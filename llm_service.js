@@ -45,38 +45,38 @@ let gameState = {
 
 
 
+
+let llmInference = null;
+
 /**
 * Initializes the client-side LLM using MediaPipe.
-* Note: Model weights must be downloaded to the client's device.
 */
 async function initializeLLM() {
-  let LlmInference;
+    // 1. Check for the global class created by the bundle
+    const LlmInference = window.LlmInference; // Should be available after the bundle loads
     
-    try {
-        // Use dynamic import to load the MediaPipe module reliably
-        // We switch to the .js extension for the ES Module version
-        const { LlmInference: ImportedLlmInference } = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-genai/genai_bundle.js');
-        LlmInference = ImportedLlmInference;
-    } catch (e) {
-        console.error("Failed to load MediaPipe GenAI bundle:", e);
-        throw new Error("LlmInference library could not be loaded.");
+    if (typeof LlmInference === 'undefined') {
+        console.error("CRITICAL: MediaPipe LlmInference class is UNDEFINED. The bundle failed to load or expose the object correctly.");
+        throw new Error("Initialization failed: LlmInference class not found.");
     }
 
-    if (typeof LlmInference === 'undefined') {
-        throw new Error("LlmInference object is undefined after loading.");
-    }
-    
-    // Use a small, optimized model like Gemma 2B or Phi-3 for on-device performance [4, 1]
+    // Use a small, optimized model like Gemma 2B
     const modelUrl = 'https://storage.googleapis.com/mediapipe-models/llm_inference/gemma-2b/model.bin';
     
-    // Set up LlmInference (MediaPipe's LLM engine)
-    llmInference = await LlmInference.create(modelUrl, {
-        gpu: 'auto', // Prioritize WebGPU for acceleration [8]
-        // Other configuration specific to the chosen model
-    });
-    console.log("LLM Model Loaded and ready for client-side inference.");
+    try {
+        // 2. Set up LlmInference
+        llmInference = await LlmInference.create(modelUrl, {
+            // Since you're on Chrome/GitHub Pages, WebGPU should be available, 
+            // but setting it to 'auto' is fine.
+            gpu: 'auto', 
+        });
+        console.log("LLM Model Loaded and ready for client-side inference.");
+    } catch (error) {
+        // This catch block handles errors during the ASYNC model creation/download
+        console.error("Error during LlmInference.create(). Check model URL or CORS/fetch issues.", error);
+        throw new Error("LLM model creation failed. Check browser console for details.");
+    }
 }
-
 /**
 * Generates the next challenge state from the LLM, enforcing JSON output.
 * @param {string} playerInput - The player's attempt at the trivia answer.
