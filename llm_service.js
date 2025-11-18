@@ -44,15 +44,12 @@ let gameState = {
 
 
 
-
-
 let llmInference = null;
 
 /**
 * Initializes the client-side LLM using MediaPipe.
 */
 async function initializeLLM() {
-  let LlmInference;
     
     try {
         // FIX: Dynamically import the CJS bundle. 
