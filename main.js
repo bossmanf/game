@@ -6,11 +6,13 @@ class MusicTriviaScene extends Phaser.Scene {
        this.currentAudio = null;
    }
 
-   preload() {
+   async preload() {
        // Pre-load a fallback audio loop for when Mubert's free tier is exhausted [1]
        //this.load.audio('fallback', 'assets/local_fallback_loop.mp3');
        // Initial setup for the LLM 
-       initializeLLM(); 
+        console.log("Starting LLM initialization...");
+        await initializeLLM(); 
+        console.log("LLM successfully initialized. Game starting.");
    }
 
    create() {
