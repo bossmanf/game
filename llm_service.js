@@ -16,7 +16,7 @@ const GAME_STATE_SCHEMA = {
             "type": "string",
             "description": "The correct trivia answer the player must guess (e.g., 'Jazz fusion', '80s Synthwave', 'Saxophone solo')."
         },
-        "conversion_tone": {
+        "conversation_tone": {
             "type": "string",
             "description": "The mood of your sentences, getting more and more excited as the player gets close to the end.",
             "enum": ["Normal", "Excited", "Over the moon"] 
@@ -30,7 +30,7 @@ const GAME_STATE_SCHEMA = {
             "description": "A concise, single-sentence summary of the player's recent performance to maintain continuity and state."
         }
     },
-    "required": ["challenge_difficulty", "conversion_tone" , "correct_answer", "score_adjustment", "context_summary"]
+    "required": ["challenge_difficulty", "conversation_tone", "correct_answer", "score_adjustment", "context_summary"]
 };
 
 // Global object to store game state (score, difficulty, etc.)
