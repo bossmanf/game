@@ -18,7 +18,7 @@ const GAME_STATE_SCHEMA = {
         },
         "conversion_tone": {
             "type": "string",
-            "description": "The mood of your sentences, getting more and more excited as the player gets close to the end."
+            "description": "The mood of your sentences, getting more and more excited as the player gets close to the end.",
             "enum": ["Normal", "Excited", "Over the moon"] 
         },
         "score_adjustment": { 
@@ -30,14 +30,14 @@ const GAME_STATE_SCHEMA = {
             "description": "A concise, single-sentence summary of the player's recent performance to maintain continuity and state."
         }
     },
-    "required": ["challenge_difficulty", "conversion_tone" "correct_answer", "score_adjustment", "context_summary"]
+    "required": ["challenge_difficulty", "conversion_tone" , "correct_answer", "score_adjustment", "context_summary"]
 };
 
 // Global object to store game state (score, difficulty, etc.)
 let gameState = {
     score: 0,
     difficulty: "Easy",
-    conversation_tone: "Normal"
+    conversation_tone: "Normal",
     history: "Game started. Player is new."
 };
 
