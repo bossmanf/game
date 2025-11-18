@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>LLM Music Trivia</title>
-    <style>body { margin: 0; background: #222; }</style>
-
+    
+    <style>
+        /* General Body and Background */
+        body { 
+            margin: 0; 
+            /* Placeholder: Replace this URL with your preferred free SF/Music themed image */
+            background: url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif; /* Professional font */
+        }
+        
+        /* Game Container for a clean, framed look */
+        #game-container {
+            border: 2px solid #555;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Shadow for depth */
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
     
     <script src="llm_service.js" type="module"></script> 
@@ -14,3 +29,5 @@
     <div id="game-container"></div>
 </body>
 </html>
+
+
