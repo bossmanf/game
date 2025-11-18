@@ -80,6 +80,12 @@ export async function initializeLLM() {
     console.log("Initializing WebLLM...");
     
     try {
+
+        if (!window.webllm || !window.webllm.ChatModule) {
+             throw new Error("WebLLM global object not found. Check network connection and script loading order in index.html.");
+        }
+
+
         // 1. Create a ChatModule instance (WebLLM's core inference class)
         // Access window.webllm because it was loaded in index.html
         llmInference = new window.webllm.ChatModule();
