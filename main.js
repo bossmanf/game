@@ -18,6 +18,8 @@ class MusicTriviaScene extends Phaser.Scene {
        this.scoreText = this.add.text(10, 50, `Score: ${gameState.score}`, { fontSize: '20px', fill: '#0f0' });
        this.challengeText = this.add.text(10, 100, 'Loading first challenge...', { fontSize: '20px', fill: '#fff', wordWrap: { width: 780 } });
        
+
+
        // Input box and submit button (simplified)
        const inputElement = document.createElement('input');
        inputElement.type = 'text';

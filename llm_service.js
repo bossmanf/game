@@ -76,7 +76,7 @@ async function getNextChallenge(playerInput) {
    // 1. Stateful Context Injection: Inject current state into the system prompt [9, 1]
    // This ensures the model maintains continuity and scales difficulty accurately.[10]
    const systemPrompt = `You are the Music Quiz Master. Your task is to generate the NEXT trivia question challenge based on the player's input: "${playerInput}".
-   The player's current game state is: Score ${gameState.score}, Difficulty ${gameState.difficulty}, conversation mood: ${gameState.conversation_tone}Last Summary: ${gameState.history}.
+   The player's current game state is: Score ${gameState.score}, Difficulty ${gameState.difficulty}, conversation mood: ${gameState.conversation_tone}, Last Summary: ${gameState.history}.
    
    RULES:
    1. If the player was CORRECT, increase 'challenge_difficulty' (Easy -> Medium -> Hard).
