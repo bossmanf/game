@@ -100,7 +100,7 @@ const config = {
    dom: {
        createContainer: true
    },
-   scene:
+   scene:  [MusicTriviaScene]
 };
 
 const game = new Phaser.Game(config);
