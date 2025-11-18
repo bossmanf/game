@@ -1,5 +1,11 @@
 ﻿// main.js
 
+import { 
+    gameState, 
+    initializeLLM, 
+    getNextChallenge 
+} from './llm_service.js';
+
 class MusicTriviaScene extends Phaser.Scene {
    constructor() {
        super('MusicTriviaScene');

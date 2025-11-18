@@ -34,7 +34,7 @@ const GAME_STATE_SCHEMA = {
 };
 
 // Global object to store game state (score, difficulty, etc.)
-let gameState = {
+export let gameState = { 
     score: 0,
     difficulty: "Easy",
     conversation_tone: "Normal",
@@ -49,7 +49,7 @@ let llmInference = null;
 /**
 * Initializes the client-side LLM using MediaPipe.
 */
-async function initializeLLM() {
+export async function initializeLLM() {
     
     try {
         // FIX: Dynamically import the CJS bundle. 
@@ -82,7 +82,7 @@ async function initializeLLM() {
 * Generates the next challenge state from the LLM, enforcing JSON output.
 * @param {string} playerInput - The player's attempt at the trivia answer.
 */
-async function getNextChallenge(playerInput) {
+export async function getNextChallenge(playerInput) {
    if (!llmInference) {
        throw new Error("LLM not initialized.");
    }
