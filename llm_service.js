@@ -70,7 +70,7 @@ let gameState = {
     difficulty: "Easy",
     last_topic: "None", 
     conversation_tone: "Normal",
-    history: "Game started. Player is new."
+    game_history: "Game started. Player is new."
 };
 
 let llmInference = null;
@@ -153,7 +153,7 @@ async function getNextChallenge(playerInput, isTopicSelection = false) {
 
     const systemPrompt = `You are the Music Quiz Master and Game Conductor. Your task is to generate the NEXT trivia challenge and a comment.
     ${action}
-    The player's current game state is: Score ${gameState.score}, Difficulty ${gameState.difficulty}, Conversation Tone: ${gameState.conversation_tone}. Last Summary: ${gameState.history}.
+    The player's current game state is: Score ${gameState.score}, Difficulty ${gameState.difficulty}, Conversation Tone: ${gameState.conversation_tone}. Last Summary: ${gameState.game_history}.
     
     RULES:
     1. If the player was CORRECT, set 'score_adjustment' to +1, use an 'Excited' tone, and increase 'challenge_difficulty' (Easy -> Medium -> Hard) if possible.
