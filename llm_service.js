@@ -65,7 +65,7 @@ const TOPIC_SCHEMA = {
 };
 
 // Global object to store game state (score, difficulty, etc.)
-export let gameState = {
+let gameState = {
     score: 0,
     difficulty: "Easy",
     last_topic: "None", // Stores the last selected topic
@@ -76,7 +76,7 @@ export let gameState = {
 let llmInference = null;
 
 // ...
-export async function initializeLLM() {
+async function initializeLLM() {
     let LlmInference;
     
     try {
@@ -105,7 +105,7 @@ export async function initializeLLM() {
  * Generates three random topics from the LLM.
  * The LLM will be constrained to output an object matching TOPIC_SCHEMA.
  */
-export async function getNewTopics() {
+async function getNewTopics() {
     if (!llmInference) {
         throw new Error("LLM not initialized.");
     }
@@ -141,7 +141,7 @@ export async function getNewTopics() {
 * Generates the next challenge state from the LLM, enforcing JSON output.
  * @param {string} playerInput - The player's attempt OR the new topic.
  */
-export async function getNextChallenge(playerInput, isTopicSelection = false) {
+async function getNextChallenge(playerInput, isTopicSelection = false) {
     if (!llmInference) {
         throw new Error("LLM not initialized.");
     }
