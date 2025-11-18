@@ -52,30 +52,34 @@ let llmInference = null;
 * Initializes the client-side LLM using MediaPipe.
 */
 async function initializeLLM() {
-    // 1. Check for the global class created by the bundle
-    const LlmInference = window.LlmInference; // Should be available after the bundle loads
+  let LlmInference;
     
+    try {
+        // FIX: Dynamically import the CJS bundle. 
+        // This is the most reliable way to force Chrome to execute the script 
+        // despite the incorrect 'application/node' MIME type from the CDN.
+        const GenAI = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-genai/genai_bundle.cjs');
+        
+        // Destructure the LlmInference class from the imported module
+        LlmInference = GenAI.LlmInference;
+    } catch (e) {
+        console.error("Failed to dynamically load MediaPipe GenAI bundle:", e);
+        throw new Error("Initialization failed: Could not load LlmInference library.");
+    }
+
     if (typeof LlmInference === 'undefined') {
-        // Fallback for safety, though the issue should be fixed by the .js bundle
-        throw new Error("LlmInference class not found after loading bundle.js.");
+        throw new Error("LlmInference class is undefined after import.");
     }
 
     // Use a small, optimized model like Gemma 2B
     const modelUrl = 'https://storage.googleapis.com/mediapipe-models/llm_inference/gemma-2b/model.bin';
     
-    try {
-        // 2. Set up LlmInference
-        llmInference = await LlmInference.create(modelUrl, {
-            // Since you're on Chrome/GitHub Pages, WebGPU should be available, 
-            // but setting it to 'auto' is fine.
-            gpu: 'auto', 
-        });
-        console.log("LLM Model Loaded and ready for client-side inference.");
-    } catch (error) {
-        // This catch block handles errors during the ASYNC model creation/download
-        console.error("Error during LlmInference.create(). Check model URL or CORS/fetch issues.", error);
-        throw new Error("LLM model creation failed. Check browser console for details.");
-    }
+    // Set up LlmInference (MediaPipe's LLM engine)
+    llmInference = await LlmInference.create(modelUrl, {
+        gpu: 'auto', 
+    });
+    console.log("LLM Model Loaded and ready for client-side inference.");
+}
 }
 /**
 * Generates the next challenge state from the LLM, enforcing JSON output.
