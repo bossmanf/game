@@ -80,7 +80,7 @@ async function initializeLLM() {
     });
     console.log("LLM Model Loaded and ready for client-side inference.");
 }
-}
+
 /**
 * Generates the next challenge state from the LLM, enforcing JSON output.
 * @param {string} playerInput - The player's attempt at the trivia answer.
