@@ -69,7 +69,7 @@ let gameState = {
     score: 0,
     difficulty: "Easy",
     last_topic: "None", // Stores the last selected topic
-    conversation_tone: "Normal"
+    conversation_tone: "Normal",
     history: "Game started. Player is new."
 };
 
