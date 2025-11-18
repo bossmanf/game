@@ -74,31 +74,59 @@ export let gameState = {
 };
 
 let llmInference = null;
-
+const MODEL_NAME = "Llama-3-8B-Instruct-q4f32_1"; // A powerful model compatible with WebLLM
 // ...
 export async function initializeLLM() {
-    let LlmInference;
+    console.log("Initializing WebLLM...");
     
     try {
-        const GenAI = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-genai/genai_bundle.cjs');
-        LlmInference = GenAI.LlmInference;
+        // 1. Create a ChatModule instance (WebLLM's core inference class)
+        // Access window.webllm because it was loaded in index.html
+        llmInference = new window.webllm.ChatModule();
+
+        // 2. Load the model weights and set up the WebGPU/Wasm environment
+        // The first run can take a long time to download weights.
+        await llmInference.reload(MODEL_NAME, {
+            // Optional: You can specify a custom model repository if needed
+            // model_list: [/* ... */] 
+        });
+
+        console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
     } catch (e) {
-        console.error("Failed to dynamically load MediaPipe GenAI bundle:", e);
-        throw new Error("Initialization failed: Could not load LlmInference library.");
+        console.error("Failed to initialize WebLLM or load model weights. Check WebGPU support.", e);
+        throw new Error("Initialization failed: Could not load WebLLM AI system.");
     }
-
-    if (typeof LlmInference === 'undefined') {
-        throw new Error("LlmInference class is undefined after import.");
-    }
-
-    const modelUrl = 'https://storage.googleapis.com/mediapipe-models/llm_inference/gemma-2b/model.bin';
-    
-    llmInference = await LlmInference.create(modelUrl, {
-        gpu: 'auto', 
-    });
-    console.log("LLM Model Loaded and ready for client-side inference.");
 }
 
+
+async function runLLMCommand(prompt) {
+    if (!llmInference) {
+        throw new Error("LLM not initialized.");
+    }
+
+    // WebLLM requires a single system message followed by a user prompt
+    const fullPrompt = prompt + "\n\nOutput must be STRICTLY VALID JSON matching the required schema.";
+
+    // Generate the response text
+    const responseText = await llmInference.generate(fullPrompt);
+
+    // WebLLM provides text, we need to parse it, sometimes wrapped in markdown fences
+    try {
+        let jsonString = responseText.trim();
+        // Remove common markdown wrapper (e.g., ```json ... ```)
+        if (jsonString.startsWith('```')) {
+            jsonString = jsonString.substring(jsonString.indexOf('\n') + 1);
+            if (jsonString.endsWith('```')) {
+                jsonString = jsonString.substring(0, jsonString.lastIndexOf('```'));
+            }
+        }
+        
+        return JSON.parse(jsonString.trim());
+    } catch (e) {
+        console.error("LLM produced malformed JSON.", responseText, e);
+        throw new Error("Failed to parse LLM output.");
+    }
+}
 
 
 /**
@@ -116,25 +144,11 @@ export async function getNewTopics() {
     Output must be STRICTLY VALID JSON matching the TOPIC_SCHEMA, but include the greeting/comment in the 'context_summary' field.`;
     
     
-    const response = await llmInference.generateText(systemPrompt, {
-        jsonSchema: {
-             "type": "object",
-             "properties": {
-                 "topics": TOPIC_SCHEMA.properties.topics,
-                 "conductor_comment": GAME_STATE_SCHEMA.properties.conductor_comment
-             },
-             "required": ["topics", "conductor_comment"]
-        },
-        maxTokens: 128
-    });
-    
-    try {
-        const data = JSON.parse(response);
-        return { topics: data.topics, comment: data.conductor_comment }; // Return object with topics and comment
-    } catch (e) {
-        console.error("LLM produced malformed JSON for topics:", response, e);
-        throw new Error("Failed to parse LLM topic output.");
-    }
+    const data = await runLLMCommand(systemPrompt);
+
+    // The response structure might need adjustment based on WebLLM's output style
+    // We assume the model provides the topics and conductor_comment based on the prompt
+    return { topics: data.topics || ['Default Topic 1', 'Default Topic 2', 'Default Topic 3'], comment: data.conductor_comment || "Welcome!" };
 }
 
 /**
@@ -162,18 +176,5 @@ export async function getNextChallenge(playerInput, isTopicSelection = false) {
     4. The 'options' array must contain exactly four answers, one of which must EXACTLY match the 'correct_answer' field.
     5. Output must be STRICTLY VALID JSON matching the GAME_STATE_SCHEMA.`;
     
-    // 2. Enforce Structured Output using the schema
-    const response = await llmInference.generateText(systemPrompt, {
-        jsonSchema: GAME_STATE_SCHEMA,
-        maxTokens: 512 
-    });
-    
-    // 3. Robustness through Validation
-    try {
-        const challengeData = JSON.parse(response);
-        return challengeData;
-    } catch (e) {
-        console.error("LLM produced malformed JSON.", response, e);
-        throw new Error("Failed to parse LLM output.");
-    }
+    return await runLLMCommand(systemPrompt);
 }
