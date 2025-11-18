@@ -74,7 +74,7 @@ class MusicTriviaScene extends Phaser.Scene {
 
        } catch (error) {
            // Media Degradation Strategy: Fallback to local asset if API fails [1]
-           this.challengeText.setText(`Error: Game Master failed. Playing fallback music.`);
+           this.challengeText.setText(error) // `Error: Game Master failed. Playing fallback music.`);
            //this.currentAudio = this.sound.add('fallback', { loop: true });
            //this.currentAudio.play(); 
            console.error(error);
