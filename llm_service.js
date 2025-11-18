@@ -56,8 +56,8 @@ async function initializeLLM() {
     const LlmInference = window.LlmInference; // Should be available after the bundle loads
     
     if (typeof LlmInference === 'undefined') {
-        console.error("CRITICAL: MediaPipe LlmInference class is UNDEFINED. The bundle failed to load or expose the object correctly.");
-        throw new Error("Initialization failed: LlmInference class not found.");
+        // Fallback for safety, though the issue should be fixed by the .js bundle
+        throw new Error("LlmInference class not found after loading bundle.js.");
     }
 
     // Use a small, optimized model like Gemma 2B
