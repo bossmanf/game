@@ -70,7 +70,7 @@ async function initializeLLM() {
     
     // Set up LlmInference
     llmInference = await LlmInference.create(modelUrl, {
-        gpu: 'false', 
+        gpu: 'auto', 
     });
     console.log("LLM Model Loaded and ready for client-side inference.");
 }
