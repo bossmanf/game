@@ -215,19 +215,4 @@ const config = {
     scene:  [MusicTriviaScene]
 };
 
-let game;
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Check if the WebLLM library is available before creating the game instance.
-    if (window.webllm && window.webllm.ChatModule) {
-        // Create the game instance only after the WebLLM global object exists.
-        game = new Phaser.Game(config);
-    } else {
-        // This is a robust fallback for the user if the script failed entirely.
-        const container = document.getElementById('game-container');
-        if (container) {
-            container.innerHTML = "<h1>Error: WebLLM failed to load. Check console or network.</h1>";
-        }
-        console.error("Critical Failure: WebLLM global object not found.");
-    }
-});
+const game = new Phaser.Game(config);

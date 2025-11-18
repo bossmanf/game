@@ -76,25 +76,34 @@ export let gameState = {
 let llmInference = null;
 const MODEL_NAME = "Llama-3-8B-Instruct-q4f32_1"; // A powerful model compatible with WebLLM
 // ...
+
+// Helper function to delay execution
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+// The initialization function
 export async function initializeLLM() {
     console.log("Initializing WebLLM...");
     
     try {
-
-        if (!window.webllm || !window.webllm.ChatModule) {
-             throw new Error("WebLLM global object not found. Check network connection and script loading order in index.html.");
+        // 🛑 FIX: Wait loop to guarantee window.webllm exists
+        let maxRetries = 30; // Wait up to 3 seconds (30 * 100ms)
+        
+        while (!window.webllm || !window.webllm.ChatModule) {
+            if (maxRetries <= 0) {
+                throw new Error("Timeout: WebLLM global object never appeared.");
+            }
+            console.log("Waiting for WebLLM to load...");
+            await delay(100);
+            maxRetries--;
         }
-
-
-        // 1. Create a ChatModule instance (WebLLM's core inference class)
-        // Access window.webllm because it was loaded in index.html
+        
+        // 1. Create a ChatModule instance (now guaranteed to exist)
         llmInference = new window.webllm.ChatModule();
 
-        // 2. Load the model weights and set up the WebGPU/Wasm environment
-        // The first run can take a long time to download weights.
+        // 2. Load the model weights
         await llmInference.reload(MODEL_NAME, {
-            // Optional: You can specify a custom model repository if needed
-            // model_list: [/* ... */] 
+            // ... (options) ...
         });
 
         console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
@@ -103,7 +112,6 @@ export async function initializeLLM() {
         throw new Error("Initialization failed: Could not load WebLLM AI system.");
     }
 }
-
 
 async function runLLMCommand(prompt) {
     if (!llmInference) {
