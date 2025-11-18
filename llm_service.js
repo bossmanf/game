@@ -68,7 +68,7 @@ const TOPIC_SCHEMA = {
 let gameState = {
     score: 0,
     difficulty: "Easy",
-    last_topic: "None", // Stores the last selected topic
+    last_topic: "None", 
     conversation_tone: "Normal",
     history: "Game started. Player is new."
 };
