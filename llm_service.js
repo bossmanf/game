@@ -51,26 +51,20 @@ let llmInference = null;
 * Note: Model weights must be downloaded to the client's device.
 */
 async function initializeLLM() {
-  // STEP 1: Dynamically import the LlmInference class from the library
-    let LlmInference;
-    try {
-        const GenAI = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-genai/genai_bundle.js'); 
-        LlmInference = GenAI.LlmInference;
-    } catch (e) {
-        console.error("Failed to dynamically load MediaPipe GenAI bundle:", e);
-        throw new Error("Failed to load LlmInference library.");
-    }
-
-    if (!LlmInference) {
-        throw new Error("LlmInference object is undefined after import.");
+   const LlmInference = window.LlmInference || self.LlmInference; 
+    
+    if (typeof LlmInference === 'undefined') {
+        // This suggests the module bundle was not loaded correctly
+        throw new Error("MediaPipe LlmInference class not found. Check if 'genai_bundle.cjs' loaded correctly.");
     }
     
-    // Use a small, optimized model like Gemma 2B...
+    // Use a small, optimized model like Gemma 2B or Phi-3 for on-device performance [4, 1]
     const modelUrl = 'https://storage.googleapis.com/mediapipe-models/llm_inference/gemma-2b/model.bin';
     
-    // Set up LlmInference
+    // Set up LlmInference (MediaPipe's LLM engine)
     llmInference = await LlmInference.create(modelUrl, {
-        gpu: 'auto', 
+        gpu: 'false', // Prioritize WebGPU for acceleration [8]
+        // Other configuration specific to the chosen model
     });
     console.log("LLM Model Loaded and ready for client-side inference.");
 }
