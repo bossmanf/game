@@ -87,7 +87,7 @@ export async function initializeLLM() {
     
     try {
         // 🛑 FIX: Wait loop to guarantee window.webllm exists
-        let maxRetries = 30; // Wait up to 3 seconds (30 * 100ms)
+        let maxRetries = 200; // Wait up to 3 seconds (30 * 100ms)
         
         import { CreateMLCEngine } from 'https://esm.run/@mlc-ai/web-llm@0.2.79';
 
