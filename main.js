@@ -168,4 +168,4 @@ const config = {
 };
 
 // 🛑 EXPORT the game instance so React can access it
-export const game = new Phaser.Game(config);
+window.phaserGameInstance = new Phaser.Game(config);

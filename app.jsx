@@ -32,6 +32,9 @@ function App() {
 
     // 1. Setup Communication from Phaser -> React
     useEffect(() => {
+        const game = window.phaserGameInstance; 
+        if (!game) return; // Safety check
+        
         // Once the Phaser game is created, get the scene reference
         game.events.on('ready', () => {
             sceneRef.current = game.scene.getScene('MusicTriviaScene');
