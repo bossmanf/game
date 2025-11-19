@@ -129,7 +129,7 @@ export async function initializeLLM() {
 
         }
 
-        const MODEL_NAME = "gemma-2-27b-it-q0f16"//"SmolLM2-135M-Instruct-q4f32_1" //"TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
+        const MODEL_NAME = "gemma-2-27b-itq0f16"//"SmolLM2-135M-Instruct-q4f32_1" //"TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
         llmInference = await CreateMLCEngine(
           MODEL_NAME,
           { initProgressCallback: initProgressCallback }, // engineConfig
