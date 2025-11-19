@@ -278,7 +278,7 @@ export async function getNewTopics() {
    // Adjust system prompt to also generate the initial comment using the tone
     const systemPrompt = `You are the Game Conductor. Your first task is to interact with the player using an ${gameState.conversation_tone} tone and provide three random trivia topics.
     Topics must be chosen from a mixture of these categories: Music, Travel, Sports, U2, Gay pop culture, Metallica, Entertainment, and San Francisco culture. Keep the topics simple no more than 5 words.
-    Place your greeting into the 'conductor_comment' field. Output MUST be STRICTLY VALID JSON matching the TOPIC_SCHEMA. DO NOT include any text outside of the JSON structure.`;
+    Place your greeting into the 'conductor_comment' field. Output MUST be STRICTLY VALID JSON matching the ${TOPIC_SCHEMA}. DO NOT include any text outside of the JSON structure.`;
 
     const data = await runLLM_Topic_Command(systemPrompt);
 
@@ -371,7 +371,7 @@ export async function getNextChallenge(playerInput, isTopicSelection = false) {
     const systemPrompt = `You are the Music Quiz Master and Game Conductor. Your task is to generate the NEXT trivia challenge (question, 4 options, correct answer, and a comment. The player has chosen the topic: "${playerInput}". 
     Generate a new question, 4 options with one of them being the correct answer based on this topic and current difficulty:${gameState.difficulty}, and a short witty comment related to the question;
     Avoid extremely long questions. Keep it short.
-    Output must be STRICTLY VALID JSON matching the QUESTION_SCHEMA.`;
+    Output must be STRICTLY VALID JSON matching the ${QUESTION_SCHEMA}.`;
 
     const data = await runLLM_Question_Command(systemPrompt);
     

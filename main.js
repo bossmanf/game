@@ -68,6 +68,7 @@ export class MusicTriviaScene extends Phaser.Scene {
 
         try {
             const topicData = await getNewTopics(); 
+            console.log('New topics received...')
             topics = topicData.topics;
             comment = topicData.comment;
             this.challengeText.setText('Choose Your Topic:');
