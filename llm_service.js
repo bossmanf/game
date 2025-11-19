@@ -122,7 +122,9 @@ export async function initializeLLM() {
     try {
     
         //const webllm = await import ("https://esm.run/@mlc-ai/web-llm");
+        
         const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
+
         // Callback function to update model loading progress
         const initProgressCallback = (initProgress) => {
           console.log(initProgress);
@@ -132,6 +134,7 @@ export async function initializeLLM() {
     //    TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC
 //Llama-3.1-8B-q4f32_1-MLC -
         const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" //"gemma-2-27b-it-q0f16-MLC"//"SmolLM2-135M-Instruct-q4f32_1" //"TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
+       
         llmInference = await CreateMLCEngine(
           MODEL_NAME,
           { initProgressCallback: initProgressCallback }, // engineConfig
@@ -156,44 +159,44 @@ async function runLLMCommand(prompt) {
         throw new Error("LLM not initialized.");
     }
 
-
-
-    // WebLLM requires a single system message followed by a user prompt
-
     const fullPrompt = prompt + "\n\nOutput must be STRICTLY VALID JSON matching the required schema.";
 
-
-
-    // Generate the response text
-
-    const responseText = await llmInference.generate(fullPrompt);
-
-
-
-    // WebLLM provides text, we need to parse it, sometimes wrapped in markdown fences
-
-    try {
-
-        let jsonString = responseText.trim();
-        // Remove common markdown wrapper (e.g., ```json ... ```)
-        if (jsonString.startsWith('```')) {
-            jsonString = jsonString.substring(jsonString.indexOf('\n') + 1);
-            if (jsonString.endsWith('```')) {
-                jsonString = jsonString.substring(0, jsonString.lastIndexOf('```'));
-
-            }
-
+    const messages = [
+        { 
+            role: "user", 
+            content: fullPrompt 
         }
+    ];
 
+    let fullResponseText = "";
+    
+    // 2. Call the chat.completions.create method with stream: true
+    const stream = await llmInference.chat.completions.create({
+        messages: messages,
+        stream: true, // Enable streaming
+        // You can add other parameters here (temperature, max_tokens, etc.)
+    });
+
+    // 3. Process the streaming output
+    for await (const chunk of stream) {
+        const content = chunk.choices[0].delta.content;
         
-
-        return JSON.parse(jsonString.trim());
-
-    } catch (e) {
-        console.error("LLM produced malformed JSON.", responseText, e);
-        throw new Error("Failed to parse LLM output.");
-
+        if (content) {
+            fullResponseText += content;
+            // 🛑 In a real application, you would update the UI here
+            // console.log(content); 
+        }
     }
+    
+    // You must implement JSON parsing here, similar to your previous method.
+    try {
+        // ... (JSON parsing logic on fullResponseText) ...
+        return JSON.parse(fullResponseText.trim());
+    } catch (e) {
+        console.error("Streaming output produced malformed JSON.", fullResponseText, e);
+        throw new Error("Failed to parse LLM output.");
+    }
+
 
 }
 
