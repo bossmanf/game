@@ -89,22 +89,22 @@ export async function initializeLLM() {
         // 🛑 FIX: Wait loop to guarantee window.webllm exists
         let maxRetries = 30; // Wait up to 3 seconds (30 * 100ms)
         
-        import { CreateMLCEngine } from 'https://esm.run/@mlc-ai/web-llm@0.2.79';
-
+        while (!window.webllm || !window.webllm.ChatModule) {
+            if (maxRetries <= 0) {
+                throw new Error("Timeout: WebLLM global object never appeared.");
+            }
+            console.log("Waiting for WebLLM to load...");
+            await delay(100);
+            maxRetries--;
+        }
         
-        const initProgressCallback = (progress) => {
-          console.log(`Loading progress: ${progress * 100}%`);
-        };
+        // 1. Create a ChatModule instance (now guaranteed to exist)
+        llmInference = new window.webllm.ChatModule();
 
-        const createEngine = async () => {
-          lmInference = await CreateMLCEngine(initProgressCallback);
-          console.log('Engine created.');
-        };
-
-        const modelId = 'Llama-3.1-8B-Instruct-q4f32_1-MLC'; // Example model
-        await lmInference.reload(modelId);
-        console.log('Model loaded!');
-
+        // 2. Load the model weights
+        await llmInference.reload(MODEL_NAME, {
+            // ... (options) ...
+        });
 
         console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
     } catch (e) {
