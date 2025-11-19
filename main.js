@@ -20,7 +20,6 @@ const FONT_STYLE = {
         align: 'center',
         shadow: { offsetX: 2, offsetY: 2, color: '#000', blur: 6, fill: true }
     },
-    // 🛑 REMOVED: All BUTTON_ styles are gone as React handles them
 };
 
 export class MusicTriviaScene extends Phaser.Scene {
@@ -30,7 +29,6 @@ export class MusicTriviaScene extends Phaser.Scene {
         this.currentQuestionData = null; 
         this.llmInitializedPromise = null;
         
-        // 🛑 REMOVED: No more Phaser buttons arrays
         this.conductorText = null; 
     }
 
@@ -44,14 +42,12 @@ export class MusicTriviaScene extends Phaser.Scene {
         await this.llmInitializedPromise;
         console.log("LLM successfully initialized. Game starting.");
         
-        // 🛑 NEW: Emit event to React to confirm LLM is ready
+        //  NEW: Emit event to React to confirm LLM is ready
         this.game.events.emit('LLM_READY');
         
         // Only keep the text elements that draw *on the canvas*
         this.add.text(10, 10, 'LLM Quiz Master', FONT_STYLE.TITLE);
-        
-        // 🛑 Removed scoreText - React will display the score
-        
+                
         this.conductorText = this.add.text(10, 560, 'Initializing the Game Conductor...', FONT_STYLE.CONDUCTOR);
         this.challengeText = this.add.text(400, 200, 'Loading Game...', FONT_STYLE.QUESTION).setOrigin(0.5);
 
@@ -63,7 +59,6 @@ export class MusicTriviaScene extends Phaser.Scene {
 
     async showTopicSelection() {
         this.hideChallengeElements();
-        // 🛑 REMOVED: hideTopicSelection logic (Phaser buttons are gone)
         
         this.challengeText.setText('LLM generating 3 random topics...'); 
         this.conductorText.setText('Hold on, the Game Conductor is warming up the trivia engine...'); 
@@ -83,17 +78,14 @@ export class MusicTriviaScene extends Phaser.Scene {
         
         this.conductorText.setText(comment);
 
-        // 🛑 NEW: EMIT the topics and comment to the React UI
         this.game.events.emit('TOPICS_READY', { topics, comment });
 
-        // 🛑 REMOVED: All Phaser button creation logic 
     }
 
     // NEW: Function exposed to React to handle the topic selection click
     handleTopicSelection(topic) {
         this.challengeText.setText(`Topic selected: ${topic}`);
         gameState.last_topic = topic;
-        // 🛑 REMOVED: hideTopicSelection()
         this.startChallenge(topic, true);
     }
     
@@ -161,7 +153,6 @@ export class MusicTriviaScene extends Phaser.Scene {
 
     hideChallengeElements() {
         this.challengeText.setText('');
-        // 🛑 REMOVED: Answer buttons destruction
     }
 }
 
