@@ -129,7 +129,7 @@ export async function initializeLLM() {
 
         }
 
-        TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC
+    //    TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC
 //Llama-3.1-8B-q4f32_1-MLC -
         const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" //"gemma-2-27b-it-q0f16-MLC"//"SmolLM2-135M-Instruct-q4f32_1" //"TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
         llmInference = await CreateMLCEngine(
