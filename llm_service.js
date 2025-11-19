@@ -135,12 +135,13 @@ export async function initializeLLM() {
         llmInference = await CreateMLCEngine(
           MODEL_NAME,
           { initProgressCallback: initProgressCallback }, // engineConfig
-        );ß
+        );
 
         console.log('Model loaded!');
         console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
 
     } catch (e) {
+
 
         console.error("Failed to initialize WebLLM or load model weights. Check WebGPU support.", e);
         throw new Error("Initialization failed: Could not load WebLLM AI system.");
