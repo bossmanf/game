@@ -125,12 +125,11 @@ export class MusicTriviaScene extends Phaser.Scene {
             this.currentQuestionData = challengeData;
 
             // Update global state
-            gameState.score += challengeData.score_adjustment;
-            gameState.difficulty = challengeData.challenge_difficulty;
-            gameState.game_history = challengeData.context_summary; // Updated history property
+            //gameState.score += challengeData.score_adjustment;
+            //gameState.difficulty = challengeData.challenge_difficulty;
+            //gameState.game_history = challengeData.context_summary; // Updated history property
             
-            // 🛑 NEW: Emit the updated score/difficulty and the new question data
-            this.game.events.emit('GAME_STATE_UPDATE', gameState);
+            //this.game.events.emit('GAME_STATE_UPDATE', gameState);
             this.game.events.emit('QUESTION_READY', {
                 question: challengeData.question_text,
                 options: challengeData.options,
