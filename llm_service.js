@@ -129,11 +129,13 @@ export async function initializeLLM() {
 
         }
 
+        TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC
+//Llama-3.1-8B-q4f32_1-MLC --- TinyLlama-1.1B-Chat-v0.4-q4f32_1-MLC
         const MODEL_NAME = "Llama-3-8B-Instruct-q4f32_1" //"gemma-2-27b-it-q0f16-MLC"//"SmolLM2-135M-Instruct-q4f32_1" //"TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
         llmInference = await CreateMLCEngine(
           MODEL_NAME,
           { initProgressCallback: initProgressCallback }, // engineConfig
-        );
+        );ß
 
         console.log('Model loaded!');
         console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
