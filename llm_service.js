@@ -74,7 +74,10 @@ export let gameState = {
 };
 
 let llmInference = null;
-const MODEL_NAME = "Llama-3.2-3B-Instruct"; //"TinyLlama-1.1B-Chat-v0.4-q4f32_1";//"Llama-3-8B-Instruct-q4f32_1"; // A powerful model compatible with WebLLM
+//const MODEL_NAME = "Llama-3-8B-Instruct-q4f32_1"; //"TinyLlama-1.1B-Chat-v0.4-q4f32_1";//""; // A powerful model compatible with WebLLM
+
+
+
 // ...
 
 // Helper function to delay execution
@@ -88,21 +91,20 @@ export async function initializeLLM() {
     console.log("Initializing WebLLM...");
     
     try {
-        // --- STEP 1: DYNAMICALLY IMPORT THE ENGINE (New Official Method) ---
-        // We use dynamic import here instead of trying to rely on a global window object.
-        const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm@0.2.79');
         
-        // --- STEP 2: CREATE THE ENGINE INSTANCE ---
-        const initProgressCallback = (progress) => {
-            console.log(`Loading progress: ${progress * 100}%`);
-        };
+        const webllm = await import ("https://esm.run/@mlc-ai/web-llm");
+        import { CreateMLCEngine } from "@mlc-ai/web-llm";
 
-        // Assign the engine directly to the outer variable
-        llmInference = await CreateMLCEngine(initProgressCallback); 
-        console.log('Engine created.');
+        // Callback function to update model loading progress
+        const initProgressCallback = (initProgress) => {
+          console.log(initProgress);
+        }
+        const MODEL_NAME = "Llama-3.1-8B-Instruct-q4f32_1-MLC";
 
-        // --- STEP 3: LOAD THE MODEL ---
-        await llmInference.reload(MODEL_NAME);
+        const llmInference = await CreateMLCEngine(
+          MODEL_NAME,
+          { initProgressCallback: initProgressCallback }, // engineConfig
+        );
         console.log('Model loaded!');
 
 
