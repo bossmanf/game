@@ -183,4 +183,4 @@ function App() {
 
 // Render the main React application into the root DOM element
 // ReactDOM.render(<App />, document.getElementById('root'));
-ReactDOM..createRoot(<App />, document.getElementById('root'));
+ReactDOM.createRoot(<App />, document.getElementById('root'));
