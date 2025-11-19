@@ -183,7 +183,7 @@ async function runLLMCommand(prompt) {
         
         if (content) {
             fullResponseText += content;
-            console.log(content); 
+            //console.log(content); 
         }
     }
     
