@@ -74,7 +74,7 @@ export let gameState = {
 };
 
 let llmInference = null;
-const MODEL_NAME = "Llama-3.2-1B-Instruct-q4f32_1"; //"TinyLlama-1.1B-Chat-v0.4-q4f32_1";//"Llama-3-8B-Instruct-q4f32_1"; // A powerful model compatible with WebLLM
+const MODEL_NAME = "Llama-3.2-3B-Instruct"; //"TinyLlama-1.1B-Chat-v0.4-q4f32_1";//"Llama-3-8B-Instruct-q4f32_1"; // A powerful model compatible with WebLLM
 // ...
 
 // Helper function to delay execution
@@ -93,9 +93,9 @@ export async function initializeLLM() {
         const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm@0.2.79');
         
         // --- STEP 2: CREATE THE ENGINE INSTANCE ---
-        const initProgressCallback = (progress) => {
-            console.log(`Loading progress: ${progress * 100}%`);
-        };
+        //const initProgressCallback = (progress) => {
+        //    console.log(`Loading progress: ${progress * 100}%`);
+        //};
 
         // Assign the engine directly to the outer variable
         llmInference = await CreateMLCEngine(initProgressCallback); 
