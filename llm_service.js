@@ -92,9 +92,9 @@ export async function initializeLLM() {
     
     try {
         
-        const webllm = await import ("https://esm.run/@mlc-ai/web-llm");
-        import { CreateMLCEngine } from "@mlc-ai/web-llm";
-
+        //const webllm = await import ("https://esm.run/@mlc-ai/web-llm");
+        const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
+        
         // Callback function to update model loading progress
         const initProgressCallback = (initProgress) => {
           console.log(initProgress);
