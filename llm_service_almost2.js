@@ -55,7 +55,6 @@ const GAME_STATE_SCHEMA = {
             "description": "A fun, engaging comment that greets the player or reacts to the previous answer, using the current conversation_tone."
         }
     },
-    // FIX: Corrected the required fields to only include state update data
     "required": ["challenge_difficulty", "score_adjustment", "context_summary", "conversation_tone", "conductor_comment"]
 };
 
@@ -147,7 +146,6 @@ async function runLLM_Command(prompt) {
         temperature: 0.3
     });
 
-    // Process the streaming output
     for await (const chunk of stream) {
         const content = chunk.choices[0].delta.content;
         if (content) {
@@ -155,10 +153,9 @@ async function runLLM_Command(prompt) {
         }
     }
     
-    // --- Start Robust JSON Cleaning & Parsing (IMPROVED TRIMMING) ---
+    // --- Start Robust JSON Cleaning & Parsing ---
     let jsonString = fullResponseText.trim();
     
-    // 1. Find the first opening curly brace '{'
     const firstBracketIndex = jsonString.indexOf('{');
     if (firstBracketIndex > -1) {
         jsonString = jsonString.substring(firstBracketIndex);
@@ -166,19 +163,10 @@ async function runLLM_Command(prompt) {
         throw new Error("LLM Output did not contain a JSON start bracket '{'.");
     }
 
-    // 2. Find the last closing curly brace '}' and aggressively truncate everything after it.
-    let lastBracketIndex = jsonString.lastIndexOf('}');
-    if (lastBracketIndex > -1) {
-        // Keep everything up to and including the last '}'
-        jsonString = jsonString.substring(0, lastBracketIndex + 1);
-    }
-    
-    // 3. Remove trailing markdown fences (e.g., ```) if they exist
     if (jsonString.endsWith('```')) {
         jsonString = jsonString.substring(0, jsonString.lastIndexOf('```')).trim();
     }
     
-    // 4. Final check for non-JSON characters (mostly redundant now, but safer)
     while (jsonString.endsWith('.') || jsonString.endsWith('\n')) {
         jsonString = jsonString.slice(0, -1).trim();
     }
@@ -186,7 +174,7 @@ async function runLLM_Command(prompt) {
     try {
         const result = JSON.parse(jsonString);
         
-        // 5. Validate the result against GAME_STATE_SCHEMA requirements
+        // 4. Validate the result against GAME_STATE_SCHEMA requirements
         if (!result.challenge_difficulty || result.score_adjustment === undefined || !result.context_summary) {
             throw new Error("Parsed JSON is missing required GAME_STATE schema fields.");
         }
@@ -209,12 +197,11 @@ async function runLLM_Topic_Command(prompt) {
         throw new Error("LLM not initialized.");
     }
 
-    const fullPrompt = prompt + "\n\nOutput must be STRICTLY VALID JSON matching the required schema.";
 
     const messages = [
         { 
             role: "user", 
-            content: fullPrompt 
+            content: prompt 
         }
     ];
 
@@ -238,8 +225,8 @@ async function runLLM_Topic_Command(prompt) {
     
     let jsonString = fullResponseText.trim();
 
-    // 1. Find the first opening curly brace '{'
     const firstBracketIndex = jsonString.indexOf('{');
+    
     if (firstBracketIndex > -1) {
         // Discard everything before the first '{'
         jsonString = jsonString.substring(firstBracketIndex);
@@ -247,20 +234,13 @@ async function runLLM_Topic_Command(prompt) {
         // If no bracket found, something is critically wrong
         throw new Error("LLM Output did not contain a JSON start bracket '{'.");
     }
-    
-    // 2. Find the last closing curly brace '}' and aggressively truncate everything after it.
-    let lastBracketIndex = jsonString.lastIndexOf('}');
-    if (lastBracketIndex > -1) {
-        // Keep everything up to and including the last '}'
-        jsonString = jsonString.substring(0, lastBracketIndex + 1);
-    }
 
-    // 3. Remove trailing markdown fences (e.g., ```) if they exist
+    // 2. Remove trailing markdown fences (e.g., ```) if they exist
     if (jsonString.endsWith('```')) {
         jsonString = jsonString.substring(0, jsonString.lastIndexOf('```')).trim();
     }
     
-    // 4. Final check for non-JSON characters
+    // 3. Remove trailing periods or newlines that often follow the closing bracket
     while (jsonString.endsWith('.') || jsonString.endsWith('\n')) {
         jsonString = jsonString.slice(0, -1).trim();
     }
@@ -269,9 +249,9 @@ async function runLLM_Topic_Command(prompt) {
     try {
         const result = JSON.parse(jsonString);
         
-        // 5. Verification: Check if the required fields are present
+        // 4. Verification: Check if the required fields are present
         if (!result.topics || !result.conductor_comment) {
-            console.error("Parsed JSON is missing required fields (topics or conductor_comment):", result);
+            console.error("Parsed JSON is missing required fields:", result);
             throw new Error("LLM output parsed, but schema validation failed.");
         }
         
@@ -294,13 +274,15 @@ export async function getNewTopics() {
         throw new Error("LLM not initialized.");
     }
 
-   // FIX: Made the prompt extremely explicit about the required fields and what to exclude.
+   // Adjust system prompt to also generate the initial comment using the tone
     const systemPrompt = `You are the Game Conductor. Your first task is to interact with the player using an ${gameState.conversation_tone} tone and provide three random trivia topics.
     Topics must be chosen from a mixture of these categories: Music, Travel, Sports, U2, Gay pop culture, Metallica, Entertainment, and San Francisco culture. Keep the topics simple no more than 5 words.
-    Place your greeting into the 'conductor_comment' field. Your response MUST be a STRICTLY VALID JSON object with only two root fields: 'topics' (array of 3 strings) and 'conductor_comment' (string). DO NOT include questions, answers, or any other fields.`;
+    Place your greeting into the 'conductor_comment' field. Output MUST be STRICTLY VALID JSON matching the ${TOPIC_SCHEMA}. DO NOT include any text outside of the JSON structure.`;
 
     const data = await runLLM_Topic_Command(systemPrompt);
-
+    console.log('This is what the New Topic LLM returns:')
+    console.log(data)
+    // This line was flagged as error but is correct. 
     return { topics: data.topics || ['Default Topic 1', 'Default Topic 2', 'Default Topic 3'], comment: data.conductor_comment || "Welcome!" };
 
 }
@@ -314,11 +296,10 @@ async function runLLM_Question_Command(prompt) {
         throw new Error("LLM not initialized.");
     }
 
-    const fullPrompt = prompt + "\n\nOutput must be STRICTLY VALID JSON matching the required schema.";
 
     const messages = [{
         role: "user",
-        content: fullPrompt
+        content: prompt
     }];
 
     let fullResponseText = "";
@@ -338,7 +319,7 @@ async function runLLM_Question_Command(prompt) {
         }
     }
     
-    // --- Start Robust JSON Cleaning & Parsing (IMPROVED TRIMMING) ---
+    // --- Start Robust JSON Cleaning & Parsing ---
     let jsonString = fullResponseText.trim();
     
     // 1. Find the first opening curly brace '{' (where JSON must begin)
@@ -349,28 +330,20 @@ async function runLLM_Question_Command(prompt) {
         throw new Error("LLM Output did not contain a JSON start bracket '{'.");
     }
 
-    // 2. Find the last closing curly brace '}' and aggressively truncate everything after it.
-    let lastBracketIndex = jsonString.lastIndexOf('}');
-    if (lastBracketIndex > -1) {
-        // Keep everything up to and including the last '}'
-        jsonString = jsonString.substring(0, lastBracketIndex + 1);
-    }
-    
-    // 3. Remove trailing markdown fences (e.g., ```)
+    // 2. Remove trailing markdown fences (e.g., ```)
     if (jsonString.endsWith('```')) {
         jsonString = jsonString.substring(0, jsonString.lastIndexOf('```')).trim();
     }
     
-    // 4. Final check for non-JSON characters
+    // 3. Remove trailing characters that might follow the closing bracket
     while (jsonString.endsWith('.') || jsonString.endsWith('\n')) {
         jsonString = jsonString.slice(0, -1).trim();
     }
 
-
     try {
         const result = JSON.parse(jsonString);
         
-        // 5. Validate the result against the schema requirements
+        // 4. Validate the result against the schema requirements
         if (!result.question_text || !result.options || !result.correct_answer || !result.conductor_comment ) {
              throw new Error("Parsed JSON is missing required question schema fields.");
         }
@@ -397,8 +370,7 @@ export async function getNextChallenge(playerInput, isTopicSelection = false) {
     const systemPrompt = `You are the Music Quiz Master and Game Conductor. Your task is to generate the NEXT trivia challenge (question, 4 options, correct answer, and a comment. The player has chosen the topic: "${playerInput}". 
     Generate a new question, 4 options with one of them being the correct answer based on this topic and current difficulty:${gameState.difficulty}, and a short witty comment related to the question;
     Avoid extremely long questions. Keep it short.
-    Output must be STRICTLY VALID JSON matching the QUESTION_SCHEMA.`;
-
+    Output must be STRICTLY VALID JSON matching the ${QUESTION_SCHEMA}.`;
 
     const data = await runLLM_Question_Command(systemPrompt);
     
