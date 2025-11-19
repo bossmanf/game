@@ -74,7 +74,7 @@ export let gameState = {
 };
 
 let llmInference = null;
-const MODEL_NAME = "TinyLlama-1.1B-Chat-v0.4-q4f32_1";//"Llama-3-8B-Instruct-q4f32_1"; // A powerful model compatible with WebLLM
+const MODEL_NAME = "Llama-3.2-1B-Instruct-q4f32_1-MLC"; //"TinyLlama-1.1B-Chat-v0.4-q4f32_1";//"Llama-3-8B-Instruct-q4f32_1"; // A powerful model compatible with WebLLM
 // ...
 
 // Helper function to delay execution
