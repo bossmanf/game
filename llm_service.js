@@ -183,13 +183,13 @@ async function runLLMCommand(prompt) {
         
         if (content) {
             fullResponseText += content;
-            // 🛑 In a real application, you would update the UI here
-            // console.log(content); 
+            console.log(content); 
         }
     }
     
     // You must implement JSON parsing here, similar to your previous method.
     try {
+        console.log(fullResponseText.trim())
         // ... (JSON parsing logic on fullResponseText) ...
         return JSON.parse(fullResponseText.trim());
     } catch (e) {
@@ -202,25 +202,17 @@ async function runLLMCommand(prompt) {
 
 
 
-
-
 /**
 
  * Generates three random topics from the LLM.
-
  * The LLM will be constrained to output an object matching TOPIC_SCHEMA.
-
  */
 
 export async function getNewTopics() {
 
     if (!llmInference) {
-
         throw new Error("LLM not initialized.");
-
     }
-
-
 
    // Adjust system prompt to also generate the initial comment using the tone
 
@@ -228,13 +220,10 @@ export async function getNewTopics() {
     Topics must be chosen from a mixture of these categories: Music, Travel, Sports, U2, Gay pop culture, Metallica, Entertainment, and San Francisco culture.
     Output must be STRICTLY VALID JSON matching the TOPIC_SCHEMA, but include the greeting/comment in the 'context_summary' field.`;
 
-    
     const data = await runLLMCommand(systemPrompt);
-
 
     // The response structure might need adjustment based on WebLLM's output style
     // We assume the model provides the topics and conductor_comment based on the prompt
-
     return { topics: data.topics || ['Default Topic 1', 'Default Topic 2', 'Default Topic 3'], comment: data.conductor_comment || "Welcome!" };
 
 }
@@ -244,17 +233,13 @@ export async function getNewTopics() {
 /**
 
 * Generates the next challenge state from the LLM, enforcing JSON output.
-
  * @param {string} playerInput - The player's attempt OR the new topic.
-
  */
 
 export async function getNextChallenge(playerInput, isTopicSelection = false) {
 
     if (!llmInference) {
-
         throw new Error("LLM not initialized.");
-
     }
 
     
@@ -265,8 +250,6 @@ export async function getNextChallenge(playerInput, isTopicSelection = false) {
 
         `The player has chosen the topic: "${playerInput}". Generate a new question, 4 options, and the correct answer based on this topic and the current difficulty.` : 
         `The player guessed: "${playerInput}". The previous topic was "${gameState.last_topic}". Evaluate if the guess was correct (match the previous correct_answer). Adjust the score and difficulty. Generate a new question, options, and correct answer based on the previous topic.`;
-
-
 
     const systemPrompt = `You are the Music Quiz Master and Game Conductor. Your task is to generate the NEXT trivia challenge and a comment.
 
