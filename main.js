@@ -56,7 +56,7 @@ class MusicTriviaScene extends Phaser.Scene {
         console.log("LLM successfully initialized. Game starting.");
         // UI Elements
         this.add.text(10, 10, 'LLM Quiz Master', FONT_STYLE.TITLE);
-        this.scoreText = this.add.text(10, 50, `Score: ${gameState.score} | Difficulty: ${gameState.difficulty}`, FONT_STYLE.SCORE);
+        this.scoreText = this.add.text(10, 50, `Score: ${gameState.score} | Difficulty: ${gameState.difficulty} | Tone: ${gameState.conversation_tone}`, FONT_STYLE.SCORE);
         
         // Conductor Comment Text (Permanent)
         this.conductorText = this.add.text(10, 560, 'Initializing the Game Conductor...', FONT_STYLE.CONDUCTOR);

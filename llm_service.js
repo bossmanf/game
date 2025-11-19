@@ -99,7 +99,7 @@ export async function initializeLLM() {
         const initProgressCallback = (initProgress) => {
           console.log(initProgress);
         }
-        const MODEL_NAME = "TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
+        const MODEL_NAME = "SmolLM2-135M-Instructq4f32_1HuggingFace" //"TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
 
         llmInference = await CreateMLCEngine(
           MODEL_NAME,
@@ -187,11 +187,13 @@ export async function getNextChallenge(playerInput, isTopicSelection = false) {
     The player's current game state is: Score ${gameState.score}, Difficulty ${gameState.difficulty}, Conversation Tone: ${gameState.conversation_tone}. Last Summary: ${gameState.game_history}.
     
     RULES:
-    1. If the player was CORRECT, set 'score_adjustment' to +1, use an 'Excited' tone, and increase 'challenge_difficulty' (Easy -> Medium -> Hard) if possible.
-    2. If the player was INCORRECT, set 'score_adjustment' to -1, use a 'Normal' tone, and keep difficulty the same or decrease it.
-    3. The 'conductor_comment' must be engaging and react to the player's guess, matching the required Conversation Tone.
-    4. The 'options' array must contain exactly four answers, one of which must EXACTLY match the 'correct_answer' field.
-    5. Output must be STRICTLY VALID JSON matching the GAME_STATE_SCHEMA.`;
+    1. If the player was CORRECT, set 'score_adjustment' to +1, use an 'Excited' tone setting conversationn tone to 'Excited', and increase 'challenge_difficulty' (Easy -> Medium -> Hard) if possible.
+    2. If the player was INCORRECT, set 'score_adjustment' to -1, use a 'Normal' tone setting conversationn tone to 'Normal', and keep difficulty the same or decrease it.
+    3. If the score is 3 or larger, use a 'Sassy' tone setting conversationn tone to 'Sassy'.
+    3. If the score is 3 or larger, use a 'Challenging' tone setting conversationn tone to 'Challenging'.
+    4. The 'conductor_comment' must be engaging and react to the player's guess, matching the required Conversation Tone.
+    5. The 'options' array must contain exactly four answers, one of which must EXACTLY match the 'correct_answer' field.
+    6. Output must be STRICTLY VALID JSON matching the GAME_STATE_SCHEMA.`;
     
     return await runLLMCommand(systemPrompt);
 }
