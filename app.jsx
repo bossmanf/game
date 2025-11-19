@@ -181,6 +181,10 @@ function App() {
     );
 }
 
-// Render the main React application into the root DOM element
-// ReactDOM.render(<App />, document.getElementById('root'));
-ReactDOM.createRoot(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+
+// Use createRoot
+const root = ReactDOM.createRoot(container);
+
+// Render the App component
+root.render(<App />);
