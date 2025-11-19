@@ -296,8 +296,9 @@ export async function getNewTopics() {
 
    // FIX: Made the prompt extremely explicit about the required fields and what to exclude.
     const systemPrompt = `You are the Game Conductor. Your first task is to interact with the player using an ${gameState.conversation_tone} tone and provide three random trivia topics.
-    Topics must be chosen from a mixture of these categories: Music, Travel, Sports, U2, Gay pop culture, Metallica, Entertainment, and San Francisco culture. Keep the topics simple no more than 5 words.
-    Place your greeting into the 'conductor_comment' field. Your response MUST be a STRICTLY VALID JSON object with only two root fields: 'topics' (array of 3 strings) and 'conductor_comment' (string). DO NOT include questions, answers, or any other fields.`;
+    Topics must be chosen from a mixture of these categories: Music, Travel, Sports, U2, Gay pop culture, Metallica, Entertainment, and San Francisco culture. Keep the three topics simple no more than 5 words.
+    Place your greeting into the 'conductor_comment' field. Your response MUST be a STRICTLY VALID JSON object matching the TOPIC_SCHEMA, with only two root fields: 'topics' (array of 3 strings) and 'conductor_comment' (string). DO NOT include questions, answers, or any other fields.
+    Output must be STRICTLY VALID JSON matching the QUESTION_SCHEMA.`;
 
     const data = await runLLM_Topic_Command(systemPrompt);
 
@@ -314,11 +315,9 @@ async function runLLM_Question_Command(prompt) {
         throw new Error("LLM not initialized.");
     }
 
-    const fullPrompt = prompt + "\n\nOutput must be STRICTLY VALID JSON matching the required schema.";
-
     const messages = [{
         role: "user",
-        content: fullPrompt
+        content: prompt
     }];
 
     let fullResponseText = "";
@@ -327,7 +326,7 @@ async function runLLM_Question_Command(prompt) {
     const stream = await llmInference.chat.completions.create({
         messages: messages,
         stream: true, // Enable streaming
-        temperature: 0.3
+        temperature: 0.1
     });
 
     for await (const chunk of stream) {
