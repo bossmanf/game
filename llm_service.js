@@ -99,7 +99,7 @@ export async function initializeLLM() {
         const initProgressCallback = (initProgress) => {
           console.log(initProgress);
         }
-        const MODEL_NAME = "SmolLM2-135M-Instructq4f32_1HuggingFace" //"TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
+        const MODEL_NAME = "SmolLM2-135M-Instructq4f32_1" //"TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
 
         llmInference = await CreateMLCEngine(
           MODEL_NAME,
