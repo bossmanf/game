@@ -218,7 +218,7 @@ export async function getNewTopics() {
 
     const systemPrompt = `You are the Game Conductor. Your first task is to greet the player using an ${gameState.conversation_tone} tone and provide three random trivia topics.
     Topics must be chosen from a mixture of these categories: Music, Travel, Sports, U2, Gay pop culture, Metallica, Entertainment, and San Francisco culture.
-    Output must be STRICTLY VALID JSON matching the TOPIC_SCHEMA, but include the greeting/comment in the 'context_summary' field.`;
+    Output must be STRICTLY VALID JSON matching the TOPIC_SCHEMA`;
 
     const data = await runLLMCommand(systemPrompt);
 

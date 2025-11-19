@@ -82,17 +82,14 @@ export class MusicTriviaScene extends Phaser.Scene {
 
     }
 
-    // NEW: Function exposed to React to handle the topic selection click
     handleTopicSelection(topic) {
         this.challengeText.setText(`Topic selected: ${topic}`);
         gameState.last_topic = topic;
         this.startChallenge(topic, true);
     }
     
-    // NEW: Function exposed to React to handle the answer click
     processPlayerGuess(guess) {
-        // Find the correct button/answer logic is now handled in React, 
-        // but we still process the guess here
+
         const isCorrect = (guess === this.currentQuestionData.correct_answer);
         
         // Emit the result to React so it can highlight the buttons
