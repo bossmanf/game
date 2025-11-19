@@ -2,34 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LLM Music Trivia</title>
+    <title>LLM Music Trivia (React/Phaser)</title>
     
-
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
     <style>
-        /* General Body and Background */
-        body { 
-            margin: 0; 
-            /* Placeholder: Replace this URL with your preferred free SF/Music themed image */
+        body {
+            margin: 0;
             background: url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center fixed;
             background-size: cover;
-            font-family: 'Arial', sans-serif; /* Professional font */
+            font-family: 'Arial', sans-serif;
+            color: #fff; /* Ensure UI text is visible */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-        
-        /* Game Container for a clean, framed look */
-        #game-container {
+        /* New container to frame the entire app */
+        #root {
+            background-color: rgba(0, 0, 0, 0.8); /* Dark background for readability */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            width: 840px; /* Wider to accommodate UI */
+        }
+        /* Phaser will inject its canvas here */
+        #phaser-container {
             border: 2px solid #555;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Shadow for depth */
+            margin: 20px 0;
+        }
+        /* Style for the new React buttons */
+        .ui-button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.2s;
+        }
+        .ui-button:hover {
+            background-color: #0056b3;
         }
     </style>
     
 </head>
 <body>
+    <div id="root"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
-    <script src="llm_service.js" type="module"></script> 
-    <script src="main.js" type="module"></script>
-    <div id="game-container"></div>
-
-</body>
+    
+    <script src="llm_service.js" type="module"></script>
+    <script src="main.js" type="module"></script> 
+    <script type="text/babel" src="app.jsx"></script> </body>
 </html>
-
-
