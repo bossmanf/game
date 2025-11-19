@@ -39,6 +39,7 @@ class MusicTriviaScene extends Phaser.Scene {
         super('MusicTriviaScene');
         this.currentAudio = null;
         this.currentQuestionData = null; 
+        this.llmInitializedPromise = null;
         this.answerButtons = [];
         this.topicButtons = [];
         this.conductorText = null; 
@@ -46,11 +47,13 @@ class MusicTriviaScene extends Phaser.Scene {
 
     async preload() {
         console.log("Starting LLM initialization...");
-        await initializeLLM(); 
+        this.llmInitializedPromise =  initializeLLM(); 
         console.log("LLM successfully initialized. Game starting.");
     }
 
-    create() {
+    async create() {
+        await this.llmInitializedPromise;
+        console.log("LLM successfully initialized. Game starting.");
         // UI Elements
         this.add.text(10, 10, 'LLM Quiz Master', FONT_STYLE.TITLE);
         this.scoreText = this.add.text(10, 50, `Score: ${gameState.score} | Difficulty: ${gameState.difficulty}`, FONT_STYLE.SCORE);
