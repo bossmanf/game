@@ -93,9 +93,9 @@ export async function initializeLLM() {
         const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm@0.2.79');
         
         // --- STEP 2: CREATE THE ENGINE INSTANCE ---
-        //const initProgressCallback = (progress) => {
-        //    console.log(`Loading progress: ${progress * 100}%`);
-        //};
+        const initProgressCallback = (progress) => {
+            console.log(`Loading progress: ${progress * 100}%`);
+        };
 
         // Assign the engine directly to the outer variable
         llmInference = await CreateMLCEngine(initProgressCallback); 
