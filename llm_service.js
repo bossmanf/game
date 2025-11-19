@@ -390,7 +390,7 @@ export async function getNextChallenge(playerInput, isTopicSelection = false) {
 
 
     const data =  runLLM_Question_Command(systemPrompt);
-    return { question: data.question_text, options: data.options, correct_answer = data.correct_answer, conductor_comment = data.conductor_comment}
+    return { question: data.question_text, options: data.options, correct_answer:data.correct_answer, conductor_comment: data.conductor_comment}
 
 }
 
