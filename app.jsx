@@ -2,10 +2,6 @@
 
 const { useEffect, useState, useRef, useCallback } = React;
 
-// Import the game instance from main.js (Phaser)
-// 🛑 IMPORTANT: This assumes 'game' is exported from main.js (as in the update above)
-import { game } from './main.js'; 
-
 
 // Initial state for the UI
 const initialUIState = {
@@ -34,7 +30,7 @@ function App() {
     useEffect(() => {
         const game = window.phaserGameInstance; 
         if (!game) return; // Safety check
-        
+
         // Once the Phaser game is created, get the scene reference
         game.events.on('ready', () => {
             sceneRef.current = game.scene.getScene('MusicTriviaScene');
