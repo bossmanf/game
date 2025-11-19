@@ -94,14 +94,14 @@ export async function initializeLLM() {
         
         //const webllm = await import ("https://esm.run/@mlc-ai/web-llm");
         const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
-        
+
         // Callback function to update model loading progress
         const initProgressCallback = (initProgress) => {
           console.log(initProgress);
         }
-        const MODEL_NAME = "Llama-3.1-8B-Instruct-q4f32_1-MLC";
+        const MODEL_NAME = "TinyLlama-1.1B-Chat-v0.4-q4f32\_1-1k" //"Llama-3.1-8B-Instruct-q4f32_1-MLC";
 
-        const llmInference = await CreateMLCEngine(
+        llmInference = await CreateMLCEngine(
           MODEL_NAME,
           { initProgressCallback: initProgressCallback }, // engineConfig
         );
