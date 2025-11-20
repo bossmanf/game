@@ -66,8 +66,6 @@ const TOPIC_SCHEMA = {
             "type": "string",
             "description": "The comment for the player, matching the required conversation tone."
     }
-    
-    "required": ["conductor_comment"]
 };
 
 
