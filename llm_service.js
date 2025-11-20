@@ -67,7 +67,7 @@ const TOPIC_SCHEMA = {
             "description": "The comment for the player, matching the required conversation tone."
         }
     },
-    "required": ["topics", "conductor_comment"]
+    "required": ["conductor_comment"]
 };
 
 
