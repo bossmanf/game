@@ -4,6 +4,7 @@ import {
     gameState, 
     initializeLLM, 
     getNextChallenge,
+    getRandomTwoElements,
     getNewTopics
 } from './llm_service.js';
 
@@ -60,7 +61,7 @@ export class MusicTriviaScene extends Phaser.Scene {
     async showTopicSelection() {
         this.hideChallengeElements();
         
-        this.challengeText.setText('LLM generating 3 random topics...'); 
+        this.challengeText.setText('Generating 3 random topics...'); 
         this.conductorText.setText('Hold on, the Game Conductor is warming up the trivia engine...'); 
 
         let topics = ['80s Pop Music', 'Travel Trivia', 'SF Sports History'];
@@ -69,7 +70,7 @@ export class MusicTriviaScene extends Phaser.Scene {
         try {
             const topicData = await getNewTopics(); 
             console.log('New topics received...')
-            topics = topicData.topics;
+            topics = getRandomTwoElements(topics);
             comment = topicData.comment;
             this.challengeText.setText('Choose Your Topic:');
         } catch (error) {
@@ -80,14 +81,36 @@ export class MusicTriviaScene extends Phaser.Scene {
         this.conductorText.setText(comment);
 
         this.game.events.emit('TOPICS_READY', { topics, comment });
-
+        console.log('Topics ready.')
     }
 
-    handleTopicSelection(topic) {
-        this.challengeText.setText(`Topic selected: ${topic}`);
-        gameState.last_topic = topic;
-        this.startChallenge(topic, true);
+
+async handleTopicSelection(topic) {
+    // 1. Update the last topic in the global state
+    gameState.last_topic = topic;
+
+    // 2. Call the LLM to get the next question
+    try {
+        const data = await getNextChallenge(topic);
+        
+        // 3. Emit the event back to React with the new question data
+        this.game.events.emit('QUESTION_READY', {
+            question: data.question,
+            options: data.options,
+            correct_answer: data.correct_answer,
+            comment: data.conductor_comment
+        });
+        
+    } catch (error) {
+        console.error("Error generating question:", error);
+        // Handle error: emit a message back to React
+        this.game.events.emit('QUESTION_READY', {
+            question: "Error loading question. Please try again.",
+            options: ["Restart"],
+            comment: "Something went wrong in the LLM service.",
+        });
     }
+}
     
     processPlayerGuess(guess) {
 

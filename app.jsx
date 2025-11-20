@@ -1,5 +1,3 @@
-// App.jsx (must be loaded via <script type="text/babel" src="App.jsx"></script>)
-
 const { useEffect, useState, useRef, useCallback } = React;
 
 
@@ -52,7 +50,7 @@ function App() {
         });
 
         // B. Handle new question from Phaser
-        game.events.on('QUESTION_READY', ({ question, options, comment }) => {
+        game.events.on('QUESTION_READY', ({ question, options, correct_answer, comment }) => {
             setUiState(prev => ({ 
                 ...prev, 
                 question: question,
@@ -97,7 +95,9 @@ function App() {
     // 2. Communication React -> Phaser (Calling methods on the Scene)
     const handleTopicClick = (topic) => {
         if (sceneRef.current && uiState.phase === 'topic_select') {
-            setUiState(prev => ({ ...prev, phase: 'loading', message: `Topic ${topic} selected. Loading challenge...` }));
+            // Set phase to loading immediately to block further clicks and show status
+            setUiState(prev => ({ ...prev, phase: 'loading', message: `Topic ${topic} selected. Loading challenge...` })); 
+            
             // Call the exposed method on the Phaser scene instance
             sceneRef.current.handleTopicSelection(topic);
         }
@@ -114,21 +114,20 @@ function App() {
     
     // --- Render Logic ---
 
-    // Function to get the correct button style based on game state
-    const getButtonStyle = (option) => {
-        if (uiState.lastGuess === 'checking') return 'ui-button'; // Keep neutral while checking
-        if (!uiState.correctAnswer) return 'ui-button'; // Default style
-        
-        const isCorrect = option === uiState.correctAnswer;
-        const isGuessed = uiState.options.find(o => o === option && o === uiState.lastGuess); // Check if this was the one the user clicked
-
-        if (isCorrect) {
-            return 'ui-button' + (uiState.lastGuess === 'correct' ? ' correct-flash' : ' correct');
-        } else if (isGuessed && uiState.lastGuess === 'wrong') {
-             return 'ui-button wrong';
+    // Simplified style mapping for the answer buttons
+    const getAnswerButtonStyle = (option) => {
+        if (uiState.correctAnswer) {
+            if (option === uiState.correctAnswer) {
+                return 'ui-button correct'; // Highlight correct answer
+            } else if (option === uiState.lastGuess && uiState.lastGuess === 'wrong') {
+                return 'ui-button wrong'; // Highlight user's incorrect guess
+            } else {
+                return 'ui-button wrong-dim'; // Dim other options
+            }
         }
-        return 'ui-button'; 
+        return 'ui-button';
     };
+
 
     return (
         <div className="app-container">
@@ -155,7 +154,7 @@ function App() {
                         key={topic} 
                         className="ui-button"
                         onClick={() => handleTopicClick(topic)}
-                        disabled={uiState.loading}
+                        disabled={uiState.loading || uiState.phase !== 'topic_select'}
                     >
                         {topic}
                     </button>
@@ -165,7 +164,7 @@ function App() {
                 {uiState.phase === 'quiz' && uiState.options.map(option => (
                     <button 
                         key={option} 
-                        className={getButtonStyle(option)}
+                        className={getAnswerButtonStyle(option)}
                         onClick={() => handleAnswerClick(option)}
                         disabled={!!uiState.correctAnswer} // Disable once an answer is processed
                     >
@@ -183,8 +182,12 @@ function App() {
 
 const container = document.getElementById('root');
 
-// Use createRoot
-const root = ReactDOM.createRoot(container);
-
-// Render the App component
-root.render(<App />);
+// Use conditional rendering to prevent the 'createRoot' warning and potential TypeErrors 
+// if ReactDOM hasn't fully loaded before script execution.
+if (container && typeof ReactDOM !== 'undefined' && typeof ReactDOM.createRoot === 'function') {
+    const root = ReactDOM.createRoot(container);
+    // Render the App component
+    root.render(<App />);
+} else {
+    console.error("React rendering failed: Container element 'root' not found or ReactDOM not available.");
+}

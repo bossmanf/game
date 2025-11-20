@@ -62,14 +62,6 @@ const GAME_STATE_SCHEMA = {
 
 const TOPIC_SCHEMA = {
     "type": "object",
-    "properties": {
-        "topics": {
-            "type": "array",
-            "description": "An array containing exactly three distinct trivia topics.",
-            "items": { "type": "string" },
-            "minItems": 3,
-            "maxItems": 3
-        },
         "conductor_comment": { 
             "type": "string",
             "description": "The comment for the player, matching the required conversation tone."
@@ -94,6 +86,80 @@ let llmInference = null;
 // Helper function to delay execution
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+function getRandomTwoElements() {
+
+    const arr = [
+    "80s Music",
+    "90s Music",
+    "Heavy Rock",
+    "Punk Rock",
+    "Pop Music",
+    "Music (anything goes)",
+    "International Cuisine",
+    "Travel",
+    "Famous Capitals",
+    "Sports in San Francisco",
+    "U2",
+    "Gay Pop Culture",
+    "Metallica",
+    "Cinema Entertainment",
+    "Email Marketting",
+    "Wresting",
+    "Geography",
+    "Science",
+    "Arabic language",
+    "Iraq",
+    "Spain",
+    "Granada",
+    "Liverpool",
+    "Big Bear California",
+    "New York City",
+    "Hardly Strictly Bluegrass"
+    "Beenies",
+    "Black Color",
+    "Music Venues",
+    "Music Venues in San Francisco",
+    "Classic Rock",
+    "Hip-Hop",
+    "World Music",
+    "Indie Music",
+    "Alternative Music",
+    "Habibi",
+    "Softball",
+    "FIFA videogame",
+    "Gummies",
+    "Inner Sunset San Francisco",
+    "San Jose California",
+    "Famous Concerts",
+    "California",
+    "Boardgames",
+    "Guitars",
+    "Bay Area",
+    "Liverpool FC",
+    "History",
+    "Modern Comedians",
+    "San Francisco culture"
+    ];
+
+    // Check if the array is valid and has at least two elements
+    if (!Array.isArray(arr) || arr.length < 2) {
+        return null;
+    }
+
+    const length = arr.length;
+    let index1 = Math.floor(Math.random() * length);
+    let index2;
+
+    // Generate a second random index, ensuring it is unique (not the same as index1)
+    do {
+        index2 = Math.floor(Math.random() * length);
+    } while (index1 === index2);
+
+    // Return the elements at the two unique random indices
+    return [arr[index1], arr[index2]];
 }
 
 // The initialization function
@@ -295,10 +361,8 @@ export async function getNewTopics() {
     }
 
    // FIX: Made the prompt extremely explicit about the required fields and what to exclude.
-    const systemPrompt = `You are the Game Conductor. Your first task is to interact with the player using an ${gameState.conversation_tone} tone and provide EXACTLY three random trivia topics.
-    Topics must be randomly chosen from this list of topics: 80s Music, 90s Music, Heavy Rock, Punk Rock, Pop Rock, Music (anything goes), International Cuisine, Travel, Famous Capitals, Sports in San Francisco, U2, Gay Pop Culture, Metallica, Cinema Entertainment, Email Marketting, Wresting, Geography, Science, Arabic language, Iraq, Spain, Granada, Liverpool, Big Bear California, New York City, Beenies, Black Color, Music Venues, Music Venues in San Francisco, Classic Rock, Hip-Hop, World Music, Indie Music, Alternative Music, Habibi, Softball, FIFA videogame, Gummies, Inner Sunset San Francisco, San Jose California, Famous Concerts, California, Boardgames, Guitars, Bay Area, FIFA videogame, Liverpool FC, History, Modern Comedians, and San Francisco culture. 
-    Place your greeting into the 'conductor_comment' field. Your response MUST be a STRICTLY VALID JSON object matching the TOPIC_SCHEMA, 
-    with only two root fields: 'topics' (array of 3 strings) and 'conductor_comment' (string). DO NOT include questions, answers, or any other fields.`
+    const systemPrompt = `You are the Game Conductor. Your first task is to interact with the player using an ${gameState.conversation_tone} tone and announce that these are the 2 categories to choose.
+    Place your greeting into the 'conductor_comment' field. Your response MUST be a STRICTLY VALID JSON object matching the TOPIC_SCHEMA. DO NOT include questions, answers, or any other fields.`
 
 
     const data = await runLLM_Topic_Command(systemPrompt);
