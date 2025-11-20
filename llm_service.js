@@ -115,7 +115,7 @@ function getRandomTwoElements() {
     "Liverpool",
     "Big Bear California",
     "New York City",
-    "Hardly Strictly Bluegrass"
+    "Hardly Strictly Bluegrass",
     "Beenies",
     "Black Color",
     "Music Venues",
