@@ -295,8 +295,8 @@ export async function getNewTopics() {
     }
 
    // FIX: Made the prompt extremely explicit about the required fields and what to exclude.
-    const systemPrompt = `You are the Game Conductor. Your first task is to interact with the player using an ${gameState.conversation_tone} tone and provide three random trivia topics.
-    Topics must be chosen from a mixture of these categories: Music, Travel, Sports, U2, Gay pop culture, Metallica, Entertainment, and San Francisco culture. Keep the three topics simple no more than 5 words.
+    const systemPrompt = `You are the Game Conductor. Your first task is to interact with the player using an ${gameState.conversation_tone} tone and provide EXACTLY three random trivia topics.
+    Topics must be randomly chosen from this list of topics: 80s Music, 90s Music, Heavy Rock, Punk Rock, Pop Rock, Music (anything goes), International Cuisine, Travel, Famous Capitals, Sports in San Francisco, U2, Gay Pop Culture, Metallica, Cinema Entertainment, Email Marketting, Wresting, Geography, Science, Arabic language, Iraq, Spain, Granada, Liverpool, Big Bear California, New York City, Beenies, Black Color, Music Venues, Music Venues in San Francisco, Classic Rock, Hip-Hop, World Music, Indie Music, Alternative Music, Habibi, Softball, FIFA videogame, Gummies, Inner Sunset San Francisco, San Jose California, Famous Concerts, California, Boardgames, Guitars, Bay Area, FIFA videogame, Liverpool FC, History, Modern Comedians, and San Francisco culture. 
     Place your greeting into the 'conductor_comment' field. Your response MUST be a STRICTLY VALID JSON object matching the TOPIC_SCHEMA, 
     with only two root fields: 'topics' (array of 3 strings) and 'conductor_comment' (string). DO NOT include questions, answers, or any other fields.`
 
