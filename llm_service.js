@@ -428,7 +428,7 @@ async function runLLM_Topic_Command(prompt) {
  * Generates three random topics from the LLM.
  * The LLM will be constrained to output an object matching TOPIC_SCHEMA.
  */
-export async function getNewTopis() {
+export async function getNewTopics() {
 
     if (!llmInference) {
         throw new Error("LLM not initialized.");
@@ -568,20 +568,19 @@ export async function updateStatus(playerInput) {
     if (!llmInference) {
         throw new Error("LLM not initialized.");
     }
-    const systemPrompt = `The player guessed: "${playerInput}". The previous topic was "${gameState.last_topic}". Evaluate if the guess was correct (match the previous correct_answer). Adjust the score and difficulty. Generate a new question, options, and correct answer based on the previous topic.;
+    const systemPrompt = `The player guessed: "${playerInput}". The previous topic was "${gameState.last_topic}". Evaluate if the guess was correct (match the previous correct_answer). Adjust the score and difficulty.;
     The player's current game state is: Score ${gameState.score}, Difficulty ${gameState.difficulty}, Conversation Tone: ${gameState.conversation_tone}. Last Summary: ${gameState.game_history}.
     RULES:
     1. If the player was CORRECT, set 'score_adjustment' to +1, set 'conversation_tone' to 'Thrilled', and increase 'challenge_difficulty' (Easy -> Medium -> Hard) if possible.
     2. If the player was INCORRECT, set 'score_adjustment' to -1, set 'conversation_tone' to 'Normal', and keep difficulty the same or decrease it.
     3. If the score is 3 or larger, set 'conversation_tone' to 'Sassy' or 'Challenging' to increase engagement.
-    4. The 'conductor_comment' must be engaging and react to the player's guess, matching the required Conversation Tone.
-    5. The 'options' array must contain exactly four answers, one of which must EXACTLY match the 'correct_answer' field.
+    4. The 'conductor_comment' must be engaging and react to the player's guess, matching the required Conversation Tone, and sometimes mentioning something based on the last summary.
     6. Output must be STRICTLY VALID JSON matching the GAME_STATE_SCHEMA.`;
  
     const data = await runLLM_API_Call(systemPrompt, "GAME_STATE_SCHEMA");
     
     // Schema Validation for GAME_STATE_SCHEMA
-    if (!data.challenge_difficulty || data.score_adjustment === undefined || !data.context_summary) {
+    if (!data.challenge_difficulty || data.score_adjustment === undefined || !data.context_summary || !data.conductor_comment) {
         throw new Error("Parsed JSON is missing required GAME_STATE schema fields.");
     }
 
