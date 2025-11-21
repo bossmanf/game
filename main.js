@@ -4,7 +4,6 @@ import {
     gameState, 
     initializeLLM, 
     getNextChallenge,
-    getRandomTwoElements,
     getNewTopics
 } from './llm_service.js';
 
@@ -61,7 +60,7 @@ export class MusicTriviaScene extends Phaser.Scene {
     async showTopicSelection() {
         this.hideChallengeElements();
         
-        this.challengeText.setText('Generating 3 random topics...'); 
+        this.challengeText.setText('Selecting Topics...'); 
         this.conductorText.setText('Hold on, the Game Conductor is warming up the trivia engine...'); 
 
         let topics = ['80s Pop Music', 'Travel Trivia', 'SF Sports History'];
@@ -70,7 +69,7 @@ export class MusicTriviaScene extends Phaser.Scene {
         try {
             const topicData = await getNewTopics(); 
             console.log('New topics received...')
-            topics = getRandomTwoElements(topics);
+            topics = topicData.topics;
             comment = topicData.comment;
             this.challengeText.setText('Choose Your Topic:');
         } catch (error) {
@@ -168,7 +167,7 @@ async handleTopicSelection(topic) {
             this.challengeText.setText(`Error: Game Master failed. Check console.`);
             this.conductorText.setText(`Conductor: An error occurred in the quantum logic stream!`);
             console.error(error);
-            this.time.delayedCall(3000, this.showTopicSelection, [], this);
+            this.time.delayedCall(1000, this.showTopicSelection, [], this);
         }
     }
 

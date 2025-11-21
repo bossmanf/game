@@ -50,12 +50,11 @@ const GAME_STATE_SCHEMA = {
             "description": "The current conversation tone",
             "enum": ["Normal", "Sassy", "Thrilled", "Challenging"]
         },
-        "conductor_comment": { // NEW FIELD: Conductor's engaging comment
+        "conductor_comment": { 
             "type": "string",
             "description": "A fun, engaging comment that greets the player or reacts to the previous answer, using the current conversation_tone."
         }
     },
-    // FIX: Corrected the required fields to only include state update data
     "required": ["challenge_difficulty", "score_adjustment", "context_summary", "conversation_tone", "conductor_comment"]
 };
 
@@ -197,6 +196,72 @@ export async function initializeLLM() {
         throw new Error("Initialization failed: Could not load WebLLM AI system.");
     }
 }
+
+
+async function runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
+
+    if (!llmInference) {
+        throw new Error("LLM not initialized.");
+    }
+
+    // Append the mandatory instruction for strict JSON output
+    const fullPrompt = prompt + "\n\nOutput must be STRICTLY VALID JSON matching the required schema.";
+
+    const messages = [{ role: "user", content: fullPrompt }];
+
+    let fullResponseText = "";
+    
+    // 2. Call the chat.completions.create method with stream: true
+    const stream = await llmInference.chat.completions.create({
+        messages: messages,
+        stream: true, // Enable streaming
+        temperature: 0.3
+    });
+
+    // Process the streaming output
+    for await (const chunk of stream) {
+        const content = chunk.choices[0].delta.content;
+        if (content) {
+            fullResponseText += content;
+        }
+    }
+    
+    // --- Start Robust JSON Cleaning & Parsing ---
+    let jsonString = fullResponseText.trim();
+    
+    // 1. Find the first opening curly brace '{' (where JSON must begin)
+    const firstBracketIndex = jsonString.indexOf('{');
+    if (firstBracketIndex > -1) {
+        jsonString = jsonString.substring(firstBracketIndex);
+    } else {
+        throw new Error(`LLM Output for ${schemaName} did not contain a JSON start bracket '{'.`);
+    }
+
+    // 2. Find the last closing curly brace '}' and aggressively truncate everything after it.
+    let lastBracketIndex = jsonString.lastIndexOf('}');
+    if (lastBracketIndex > -1) {
+        // Keep everything up to and including the last '}'
+        jsonString = jsonString.substring(0, lastBracketIndex + 1);
+    }
+    
+    // 3. Remove trailing markdown fences (e.g., ```) if they exist
+    if (jsonString.endsWith('```')) {
+        jsonString = jsonString.substring(0, jsonString.lastIndexOf('```')).trim();
+    }
+    
+    // 4. Final check for non-JSON characters
+    while (jsonString.endsWith('.') || jsonString.endsWith('\n')) {
+        jsonString = jsonString.slice(0, -1).trim();
+    }
+
+    try {
+        return JSON.parse(jsonString);
+    } catch (e) {
+        console.error(`Failed to parse cleaned JSON string for ${schemaName}:`, jsonString, e); 
+        throw new Error(`Failed to parse LLM output for ${schemaName}. Raw string was: ${fullResponseText}`);
+    }
+}
+
 
 
 /**
@@ -374,10 +439,18 @@ export async function getNewTopis() {
     Place your greeting into the 'conductor_comment' field. Your response MUST be a STRICTLY VALID JSON object matching the TOPIC_SCHEMA. DO NOT include questions, answers, or any other fields.`
 
 
-    const data = await runLLM_Topic_Command(systemPrompt);
+    const data = await runLLM_API_Call(systemPrompt, "TOPIC_SCHEMA");
 
-    return { topics: getRandomTwoElements() || ['Default Topic 1', 'Default Topic 2'], conductor_comment: data.conductor_comment || "Welcome!" };
-
+    if (!data.conductor_comment) {
+        console.error("Parsed JSON is missing required fields (conductor_comment):", data);
+        throw new Error("LLM output parsed, but TOPIC_SCHEMA validation failed.");
+    }
+    
+    // Return the locally generated topics along with the LLM's comment
+    return { 
+        topics: getRandomTwoElements() || ['Default Topic 1', 'Default Topic 2'], 
+        conductor_comment: data.conductor_comment || "Welcome!" 
+    };
 }
 
 
@@ -473,7 +546,12 @@ export async function getNextChallenge(playerInput, isTopicSelection = false) {
     Output must be STRICTLY VALID JSON matching the QUESTION_SCHEMA.`;
 
 
-    const data = await runLLM_Question_Command(systemPrompt);
+    const data = await runLLM_API_Call(systemPrompt, "QUESTION_SCHEMA");
+    
+    // Schema Validation for QUESTION_SCHEMA
+    if (!data.question_text || !data.options || !data.correct_answer || !data.conductor_comment || data.options.length !== 4) {
+         throw new Error("Parsed JSON is missing required question schema fields or options array is incorrect.");
+    }
     
     // Return structure uses correct property notation.
     return { 
@@ -495,11 +573,16 @@ export async function updateStatus(playerInput) {
     RULES:
     1. If the player was CORRECT, set 'score_adjustment' to +1, set 'conversation_tone' to 'Thrilled', and increase 'challenge_difficulty' (Easy -> Medium -> Hard) if possible.
     2. If the player was INCORRECT, set 'score_adjustment' to -1, set 'conversation_tone' to 'Normal', and keep difficulty the same or decrease it.
-    3. If the score is 3 or larger, consider setting 'conversation_tone' to 'Sassy' or 'Challenging' to increase engagement.
+    3. If the score is 3 or larger, set 'conversation_tone' to 'Sassy' or 'Challenging' to increase engagement.
     4. The 'conductor_comment' must be engaging and react to the player's guess, matching the required Conversation Tone.
     5. The 'options' array must contain exactly four answers, one of which must EXACTLY match the 'correct_answer' field.
     6. Output must be STRICTLY VALID JSON matching the GAME_STATE_SCHEMA.`;
  
-    return await runLLM_Command(systemPrompt);
+    const data = await runLLM_API_Call(systemPrompt, "GAME_STATE_SCHEMA");
+    
+    // Schema Validation for GAME_STATE_SCHEMA
+    if (!data.challenge_difficulty || data.score_adjustment === undefined || !data.context_summary) {
+        throw new Error("Parsed JSON is missing required GAME_STATE schema fields.");
+    }
 
 }
