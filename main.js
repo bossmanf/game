@@ -220,4 +220,7 @@ const config = {
     scene: [MusicTriviaScene]
 };
 
-window.phaserGameInstance = new Phaser.Game(config);
+export function initPhaserGame() {
+    window.phaserGameInstance = new Phaser.Game(config);
+    console.log("Phaser Game Initialized and ready to run.");
+}
