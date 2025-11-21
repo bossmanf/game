@@ -12,7 +12,8 @@ const initialUIState = {
     question: null,
     options: [],
     correctAnswer: null,
-    lastGuess: null
+    lastGuess: null,
+    phase: 'loading'
 };
 
 // --- React Components ---
@@ -173,7 +174,9 @@ function App() {
                 ))}
 
                 {/* Loading Indicator */}
-                {uiState.loading && <p>Loading LLM assets. Please wait...</p>}
+                {(uiState.loading || uiState.phase === 'loading') && uiState.topics.length === 0 && (
+                    <div className="text-gray-400 mt-4 animate-pulse">Loading LLM assets or next challenge...</div>
+                )}
             </div>
             
         </div>
