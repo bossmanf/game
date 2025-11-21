@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hassansational Trivia Challenge</title>
+    
+    <!-- Tailwind CSS CDN for the App UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font for the music-looking button text -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- We rely on app.jsx to load React/Phaser/Babel dynamically or use the environment's globals -->
+
+    <style>
+        /* Custom styles for the unique button font */
+        .music-font {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        
+        body {
+            margin: 0;
+            /* Using a darker overlay background image for drama */
+            background: url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+            /* React will manage the display/layout now */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        /* New container to frame the entire app */
+        #root {
+            width: 100%;
+            min-height: 100vh;
+            display: flex; /* Ensure React container can center its content */
+            justify-content: center;
+            align-items: center;
+            overflow: auto; 
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="root"></div>
+
+    <script type="module" src="./app.jsx"></script>
+</body>
+</html>
