@@ -75,7 +75,7 @@ export class MusicTriviaScene extends Phaser.Scene {
             const topicData = await getNewTopics(); 
             console.log('New topics received...')
             topics = topicData.topics;
-            this.challengeText.setText('Choose Your Topic:');
+            this.challengeText.setText('Choose one of these Topics:');
         } catch (error) {
             this.challengeText.setText('Topic Generator failed. Using default topics.');
             console.error("Topic generation error:", error);
