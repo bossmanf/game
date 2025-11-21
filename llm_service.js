@@ -28,6 +28,9 @@ const QUESTION_SCHEMA= {
     "required": [ "question_text", "correct_answer", "options", "conductor_comment"]
 };
 
+
+
+
 const GAME_STATE_SCHEMA = {
     "type": "object",
     "properties": {

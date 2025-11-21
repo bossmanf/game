@@ -77,9 +77,8 @@ export class MusicTriviaScene extends Phaser.Scene {
         }
         
         this.conductorText.setText(comment);
-
-        this.game.events.emit('TOPICS_READY', { topics, comment });
         console.log('Topics ready.')
+        this.game.events.emit('TOPICS_READY', { topics, comment });
     }
 
 

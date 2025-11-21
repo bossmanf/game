@@ -97,7 +97,7 @@ function App() {
         if (sceneRef.current && uiState.phase === 'topic_select') {
             // Set phase to loading immediately to block further clicks and show status
             setUiState(prev => ({ ...prev, phase: 'loading', message: `Topic ${topic} selected. Loading challenge...` })); 
-            
+            console.log('handleTopicClick')
             // Call the exposed method on the Phaser scene instance
             sceneRef.current.handleTopicSelection(topic);
         }
@@ -179,6 +179,7 @@ function App() {
         </div>
     );
 }
+export default App;
 
 const container = document.getElementById('root');
 
