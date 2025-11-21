@@ -129,6 +129,13 @@ async handleTopicSelection(topic) {
             this.challengeText.setText(`WRONG! Correct answer was: ${this.currentQuestionData.correct_answer}`);
         }
         
+         // Update global state
+        gameState.score += challengeData.score_adjustment;
+        gameState.difficulty = challengeData.challenge_difficulty;
+        gameState.game_history = challengeData.context_summary; // Updated history property
+           
+
+
         this.conductorText.setText(`Conductor: ${isCorrect ? 'That was a sharp guess!' : 'Better luck next time!'}`); 
 
         // Wait 2 seconds, then transition to the next phase
@@ -146,13 +153,7 @@ async handleTopicSelection(topic) {
 
         try {
             const challengeData = await getNextChallenge(playerInput, isTopic);
-            this.currentQuestionData = challengeData;
-
-            // Update global state
-            //gameState.score += challengeData.score_adjustment;
-            //gameState.difficulty = challengeData.challenge_difficulty;
-            //gameState.game_history = challengeData.context_summary; // Updated history property
-            
+            this.currentQuestionData = challengeData; 
             //this.game.events.emit('GAME_STATE_UPDATE', gameState);
             this.game.events.emit('QUESTION_READY', {
                 question: challengeData.question_text,
@@ -180,7 +181,7 @@ const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    parent: 'phaser-container', // 🛑 UPDATED to match React div ID
+    parent: 'phaser-container', 
     dom: {
         createContainer: true
     },
