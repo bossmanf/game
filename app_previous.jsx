@@ -94,6 +94,7 @@ function App() {
 
     // 2. Communication React -> Phaser (Calling methods on the Scene)
     const handleTopicClick = (topic) => {
+        console.log('handletopicClick')
         if (sceneRef.current && uiState.phase === 'topic_select') {
             // Set phase to loading immediately to block further clicks and show status
             setUiState(prev => ({ ...prev, phase: 'loading', message: `Topic ${topic} selected. Loading challenge...` })); 
