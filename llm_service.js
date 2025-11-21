@@ -363,7 +363,7 @@ async function runLLM_Topic_Command(prompt) {
  * Generates three random topics from the LLM.
  * The LLM will be constrained to output an object matching TOPIC_SCHEMA.
  */
-export async function getNewTopics() {
+export async function getRandomTwoElements() {
 
     if (!llmInference) {
         throw new Error("LLM not initialized.");
