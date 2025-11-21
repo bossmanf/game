@@ -346,42 +346,45 @@ const PhaserGame = ({  setUiState }) => {
             }
 
             async getTopics() {
-                
-                const arr = [
-                "80s Music", "90s Music", "Heavy Rock", "Punk Rock", "Pop Music", "Music (anything goes)", "International Cuisine", 
-                "Travel", "Famous Capitals", "Sports in San Francisco", "U2", "Gay Pop Culture", "Metallica", "Cinema Entertainment",
-                "Email Marketting", "Wresting", "Geography", "Science", "Arabic language", "Iraq", "Spain", "Granada", "Liverpool", 
-                "Big Bear California", "New York City", "Diversity and Justice", "Salesforce", "Living in the Bay Area", "Gay Lifestyle", 
-                "Living in Spain", "California Lifestyle", "Karl the Fog", "Travel Culture", "International Destinations", 
-                "Wrestling Icons", "Happiness", "Hardly Strictly Bluegrass", "Beenies", "Black Color", "Music Venues", 
-                "Music Venues in San Francisco", "Classic Rock", "Hip-Hop", "World Music", "Indie Music", "Alternative Music", 
-                "Habibi", "Softball", "FIFA videogame", "Gummies", "Inner Sunset San Francisco", "San Jose California", 
-                "Famous Concerts", "California", "Boardgames", "Guitars", "Bay Area", "Liverpool FC", "History", 
-                "Modern Comedians", "San Francisco culture"
-                ];
+                const defaultTopics = ['Default Topic 1', 'Default Topic 2', 'Default Topic 3'];
+                let arr = defaultTopics; // Start with default topics
 
-                // Check if the array is valid and has at least two elements
-                if (!Array.isArray(arr) || arr.length < 2) {
-                    return null;
+                try {
+                    console.log("Fetching topics from ./topics.txt...");
+                    const res = await fetch('./topics.txt');
+                    
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    
+                    // Fetch, split, trim, and filter in one chain
+                    arr = (await res.text())
+                        .split('\n')
+                        .map(t => t.trim())
+                        .filter(t => t.length > 0);
+
+                    if (arr.length < 2) throw new Error("File contains less than 2 valid topics.");
+
+                    console.log(`Successfully loaded ${arr.length} topics.`);
+
+                } catch (error) {
+                    console.error("Failed to load topics. Using defaults.", error);
+                    // 'arr' remains 'defaultTopics' if the try block fails
                 }
 
+                // --- Topic Selection (Always runs, guaranteeing unique topics since arr.length >= 2) ---
                 const length = arr.length;
                 let index1 = Math.floor(Math.random() * length);
-                let index2;
+                let index2 = index1;
+                
+                while (index1 === index2) index2 = Math.floor(Math.random() * length);
 
-                // Generate a second random index, ensuring it is unique (not the same as index1)
-                do {
-                    index2 = Math.floor(Math.random() * length);
-                } while (index1 === index2);
-
-                // Return the elements at the two unique random indices
-                topics = [arr[index1], arr[index2]] || ['Default Topic 1', 'Default Topic 2'] ;
-
-                console.log("Topics successfully parsed and ready:", topics);
-                this.game.events.emit('TOPICS_READY', { topics: topics });
-                    
-
+                this.topics = [arr[index1], arr[index2]];
+                
+                console.log("Topics successfully parsed and ready:", this.topics);
+                this.game.events.emit('TOPICS_READY', { topics: this.topics });
+                
+                return this.topics;
             }
+        
 
             async handleTopicSelection(topic) {
                 // Game logic to transition to quiz phase
