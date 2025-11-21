@@ -4,7 +4,8 @@ import {
     gameState, 
     initializeLLM, 
     getNextChallenge,
-    getNewTopics
+    getNewTopics,
+    updateStatus
 } from './llm_service.js';
 
 // Define the styles used by Phaser for the IN-GAME TEXT ONLY
@@ -42,15 +43,13 @@ export class MusicTriviaScene extends Phaser.Scene {
         await this.llmInitializedPromise;
         console.log("LLM successfully initialized. Game starting.");
         
-        //  NEW: Emit event to React to confirm LLM is ready
         this.game.events.emit('LLM_READY');
         
         // Only keep the text elements that draw *on the canvas*
         this.add.text(10, 10, 'LLM Quiz Master', FONT_STYLE.TITLE);
-                
+        this.scoreText = this.add.text(790, 10, `Score: ${gameState.score}`, FONT_STYLE.SCORE).setOrigin(1, 0);
         this.conductorText = this.add.text(10, 560, 'Initializing the Game Conductor...', FONT_STYLE.CONDUCTOR);
         this.challengeText = this.add.text(400, 200, 'Loading Game...', FONT_STYLE.QUESTION).setOrigin(0.5);
-
         // Start the Topic Selection Phase
         this.showTopicSelection();
     }
@@ -84,41 +83,60 @@ export class MusicTriviaScene extends Phaser.Scene {
     }
 
 
-async handleTopicSelection(topic) {
-    // 1. Update the last topic in the global state
-    gameState.last_topic = topic;
+    async handleTopicSelection(topic) {
+        gameState.last_topic = topic;
 
-    // 2. Call the LLM to get the next question
-    try {
-        const data = await getNextChallenge(topic);
-        
-        // 3. Emit the event back to React with the new question data
-        this.game.events.emit('QUESTION_READY', {
-            question: data.question,
-            options: data.options,
-            correct_answer: data.correct_answer,
-            comment: data.conductor_comment
-        });
-        
-    } catch (error) {
-        console.error("Error generating question:", error);
-        // Handle error: emit a message back to React
-        this.game.events.emit('QUESTION_READY', {
-            question: "Error loading question. Please try again.",
-            options: ["Restart"],
-            comment: "Something went wrong in the LLM service.",
-        });
+        // 2. Call the LLM to get the next question
+        try {
+
+            console.log('Calling Next Challenge for first question on topic:', topic)
+            const data = await getNextChallenge(topic);
+            
+            this.currentQuestionData = {
+                question_text: data.question,
+                options: data.options,
+                correct_answer: data.correct_answer,
+                conductor_comment: data.conductor_comment
+            };
+
+            this.game.events.emit('QUESTION_READY', {
+                question: data.question,
+                options: data.options,
+                correct_answer: data.correct_answer,
+                comment: data.conductor_comment
+            });
+            
+            this.challengeText.setText(data.question);
+            this.conductorText.setText(`Conductor: ${data.conductor_comment}`);
+
+        } catch (error) {
+            console.error("Error generating question:", error);
+            // Handle error: emit a message back to React
+            this.game.events.emit('QUESTION_READY', {
+                question: "Error loading question. Please try again.",
+                options: ["Restart"],
+                comment: "Something went wrong in the LLM service. Check console.",
+                correct_answer: "Restart" // Provide a fallback answer
+            });
+            this.challengeText.setText("Error loading question. Please try again.");
+            this.conductorText.setText("Conductor: Something went wrong in the LLM service. Check console.");
+        }
     }
-}
     
-    processPlayerGuess(guess) {
+    async processPlayerGuess(guess) {
 
+        if (!this.currentQuestionData) {
+            console.error("No current question data available. Restarting topic selection.");
+            this.showTopicSelection();
+            return;
+        }
+        
         const isCorrect = (guess === this.currentQuestionData.correct_answer);
         
         // Emit the result to React so it can highlight the buttons
-        this.game.events.emit('GUESS_PROCESSED', { 
-            isCorrect: isCorrect, 
-            correctAnswer: this.currentQuestionData.correct_answer 
+        this.game.events.emit('GUESS_PROCESSED', {  
+            isCorrect: isCorrect,   
+            correctAnswer: this.currentQuestionData.correct_answer  
         });
 
         // Continue processing in Phaser
@@ -128,18 +146,33 @@ async handleTopicSelection(topic) {
             this.challengeText.setText(`WRONG! Correct answer was: ${this.currentQuestionData.correct_answer}`);
         }
         
-         // Update global state
-        gameState.score += challengeData.score_adjustment;
-        gameState.difficulty = challengeData.challenge_difficulty;
-        gameState.game_history = challengeData.context_summary; // Updated history property
-           
+        // 1. Call LLM to update status and get new game state
+        try {
+            // updateStatus returns the state adjustment and new tone/difficulty
+            const statusUpdate = await updateStatus(guess); 
 
+            // 2. Update global state using the returned statusUpdate object
+            gameState.score += statusUpdate.score_adjustment;
+            gameState.difficulty = statusUpdate.challenge_difficulty;
+            gameState.game_history = statusUpdate.context_summary; 
+            gameState.conversation_tone = statusUpdate.conversation_tone;
+            
+            // 3. Update the conductor text with the LLM's new comment
+            this.conductorText.setText(`Conductor: ${statusUpdate.conductor_comment}`);
+            this.scoreText.setText(`Score: ${gameState.score}`);
+            
+            // 4. Emit the updated score and state to React UI
+            this.game.events.emit('GAME_STATE_UPDATE', gameState);
 
-        this.conductorText.setText(`Conductor: ${isCorrect ? 'That was a sharp guess!' : 'Better luck next time!'}`); 
+        } catch (error) {
+            console.error("Error updating game status:", error);
+            this.conductorText.setText(`Conductor: Score update failed due to a transmission error!`);
+        }
 
-        // Wait 2 seconds, then transition to the next phase
-        this.time.delayedCall(2000, () => {
-            this.startChallenge(guess, false);
+        // 5. Wait 3 seconds, then transition to the next question phase
+        this.time.delayedCall(3000, () => {
+            // Pass the ongoing topic for the next question
+            this.startChallenge(gameState.last_topic); 
         }, [], this);
     }
     
@@ -153,10 +186,11 @@ async handleTopicSelection(topic) {
         try {
             const challengeData = await getNextChallenge(playerInput, isTopic);
             this.currentQuestionData = challengeData; 
-            //this.game.events.emit('GAME_STATE_UPDATE', gameState);
+
             this.game.events.emit('QUESTION_READY', {
                 question: challengeData.question_text,
                 options: challengeData.options,
+                correct_answer: challengeData.correct_answer,
                 comment: challengeData.conductor_comment
             });
             
@@ -187,5 +221,4 @@ const config = {
     scene: [MusicTriviaScene]
 };
 
-// 🛑 EXPORT the game instance so React can access it
 window.phaserGameInstance = new Phaser.Game(config);
