@@ -97,10 +97,47 @@
         </div>
     </div>
     
+    <!-- Main Application Container (Hidden initially) -->
     <div id="root"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
     
+    <!-- Import main.js dynamically to get the initPhaserGame function -->
+    <script type="module">
+        import { initPhaserGame } from './main.js';
+        
+        // Expose initPhaserGame globally for the HTML script block to call
+        window.initPhaserGame = initPhaserGame;
+    </script>
     
-    <script type="module" src="./app.jsx"></script>
+    <script src="llm_service.js" type="module"></script> 
+    <!-- app.jsx is loaded as type="text/babel" which needs to run after initialization -->
+    
+    <script>
+        // Global function called by the New Game button
+        function startGame() {
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const rootContainer = document.getElementById('root');
+
+            // 1. Hide the welcome window with a smooth transition
+            welcomeScreen.classList.add('hidden-screen');
+
+            // 2. Start the game initialization flow after the transition
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+                rootContainer.style.display = 'flex'; // Use flex for the React layout
+                
+                // 3. Trigger the Phaser initialization (which starts the React component mounting)
+                if (window.initPhaserGame) {
+                    window.initPhaserGame();
+                    console.log("Phaser/React game flow initiated.");
+                } else {
+                    console.error("Initialization function not available. Check module imports.");
+                }
+            }, 500); // Matches the CSS transition duration
+        }
+    </script>
+    
+    <script type="text/babel" src="app.jsx"></script>
 </body>
 </html>

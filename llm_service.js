@@ -230,7 +230,7 @@ export async function getNewTopics() {
 
 /**
 * Generates the next challenge state from the LLM, enforcing JSON output.
- * @param {string} playerInput - The player's attempt OR the new topic.
+ * @param {string} playerInput - The player's attempt OR the d.
  */
 export async function getNextChallenge(playerInput, isTopicSelection = false) {
 
