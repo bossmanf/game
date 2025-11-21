@@ -28,18 +28,18 @@ const QUESTION_SCHEMA= {
     "required": [ "question_text", "correct_answer", "options", "conductor_comment"]
 };
 
-
 const GAME_STATE_SCHEMA = {
     "type": "object",
     "properties": {
         "challenge_difficulty": { 
             "type": "string", 
             "description": "The current difficulty level: Easy, Medium, or Hard.",
-            "enum": ["Easy", "Medium", "Hard", "Game_Over"]
+            "enum": ["Very Easy", "Easy", "Medium", "Hard"]
         },
         "score_adjustment": { 
             "type": "integer", 
-            "description": "The score to be awarded/deducted based on the player's last action (+/-). Should be +1 or -1."
+            // UPDATED: New score values reflecting the 100-point and 50-point changes
+            "description": "The score to be awarded/deducted based on the player's last action (+/-). Should be +100 or -50."
         },
         "context_summary": {
             "type": "string",
@@ -48,16 +48,17 @@ const GAME_STATE_SCHEMA = {
         "conversation_tone": {
             "type": "string",
             "description": "The current conversation tone",
-            "enum": ["Normal", "Sassy", "Thrilled", "Challenging"]
+            // Note: 'Excited' replaces 'Thrilled' in the new logic
+            "enum": ["Normal", "Sassy", "Excited", "Challenging"]
         },
-        "conductor_comment": { 
+        "conductor_comment": { // NEW FIELD: Conductor's engaging comment
             "type": "string",
-            "description": "A fun, engaging comment that greets the player or reacts to the previous answer, using the current conversation_tone."
+            // IMPORTANT: Comment must reference the 1000-point goal progress
+            "description": "A fun, engaging comment that greets the player or reacts to the previous answer, using the current conversation_tone, and informing them of their progress toward 1000 points."
         }
     },
     "required": ["challenge_difficulty", "score_adjustment", "context_summary", "conversation_tone", "conductor_comment"]
 };
-
 
 const TOPIC_SCHEMA = {
     "type": "object",
@@ -71,7 +72,7 @@ const TOPIC_SCHEMA = {
 // Global object to store game state (score, difficulty, etc.)
 export let gameState = {
     score: 0,
-    difficulty: "Easy",
+    difficulty: "Very Easy",
     last_topic: "None", 
     conversation_tone: "Normal",
     game_history: "Game started. Player is new."
@@ -89,67 +90,16 @@ function delay(ms) {
 function getRandomTwoElements() {
 
     const arr = [
-    "80s Music",
-    "90s Music",
-    "Heavy Rock",
-    "Punk Rock",
-    "Pop Music",
-    "Music (anything goes)",
-    "International Cuisine",
-    "Travel",
-    "Famous Capitals",
-    "Sports in San Francisco",
-    "U2",
-    "Gay Pop Culture",
-    "Metallica",
-    "Cinema Entertainment",
-    "Email Marketting",
-    "Wresting",
-    "Geography",
-    "Science",
-    "Arabic language",
-    "Iraq",
-    "Spain",
-    "Granada",
-    "Liverpool",
-    "Big Bear California",
-    "New York City",
-    "Diversity and Justice",
-    "Salesforce",
-    "Living in the Bay Area",
-    "Gay Lifestyle",
-    "Living in Spain",
-    "California Lifestyle",
-    "Karl the Fog",
-    "Travel Culture",
-    "International Destinations",
-    "Wrestling Icons",
-    "Happiness",
-    "Hardly Strictly Bluegrass",
-    "Beenies",
-    "Black Color",
-    "Music Venues",
-    "Music Venues in San Francisco",
-    "Classic Rock",
-    "Hip-Hop",
-    "World Music",
-    "Indie Music",
-    "Alternative Music",
-    "Habibi",
-    "Softball",
-    "FIFA videogame",
-    "Gummies",
-    "Inner Sunset San Francisco",
-    "San Jose California",
-    "Famous Concerts",
-    "California",
-    "Boardgames",
-    "Guitars",
-    "Bay Area",
-    "Liverpool FC",
-    "History",
-    "Modern Comedians",
-    "San Francisco culture"
+    "80s Music", "90s Music", "Heavy Rock", "Punk Rock", "Pop Music", "Music (anything goes)", "International Cuisine", 
+    "Travel", "Famous Capitals", "Sports in San Francisco", "U2", "Gay Pop Culture", "Metallica", "Cinema Entertainment",
+    "Email Marketting", "Wresting", "Geography", "Science", "Arabic language", "Iraq", "Spain", "Granada", "Liverpool", 
+    "Big Bear California", "New York City", "Diversity and Justice", "Salesforce", "Living in the Bay Area", "Gay Lifestyle", 
+    "Living in Spain", "California Lifestyle", "Karl the Fog", "Travel Culture", "International Destinations", 
+    "Wrestling Icons", "Happiness", "Hardly Strictly Bluegrass", "Beenies", "Black Color", "Music Venues", 
+    "Music Venues in San Francisco", "Classic Rock", "Hip-Hop", "World Music", "Indie Music", "Alternative Music", 
+    "Habibi", "Softball", "FIFA videogame", "Gummies", "Inner Sunset San Francisco", "San Jose California", 
+    "Famous Concerts", "California", "Boardgames", "Guitars", "Bay Area", "Liverpool FC", "History", 
+    "Modern Comedians", "San Francisco culture"
     ];
 
     // Check if the array is valid and has at least two elements
@@ -254,8 +204,23 @@ async function runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
         jsonString = jsonString.slice(0, -1).trim();
     }
 
+    
     try {
-        return JSON.parse(jsonString);
+        const result = JSON.parse(jsonString);
+        
+        // Basic schema validation based on function usage
+        if (schemaName === "TOPIC_SCHEMA" && !result.conductor_comment) {
+            throw new Error("TOPIC_SCHEMA validation failed: Missing conductor_comment.");
+        }
+        if (schemaName === "QUESTION_SCHEMA" && (!result.question_text || !result.options || !result.correct_answer)) {
+            throw new Error("QUESTION_SCHEMA validation failed: Missing core question fields.");
+        }
+        if (schemaName === "GAME_STATE_SCHEMA" && (!result.challenge_difficulty || result.score_adjustment === undefined)) {
+            throw new Error("GAME_STATE_SCHEMA validation failed: Missing core state fields.");
+        }
+        
+        return result;
+
     } catch (e) {
         console.error(`Failed to parse cleaned JSON string for ${schemaName}:`, jsonString, e); 
         throw new Error(`Failed to parse LLM output for ${schemaName}. Raw string was: ${fullResponseText}`);
@@ -441,10 +406,6 @@ export async function getNewTopics() {
 
     const data = await runLLM_API_Call(systemPrompt, "TOPIC_SCHEMA");
 
-    if (!data.conductor_comment) {
-        console.error("Parsed JSON is missing required fields (conductor_comment):", data);
-        throw new Error("LLM output parsed, but TOPIC_SCHEMA validation failed.");
-    }
     
     // Return the locally generated topics along with the LLM's comment
     return { 
@@ -548,10 +509,6 @@ export async function getNextChallenge(playerInput, isTopicSelection = false) {
 
     const data = await runLLM_API_Call(systemPrompt, "QUESTION_SCHEMA");
     
-    // Schema Validation for QUESTION_SCHEMA
-    if (!data.question_text || !data.options || !data.correct_answer || !data.conductor_comment || data.options.length !== 4) {
-         throw new Error("Parsed JSON is missing required question schema fields or options array is incorrect.");
-    }
     
     // Return structure uses correct property notation.
     return { 
@@ -568,20 +525,22 @@ export async function updateStatus(playerInput) {
     if (!llmInference) {
         throw new Error("LLM not initialized.");
     }
-    const systemPrompt = `The player guessed: "${playerInput}". The previous topic was "${gameState.last_topic}". Evaluate if the guess was correct (match the previous correct_answer). Adjust the score and difficulty.;
+    const systemPrompt = `The player guessed: "${playerInput}". The previous topic was "${gameState.last_topic}". Evaluate if the guess was correct (match the previous correct_answer). Adjust the score and difficulty. 
+    The goal is to reach 1000 points.
+    
     The player's current game state is: Score ${gameState.score}, Difficulty ${gameState.difficulty}, Conversation Tone: ${gameState.conversation_tone}. Last Summary: ${gameState.game_history}.
+    
     RULES:
-    1. If the player was CORRECT, set 'score_adjustment' to +1, set 'conversation_tone' to 'Thrilled', and increase 'challenge_difficulty' (Easy -> Medium -> Hard) if possible.
-    2. If the player was INCORRECT, set 'score_adjustment' to -1, set 'conversation_tone' to 'Normal', and keep difficulty the same or decrease it.
-    3. If the score is 3 or larger, set 'conversation_tone' to 'Sassy' or 'Challenging' to increase engagement.
-    4. The 'conductor_comment' must be engaging and react to the player's guess, matching the required Conversation Tone, and sometimes mentioning something based on the last summary.
-    6. Output must be STRICTLY VALID JSON matching the GAME_STATE_SCHEMA.`;
+    1. If the player was CORRECT, set 'score_adjustment' to +100, set 'conversation_tone' to 'Excited', and increase 'challenge_difficulty' (Easy -> Medium -> Hard) if possible.
+    2. If the player was INCORRECT, set 'score_adjustment' to -50, set 'conversation_tone' to 'Normal', and keep difficulty the same or decrease it.
+    3. If the current score (${gameState.score}) is greater than 700, set the 'conversation_tone' to 'Sassy' or 'Challenging' to increase the tension as they approach the 1000-point goal.
+    4. The 'conductor_comment' must directly reference the player's progress toward the 1000-point goal (e.g., "Only 300 points left to go!") and react to the guess, matching the required Conversation Tone.
+    5. Output must be STRICTLY VALID JSON matching the GAME_STATE_SCHEMA.`;
  
     const data = await runLLM_API_Call(systemPrompt, "GAME_STATE_SCHEMA");
     
-    // Schema Validation for GAME_STATE_SCHEMA
-    if (!data.challenge_difficulty || data.score_adjustment === undefined || !data.context_summary || !data.conductor_comment) {
-        throw new Error("Parsed JSON is missing required GAME_STATE schema fields.");
-    }
+    // The calling code will take this score_adjustment and apply it to gameState.score
+    // Example: gameState.score += data.score_adjustment;
+    return data;
 
 }
