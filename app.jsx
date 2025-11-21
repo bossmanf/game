@@ -104,93 +104,109 @@ function App() {
     };
 
     const handleAnswerClick = (guess) => {
-        if (sceneRef.current && uiState.phase === 'quiz' && !uiState.correctAnswer) {
-             // Disable further interaction visually
-            setUiState(prev => ({ ...prev, lastGuess: 'checking' }));
-            // Call the exposed method on the Phaser scene instance
-            sceneRef.current.processPlayerGuess(guess);
+        if (sceneRef.current && uiState.phase === 'quiz' && uiState.correctAnswer === null) {
+              // Disable further interaction visually and show it's processing
+              setUiState(prev => ({ ...prev, lastGuess: guess })); 
+              // Call the exposed method on the Phaser scene instance
+              sceneRef.current.processPlayerGuess(guess);
         }
     };
     
-    // --- Render Logic ---
-
-    // Simplified style mapping for the answer buttons
-    const getAnswerButtonStyle = (option) => {
-        if (uiState.correctAnswer) {
-            if (option === uiState.correctAnswer) {
-                return 'ui-button correct'; // Highlight correct answer
-            } else if (option === uiState.lastGuess && uiState.lastGuess === 'wrong') {
-                return 'ui-button wrong'; // Highlight user's incorrect guess
-            } else {
-                return 'ui-button wrong-dim'; // Dim other options
-            }
-        }
-        return 'ui-button';
-    };
-
-
+    // The main render block was missing, which is why the topics didn't show up!
     return (
-        <div className="app-container">
-            {/* --- Top UI: Scoreboard --- */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #444' }}>
-                <h2 style={{ color: '#00FFC0' }}>Score: {uiState.score}</h2>
-                <h2 style={{ color: '#F5D547' }}>Difficulty: {uiState.difficulty}</h2>
-            </div>
+        <div className="flex flex-col items-center justify-center p-4 min-h-screen text-white">
             
-            {/* --- Phaser Canvas Container --- */}
-            <div id="phaser-container">
-                {/* Phaser will inject its canvas here */}
+            {/* The Phaser Canvas Container */}
+            <div id="phaser-container" className="mb-4 w-[800px] h-[600px] border-2 border-red-500 rounded-lg shadow-xl overflow-hidden">
+                {/* Phaser Canvas renders here */}
             </div>
 
-            {/* --- Bottom UI: Dynamic Buttons (Topics or Answers) --- */}
-            <div style={{ textAlign: 'center', minHeight: '150px' }}>
-                <p style={{ color: '#F5D547', fontSize: '18px' }}>
-                    **Conductor:** {uiState.message}
-                </p>
+            {/* UI Control Panel */}
+            <div className="bg-gray-800/90 p-6 rounded-lg shadow-2xl w-[800px] border border-gray-700">
+                <h2 className="text-xl font-bold mb-3 text-red-400">Game Status</h2>
+                <div className="flex justify-between text-lg mb-4">
+                    <span>Score: <span className="text-green-400 font-extrabold">{uiState.score}</span></span>
+                    <span>Difficulty: <span className="text-yellow-400">{uiState.difficulty}</span></span>
+                    <span>Tone: <span className="text-teal-400">{uiState.tone}</span></span>
+                </div>
+                
+                {/* Main Interaction Area */}
+                <div className="mt-4 p-4 bg-gray-900/90 rounded-lg border-2 border-gray-700">
+                    
+                    {/* LOADING PHASE */}
+                    {uiState.phase === 'loading' && (
+                        <p className="text-center text-xl text-yellow-500 animate-pulse">{uiState.message}</p>
+                    )}
 
-                {/* Show Topics */}
-                {uiState.phase === 'topic_select' && uiState.topics.map(topic => (
-                    <button 
-                        key={topic} 
-                        className="ui-button"
-                        onClick={() => handleTopicClick(topic)}
-                        disabled={uiState.loading || uiState.phase !== 'topic_select'}
-                    >
-                        {topic}
-                    </button>
-                ))}
+                    {/* TOPIC SELECTION PHASE */}
+                    {uiState.phase === 'topic_select' && uiState.topics.length > 0 && (
+                        <div className="text-center">
+                            <p className="text-2xl font-semibold mb-6 text-red-300">Choose Your Topic:</p>
+                            <div className="flex flex-col md:flex-row gap-4 justify-center">
+                                {uiState.topics.map(topic => (
+                                    <button
+                                        key={topic}
+                                        onClick={() => handleTopicClick(topic)}
+                                        className="px-6 py-4 bg-purple-600 text-white text-xl font-bold rounded-xl shadow-lg
+                                                   hover:bg-purple-700 transition-all duration-200 transform hover:scale-105"
+                                    >
+                                        {topic}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {/* QUIZ PHASE */}
+                    {uiState.phase === 'quiz' && uiState.options.length > 0 && (
+                        <div className="flex flex-col items-center">
+                            {/* The Conductor's comment is displayed here from the UI state message */}
+                            <p className="text-lg italic text-gray-400 mb-4 text-center">{`Conductor: ${uiState.message}`}</p>
+                            
+                            <div className="grid grid-cols-2 gap-4 w-full">
+                                {uiState.options.map(option => {
+                                    let buttonClasses = "px-4 py-3 text-lg font-medium rounded-lg transition-all duration-300 shadow-md";
+                                    
+                                    const isAnswered = uiState.correctAnswer !== null;
+                                    const isCorrectAnswer = isAnswered && (option === uiState.correctAnswer);
+                                    const isPlayerGuess = isAnswered && (option === uiState.lastGuess);
+                                    
+                                    if (isAnswered) {
+                                        if (isCorrectAnswer) {
+                                            // Correct answer highlight (Green)
+                                            buttonClasses += " bg-green-600 hover:bg-green-700 opacity-100";
+                                        } else if (isPlayerGuess && !isCorrectAnswer) {
+                                            // Player's incorrect guess highlight (Red)
+                                            buttonClasses += " bg-red-600 hover:bg-red-700 opacity-70";
+                                        } else {
+                                            // Other options dim (preventing further interaction)
+                                            buttonClasses += " bg-gray-600 hover:bg-gray-600 opacity-50 cursor-default";
+                                        }
+                                    } else {
+                                        // Default quiz button style
+                                        buttonClasses += " bg-blue-500 hover:bg-blue-600";
+                                    }
 
-                {/* Show Answers */}
-                {uiState.phase === 'quiz' && uiState.options.map(option => (
-                    <button 
-                        key={option} 
-                        className={getAnswerButtonStyle(option)}
-                        onClick={() => handleAnswerClick(option)}
-                        disabled={!!uiState.correctAnswer} // Disable once an answer is processed
-                    >
-                        {option}
-                    </button>
-                ))}
+                                    return (
+                                        <button
+                                            key={option}
+                                            onClick={() => !isAnswered && handleAnswerClick(option)}
+                                            disabled={isAnswered}
+                                            className={buttonClasses}
+                                        >
+                                            {option}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
 
-                {/* Loading Indicator */}
-                {(uiState.loading || uiState.phase === 'loading') && uiState.topics.length === 0 && (
-                    <div className="text-gray-400 mt-4 animate-pulse">Loading LLM assets or next challenge...</div>
-                )}
+                </div>
             </div>
-            
         </div>
     );
 }
-export default App;
 
-const container = document.getElementById('root');
-
-// Use conditional rendering to prevent the 'createRoot' warning and potential TypeErrors 
-// if ReactDOM hasn't fully loaded before script execution.
-if (container && typeof ReactDOM !== 'undefined' && typeof ReactDOM.createRoot === 'function') {
-    const root = ReactDOM.createRoot(container);
-    // Render the App component
-    root.render(<App />);
-} else {
-    console.error("React rendering failed: Container element 'root' not found or ReactDOM not available.");
-}
+// Make sure the React application is rendered into the root element
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);

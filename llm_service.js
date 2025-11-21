@@ -224,8 +224,6 @@ async function runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
 }
 
 
-
-
 /**
  * Generates three random topics from the LLM.
  * The LLM will be constrained to output an object matching TOPIC_SCHEMA.
@@ -236,8 +234,6 @@ export async function getNewTopics() {
         topics: getRandomTwoElements() || ['Default Topic 1', 'Default Topic 2']
     };
 }
-
-
 
 /**
 * Generates the next challenge state from the LLM, enforcing JSON output.

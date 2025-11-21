@@ -40,6 +40,8 @@ export class MusicTriviaScene extends Phaser.Scene {
     }
 
     async create() {
+        let comment = "Welcome to the game! I'm your Conductor. Let's start with a topic!";
+
         await this.llmInitializedPromise;
         console.log("LLM successfully initialized. Game starting.");
         
@@ -166,7 +168,7 @@ export class MusicTriviaScene extends Phaser.Scene {
         }
 
         // 5. Wait 3 seconds, then transition to the next question phase
-        this.time.delayedCall(3000, () => {
+        this.time.delayedCall(100, () => {
             // Pass the ongoing topic for the next question
             this.startChallenge(gameState.last_topic); 
         }, [], this);
@@ -197,7 +199,7 @@ export class MusicTriviaScene extends Phaser.Scene {
             this.challengeText.setText(`Error: Game Master failed. Check console.`);
             this.conductorText.setText(`Conductor: An error occurred in the quantum logic stream!`);
             console.error(error);
-            this.time.delayedCall(1000, this.showTopicSelection, [], this);
+            this.time.delayedCall(100, this.showTopicSelection, [], this);
         }
     }
 
