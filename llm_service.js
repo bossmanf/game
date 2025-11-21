@@ -29,8 +29,6 @@ const QUESTION_SCHEMA= {
 };
 
 
-
-
 const GAME_STATE_SCHEMA = {
     "type": "object",
     "properties": {
@@ -143,7 +141,6 @@ export async function initializeLLM() {
     }
 }
 
-
 async function runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
 
     if (!llmInference) {
@@ -204,10 +201,6 @@ async function runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
     try {
         const result = JSON.parse(jsonString);
         
-        // Basic schema validation based on function usage
-        if (schemaName === "TOPIC_SCHEMA" && !result.conductor_comment) {
-            throw new Error("TOPIC_SCHEMA validation failed: Missing conductor_comment.");
-        }
         if (schemaName === "QUESTION_SCHEMA" && (!result.question_text || !result.options || !result.correct_answer)) {
             throw new Error("QUESTION_SCHEMA validation failed: Missing core question fields.");
         }
