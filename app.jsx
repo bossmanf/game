@@ -41,11 +41,10 @@ function App() {
         });
 
         // A. Handle new topics from Phaser
-        game.events.on('TOPICS_READY', ({ topics, comment }) => {
+        game.events.on('TOPICS_READY', ({ topics }) => {
             setUiState(prev => ({ 
                 ...prev, 
                 topics: topics, 
-                message: comment,
                 phase: 'topic_select'
             }));
         });
