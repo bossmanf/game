@@ -261,8 +261,8 @@ function App() {
                                     <button
                                         key={topic}
                                         onClick={() => handleTopicClick(topic)}
-                                        className="px-6 py-4 bg-purple-600 text-white text-xl font-bold rounded-xl shadow-lg
-                                                   hover:bg-purple-700 transition-all duration-200 transform hover:scale-105 music-font"
+                                        className="px-6 py-4 bg-purple-500 text-white text-xl font-extrabold rounded-xl shadow-2xl
+                                                   hover:bg-purple-600 transition-all duration-200 transform hover:scale-105"
                                     >
                                         {topic}
                                     </button>
