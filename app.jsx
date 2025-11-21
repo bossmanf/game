@@ -9,11 +9,6 @@ const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-// The LLM Model to use
-const MODEL_NAME = 'gemini-2.5-flash-preview-09-2025';
-const LLM_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=`;
-
-// --- Game State & Utility ---
 
 const initialUIState = {
     score: 0,
@@ -31,8 +26,43 @@ const initialUIState = {
     isCorrect: null,
     isAuthReady: false,
     userId: null,
+    appPhase: 'welcome',
 };
 
+let llmInference = null;
+
+
+// --- Welcome Screen Component ---
+const WelcomeScreen = ({ onStartGame }) => (
+    // This div simulates the fixed welcome-screen overlay from the original HTML
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-95 z-50 p-4 transition-opacity duration-500 ease-out">
+        <div className="bg-gray-900 p-8 rounded-xl shadow-2xl max-w-4xl w-full text-center border-4 border-red-500">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-red-400 mb-8 music-font">
+                Hassansational Trivia Challenge!
+            </h1>
+            
+            {/* Placeholder Image Section */}
+            <div className="mx-auto w-11/12 md:w-2/3 mb-10 border-4 border-yellow-500 rounded-lg overflow-hidden shadow-xl">
+                <img 
+                    src="https://media.gettyimages.com/id/1363411424/photo/smiling-young-man-playing-an-acoustic-guitar.jpg?s=2048x2048&w=gi&k=20&c=z8m_ZT1x5gFEstoTfBIulNKpBzp6D-XAbbfA7b7e2B8="
+                    alt="Habibi is the best" 
+                    className="w-full h-auto object-cover"
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/1200x800/dc2626/f8fafc?text=Image+Failed+to+Load'; }}
+                />
+            </div>
+
+            {/* New Game Button */}
+            <button 
+                onClick={onStartGame}
+                className="music-font text-4xl md:text-5xl px-12 py-4 bg-gradient-to-r from-teal-500 to-green-600 text-white rounded-full shadow-2xl 
+                           hover:from-teal-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 
+                           ring-4 ring-red-500 ring-offset-4 ring-offset-gray-900"
+            >
+                New Game
+            </button>
+        </div>
+    </div>
+);
 // --- Image and Style Logic ---
 
 const getConductorImageProps = (state) => {
@@ -93,7 +123,54 @@ const getCharacterImageProps = (state) => {
 
 // --- Phaser Game Component ---
 // This component manages the lifecycle of the Phaser game and handles the LLM logic
-const PhaserGame = ({ initialAuthState, setUiState }) => {
+const PhaserGame = ({  setUiState }) => {
+
+   const initializeLLM = async () => {
+        setUiState(prev => ({ ...prev, loading: true, message: "Initializing LLM..." }));
+    
+        try {
+            const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
+
+            const initProgressCallback = (initProgress) => {
+                console.log(initProgress);
+                setUiState(prev => ({ ...prev, message: `Loading Model: ${initProgress.text}` }));
+            }
+
+            const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC"
+            
+            llmInference = await CreateMLCEngine(
+                MODEL_NAME,
+                { initProgressCallback: initProgressCallback }, // engineConfig
+            );
+
+            console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
+            return true;
+        } catch (e) {
+            console.error("Failed to initialize WebLLM or load model weights. Check WebGPU support.", e);
+            setUiState(prev => ({ ...prev, message: "LLM Initialization failed. See console for details.", loading: false }));
+            return false;
+        }
+    }
+
+
+    // Function to handle the full initialization sequence
+    const initGameSequence = useCallback(async (userId, scene) => {
+        if (!scene || !userId) return;
+
+        // 1. Load/Create Game State
+        await scene.loadOrCreateGameState(userId);
+
+        // 2. Initialize LLM
+        const llmReady = await initializeLLM();
+
+        if (llmReady) {
+            // 3. Get Topics
+            scene.getTopics();
+        }
+
+    }, [setUiState]); // Dependency on setUiState
+
+
     useEffect(() => {
         if (!window.Phaser) {
             console.error("Phaser library not loaded.");
@@ -106,7 +183,8 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
         const db = getFirestore(firebaseApp);
         
         let currentUserId = null;
-        let dbReady = false;
+        let authIsReady = false;
+        let gameInitialized = false; // Flag to prevent re-init of Phaser instance
 
         // 1. Scene Definition (The core game logic)
         class MusicTriviaScene extends window.Phaser.Scene {
@@ -116,27 +194,33 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
                 this.currentScore = 0;
                 this.difficultyLevel = 'Very Easy';
                 this.gameDataRef = null; // Firestore document reference
+                this.llmInitializedPromise = initializeLLM(); 
+
             }
 
             preload() {
-                // Preload any assets if needed (e.g., audio, images)
+
             }
 
             create() {
-                // Set the game background color (visually hidden by React container)
                 this.cameras.main.setBackgroundColor('#1f2937');
                 
                 // Expose a public method to React to handle topic selection
                 window.phaserGameInstance.scene.getScene('MusicTriviaScene').handleTopicSelection = this.handleTopicSelection.bind(this);
                 window.phaserGameInstance.scene.getScene('MusicTriviaScene').processPlayerGuess = this.processPlayerGuess.bind(this);
+                window.phaserGameInstance.scene.getScene('MusicTriviaScene').startNextRound = this.startNextRound.bind(this);
+                
+                // Inform React that the scene is ready
+                this.game.events.emit('ready');
+                
+                if (authIsReady) {
+                    initGameSequence(currentUserId, this);
+                }
 
-                // Wait for the Firebase Auth to be ready before calling LLM
-                if (dbReady) {
-                    this.initializeLLMAndGetTopics();
                 } else {
                     console.log("Waiting for Firebase to be ready...");
                 }
-                
+                 
                 // Inform React that the scene is ready
                 this.game.events.emit('ready');
             }
@@ -193,86 +277,110 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
                 }));
             }
 
-            // --- LLM API CALLER ---
 
-            async callGeminiAPI(systemPrompt, userQuery, responseSchema = null) {
-                // Exponential backoff logic
-                const MAX_RETRIES = 5;
-                let delay = 1000;
+            async function runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
 
-                const apiKey = ""; // Canvas will provide this
-                const url = `${LLM_API_URL}${apiKey}`;
-
-                const payload = {
-                    contents: [{ parts: [{ text: userQuery }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] },
-                    tools: [{ "google_search": {} }],
-                };
-
-                if (responseSchema) {
-                    payload.generationConfig = {
-                        responseMimeType: "application/json",
-                        responseSchema: responseSchema
-                    };
+                if (!llmInference) {
+                    throw new Error("LLM not initialized.");
                 }
 
-                for (let i = 0; i < MAX_RETRIES; i++) {
-                    try {
-                        const response = await fetch(url, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
+                // Append the mandatory instruction for strict JSON output
 
-                        if (response.ok) {
-                            return await response.json();
-                        } else {
-                            console.warn(`LLM API request failed (attempt ${i + 1}):`, response.status, await response.text());
-                        }
-                    } catch (e) {
-                        console.error(`LLM API fetch error (attempt ${i + 1}):`, e);
-                    }
+                const messages = [{ role: "user", content: prompt}];
 
-                    if (i < MAX_RETRIES - 1) {
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        delay *= 2; // Exponential backoff
+                let fullResponseText = "";
+                
+                // 2. Call the chat.completions.create method with stream: true
+                const stream = await llmInference.chat.completions.create({
+                    messages: messages,
+                    stream: true, // Enable streaming
+                    temperature: 0.3
+                });
+
+                // Process the streaming output
+                for await (const chunk of stream) {
+                    const content = chunk.choices[0].delta.content;
+                    if (content) {
+                        fullResponseText += content;
                     }
                 }
-                throw new Error("Failed to get response from LLM after multiple retries.");
-            }
+                
+                // --- Start Robust JSON Cleaning & Parsing ---
+                let jsonString = fullResponseText.trim();
+                
+                // 1. Find the first opening curly brace '{' (where JSON must begin)
+                const firstBracketIndex = jsonString.indexOf('{');
+                if (firstBracketIndex > -1) {
+                    jsonString = jsonString.substring(firstBracketIndex);
+                } else {
+                    throw new Error(`LLM Output for ${schemaName} did not contain a JSON start bracket '{'.`);
+                }
 
-            // --- GAME FLOW LOGIC ---
-            
-            async initializeLLMAndGetTopics() {
-                this.updateReactState({ loading: false, message: "LLM ready. Generating topics..." });
-                this.getTopics();
+                // 2. Find the last closing curly brace '}' and aggressively truncate everything after it.
+                let lastBracketIndex = jsonString.lastIndexOf('}');
+                if (lastBracketIndex > -1) {
+                    // Keep everything up to and including the last '}'
+                    jsonString = jsonString.substring(0, lastBracketIndex + 1);
+                }
+                
+                // 3. Remove trailing markdown fences (e.g., ```) if they exist
+                if (jsonString.endsWith('```')) {
+                    jsonString = jsonString.substring(0, jsonString.lastIndexOf('```')).trim();
+                }
+                
+                // 4. Final check for non-JSON characters
+                while (jsonString.endsWith('.') || jsonString.endsWith('\n')) {
+                    jsonString = jsonString.slice(0, -1).trim();
+                }
+
+                
+                try {
+                    const result = JSON.parse(jsonString);
+                    
+                    return result;
+
+                } catch (e) {
+                    console.error(`Failed to parse cleaned JSON string for ${schemaName}:`, jsonString, e); 
+                    throw new Error(`Failed to parse LLM output for ${schemaName}. Raw string was: ${fullResponseText}`);
+                }
             }
 
             async getTopics() {
-                const systemPrompt = "You are a musical trivia host. Generate 2 diverse and engaging music trivia topics suitable for a quiz game. The response MUST be a JSON array of strings, where each string is a topic name (e.g., ['Classical Music', '1980s Pop Hits']). DO NOT include any commentary outside the JSON array.";
+                
+                const arr = [
+                "80s Music", "90s Music", "Heavy Rock", "Punk Rock", "Pop Music", "Music (anything goes)", "International Cuisine", 
+                "Travel", "Famous Capitals", "Sports in San Francisco", "U2", "Gay Pop Culture", "Metallica", "Cinema Entertainment",
+                "Email Marketting", "Wresting", "Geography", "Science", "Arabic language", "Iraq", "Spain", "Granada", "Liverpool", 
+                "Big Bear California", "New York City", "Diversity and Justice", "Salesforce", "Living in the Bay Area", "Gay Lifestyle", 
+                "Living in Spain", "California Lifestyle", "Karl the Fog", "Travel Culture", "International Destinations", 
+                "Wrestling Icons", "Happiness", "Hardly Strictly Bluegrass", "Beenies", "Black Color", "Music Venues", 
+                "Music Venues in San Francisco", "Classic Rock", "Hip-Hop", "World Music", "Indie Music", "Alternative Music", 
+                "Habibi", "Softball", "FIFA videogame", "Gummies", "Inner Sunset San Francisco", "San Jose California", 
+                "Famous Concerts", "California", "Boardgames", "Guitars", "Bay Area", "Liverpool FC", "History", 
+                "Modern Comedians", "San Francisco culture"
+                ];
 
-                const responseSchema = {
-                    type: "ARRAY",
-                    items: { "type": "STRING" }
-                };
-
-                try {
-                    const result = await this.callGeminiAPI(systemPrompt, "Generate 2 music trivia topics.", responseSchema);
-                    const jsonText = result.candidates[0].content.parts[0].text;
-                    
-                    // Robust JSON Parsing and validation for the topics fix
-                    const parsedJson = JSON.parse(jsonText);
-                    
-                    if (Array.isArray(parsedJson) && parsedJson.length > 0 && parsedJson.every(item => typeof item === 'string')) {
-                        console.log("Topics successfully parsed and ready:", parsedJson);
-                        this.game.events.emit('TOPICS_READY', { topics: parsedJson });
-                    } else {
-                        throw new Error("LLM response not in expected array format for topics.");
-                    }
-                } catch (e) {
-                    console.error("Failed to generate or parse topics:", e);
-                    this.game.events.emit('CONVERSATION_UPDATE', { message: "Error: Could not retrieve topics. Please refresh." });
+                // Check if the array is valid and has at least two elements
+                if (!Array.isArray(arr) || arr.length < 2) {
+                    return null;
                 }
+
+                const length = arr.length;
+                let index1 = Math.floor(Math.random() * length);
+                let index2;
+
+                // Generate a second random index, ensuring it is unique (not the same as index1)
+                do {
+                    index2 = Math.floor(Math.random() * length);
+                } while (index1 === index2);
+
+                // Return the elements at the two unique random indices
+                topics = [arr[index1], arr[index2]] || ['Default Topic 1', 'Default Topic 2'] ;
+
+                console.log("Topics successfully parsed and ready:", topics);
+                this.game.events.emit('TOPICS_READY', { topics: topics });
+                    
+
             }
 
             async handleTopicSelection(topic) {
@@ -280,6 +388,7 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
                 this.selectedTopic = topic;
                 this.getNewQuestion(topic);
             }
+
 
             async getNewQuestion(topic) {
                 const systemPrompt = `You are the conductor of a music trivia quiz. The player's current difficulty is ${this.difficultyLevel} (Score: ${this.currentScore}). Your conversation tone is currently ${this.conversationTone}. 
@@ -310,14 +419,12 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
                 };
 
                 try {
-                    this.updateReactState({ message: `Generating question on ${topic}...` });
-                    const result = await this.callGeminiAPI(systemPrompt, `Generate a question for the topic: ${topic}.`, responseSchema);
-                    const jsonText = result.candidates[0].content.parts[0].text;
-                    const parsedJson = JSON.parse(jsonText);
+                    this.updateReactState({ phase: 'loading', message: `Generating question on ${topic}...` });
 
-                    if (parsedJson.question && Array.isArray(parsedJson.options) && parsedJson.options.length === 4) {
-                        this.game.events.emit('QUESTION_READY', parsedJson);
-                        this.currentQuestionData = parsedJson;
+                    const parsedJson = await this.runLLM_API_Call(systemPrompt, responseSchema);
+                
+                    this.game.events.emit('QUESTION_READY', parsedJson);
+                    this.currentQuestionData = parsedJson;
                     } else {
                         throw new Error("LLM question response was malformed.");
                     }
@@ -333,6 +440,8 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
                 
                 const correctAnswer = this.currentQuestionData.correct_answer;
                 const isCorrect = guess === correctAnswer;
+                const scoreAdjustment = isCorrect ? 50 : 0;
+
                 
                 // Inform React of the correct answer for highlighting buttons
                 this.game.events.emit('GUESS_PROCESSED', { correctAnswer });
@@ -351,27 +460,26 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
                 // Update internal score and difficulty/tone
                 this.currentScore += points;
                 
-                // Simple difficulty adjustment logic
-                if (this.currentScore >= 500) {
-                    this.difficultyLevel = 'Difficult';
-                    this.conversationTone = 'Challenging';
-                } else if (this.currentScore >= 200) {
-                    this.difficultyLevel = 'Medium';
-                    this.conversationTone = 'Excited';
-                } else if (this.currentScore >= 0) {
-                    this.difficultyLevel = 'Easy';
-                    this.conversationTone = 'Normal';
-                } else {
-                     this.difficultyLevel = 'Very Easy';
-                    this.conversationTone = 'Sassy';
-                }
-                
                 await this.saveGameState();
                 
+                // Inform React of the outcome for displaying results
+                this.updateReactState({
+                    phase: 'quiz_result',
+                    isCorrect: isCorrect,
+                    scoreAdjustment: scoreAdjustment,
+                    correctAnswer: correctAnswer,
+                    lastGuess: guess,
+                    message: isCorrect ? 
+                        `Correct! You earned ${scoreAdjustment} points. The Conductor is pleased.` : 
+                        `Incorrect. The correct answer was ${correctAnswer}. The Conductor shows mercy.`
+                });
+
                 // Get commentary from LLM
                 await this.getConductorCommentary(isCorrect, guess, this.currentQuestionData, scoreAdjustment);
             }
             
+            
+
             async getConductorCommentary(isCorrect, playerGuess, questionData, scoreAdjustment) {
                 const resultText = isCorrect ? "correct" : "incorrect";
                 const sentiment = isCorrect ? "positive and encouraging" : "sympathetic but firm";
@@ -387,8 +495,7 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
                 3. Performs the next action: ${nextAction}.`;
                 
                 try {
-                    const result = await this.callGeminiAPI(systemPrompt, "Give commentary on the player's answer and move to the next step.");
-                    const conductorComment = result.candidates[0].content.parts[0].text;
+                    const conductorComment = await this.runLLM_API_Call(systemPrompt, '');
                     
                     // Update React state for result phase
                     this.game.events.emit('GAME_STATE_UPDATE', { 
@@ -415,11 +522,12 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
                 }
             }
             
-            // Called by React button click to proceed
             startNextRound() {
                 if (this.currentScore >= 1000) {
-                    this.game.events.emit('CONVERSATION_UPDATE', { message: "Congratulations! You have mastered the Music Trivia Challenge!" });
-                    // Optionally reset or offer a new game
+                    this.updateReactState({ 
+                        message: "Congratulations! You have mastered the Music Trivia Challenge!",
+                        phase: 'loading' // Or another end state
+                    });
                     return; 
                 }
                 
@@ -429,14 +537,14 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
 
         } // End of MusicTriviaScene
 
-        // 2. Auth Listener and Initialization
-        onAuthStateChanged(auth, async (user) => {
+         // 2. Auth Listener and Initialization
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserId = user.uid;
-                dbReady = true;
+                authIsReady = true;
                 setUiState(prev => ({ ...prev, userId: currentUserId, isAuthReady: true, message: "Authentication complete. Loading game state..." }));
                 
-                // Now initialize Phaser and call LLM once ready
+                // Initialize Phaser instance once auth is ready AND the game hasn't been initialized yet
                 if (!window.phaserGameInstance) {
                     const config = {
                         type: window.Phaser.AUTO,
@@ -449,13 +557,14 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
 
                     const game = new window.Phaser.Game(config);
                     window.phaserGameInstance = game;
+                    gameInitialized = true;
                 }
                 
-                // If the scene exists, load state and initialize LLM
+                // If the scene exists (which it should if gameInitialized is true)
                 const scene = window.phaserGameInstance.scene.getScene('MusicTriviaScene');
-                if (scene) {
-                    await scene.loadOrCreateGameState(currentUserId);
-                    scene.initializeLLMAndGetTopics();
+                if (scene && gameInitialized) {
+                    // Trigger the full game initialization sequence only after Phaser is created
+                    await initGameSequence(currentUserId, scene);
                 }
 
             } else {
@@ -465,7 +574,7 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
             }
         });
 
-        // Initial sign-in attempt
+        // Initial sign-in attempt (outside of listener for immediate start)
         if (initialAuthToken) {
             signInWithCustomToken(auth, initialAuthToken).catch(e => {
                 console.error("Custom token sign in failed. Falling back to anonymous:", e);
@@ -476,13 +585,10 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
         }
 
         return () => {
-            // Cleanup on unmount (Phaser is usually kept alive but good practice)
-            // if (window.phaserGameInstance) {
-            //     window.phaserGameInstance.destroy(true);
-            //     delete window.phaserGameInstance;
-            // }
+             // Cleanup auth listener
+             unsubscribe();
         };
-    }, []);
+    }, [initGameSequence]); // Dependency on the memoized initGameSequence
 
     return (
         // The container where the Phaser canvas will be injected
@@ -497,17 +603,130 @@ const PhaserGame = ({ initialAuthState, setUiState }) => {
 };
 
 
+
+// --- UI Components ---
+const GameUI = ({ uiState, handleTopicClick, handleAnswerClick, handleContinueClick }) => {
+    
+    // Status Bar for Score, Difficulty, and User ID
+    const StatusBar = () => (
+        <div className="bg-gray-800 p-4 rounded-xl mb-4 flex justify-between items-center text-sm font-mono shadow-lg border-b-2 border-red-500">
+            <div className="flex space-x-6">
+                <p className="text-yellow-400">Score: <span className="text-white font-bold text-lg">{uiState.score}</span></p>
+                <p className="text-red-400">Difficulty: <span className="text-white font-bold">{uiState.difficulty}</span></p>
+                <p className="text-teal-400">Tone: <span className="text-white font-bold">{uiState.tone}</span></p>
+            </div>
+            <p className="text-gray-500 truncate max-w-[200px]" title={`User ID: ${uiState.userId}`}>User: {uiState.userId || 'Connecting...'}</p>
+        </div>
+    );
+
+    // Message/Conductor Commentary Box
+    const CommentaryBox = () => (
+        <div className={`p-4 rounded-lg mb-4 text-center shadow-inner ${uiState.loading ? 'bg-blue-900/50' : 'bg-gray-700/70'}`}>
+            <p className="text-xl font-semibold text-white">{uiState.message}</p>
+        </div>
+    );
+
+    // Topic Selection Phase UI
+    const TopicSelection = () => (
+        <div className="grid grid-cols-2 gap-4">
+            {uiState.topics.map(topic => (
+                <button 
+                    key={topic}
+                    onClick={() => handleTopicClick(topic)}
+                    className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-lg text-xl font-bold shadow-md transition transform hover:scale-[1.02]"
+                >
+                    {topic}
+                </button>
+            ))}
+        </div>
+    );
+
+    // Quiz Phase UI (Question and Answer Options)
+    const QuizPhase = () => (
+        <div className="space-y-4">
+            <p className="text-2xl font-bold text-yellow-300 mb-6 text-center">{uiState.question}</p>
+            <div className="grid grid-cols-2 gap-4">
+                {uiState.options.map(option => {
+                    let className = "p-4 rounded-lg text-lg font-semibold shadow-md transition transform hover:scale-[1.02] duration-200 ease-in-out";
+                    let disabled = uiState.correctAnswer !== null; // Disable after first guess
+
+                    if (uiState.correctAnswer) {
+                        if (option === uiState.correctAnswer) {
+                            className += ' bg-green-600'; // Correct answer
+                        } else if (option === uiState.lastGuess) {
+                            className += ' bg-red-600 opacity-75'; // Incorrect guess
+                        } else {
+                            className += ' bg-gray-500/50 opacity-50'; // Unchosen wrong option
+                        }
+                    } else {
+                        className += ' bg-gray-600 hover:bg-gray-500'; // Default unclicked state
+                    }
+
+                    return (
+                        <button 
+                            key={option}
+                            onClick={() => handleAnswerClick(option)}
+                            className={className}
+                            disabled={disabled}
+                        >
+                            {option}
+                        </button>
+                    );
+                })}
+            </div>
+            {uiState.correctAnswer && (
+                <button
+                    onClick={handleContinueClick}
+                    className="mt-6 w-full p-4 bg-teal-500 hover:bg-teal-600 text-white text-xl font-bold rounded-lg shadow-xl"
+                >
+                    Continue to Next Round
+                </button>
+            )}
+        </div>
+    );
+
+
+    let content;
+    if (uiState.loading && !uiState.topics.length) {
+        content = <p className="text-center text-gray-400 text-2xl animate-pulse">Loading AI...</p>;
+    } else if (uiState.phase === 'topic_select') {
+        content = <TopicSelection />;
+    } else if (uiState.phase === 'quiz' || uiState.phase === 'quiz_result') {
+        content = <QuizPhase />;
+    } else {
+        content = <p className="text-center text-gray-400 text-2xl">Game Ready. Choose a topic to begin.</p>;
+    }
+
+
+    return (
+        <div className="bg-gray-900/95 p-6 md:p-10 rounded-xl shadow-2xl max-w-2xl w-full mx-auto border-4 border-yellow-500">
+            <StatusBar />
+            <CommentaryBox />
+            <div id="phaser-parent" className="mb-6">
+                <PhaserGame setUiState={setUiState} />
+            </div>
+            <div className="min-h-[200px] flex flex-col justify-center">
+                 {content}
+            </div>
+        </div>
+    );
+};
+
+
+
 // --- Main React Component ---
 
 function App() {
     const [uiState, setUiState] = useState(initialUIState);
+    const [isGameStarted, setGameStarted] = useState(false); // NEW: Controls the Welcome Screen
     const sceneRef = useRef(null); // Reference to the Phaser scene for direct method calls
 
     // 1. Setup Communication from Phaser -> React
     useEffect(() => {
-        // This useEffect runs once the global phaserGameInstance is available
+        // This useEffect runs once the global phaserGameInstance is available, BUT only if the game has started.
+        if (!isGameStarted || !window.phaserGameInstance) return;
+        
         const game = window.phaserGameInstance; 
-        if (!game) return;
 
         const handleReady = () => {
             sceneRef.current = game.scene.getScene('MusicTriviaScene');
@@ -524,12 +743,15 @@ function App() {
                 ...prev, 
                 topics: topics, 
                 phase: 'topic_select',
-                message: "Choose Your Topic from the options below:"
+                message: "Choose Your Topic from the options below:",
+                loading: false
             }));
         };
 
+        // Note: The original handleQuestionReady from the prompt was missing its payload, 
+        // using the simpler mock from the scene for now.
         const handleQuestionReady = ({ question, options, comment }) => {
-            setUiState(prev => ({ 
+             setUiState(prev => ({ 
                 ...prev, 
                 question: question,
                 options: options, 
@@ -538,7 +760,8 @@ function App() {
                 correctAnswer: null, 
                 lastGuess: null,
                 isCorrect: null, 
-                scoreAdjustment: 0
+                scoreAdjustment: 0,
+                loading: false
             }));
         };
         
@@ -577,7 +800,7 @@ function App() {
             game.events.off('GAME_STATE_UPDATE', handleGameStateUpdate);
             game.events.off('GUESS_PROCESSED', handleGuessProcessed);
         };
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [isGameStarted]); // Re-run effect only when game starts
 
     // 2. Communication React -> Phaser (Calling methods on the Scene)
     const handleTopicClick = (topic) => {
@@ -585,9 +808,9 @@ function App() {
             setUiState(prev => ({ 
                 ...prev, 
                 phase: 'loading', 
-                message: `Topic ${topic} selected. Loading challenge...` 
+                message: `Topic ${topic} selected. Loading challenge...`,
+                loading: true
             })); 
-            // Call the exposed method on the Phaser scene instance
             sceneRef.current.handleTopicSelection(topic);
         }
     };
@@ -609,6 +832,28 @@ function App() {
             sceneRef.current.startNextRound();
         }
     }
+
+    const handleStartGame = () => {
+        // This instantly hides the WelcomeScreen and mounts the main App/PhaserGame
+        setGameStarted(true);
+    };
+
+    return (
+        <div className="w-full min-h-screen flex items-center justify-center p-4">
+            {!isGameStarted ? (
+                // Show Welcome Screen if the game hasn't started
+                <WelcomeScreen onStartGame={handleStartGame} />
+            ) : (
+                // Show Main Game UI once started
+                <GameUI
+                    uiState={uiState}
+                    handleTopicClick={handleTopicClick}
+                    handleAnswerClick={handleAnswerClick}
+                    handleContinueClick={handleContinueClick}
+                />
+            )}
+        </div>
+    );
 
     // Get image props based on current state
     const conductorProps = getConductorImageProps(uiState);
@@ -792,14 +1037,15 @@ function App() {
     );
 }
 
-// Global script block for loading external libraries
-// Note: In a real environment, these imports would be handled by the build system.
-// Here, we load them dynamically for the single-file immersive.
-if (typeof window.Phaser === 'undefined' || typeof window.ReactDOM === 'undefined') {
-    const phaserScript = document.createElement('script');
-    phaserScript.src = 'https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js';
-    document.head.appendChild(phaserScript);
 
+if (typeof window.Phaser === 'undefined' || typeof window.ReactDOM === 'undefined') {
+    // Check for existence of script tag to prevent double-loading if user runs repeatedly
+    if (!document.querySelector('script[src*="phaser.min.js"]')) {
+        const phaserScript = document.createElement('script');
+        phaserScript.src = 'https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js';
+        document.head.appendChild(phaserScript);
+    }
+    
     const reactScript = document.createElement('script');
     reactScript.src = 'https://unpkg.com/react@18/umd/react.development.js';
     document.head.appendChild(reactScript);
@@ -808,16 +1054,22 @@ if (typeof window.Phaser === 'undefined' || typeof window.ReactDOM === 'undefine
     reactDomScript.src = 'https://unpkg.com/react-dom@18/umd/react-dom.development.js';
     document.head.appendChild(reactDomScript);
 
-    phaserScript.onload = () => {
-        reactDomScript.onload = () => {
+    const checkAndRender = () => {
+        if (window.Phaser && window.ReactDOM && window.React) {
             const root = document.getElementById('root');
             if (root) {
                 ReactDOM.createRoot(root).render(<App />);
             } else {
                 console.error("Root element not found.");
             }
-        };
+        } else {
+             // Use requestAnimationFrame for slightly better loop timing than setTimeout
+            requestAnimationFrame(checkAndRender);
+        }
     };
+    // Start checking after initial scripts are injected (assuming they'll load quickly)
+    requestAnimationFrame(checkAndRender);
+
 } else {
     // If libraries are already loaded (e.g., in a development environment)
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);

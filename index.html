@@ -5,15 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hassansational Trivia Challenge</title>
     
-    <!-- Tailwind CSS CDN for the Welcome Screen and App UI -->
+    <!-- Tailwind CSS CDN for the App UI -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font for the music-looking button text -->
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
+    <!-- We rely on app.jsx to load React/Phaser/Babel dynamically or use the environment's globals -->
+
     <style>
         /* Custom styles for the unique button font */
         .music-font {
@@ -29,78 +27,28 @@
             background-size: cover;
             font-family: 'Inter', sans-serif;
             color: #fff;
+            /* React will manage the display/layout now */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
         
-        /* New container to frame the entire app - no fixed width here, let React handle it */
+        /* New container to frame the entire app */
         #root {
-            /* This is the container for the React UI */
             width: 100%;
-            height: 100vh;
-            display: none; /* Hidden initially */
-            overflow: auto; /* Allow scrolling if content is too large */
-        }
-        
-        /* Welcome Screen Specific Styles */
-        #welcome-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
+            min-height: 100vh;
+            display: flex; /* Ensure React container can center its content */
             justify-content: center;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
-        }
-        .hidden-screen {
-            opacity: 0;
-            visibility: hidden;
+            align-items: center;
+            overflow: auto; 
         }
     </style>
-    
 </head>
 <body>
     
-    <!-- Welcome Screen Overlay -->
-    <div id="welcome-screen" class="p-4">
-        <div class="bg-gray-900 p-8 rounded-xl shadow-2xl max-w-4xl w-full text-center border-4 border-red-500">
-            <h1 class="text-6xl font-extrabold text-red-400 mb-8 music-font">
-                Hassansational Trivia Challenge!
-            </h1>
-            
-            <!-- Placeholder Image Section -->
-            <div class="mx-auto w-11/12 md:w-2/3 mb-10 border-4 border-yellow-500 rounded-lg overflow-hidden shadow-xl">
-                <img 
-                    src="https://media.gettyimages.com/id/1363411424/photo/smiling-young-man-playing-an-acoustic-guitar.jpg?s=2048x2048&w=gi&k=20&c=z8m_ZT1x5gFEstoTfBIulNKpBzp6D-XAbbfA7b7e2B8=" "
-                    alt="Habibi is the best" 
-                    class="w-full h-auto object-cover"
-                    onerror="this.onerror=null; this.src='https://placehold.co/1200x800/dc2626/f8fafc?text=Image+Failed+to+Load'"
-                >
-            </div>
-
-            <!-- New Game Button -->
-            <button 
-                id="new-game-button"
-                onclick="startGame()"
-                class="music-font text-4xl md:text-5xl px-12 py-4 bg-gradient-to-r from-teal-500 to-green-600 text-white rounded-full shadow-2xl 
-                       hover:from-teal-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 
-                       ring-4 ring-red-500 ring-offset-4 ring-offset-gray-900"
-            >
-                New Game
-            </button>
-        </div>
-    </div>
-    
     <div id="root"></div>
 
-    
-    
     <script type="module" src="./app.jsx"></script>
 </body>
 </html>
