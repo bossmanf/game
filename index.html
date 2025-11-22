@@ -272,7 +272,7 @@
                 throw new Error("LLM not initialized.");
             }
 
-            const schemaString = JSON.stringify(schemaName, null, 2);
+            const schemaString = JSON.stringify(schemaName);
 
             const fullPrompt = `${prompt}\n\nOutput must be STRICTLY VALID JSON matching the required schema:
             --- START OF SCHEMA ---
@@ -289,13 +289,13 @@
             // 2. Call the chat.completions.create method with stream: true
             const stream = await llmInference.chat.completions.create({
                 messages: messages,
-                stream: true, // Enable streaming
-                temperature: 0.2
+                stream: false, // Enable streaming
+                temperature: 0.01
             });
 
             // Process the streaming output
             for await (const chunk of stream) {
-                const content = chunk.choices[0].delta.content;
+                const content = chunk.choices[0].message.content;
                 if (content) {
                     fullResponseText += content;
                 }
