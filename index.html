@@ -312,7 +312,7 @@
 
               // If model ignored the "no fences" rule, strip them
               const fenceMatch = jsonString.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-              if (fenceMatch) jsonString = fenceMatch,[object Object],trim();
+              if (fenceMatch) jsonString = fenceMatch[1].trim();
 
               // Find first '{' and truncate after last '}'
               const start = jsonString.indexOf("{");
@@ -335,7 +335,7 @@
                 // Last-resort salvage: extract first balanced {...}
                 const match = jsonString.match(/\{[\s\S]*\}/);
                 if (match) {
-                  parsed = JSON.parse(match,[object Object],);
+                  parsed = JSON.parse(match[0]);
                 } else {
                   throw new Error("Failed to parse LLM output. Raw: " + fullResponseText);
                 }
