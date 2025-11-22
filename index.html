@@ -173,8 +173,10 @@
 
                     const initProgressCallback = (initProgress) => {
                         console.log(initProgress);
-                        setUiState(prev => ({ ...prev, message: `Loading Model: ${initProgress.text}` }));
-                    }
+                        updateState({ 
+                        message: 'Loading model...',
+                        isLoading: true
+                    });
 
                     const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC"
                     
@@ -186,7 +188,9 @@
                     console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
                 } catch (e) {
                     console.error("Failed to initialize WebLLM or load model weights. Check WebGPU support.", e);
-                    setUiState(prev => ({ ...prev, message: "LLM Initialization failed. See console for details.", loading: false }));
+                    updateState({ 
+                        message: 'Failed to initialize WebLLM',
+                        isLoading: false
                     return false;
                 }  
                 
