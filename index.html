@@ -294,7 +294,7 @@
                 }
             }
             
-            console.log(fullResponseTexts)
+            console.log(fullResponseText)
 
             // --- Start Robust JSON Cleaning & Parsing ---
             let jsonString = fullResponseText.trim();
@@ -352,12 +352,15 @@
             const responseSchema = {
                 type: "OBJECT",
                 properties: {
-                    "question": { "type": "STRING" },
+                    "question": { "type": "STRING" , "description": "The main trivia question text."},
                     "wrongAnswers": {
                         "type": "ARRAY",
-                        "items": { "type": "STRING" }
+                        "description": "An array containing exactly three plausible, incorrect answers (distractors).",
+                        "items": { "type": "STRING" },
+                        "minItems": 3,
+                        "maxItems": 3
                     },
-                    "correctAnswer": { "type": "STRING" },
+                    "correctAnswer": { "type": "STRING",  "description": "The single, correct answer to the question." },
                 },
             };
 
