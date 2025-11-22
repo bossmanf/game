@@ -174,7 +174,7 @@
                 }
                 const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC"
                 
-                llmInference = CreateMLCEngine(
+                llmInference = await CreateMLCEngine(
                     MODEL_NAME,
                     { initProgressCallback: initProgressCallback }, // engineConfig
                 );
