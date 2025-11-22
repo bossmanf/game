@@ -272,9 +272,10 @@
                 throw new Error("LLM not initialized.");
             }
 
+            const fullPrompt = prompt + "\n\nOutput must be STRICTLY VALID JSON matching the required schema {schemaName}";
             // Append the mandatory instruction for strict JSON output
 
-            const messages = [{ role: "user", content: prompt}];
+            const messages = [{ role: "user", content: fullPrompt}];
 
             let fullResponseText = "";
             
@@ -293,12 +294,36 @@
                 }
             }
             
-            console.log('full string:', fullResponseText)
-
+            console.log(fullResponseTexts)
 
             // --- Start Robust JSON Cleaning & Parsing ---
             let jsonString = fullResponseText.trim();
             
+            // 1. Find the first opening curly brace '{' (where JSON must begin)
+            const firstBracketIndex = jsonString.indexOf('{');
+            if (firstBracketIndex > -1) {
+                jsonString = jsonString.substring(firstBracketIndex);
+            } else {
+                throw new Error(`LLM Output for ${schemaName} did not contain a JSON start bracket '{'.`);
+            }
+
+            // 2. Find the last closing curly brace '}' and aggressively truncate everything after it.
+            let lastBracketIndex = jsonString.lastIndexOf('}');
+            if (lastBracketIndex > -1) {
+                // Keep everything up to and including the last '}'
+                jsonString = jsonString.substring(0, lastBracketIndex + 1);
+            }
+            
+            // 3. Remove trailing markdown fences (e.g., ```) if they exist
+            if (jsonString.endsWith('```')) {
+                jsonString = jsonString.substring(0, jsonString.lastIndexOf('```')).trim();
+            }
+            
+            // 4. Final check for non-JSON characters
+            while (jsonString.endsWith('.') || jsonString.endsWith('\n')) {
+                jsonString = jsonString.slice(0, -1).trim();
+            }
+
             try {
                 const result = JSON.parse(jsonString);
                 
