@@ -282,7 +282,7 @@
             - No prose or explanations.
 
             --- SCHEMA START ---
-            ${JSON.stringify(schema)}
+            ${JSON.stringify(schemaName)}
             --- SCHEMA END ---
             `.trim();
 
@@ -386,6 +386,7 @@
 
             try {
 
+                console.log('Calling with:', userRequestPrompt)
                 const parsed = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
                 console.log('This is what I am getting:', parsed)
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
