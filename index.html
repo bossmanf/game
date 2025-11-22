@@ -97,7 +97,7 @@
                     src="https://media.gettyimages.com/id/1363411424/photo/smiling-young-man-playing-an-acoustic-guitar.jpg?s=2048x2048&w=gi&k=20&c=z8m_ZT1x5gFEstoTfBIulNKpBzp6D-XAbbfA7b7e2B8="
                     alt="Habibi is the best" 
                     className="w-full h-auto object-cover"
-                    onError={(e) => { 'Error loading LLM' }}
+                    onError={(e) => 'Error loading'
                 />
             </div>
             <!-- Content will be rendered here by JavaScript -->
@@ -180,7 +180,7 @@
 
                     const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC"
                     
-                    llmInference = await CreateMLCEngine(
+                    llmInference = CreateMLCEngine(
                         MODEL_NAME,
                         { initProgressCallback: initProgressCallback }, // engineConfig
                     );
