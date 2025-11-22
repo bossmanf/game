@@ -159,54 +159,40 @@
         async function initializeLLM() {
             updateState({ message: 'SYSTEM: Loading Machine Core...', isLoading: true, error: null });
 
+
             try {
-                // Simulate loading with a small delay
-                await new Promise(resolve => setTimeout(resolve, 1500)); 
-                
-                const payload = {
-                    contents: [{ parts: [{ text: "Acknowledge the model is ready for a trivia game. Respond with only the word 'Ready'." }] }],
-                    systemInstruction: { parts: [{ text: "You are a trivia conductor. Respond concisely." }] },
-                };
-                
-                try {
-                    const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
+                const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
 
-                    const initProgressCallback = (initProgress) => {
-                        console.log(initProgress);
-                        updateState({ 
-                        message: 'Loading model...',
-                        isLoading: true
-                        });
-                    }
-                    const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC"
-                    
-                    llmInference = CreateMLCEngine(
-                        MODEL_NAME,
-                        { initProgressCallback: initProgressCallback }, // engineConfig
-                    );
-
-                    console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
-                } catch (e) {
-                    console.error("Failed to initialize WebLLM or load model weights. Check WebGPU support.", e);
+                const initProgressCallback = (initProgress) => {
+                    console.log(initProgress);
                     updateState({ 
-                        message: 'Failed to initialize WebLLM',
-                        isLoading: false
+                    message: 'Loading model...',
+                    isLoading: true
                     });
-                    return false;
-                }  
+                }
+                const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC"
                 
+                llmInference = CreateMLCEngine(
+                    MODEL_NAME,
+                    { initProgressCallback: initProgressCallback }, // engineConfig
+                );
                 updateState({ 
                     isLLMLoaded: true, 
                     message: 'CORE ONLINE. Ready to Challenge.', 
                     isLoading: false 
                 });
+                console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
+
+
             } catch (e) {
+                console.error("Failed to initialize WebLLM or load model weights. Check WebGPU support.", e);
                 updateState({ 
                     error: `Initialization Failure: ${e.message}. Check Network.`, 
                     message: 'FATAL ERROR.', 
                     isLoading: false 
                 });
-            }
+            }  
+                
         }
 
         // --- Phase 2: Topic Selection ---
@@ -565,7 +551,7 @@
                             </div>
                         </div>
                         <div class="text-center text-xs text-gray-500">
-                            <p>MODEL: GEMINI FLASH</p>
+                            <p>Lux Aeterna!</p>
                         </div>
                     </div>
 
