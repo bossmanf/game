@@ -266,30 +266,18 @@
 
 
 
-        async function runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
+        async function runLLM_API_Call(prompt) {
 
             if (!llmInference) {
                 throw new Error("LLM not initialized.");
             }
-
-            const fullPrompt = `${prompt}
-            Rules:
-            - Return ONLY a single JSON object.
-            - It MUST validate against the schema below.
-            - No markdown code fences.
-            - No prose or explanations.
-            --- SCHEMA START ---
-            ${JSON.stringify(schemaName)}
-            --- SCHEMA END ---
-            `.trim();
-
             let fullResponseText = "";
 
-            console.log('This is the full Prompt:', fullPrompt)
+            console.log('This is the full Prompt:', prompt)
             const stream = await llmInference.chat.completions.create({
                 messages: [
-                  { role: "system", content: "You are a challenging and knowledgeable Trivia Master that outputs strict JSON when asked." },
-                  { role: "user", content: fullPrompt }
+                  { role: "system", content: "You are a challenging and knowledgeable Trivia Master. Your ONLY output must be the requested JSON object" },
+                  { role: "user", content: prompt }
                 ],
                 stream: true,
                 temperature: 0.01
@@ -298,12 +286,14 @@
 
             // Process the streaming output
             for await (const chunk of stream) {
-                const content = chunk.choices[0].delta.content;
-                const piece = chunk?.choices?.[0]?.delta?.content ?? ""; 
-                if (piece) fullResponseText += piece;
+                    const piece = chunk?.choices?.[0]?.delta?.content ?? ""; 
+                    if (piece) {
+                        fullResponseText += piece;
+                        // Optional: Update UI with streamed content here
+                    }
             }
             
-            console.log('FULL RESPONSE:', fullResponseText)
+            console.log('FULL RAW RESPONSE:', fullResponseText)
 
             let jsonString = (fullResponseText || "").trim();
 
@@ -344,7 +334,7 @@
         /**
          * Calls LLM to generate a question, correct answer, and 3 wrong answers.
          */
-        async function inferenceLLM(topic) {
+        async function generateTriviaQuestion(topic) {
             updateState({ 
                 isLoading: true, 
                 currentTopic: topic, 
@@ -371,18 +361,28 @@
                   "required": ["question", "wrongAnswers", "correctAnswer"]
                 }
 
+            const schemaString = JSON.stringify(responseSchema, null, 2);
+
             const userRequestPrompt = `
-            Task: Create one multiple-choice trivia question about "${topic}".
+            Task: Create one multiple-choice trivia question about the topic "${topic}".
+            - The generated question and answers must be based on real-world facts.
             - Exactly one correct answer.
             - Exactly three plausible but incorrect answers.
             - Answers must be concise.
-            Output must strictly match the JSON schema below.
-            `.trim();
+
+            --- JSON SCHEMA DEFINITION ---
+            The output MUST be a single, valid JSON object that strictly adheres to the structure defined below. Do NOT include any commentary, explanations, or text outside of the final JSON object.
+            ${schemaString}
+            --- END OF SCHEMA DEFINITION ---
+
+            Output ONLY the generated JSON object now:
+                `.trim();
+
             
 
             try {
 
-                const parsed = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
+                const parsed = await this.runLLM_API_Call(userRequestPrompt);
                 console.log('This is what I am getting:', parsed)
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
@@ -472,7 +472,7 @@
             const topicButtons = createElement('div', 'w-full space-y-6');
             game.topics.forEach((topic) => {
                 const button = createElement('button', 'metal-button w-full py-4 text-xl', topic.toUpperCase());
-                button.onclick = () => inferenceLLM(topic);
+                button.onclick = () => generateTriviaQuestion(topic);
                 topicButtons.appendChild(button);
             });
             topicContent.appendChild(topicButtons);
