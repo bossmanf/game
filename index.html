@@ -278,14 +278,13 @@
             --- START OF SCHEMA ---
             ${schemaString}
             --- END OF SCHEMA --
-
             Please output ONLY the JSON object, wrapped inside a JSON markdown code block. Do not include any commentary outside this block. `;
 
             const messages = [{ role: "user", content: fullPrompt}];
 
             let fullResponseText = "";
 
-            console.log(messages.fullPrompt)
+            console.log('This is the full Prompt:', messages.fullPrompt)
             
             // 2. Call the chat.completions.create method with stream: true
             const stream = await llmInference.chat.completions.create({
@@ -334,7 +333,7 @@
 
             try {
                 const result = JSON.parse(jsonString);
-                
+                console.log('This is what I return:', result)
                 return result;
 
             } catch (e) {
