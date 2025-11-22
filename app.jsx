@@ -278,7 +278,7 @@ const PhaserGame = ({  setUiState }) => {
             }
 
 
-            async function runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
+            async runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
 
                 if (!llmInference) {
                     throw new Error("LLM not initialized.");
