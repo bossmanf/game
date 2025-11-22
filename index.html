@@ -97,7 +97,7 @@
                     src="https://media.gettyimages.com/id/1363411424/photo/smiling-young-man-playing-an-acoustic-guitar.jpg?s=2048x2048&w=gi&k=20&c=z8m_ZT1x5gFEstoTfBIulNKpBzp6D-XAbbfA7b7e2B8="
                     alt="Habibi is the best" 
                     className="w-full h-auto object-cover"
-                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/1200x800/dc2626/f8fafc?text=Image+Failed+to+Load'; }}
+                    onError={(e) => { 'Error loading LLM' }}
                 />
             </div>
             <!-- Content will be rendered here by JavaScript -->
@@ -272,7 +272,7 @@
 
 
 
-        async runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
+        async function runLLM_API_Call(prompt, schemaName = "UNKNOWN_SCHEMA") {
 
             if (!llmInference) {
                 throw new Error("LLM not initialized.");
