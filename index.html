@@ -172,7 +172,7 @@
                     isLoading: true
                     });
                 }
-                const MODEL_NAME = "TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC" //"TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC"
+                const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" //"TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC" //
                 
                 llmInference = await CreateMLCEngine(
                     MODEL_NAME,
@@ -231,7 +231,7 @@
                     .filter(t => t.length > 0);
 
                 if (arr.length < 2) throw new Error("File contains less than 2 valid topics.");
-                console.log(`Successfully loaded ${arr.length} topics.`);
+                // console.log(`Successfully loaded ${arr.length} topics.`);
                 const length = arr.length;
                 let index1 = Math.floor(Math.random() * length);
                 let index2 = index1;
@@ -277,23 +277,26 @@
             const messages = [{ role: "user", content: fullPrompt}];
 
             let fullResponseText = "";
+
+            console.log(messages.fullPrompt)
             
             // 2. Call the chat.completions.create method with stream: true
             const stream = await llmInference.chat.completions.create({
                 messages: messages,
                 stream: true, // Enable streaming
-                temperature: 0.3
+                temperature: 0.1
             });
 
             // Process the streaming output
             for await (const chunk of stream) {
                 const content = chunk.choices[0].delta.content;
                 if (content) {
+                    console.log('ADDING CONTENT:', content)
                     fullResponseText += content;
                 }
             }
             
-            console.log(fullResponseText)
+            console.log('FULL RESPONSE:', fullResponseText)
 
             // --- Start Robust JSON Cleaning & Parsing ---
             let jsonString = fullResponseText.trim();
@@ -343,10 +346,10 @@
                 currentTopic: topic, 
                 questionData: null, 
                 phase: 3, 
-                message: `LOADING QUESTION on: ${topic.toUpperCase()}...` 
+                message: `GENERATING QUESTION on: ${topic.toUpperCase()}...` 
             });
 
-            const systemPrompt = `You are a challenging and knowledgeable Trivia Master. Your task is to generate a single multiple-choice trivia question based on the user's topic: "${topic}". The question must have exactly one correct answer and exactly three plausible, but incorrect, answers (distractors). Ensure the question is clear and the answers are concise.`;
+            const systemPrompt = `You are a challenging and knowledgeable Trivia Master. Your task is to generate a single multiple-choice trivia question based on the user's topic: "${topic}". The question must have exactly one correct answer and exactly three plausible, but incorrect answers. Ensure the question is clear and the answers are concise.`;
 
             const responseSchema = {
                 type: "OBJECT",
@@ -354,7 +357,7 @@
                     "question": { "type": "STRING" , "description": "The main trivia question text."},
                     "wrongAnswers": {
                         "type": "ARRAY",
-                        "description": "An array containing exactly three plausible, incorrect answers (distractors).",
+                        "description": "An array containing exactly three plausible, incorrect answers.",
                         "items": { "type": "STRING" },
                         "minItems": 3,
                         "maxItems": 3
