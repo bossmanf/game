@@ -272,30 +272,34 @@
                 throw new Error("LLM not initialized.");
             }
 
-            const schemaString = JSON.stringify(schemaName);
+            const schemaString = JSON.stringify(schemaName, null, 2);
 
-            const fullPrompt = `${prompt}\n\nOutput must be STRICTLY VALID JSON matching the required schema:
+            const fullPrompt = `${prompt}
+            nOutput must be STRICTLY VALID JSON matching the required schema:
             --- START OF SCHEMA ---
             ${schemaString}
             --- END OF SCHEMA --
             Please output ONLY the JSON object, wrapped inside a JSON markdown code block. Do not include any commentary outside this block. `;
 
-            const messages = [{ role: "user", content: fullPrompt}];
 
             let fullResponseText = "";
 
-            console.log('This is the full Prompt:', messages.fullPrompt)
+            console.log('This is the full Prompt:', fullPrompt)
             
-            // 2. Call the chat.completions.create method with stream: true
-            const stream = await llmInference.chat.completions.create({
-                messages: messages,
-                stream: false, // Enable streaming
+
+            const stream = await engine.chat.completions.create({
+                messages: [
+                  { role: "system", content: "You are a challenging and knowledgeable Trivia Master that outputs strict JSON when asked." },
+                  { role: "user", content: fullPrompt }
+                ],
+                stream: true,
                 temperature: 0.01
             });
 
+
             // Process the streaming output
             for await (const chunk of stream) {
-                const content = chunk.choices[0].message.content;
+                const content = chunk.choices[0].delta.content;
                 if (content) {
                     fullResponseText += content;
                 }
@@ -354,7 +358,7 @@
                 message: `GENERATING QUESTION on: ${topic.toUpperCase()}...` 
             });
 
-            const systemPrompt = `You are a challenging and knowledgeable Trivia Master. Your task is to generate a single multiple-choice trivia question using the user's topic: "${topic}". The question must have exactly one correct answer and exactly three plausible but incorrect answers. Ensure the question is clear and the answers are concise. Format your response as a JSON object with keys: question, WrongAnswers (array), correctAnswer.`;
+            const userRequestPrompt = `Your task is to generate a single multiple-choice trivia question using the user's topic: "${topic}". The question must have exactly one correct answer and exactly three plausible but incorrect answers. Ensure the question is clear and the answers are concise. Format your response as a JSON object with keys: question, WrongAnswers (array), correctAnswer.`;
 
             const responseSchema = {
                 type: "OBJECT",
@@ -373,7 +377,7 @@
 
             try {
 
-                const parsed = await this.runLLM_API_Call(systemPrompt, responseSchema);
+                const parsed = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
                 console.log('This is what I am getting:', parsed)
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
