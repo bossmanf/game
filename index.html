@@ -185,9 +185,6 @@
                 });
                 console.log(`WebLLM Model (${MODEL_NAME}) Loaded and ready for client-side inference.`);
 
-                contentElement = renderPhase1();
-                dynamicContent.appendChild(contentElement);
-
 
             } catch (e) {
                 console.error("Failed to initialize WebLLM or load model weights. Check WebGPU support.", e);
@@ -204,6 +201,7 @@
         async function initializeLLM() {
 
             await new Promise(resolve => loadModel()); 
+            renderGame()
         }
 
         // --- Phase 2: Topic Selection ---
