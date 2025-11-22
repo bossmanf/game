@@ -272,8 +272,7 @@
                 throw new Error("LLM not initialized.");
             }
 
-            const fullPrompt = `You are a precise assistant that outputs STRICT JSON only.            
-            ${prompt}
+            const fullPrompt = `${prompt}
             Rules:
             - Return ONLY a single JSON object.
             - It MUST validate against the schema below.
@@ -355,7 +354,6 @@
             });
 
             const responseSchema = {
-                  "$schema": "http://json-schema.org/draft-07/schema#",
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
