@@ -293,9 +293,14 @@
                 }
             }
             
+            console.log('full string:', fullResponseText)
+
+
             // --- Start Robust JSON Cleaning & Parsing ---
             let jsonString = fullResponseText.trim();
             
+            console.log('After trimming:', jsonString)
+
             // 1. Find the first opening curly brace '{' (where JSON must begin)
             const firstBracketIndex = jsonString.indexOf('{');
             if (firstBracketIndex > -1) {
@@ -465,7 +470,7 @@
             if (game.isLoading || !game.questionData) {
                 return createElement('div', 'flex flex-col items-center justify-center h-full p-8', `
                     <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
-                    <p class="mt-6 text-xl text-gray-400 title-font">GENERATING PAYLOAD...</p>
+                    <p class="mt-6 text-xl text-gray-400 title-font">GENERATING QUESTION...</p>
                 `);
             }
             
