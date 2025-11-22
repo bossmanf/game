@@ -298,7 +298,6 @@
             for await (const chunk of stream) {
                 const content = chunk.choices[0].delta.content;
                 if (content) {
-                    console.log('ADDING CONTENT:', content)
                     fullResponseText += content;
                 }
             }
@@ -356,7 +355,7 @@
                 message: `GENERATING QUESTION on: ${topic.toUpperCase()}...` 
             });
 
-            const systemPrompt = `You are a challenging and knowledgeable Trivia Master. Your task is to generate a single multiple-choice trivia question based on the user's topic: "${topic}". The question must have exactly one correct answer and exactly three plausible, but incorrect answers. Ensure the question is clear and the answers are concise. Format your response as a JSON object with keys: question, WrongAnswers (array), correctAnswer.`;
+            const systemPrompt = `You are a challenging and knowledgeable Trivia Master. Your task is to generate a single multiple-choice trivia question using the user's topic: "${topic}". The question must have exactly one correct answer and exactly three plausible but incorrect answers. Ensure the question is clear and the answers are concise. Format your response as a JSON object with keys: question, WrongAnswers (array), correctAnswer.`;
 
             const responseSchema = {
                 type: "OBJECT",
@@ -376,7 +375,7 @@
             try {
 
                 const parsed = await this.runLLM_API_Call(systemPrompt, responseSchema);
-                console.log(parsed)
+                console.log('This is what I am getting:', parsed)
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
                         questionData: parsed,
