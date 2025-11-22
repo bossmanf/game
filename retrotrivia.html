@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid LLM Trivia Game</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Inter Font and basic reset */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        /* Style for the Phaser container (ensures it fills its parent) */
+        #phaser-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+
+    <!-- CRITICAL DEPENDENCIES -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Phaser 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback, useRef } = React;
+
+        // --- LLM Service Configuration ---
+        const API_KEY = ""; // Provided by the environment
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+        
+        // --- Game State Constants ---
+        const SCREENS = {
+            MENU: 'menu',
+            LOADING: 'loading',
+            TRIVIA: 'trivia',
+            RESULTS: 'results',
+        };
+
+        // --- 1. LLM Interaction Function ---
+        const fetchTriviaQuestion = async (topic = "World History") => {
+            const userQuery = `Generate one challenging multiple-choice trivia question about ${topic}. Provide 4 options and the correct answer index (0-3).`;
+            const systemPrompt = "You are an expert trivia question generator. Provide the output strictly in the requested JSON format.";
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                // Use grounding for fact-based questions
+                tools: [{ "google_search": {} }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            "question": { "type": "STRING", description: "The trivia question text." },
+                            "options": {
+                                "type": "ARRAY",
+                                "items": { "type": "STRING" },
+                                "description": "Exactly four options for the question."
+                            },
+                            "correctIndex": { "type": "INTEGER", description: "The zero-based index of the correct answer." }
+                        },
+                        required: ["question", "options", "correctIndex"]
+                    }
+                }
+            };
+
+            try {
+                // Implementing simple retry logic for robustness
+                for (let attempt = 0; attempt < 3; attempt++) {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (jsonText) {
+                            const questionData = JSON.parse(jsonText);
+                            return questionData;
+                        }
+                    } else if (response.status === 429 && attempt < 2) {
+                        await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000)); // Exponential backoff
+                        continue;
+                    }
+                    throw new Error(`API failed with status ${response.status}`);
+                }
+                throw new Error("API failed after multiple retries.");
+            } catch (e) {
+                console.error("LLM API Fetch Error:", e);
+                // Return a mock question on failure
+                return { 
+                    question: "Who was the first person to step on the moon?",
+                    options: ["Yuri Gagarin", "Buzz Aldrin", "Neil Armstrong", "Michael Collins"],
+                    correctIndex: 2
+                };
+            }
+        };
+
+        // --- 2. Phaser Character Animation Component ---
+        const PhaserAnimation = ({ characterImage, statusText }) => {
+            const phaserRef = useRef(null);
+
+            useEffect(() => {
+                if (!phaserRef.current) return;
+
+                // Basic Phaser Scene Setup
+                class MainScene extends Phaser.Scene {
+                    constructor() {
+                        super('MainScene');
+                        this.character = null;
+                        this.statusText = statusText; // Initial status
+                    }
+
+                    preload() {
+                        // Use a simple, generated image placeholder URL for the character
+                        this.load.image('character', characterImage);
+                    }
+
+                    create() {
+                        const { width, height } = this.sys.game.config;
+                        
+                        // Set up a gradient background
+                        this.cameras.main.setBackgroundColor('#1f2937'); // dark gray
+
+                        // Add the character sprite (positioning it)
+                        this.character = this.add.image(width * 0.5, height * 0.75, 'character')
+                            .setOrigin(0.5, 1)
+                            .setScale(0.8);
+
+                        // Simple up-and-down animation (simulating breathing/boredom)
+                        this.tweens.add({
+                            targets: this.character,
+                            y: '-=10',
+                            duration: 1500,
+                            yoyo: true,
+                            repeat: -1,
+                            ease: 'Sine.easeInOut'
+                        });
+
+                        // Add character status text 
+                        this.statusLabel = this.add.text(width / 2, 20, this.statusText, { 
+                            fontSize: '18px', 
+                            fill: '#FFFFFF', 
+                            backgroundColor: '#374151',
+                            padding: { x: 10, y: 5 }
+                        }).setOrigin(0.5, 0);
+                    }
+
+                    // Method to update character status from React props
+                    updateStatus(newStatus) {
+                        if (this.statusLabel) {
+                            this.statusLabel.setText(newStatus);
+                        }
+                    }
+                }
+                
+                // Phaser Game Configuration
+                const config = {
+                    type: Phaser.WEBGL, // Use WEBGL for better performance
+                    width: 300,
+                    height: 300,
+                    parent: phaserRef.current, // Attach to the specific div reference
+                    scene: MainScene
+                };
+
+                const game = new Phaser.Game(config);
+                
+                // Listener to capture the scene instance once it's created
+                game.events.on('ready', () => {
+                    const scene = game.scene.getScene('MainScene');
+                    // Attach the update method to the game instance for React to use
+                    game.updateCharacterStatus = (newStatus) => scene.updateStatus(newStatus);
+                });
+
+
+                // Cleanup function when the component unmounts
+                return () => {
+                    if (game) {
+                        game.destroy(true);
+                    }
+                };
+            }, []); // Empty dependency array ensures it runs only once on mount
+
+            // Effect to update Phaser scene when React statusText prop changes
+            useEffect(() => {
+                // FIX: Added checks for Phaser and Phaser.GAMES existence to prevent runtime TypeError on mount.
+                if (Phaser && Phaser.GAMES && Phaser.GAMES.length > 0) {
+                     // Find the game instance associated with this container
+                    const game = Phaser.GAMES.find(g => g.config.parent === phaserRef.current);
+                    if (game && game.updateCharacterStatus) {
+                        game.updateCharacterStatus(statusText);
+                    }
+                }
+            }, [statusText]);
+
+
+            return (
+                <div 
+                    ref={phaserRef} 
+                    id="phaser-container" 
+                    className="w-full h-48 bg-gray-800 rounded-lg overflow-hidden shadow-inner border border-gray-700 md:h-64"
+                >
+                    {/* Phaser canvas will be injected here */}
+                </div>
+            );
+        };
+
+        // --- 3. UI Component for Option Buttons ---
+        const OptionButton = ({ option, index, onClick, isCorrect, isSelected, showResult }) => {
+            let baseClasses = "w-full py-3 px-4 text-left font-semibold rounded-lg transition duration-200 ease-in-out shadow-md hover:shadow-lg active:translate-y-0.5 ";
+            
+            if (showResult) {
+                if (isCorrect) {
+                    baseClasses += "bg-green-500 text-white shadow-green-700/50 ";
+                } else if (isSelected) {
+                    baseClasses += "bg-red-500 text-white line-through shadow-red-700/50 ";
+                } else {
+                    baseClasses += "bg-gray-200 text-gray-500 opacity-70 ";
+                }
+            } else {
+                baseClasses += "bg-white text-gray-800 border-2 border-indigo-400 hover:bg-indigo-50 ";
+            }
+            
+            return (
+                <button 
+                    onClick={() => onClick(index)} 
+                    disabled={showResult}
+                    className={baseClasses}
+                >
+                    <span className="font-extrabold mr-2">[{String.fromCharCode(65 + index)}]</span>
+                    {option}
+                </button>
+            );
+        };
+
+
+        // --- 4. Main App Component (Game Workflow) ---
+        const App = () => {
+            const [currentScreen, setCurrentScreen] = useState(SCREENS.MENU);
+            const [questionData, setQuestionData] = useState(null);
+            const [selectedAnswer, setSelectedAnswer] = useState(null);
+            const [showResult, setShowResult] = useState(false);
+            const [characterStatus, setCharacterStatus] = useState("Waiting for a question...");
+
+            const loadQuestion = async (topic) => {
+                setCurrentScreen(SCREENS.LOADING);
+                setCharacterStatus("Generating a new challenge...");
+                const data = await fetchTriviaQuestion(topic);
+                setQuestionData(data);
+                setSelectedAnswer(null);
+                setShowResult(false);
+                setCurrentScreen(SCREENS.TRIVIA);
+                setCharacterStatus("Analyze and answer quickly!");
+            };
+
+            const handleAnswer = (index) => {
+                if (showResult) return;
+                setSelectedAnswer(index);
+                setShowResult(true);
+
+                if (index === questionData.correctIndex) {
+                    setCharacterStatus("Correct! Impressive knowledge!");
+                } else {
+                    setCharacterStatus("Incorrect! Better luck next time.");
+                }
+            };
+
+            const renderContent = () => {
+                switch (currentScreen) {
+                    case SCREENS.MENU:
+                        return (
+                            <div className="text-center space-y-6 p-8">
+                                <h2 className="text-3xl font-extrabold text-indigo-700">The LLM Trivia Challenge</h2>
+                                <p className="text-gray-600">Test your knowledge with AI-generated questions.</p>
+                                <button 
+                                    onClick={() => loadQuestion("Technology and AI")}
+                                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg shadow-xl transition duration-150"
+                                >
+                                    Start Game: Technology Topic
+                                </button>
+                                <button 
+                                    onClick={() => loadQuestion("Random Facts")}
+                                    className="w-full bg-indigo-400 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg shadow-md transition duration-150"
+                                >
+                                    Start Game: Random Topic
+                                </button>
+                            </div>
+                        );
+                    
+                    case SCREENS.LOADING:
+                        return (
+                            <div className="text-center p-12 space-y-4">
+                                <svg className="animate-spin mx-auto h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <p className="text-lg text-gray-600">Consulting the knowledge banks... (Fetching question)</p>
+                            </div>
+                        );
+
+                    case SCREENS.TRIVIA:
+                        if (!questionData) return null;
+                        
+                        return (
+                            <div className="space-y-6">
+                                {/* Question Section */}
+                                <div className="p-4 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg shadow-inner">
+                                    <h3 className="text-xl font-bold text-gray-800 mb-2">Question:</h3>
+                                    <p className="text-xl text-gray-700 leading-relaxed italic">{questionData.question}</p>
+                                </div>
+
+                                {/* Options Section */}
+                                <div className="space-y-3">
+                                    {questionData.options.map((option, index) => (
+                                        <OptionButton
+                                            key={index}
+                                            option={option}
+                                            index={index}
+                                            onClick={handleAnswer}
+                                            isCorrect={index === questionData.correctIndex}
+                                            isSelected={index === selectedAnswer}
+                                            showResult={showResult}
+                                        />
+                                    ))}
+                                </div>
+                                
+                                {showResult && (
+                                    <button 
+                                        onClick={() => setCurrentScreen(SCREENS.MENU)}
+                                        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow-xl transition duration-150"
+                                    >
+                                        Next Question / Back to Menu
+                                    </button>
+                                )}
+                            </div>
+                        );
+
+                    default:
+                        return null;
+                }
+            };
+
+            // Placeholder image for the character animation
+            const characterImageUrl = 'https://placehold.co/100x150/0000FF/FFFFFF?text=Quiz+Bot';
+
+            return (
+                <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
+                    <div className="w-full max-w-2xl bg-white p-6 md:p-8 rounded-xl shadow-2xl space-y-6">
+                        
+                        {/* Section A: Animated Character (Phaser) */}
+                        <PhaserAnimation 
+                            characterImage={characterImageUrl}
+                            statusText={characterStatus}
+                        />
+
+                        {/* Section B: Main Game Workflow (React UI) */}
+                        <div className="border-t pt-6">
+                            {renderContent()}
+                        </div>
+                        
+                    </div>
+                </div>
+            );
+        };
+
+        // --- 5. BOOTSTRAPPING CODE (The "Init Method") ---
+        const rootElement = document.getElementById('root');
+        if (rootElement) {
+            const root = ReactDOM.createRoot(rootElement);
+            root.render(<App />);
+        } else {
+            console.error("Critical Error: Root element '#root' not found.");
+        }
+    </script>
+</body>
+</html>

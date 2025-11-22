@@ -450,7 +450,6 @@ const PhaserGame = ({  setUiState }) => {
 
                 // Determine points and update difficulty/tone
                 let points = 0;
-                let scoreAdjustment = 0;
                 if (isCorrect) {
                     points = 100; // Base points
                     scoreAdjustment = points;

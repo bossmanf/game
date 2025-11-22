@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber-Punk Jukebox</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load an aggressive, heavy font ('Metal Mania') and a strong block font ('Bebas Neue') from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to define the punk aesthetic */
+        :root {
+            --punk-red: #cc0000;
+            --punk-black: #1a1a1a;
+            --punk-glow: #ff0000;
+        }
+
+        body {
+            /* Use a dark, distressed background color */
+            background-color: var(--punk-black);
+            font-family: 'Inter', sans-serif;
+            color: #d1d5db; /* Light gray text */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .title-font {
+            font-family: 'Metal Mania', cursive;
+            text-shadow: 0 0 5px var(--punk-glow); /* Subtle red glow */
+        }
+
+        .secondary-font {
+            font-family: 'Bebas Neue', sans-serif;
+        }
+
+        .punk-card {
+            background-color: #2c2c2c;
+            border: 4px solid var(--punk-red);
+            /* Aggressive box shadow for a glowing, dangerous look */
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5), 0 0 30px rgba(255, 0, 0, 0.2);
+            border-radius: 0.5rem; /* Small rounding */
+            transform: skew(-1deg); /* Slight skew for an edgy feel */
+        }
+
+        .punk-button {
+            background-color: var(--punk-red);
+            color: var(--punk-black);
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            transition: all 0.15s ease-in-out;
+            border: 2px solid #fff;
+            box-shadow: 4px 4px 0 var(--punk-glow); /* Offset shadow */
+            clip-path: polygon(0 0, 100% 0, 100% 80%, 80% 100%, 0% 100%); /* Aggressive cutout shape */
+        }
+
+        .punk-button:hover {
+            background-color: #ff3333;
+            box-shadow: 6px 6px 0 var(--punk-glow);
+            transform: translateY(-2px) skew(-1deg);
+        }
+
+        .punk-input {
+            background-color: #111;
+            border: 1px solid var(--punk-red);
+            color: white;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.3);
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .punk-card {
+                transform: skew(0deg); /* Remove skew on mobile for readability */
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-red-700 selection:text-white">
+
+    <div id="app" class="punk-card w-full max-w-lg p-6 md:p-10 space-y-8">
+
+        <!-- Title Section -->
+        <header class="text-center pb-4 border-b-2 border-red-700">
+            <h1 class="title-font text-5xl md:text-6xl text-red-600 uppercase">
+                CYBER-PUNK
+            </h1>
+            <p class="secondary-font text-3xl text-white tracking-widest mt-2">
+                Jukebox v4.20
+            </p>
+        </header>
+
+        <!-- Search / Input Section -->
+        <div class="space-y-4">
+            <label for="track-input" class="block secondary-font text-xl text-red-500 tracking-wider">
+                QUEUE THE FURY
+            </label>
+            <input type="text" id="track-input" placeholder="Enter Band, Track, or Noise..."
+                   class="punk-input w-full h-12 rounded-none focus:outline-none focus:border-white">
+            <button onclick="queueTrack()" class="punk-button w-full py-3 rounded-none mt-2 text-xl secondary-font">
+                SHRED THE RIFF
+            </button>
+        </div>
+
+        <!-- Status / Now Playing -->
+        <div class="space-y-4 pt-4 border-t-2 border-red-900">
+            <h2 class="secondary-font text-2xl text-red-500 tracking-wider">NOW SCORCHING:</h2>
+            <div id="now-playing" class="bg-gray-800 p-4 rounded-sm border-2 border-red-600">
+                <p id="current-track" class="text-white text-lg italic">
+                    <span class="text-red-400">&gt;&gt;</span> Awaiting Command...
+                </p>
+            </div>
+        </div>
+
+        <!-- Playback Controls -->
+        <div class="flex justify-between space-x-4 pt-2">
+            <button onclick="control('prev')" class="punk-button w-1/3 py-2 secondary-font text-lg">
+                &lt;&lt; PREV
+            </button>
+            <button onclick="control('pause')" class="punk-button w-1/3 py-2 secondary-font text-lg">
+                || PAUSE
+            </button>
+            <button onclick="control('next')" class="punk-button w-1/3 py-2 secondary-font text-lg">
+                NEXT &gt;&gt;
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const currentTrackElement = document.getElementById('current-track');
+        const trackInputElement = document.getElementById('track-input');
+        const appContainer = document.getElementById('app');
+
+        let trackCount = 1;
+        
+        // Simple exponential backoff retry mechanism for API calls
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response;
+                } catch (error) {
+                    if (i === maxRetries - 1) {
+                        console.error("Max retries reached. Failed to fetch:", error);
+                        throw error;
+                    }
+                    const delay = Math.pow(2, i) * 1000; // Exponential backoff
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        /**
+         * Simulates queuing a track, using an LLM call to generate a punk/metal track name.
+         */
+        async function queueTrack() {
+            const userText = trackInputElement.value.trim();
+            if (!userText) {
+                showMessage("SYSTEM ERROR: INPUT REQUIRED! ENTER NOISE!", 'error');
+                return;
+            }
+            
+            showMessage("PROCESSING FURY... HOLD FAST...", 'loading');
+
+            const systemPrompt = "You are a creative engine generating names for extreme metal and punk rock tracks. Your output must be a single, short, aggressive track title, nothing else. Do not use quotes or introductory phrases.";
+            const userQuery = `Generate a new track title about: ${userText}. Make it sound aggressive and punk/metal.`;
+            
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+            };
+
+            try {
+                const response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const newTrack = result.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "DEATH BY SILENCE (ERROR)";
+                
+                trackInputElement.value = '';
+                trackCount++;
+                showMessage(`Track ${trackCount}: "${newTrack}" QUEUED!`, 'success');
+                currentTrackElement.innerHTML = `<span class="text-red-400 secondary-font">&gt;&gt; NOW PLAYING:</span> ${newTrack.toUpperCase()}`;
+                
+            } catch (error) {
+                showMessage("NETWORK BREACH: FAILED TO FETCH RIFFS.", 'error');
+            }
+        }
+
+        /**
+         * Simulates playback control action.
+         */
+        function control(action) {
+            let message = "";
+            let status = 'info';
+            switch (action) {
+                case 'prev':
+                    message = "REVERSE THRUSTERS! JUMPING TO PREVIOUS TRACK.";
+                    break;
+                case 'pause':
+                    message = "TEMPORARY CESSATION OF AGGRESSION. PAUSED.";
+                    break;
+                case 'next':
+                    message = "FULL SPEED AHEAD! SKIPPING TO NEXT TRACK.";
+                    break;
+            }
+            showMessage(message, status);
+        }
+
+        /**
+         * Custom modal message box (replaces alert()).
+         */
+        function showMessage(text, type = 'info') {
+            const existingModal = document.getElementById('punk-modal');
+            if (existingModal) existingModal.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'punk-modal';
+            modal.className = 'fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 transition-opacity duration-300';
+            
+            let borderColor = 'border-red-600';
+            let title = 'SYSTEM MESSAGE';
+            let titleColor = 'text-red-500';
+
+            if (type === 'error') {
+                borderColor = 'border-red-900';
+                title = '!!! FATAL ERROR !!!';
+                titleColor = 'text-red-900';
+            } else if (type === 'success') {
+                borderColor = 'border-green-500';
+                title = 'SUCCESS';
+                titleColor = 'text-green-500';
+            } else if (type === 'loading') {
+                title = 'LOADING...';
+                titleColor = 'text-yellow-400';
+            }
+
+            modal.innerHTML = `
+                <div class="punk-card p-6 w-11/12 max-w-sm rounded-none ${borderColor} border-4 secondary-font" style="transform: skew(0);">
+                    <h3 class="text-2xl ${titleColor} mb-4">${title}</h3>
+                    <p class="text-white text-lg">${text}</p>
+                    ${type !== 'loading' ? '<button class="punk-button mt-6 py-2 px-4 text-sm float-right" onclick="document.getElementById(\'punk-modal\').remove()">ACKNOWLEDGE & DISMISS</button>' : ''}
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            if (type !== 'loading') {
+                 setTimeout(() => {
+                    const m = document.getElementById('punk-modal');
+                    if (m) m.remove();
+                }, 4000); // Auto-dismiss after 4 seconds for non-error messages
+            }
+        }
+
+        // Add event listener to input field for Enter key
+        trackInputElement.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                queueTrack();
+            }
+        });
+    </script>
+</body>
+</html>
