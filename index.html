@@ -302,7 +302,7 @@
             // Process the streaming output
             for await (const chunk of stream) {
                 const content = chunk.choices[0].delta.content;
-                const piece = chunk?.choices?.,[object Object],?.delta?.content ?? "";
+                const piece = chunk?.choices?.[0]?.delta?.content ?? ""; 
                 if (piece) fullResponseText += piece;
             }
             
