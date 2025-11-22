@@ -172,7 +172,7 @@
                     isLoading: true
                     });
                 }
-                const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC"
+                const MODEL_NAME = "TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC" //"TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC"
                 
                 llmInference = await CreateMLCEngine(
                     MODEL_NAME,
@@ -271,8 +271,7 @@
             if (!llmInference) {
                 throw new Error("LLM not initialized.");
             }
-
-            const fullPrompt = prompt + "\n\nOutput must be STRICTLY VALID JSON matching the required schema {schemaName}";
+            const fullPrompt = `${prompt}\n\nOutput must be STRICTLY VALID JSON matching the required schema ${schemaName}`;
             // Append the mandatory instruction for strict JSON output
 
             const messages = [{ role: "user", content: fullPrompt}];
@@ -347,7 +346,7 @@
                 message: `LOADING QUESTION on: ${topic.toUpperCase()}...` 
             });
 
-            const systemPrompt = `Generate a challenging trivia question based on the topic: "${topic}". Provide one question, one correct answer, and three distinct wrong answers.`;
+            const systemPrompt = `You are a challenging and knowledgeable Trivia Master. Your task is to generate a single multiple-choice trivia question based on the user's topic: "${topic}". The question must have exactly one correct answer and exactly three plausible, but incorrect, answers (distractors). Ensure the question is clear and the answers are concise.`;
 
             const responseSchema = {
                 type: "OBJECT",
