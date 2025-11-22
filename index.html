@@ -272,15 +272,13 @@
                 throw new Error("LLM not initialized.");
             }
 
-            const fullPrompt = `${prompt}
-            You are a precise assistant that outputs STRICT JSON only.
+            const fullPrompt = `You are a precise assistant that outputs STRICT JSON only.            
             ${prompt}
             Rules:
             - Return ONLY a single JSON object.
             - It MUST validate against the schema below.
             - No markdown code fences.
             - No prose or explanations.
-
             --- SCHEMA START ---
             ${JSON.stringify(schemaName)}
             --- SCHEMA END ---
@@ -386,7 +384,6 @@
 
             try {
 
-                console.log('Calling with:', userRequestPrompt)
                 const parsed = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
                 console.log('This is what I am getting:', parsed)
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
