@@ -362,7 +362,6 @@
             };
 
             try {
-                this.updateReactState({ phase: 'loading', message: `Generating question on ${topic}...` });
 
                 const parsedJson = await this.runLLM_API_Call(systemPrompt, responseSchema);
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
