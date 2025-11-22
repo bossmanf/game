@@ -271,8 +271,15 @@
             if (!llmInference) {
                 throw new Error("LLM not initialized.");
             }
-            const fullPrompt = `${prompt}\n\nOutput must be STRICTLY VALID JSON matching the required schema ${schemaName}`;
-            // Append the mandatory instruction for strict JSON output
+
+            const schemaString = JSON.stringify(schemaName, null, 2);
+
+            const fullPrompt = `${prompt}\n\nOutput must be STRICTLY VALID JSON matching the required schema:
+            --- START OF SCHEMA ---
+            ${schemaString}
+            --- END OF SCHEMA --
+
+            Please output ONLY the JSON object, wrapped inside a JSON markdown code block. Do not include any commentary outside this block. `;
 
             const messages = [{ role: "user", content: fullPrompt}];
 
@@ -284,7 +291,7 @@
             const stream = await llmInference.chat.completions.create({
                 messages: messages,
                 stream: true, // Enable streaming
-                temperature: 0.1
+                temperature: 0.2
             });
 
             // Process the streaming output
@@ -349,7 +356,7 @@
                 message: `GENERATING QUESTION on: ${topic.toUpperCase()}...` 
             });
 
-            const systemPrompt = `You are a challenging and knowledgeable Trivia Master. Your task is to generate a single multiple-choice trivia question based on the user's topic: "${topic}". The question must have exactly one correct answer and exactly three plausible, but incorrect answers. Ensure the question is clear and the answers are concise.`;
+            const systemPrompt = `You are a challenging and knowledgeable Trivia Master. Your task is to generate a single multiple-choice trivia question based on the user's topic: "${topic}". The question must have exactly one correct answer and exactly three plausible, but incorrect answers. Ensure the question is clear and the answers are concise. Format your response as a JSON object with keys: question, WrongAnswers (array), correctAnswer.`;
 
             const responseSchema = {
                 type: "OBJECT",
