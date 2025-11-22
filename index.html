@@ -289,7 +289,7 @@
             let fullResponseText = "";
 
             console.log('This is the full Prompt:', fullPrompt)
-            const stream = await engine.chat.completions.create({
+            const stream = await llmInference.chat.completions.create({
                 messages: [
                   { role: "system", content: "You are a challenging and knowledgeable Trivia Master that outputs strict JSON when asked." },
                   { role: "user", content: fullPrompt }
