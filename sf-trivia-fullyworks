@@ -1,0 +1,394 @@
+import React, { useState, useEffect, useCallback } from 'react';
+
+// --- San Francisco Trivia Game Component ---
+// This application simulates a three-phase trivia game using the Gemini API 
+// to generate topics, questions, and answers on the fly.
+
+const API_KEY = ""; // Placeholder for Canvas environment key
+const API_URL_BASE = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=";
+
+// --- Helper Components ---
+
+// A simple loading spinner
+const Spinner = () => (
+  <div className="flex justify-center items-center p-8">
+    <div className="animate-spin rounded-full h-10 w-10 border-4 border-t-blue-500 border-gray-200"></div>
+  </div>
+);
+
+// Custom Button styled for the SF aesthetic
+const SFButton = ({ children, onClick, disabled = false, className = '' }) => (
+    <button
+        onClick={onClick}
+        disabled={disabled}
+        className={`w-full py-4 px-6 text-xl font-bold rounded-lg shadow-lg transition duration-300 transform 
+                    ${disabled 
+                        ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
+                        : 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-xl hover:-translate-y-0.5'
+                    }
+                    ${className}`}
+    >
+        {children}
+    </button>
+);
+
+// --- Game Logic and API Simulation ---
+
+function App() {
+  const [phase, setPhase] = useState(1);         // 1: Welcome, 2: Topic Selection, 3: Question
+  const [score, setScore] = useState(0);         // Player score
+  const [isLLMLoaded, setIsLLMLoaded] = useState(false); // Phase 1 status
+  const [isLoading, setIsLoading] = useState(false);     // Loading state for API calls
+  const [topics, setTopics] = useState([]);      // Topics for Phase 2
+  const [currentTopic, setCurrentTopic] = useState(''); // Selected topic
+  const [questionData, setQuestionData] = useState(null); // {question, correctAnswer, wrongAnswers[]}
+  const [selectedAnswer, setSelectedAnswer] = useState(null); // The answer the player clicked
+  const [message, setMessage] = useState('Welcome to the San Francisco Trivia Challenge!');
+  const [error, setError] = useState(null);
+
+  // Utility to handle API calls with exponential backoff
+  const fetchWithBackoff = useCallback(async (payload, maxRetries = 5) => {
+    const url = `${API_URL_BASE}${API_KEY}`;
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json();
+        } catch (e) {
+            if (i === maxRetries - 1) throw e;
+            const delay = Math.pow(2, i) * 1000;
+            console.warn(`Retry ${i + 1}/${maxRetries}. Retrying in ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+  }, []);
+
+  // Phase 1: Simulate LLM Model Loading (Initial Call)
+  const initializeLLM = useCallback(async () => {
+    setMessage('Initializing AI Conductor...');
+    setIsLoading(true);
+
+    try {
+      // Simulate loading with a small delay and a dummy API call to ensure connectivity
+      await new Promise(resolve => setTimeout(resolve, 1500)); 
+      
+      const payload = {
+        contents: [{ parts: [{ text: "Acknowledge the model is ready for a trivia game. Respond with only the word 'Ready'." }] }],
+        systemInstruction: { parts: [{ text: "You are a trivia conductor. Respond concisely." }] },
+      };
+      
+      await fetchWithBackoff(payload); // Ensure successful API handshake
+      
+      setIsLLMLoaded(true);
+      setMessage('AI Conductor Initialized. Click START GAME.');
+    } catch (e) {
+      setError(`Initialization Failed: ${e.message}`);
+      setMessage('Initialization failed. Check console for details.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [fetchWithBackoff]);
+  
+  // Phase 2: Get two diverse topics from the LLM
+  const getTopics = useCallback(async () => {
+    if (score >= 1000) return; // Game over check
+    
+    setIsLoading(true);
+    setCurrentTopic('');
+    setQuestionData(null);
+    setSelectedAnswer(null);
+    setTopics([]);
+    setPhase(2);
+
+    const prompt = "Provide two distinct and unique trivia topics suitable for a fun game. For example: 'San Francisco History' or '80s Rock Bands'.";
+    const payload = {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+              type: "OBJECT",
+              properties: { topics: { type: "ARRAY", items: { type: "STRING" } } },
+          },
+      },
+    };
+
+    try {
+      const response = await fetchWithBackoff(payload);
+      const jsonText = response.candidates?.[0]?.content?.parts?.[0]?.text;
+      const parsed = JSON.parse(jsonText);
+      
+      if (parsed && parsed.topics && parsed.topics.length >= 2) {
+        setTopics(parsed.topics.slice(0, 2));
+        setMessage('Choose your next challenge!');
+      } else {
+        throw new Error('LLM returned insufficient topics.');
+      }
+    } catch (e) {
+      setError(`Topic Generation Error: ${e.message}`);
+      setMessage('Failed to get topics. Try refreshing.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [score, fetchWithBackoff]);
+  
+  // Phase 3: Get Question/Answers from the LLM
+  const inferenceLLM = useCallback(async (topic) => {
+    setIsLoading(true);
+    setCurrentTopic(topic);
+    setQuestionData(null);
+    setPhase(3);
+
+    const prompt = `Generate a challenging trivia question based on the topic: "${topic}". Provide one question, one correct answer, and three distinct wrong answers.`;
+    const payload = {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+              type: "OBJECT",
+              properties: {
+                  question: { type: "STRING" },
+                  correctAnswer: { type: "STRING" },
+                  wrongAnswers: { type: "ARRAY", items: { type: "STRING" } }
+              },
+          },
+      },
+    };
+
+    try {
+      const response = await fetchWithBackoff(payload);
+      const jsonText = response.candidates?.[0]?.content?.parts?.[0]?.text;
+      const parsed = JSON.parse(jsonText);
+      
+      if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
+        setQuestionData(parsed);
+        setMessage(`Topic: ${topic}. Answer the question!`);
+      } else {
+        throw new Error('LLM returned malformed question data.');
+      }
+    } catch (e) {
+      setError(`Question Generation Error: ${e.message}`);
+      setMessage('Failed to get question. Try a different topic.');
+      setPhase(2); // Go back to topic selection
+    } finally {
+      setIsLoading(false);
+    }
+  }, [fetchWithBackoff]);
+  
+  // Game Initialization on Mount
+  useEffect(() => {
+    if (!isLLMLoaded && phase === 1) {
+      initializeLLM();
+    }
+  }, [isLLMLoaded, phase, initializeLLM]);
+  
+  // Topic Selection Handler
+  const handleTopicSelect = (topic) => {
+    if (isLoading) return;
+    inferenceLLM(topic);
+  };
+  
+  // Answer Click Handler
+  const handleAnswerSelect = (answer) => {
+    if (selectedAnswer !== null) return; // Prevent double-clicking
+    setSelectedAnswer(answer);
+    
+    let newScore = score;
+    let feedback = '';
+
+    if (answer === questionData.correctAnswer) {
+      newScore += 100;
+      feedback = 'CORRECT! +100 Points!';
+    } else {
+      newScore -= 50;
+      feedback = `INCORRECT! -50 Points. The correct answer was: ${questionData.correctAnswer}`;
+    }
+
+    setScore(newScore);
+    setMessage(feedback);
+    
+    // Check win condition or prepare for next round
+    if (newScore >= 1000) {
+        setTimeout(() => setMessage('CONGRATULATIONS! You won the challenge!'), 2000);
+    } else {
+        setTimeout(() => getTopics(), 3000); // 3 second delay before next topic selection
+    }
+  };
+
+  // --- Rendering Functions ---
+
+  // Determines the color and disabled status of an answer button
+  const getAnswerButtonClass = (answer) => {
+    if (selectedAnswer === null) {
+      return 'hover:bg-blue-100 border-blue-300'; // Default unclicked
+    }
+    
+    const isCorrect = answer === questionData.correctAnswer;
+    const isSelected = answer === selectedAnswer;
+
+    if (isCorrect) {
+      return 'bg-green-500 border-green-700 shadow-lg'; // Always green for correct
+    } else if (isSelected) {
+      return 'bg-red-500 border-red-700 shadow-lg'; // Red for wrong selected
+    } else {
+      return 'bg-gray-200 border-gray-300 opacity-50'; // Faded wrong unselected
+    }
+  };
+  
+  // Component to render the game panels
+  const GamePanels = () => (
+    <div className="flex w-full h-full bg-white shadow-xl rounded-xl overflow-hidden min-h-[600px] md:min-h-[700px]">
+      
+      {/* LEFT PANEL: Conductor Info */}
+      <div className="w-1/5 bg-gray-800 text-white p-4 hidden md:flex flex-col items-center justify-between border-r-4 border-blue-600">
+        <div className="text-center space-y-3">
+            <h3 className="text-xl font-bold border-b pb-2 border-gray-600 mb-4">AI CONDUCTOR</h3>
+            {/* Placeholder Conductor Image (Stylized SVG) */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-blue-400">
+                <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
+            </svg>
+            <div className="text-sm font-mono mt-4 p-2 bg-gray-700 rounded-lg">
+                <p>STATUS: OPERATIONAL</p>
+                <p>MOOD: NEUTRAL</p>
+            </div>
+        </div>
+        <div className="text-center text-xs text-gray-500">
+            <p>MODEL: GEMINI 2.5</p>
+            <p>APP ID: {typeof __app_id !== 'undefined' ? __app_id.substring(0, 8) : 'default'}</p>
+        </div>
+      </div>
+
+      {/* CENTER PANEL: Game Interaction */}
+      <div className="flex-1 p-6 flex flex-col justify-between">
+        <h2 className="text-3xl font-extrabold text-gray-800 mb-4 text-center">{score >= 1000 ? 'VICTORY ACHIEVED' : 'TRIVIA CHALLENGE'}</h2>
+        
+        {/* Game Message Panel */}
+        <div className={`p-4 mb-6 text-center rounded-lg font-semibold shadow-md ${score >= 1000 ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-50 text-blue-700'}`}>
+            {message}
+        </div>
+
+        {/* Dynamic Phase Content */}
+        {isLoading && <Spinner />}
+
+        {/* Phase 1: Welcome/Start */}
+        {phase === 1 && isLLMLoaded && !isLoading && (
+            <div className="flex flex-col items-center justify-center flex-1">
+                <p className="text-xl text-gray-600 mb-8">
+                    The AI Conductor is ready. Hit the button below to start your climb to $1000 points!
+                </p>
+                <SFButton onClick={getTopics} className="w-2/3">
+                    START GAME
+                </SFButton>
+            </div>
+        )}
+
+        {/* Phase 2: Topic Selection */}
+        {phase === 2 && !isLoading && topics.length > 0 && (
+            <div className="flex flex-col items-center justify-center flex-1 space-y-6">
+                <h3 className="text-2xl font-bold text-gray-700">Choose a Topic:</h3>
+                <div className="w-full space-y-4">
+                    {topics.map((topic, index) => (
+                        <SFButton 
+                            key={index} 
+                            onClick={() => handleTopicSelect(topic)}
+                            className="bg-green-600 hover:bg-green-700"
+                        >
+                            {topic}
+                        </SFButton>
+                    ))}
+                </div>
+            </div>
+        )}
+        
+        {/* Phase 3: Question and Answers */}
+        {phase === 3 && !isLoading && questionData && (
+            <div className="flex flex-col flex-1">
+                <p className="text-lg font-semibold text-blue-600 mb-3">Topic: {currentTopic}</p>
+                <div className="p-4 bg-gray-100 rounded-lg border-2 border-gray-300 mb-6">
+                    <p className="text-2xl font-bold text-gray-800">{questionData.question}</p>
+                </div>
+                
+                <div className="space-y-4 flex-1">
+                    {[...questionData.wrongAnswers, questionData.correctAnswer]
+                        .sort(() => Math.random() - 0.5) // Shuffle answers
+                        .map((answer, index) => (
+                            <button
+                                key={index}
+                                onClick={() => handleAnswerSelect(answer)}
+                                disabled={selectedAnswer !== null}
+                                className={`w-full text-left p-4 rounded-lg border-2 text-gray-800 font-medium transition duration-200 
+                                            ${getAnswerButtonClass(answer)} 
+                                            ${selectedAnswer === null ? 'hover:shadow-md' : ''}`}
+                            >
+                                {answer}
+                            </button>
+                    ))}
+                </div>
+            </div>
+        )}
+
+        {/* Win Screen */}
+        {score >= 1000 && (
+            <div className="flex flex-col items-center justify-center flex-1 text-center bg-yellow-50 p-8 rounded-xl shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500 mb-4">
+                    <path d="M12 17.5 14.654 20l4.346-6.5L16 10l3.033-6.067L12 5.5l-7.033-2.567L8 10l-3 3.5 4.346 6.5z"/>
+                </svg>
+                <h3 className="text-4xl font-extrabold text-yellow-600">VICTORY</h3>
+                <p className="text-xl text-gray-700 mt-2">You surpassed the $1000 goal! Final Score: ${score}</p>
+                <SFButton onClick={() => window.location.reload()} className="w-1/2 mt-6 bg-red-600 hover:bg-red-700">
+                    RESTART CHALLENGE
+                </SFButton>
+            </div>
+        )}
+      </div>
+
+      {/* RIGHT PANEL: Player Info */}
+      <div className="w-1/5 bg-gray-800 text-white p-4 hidden md:flex flex-col items-center justify-between border-l-4 border-blue-600">
+        <div className="text-center space-y-3">
+            <h3 className="text-xl font-bold border-b pb-2 border-gray-600 mb-4">PLAYER PROFILE</h3>
+             {/* Placeholder Player Image (Stylized SVG) */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-yellow-400">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+            <div className="mt-4 p-3 bg-blue-600 rounded-lg shadow-xl">
+                <p className="text-sm font-mono text-white">SCORE BOARD</p>
+                <p className="text-4xl font-extrabold text-yellow-400">${score}</p>
+                <p className="text-xs text-gray-200">Goal: $1000</p>
+            </div>
+        </div>
+        <div className="text-center text-xs text-gray-500">
+            <p>USER ID: GUEST</p>
+        </div>
+      </div>
+      
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4 flex flex-col items-center font-sans">
+      <header className="mb-6 mt-4 text-center">
+        <h1 className="text-5xl font-extrabold text-gray-900 border-b-4 border-blue-500 pb-2 tracking-tight">
+          <span className="text-blue-600">SF</span> TRIVIA
+        </h1>
+        <p className="text-gray-500 mt-2 italic">A Gemini-Powered Knowledge Challenge</p>
+      </header>
+
+      {error && (
+        <div className="w-full max-w-4xl p-4 mb-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center">
+          <p className="font-bold">System Error:</p>
+          <p>{error}</p>
+        </div>
+      )}
+
+      <div className="w-full max-w-4xl">
+        <GamePanels />
+      </div>
+
+    </div>
+  );
+}
+
+export default App;
