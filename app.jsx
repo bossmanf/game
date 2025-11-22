@@ -217,7 +217,7 @@ const PhaserGame = ({  setUiState }) => {
                     initGameSequence(currentUserId, this);
                 }
 
-                } else {
+                else {
                     console.log("Waiting for Firebase to be ready...");
                 }
                  
