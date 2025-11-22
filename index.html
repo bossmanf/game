@@ -151,14 +151,16 @@
             return el;
         }
 
+
         // --- Phase 1: Initialization ---
 
         /**
          * Simulates LLM Model Loading and checks API connectivity.
          */
-        async function initializeLLM() {
-            updateState({ message: 'SYSTEM: Loading Machine Core...', isLoading: true, error: null });
 
+
+        async function loadModel(){
+            updateState({ message: 'SYSTEM: Loading Machine Core...', isLoading: true, error: null });
 
             try {
                 const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
@@ -193,6 +195,12 @@
                 });
             }  
                 
+        }
+
+
+        async function initializeLLM() {
+
+            await new Promise(resolve => loadModel(); 
         }
 
         // --- Phase 2: Topic Selection ---
