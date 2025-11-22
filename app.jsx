@@ -428,10 +428,9 @@ const PhaserGame = ({  setUiState }) => {
                 
                     this.game.events.emit('QUESTION_READY', parsedJson);
                     this.currentQuestionData = parsedJson;
-                    } else {
-                        throw new Error("LLM question response was malformed.");
+                    } 
                     
-                } catch (e) {
+                 catch (e) {
                     console.error("Failed to generate or parse question:", e);
                     this.game.events.emit('CONVERSATION_UPDATE', { message: "Apologies, I hit a snag getting the question. Let's try another topic." });
                     this.game.events.emit('TOPICS_READY', { topics: this.game.events.contextTopics || [] }); // Go back to topics
