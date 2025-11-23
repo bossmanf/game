@@ -377,7 +377,7 @@
               };
             const responseSchemaStr= JSON.stringify(responseSchema, null, 2);
 
-            const userRequestPrompt = `
+            userRequestPrompt = `
                 Task: Create one multiple-choice trivia question about the topic ${topic}
                 Constraints:
                 The question and answers must be based on real-world facts.
