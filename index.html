@@ -507,24 +507,23 @@
             
             
 
+            function renderPhase_boot() {
+            const welcomeContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8');
+            
             if (game.isLoading) {
                 welcomeContent.innerHTML = `
                     <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
                     <p class="mt-6 text-xl text-gray-400 title-font">${game.message}</p>
                 `;
             } else if (game.isLLMLoaded) {
+                // LLM is loaded, show the START button
 
-                updateState({ 
-                    isLoading: false, 
-                    currentTopic: '', 
-                    questionData: null, 
-                    selectedAnswer: null, 
-                    topics: [], 
-                    phase: 0,
-                    //message: 'QUERYING SYSTEM for next target...'
-                });
                 const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
-                startButton.onclick = renderGame();
+                
+                // FIX: Assign an anonymous function to onclick that calls setPhase(0).
+                // This prevents the function from running immediately upon rendering.
+                startButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
+
                 welcomeContent.append(
                     createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
                     startButton
@@ -683,23 +682,7 @@
             return shopContent;
         }
 
-    function renderPhase_boot() {
-        const welcomeContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8');
-        
-        if (game.isLoading) {
-            welcomeContent.innerHTML = `
-                <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
-                <p class="mt-6 text-xl text-gray-400 title-font">${game.message}</p>
-            `;
-        } else if (game.isLLMLoaded) {
-            const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
-            welcomeContent.append(
-                createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
-                startButton
-            );
-        }
-        return welcomeContent;
-    }
+    
 
         function renderPhase3() {
             if (game.isLoading || !game.questionData) {
