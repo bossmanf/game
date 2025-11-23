@@ -157,7 +157,7 @@
         // Global Game State
         const game = {
             phase: 1,             // 1: Welcome, 2: Topic Selection, 3: Question
-            score: 0,
+            score: 20000,
             isLLMLoaded: false,
             isLoading: false,
             topics: [],
@@ -565,7 +565,7 @@
                 { title: 'TRIVIA', phase: 2, action: initiateTrivia, iconHtml: TriviaIconHtml() },
                 { title: 'WORDLE', phase: 0, action: () => setPhase(0, 'WORDLE not implemented yet. Try Trivia!'), iconHtml: WordleIconHtml() },
                 { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Gear up for the Ultimate Ascent!'), iconHtml: ShopIconHtml() },
-                { title: 'INSTRUCTIONS', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), iconHtml: InstructionsIconHtml() },
+                { title: 'MISSION', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), iconHtml: InstructionsIconHtml() },
                 { title: 'X (LOCKED)', phase: 0, action: () => setPhase(0, 'Sector X is currently locked.'), iconHtml: LockedIconHtml() },
                 { title: 'Y (LOCKED)', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconHtml: LockedIconHtml() },
             ];
