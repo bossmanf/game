@@ -366,7 +366,7 @@
                 wrongAnswers: ["Oxygen", "Hydrogen", "Ozone"],
                 correctAnswer: "Carbon dioxide"
               };
-            const schemaString = JSON.stringify(responseSchema, null, 2);
+            const responseSchemaStr= JSON.stringify(responseSchema, null, 2);
 
             const userRequestPrompt = `
             Task: Create one multiple-choice trivia question with one correct answer and an array with three plausible but incorrect answers about the topic "${topic}".
@@ -374,14 +374,21 @@
             - Exactly one correct answer.
             - Exactly three plausible but incorrect answers.
             - Answers must be concise.
+            - Do NOT copy the example content; only copy the structure.
 
-            The output MUST be a single, valid JSON object following the structure defined below. Do NOT include any commentary, explanations, or text outside of the final JSON object.
-            --- JSON SCHEMA DEFINITION ---
-            ${schemaString}
-            --- END OF SCHEMA DEFINITION ---
             EXAMPLE OUTPUT (structure only; different content):
             ${JSON.stringify(example, null, 2)}
-                `.trim();
+
+            Follow the same shape for the topic "${topic}".
+
+            Output must strictly match the JSON schema below. Return ONLY a single JSON object. No markdown code fences, no extra text, no comments.
+
+            --- SCHEMA START ---
+            ${JSON.stringify(responseSchemaStr, null, 2)}
+            --- SCHEMA END ---
+            `.trim();
+
+
 
             try {
 
