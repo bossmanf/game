@@ -378,7 +378,7 @@
                 The output must strictly adhere to the JSON schema provided below.
                 The resulting question must have:
                 Exactly one correct answer.
-                Exactly three plausible but incorrect answers (wrongAnswers array size must be 3).
+                Exactly THREE plausible but incorrect answers (wrongAnswers array size must be 3). Do not repeat answers.
                 Concise answers.
                 --- JSON SCHEMA DEFINITION ---
                 {"type": "object", "additionalProperties": false, "properties": {"question": {"type": "string", "minLength": 5, "description": "The main trivia question text."}, "wrongAnswers": {"type": "array", "description": "An array containing exactly three plausible, incorrect answers.", "items": {"type": "string", "minLength": 1}, "minItems": 3, "maxItems": 3, "uniqueItems": true}, "correctAnswer": {"type": "string", "minLength": 1, "description": "The single, correct answer to the question."}}, "required": ["question", "wrongAnswers", "correctAnswer"]}
@@ -440,7 +440,7 @@
             if (newScore >= 1000) {
                 setTimeout(() => updateState({ message: 'VICTORY ACHIEVED! MACHINE DEFEATED.' }), 2000);
             } else {
-                setTimeout(() => getTopics(), 3000); // 3 second delay before next topic selection
+                setTimeout(() => getTopics(), 4000); // 3 second delay before next topic selection
             }
         }
 
