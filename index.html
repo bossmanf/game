@@ -207,6 +207,14 @@
          */
 
 
+        function initiateTrivia() {
+            if (game.isLLMLoaded) {
+                getTopics();
+            } else {
+                updateState({ message: 'Core not ready. Please wait for initialization.', phase: 1 });
+            }
+        }
+        
         async function initializeLLM(){
             updateState({ message: 'SYSTEM: Loading Machine Core...', isLoading: true, error: null });
 
@@ -526,7 +534,7 @@
 
 
             const buttons = [
-                { title: 'TRIVIA', phase: 2, action: getTopics;, icon: '🧠' }, // Go to Topic Selection (Phase 2)
+                { title: 'TRIVIA', phase: 2, action: initiateTrivia, icon: '🧠' }, // Go to Topic Selection (Phase 2)
                 { title: 'WORDLE', phase: 0, action: () => setPhase(0, 'WORDLE not implemented yet. Try Trivia!'), icon: '🔠' },
                 { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Gear up for the Ultimate Ascent!'), icon: '🛒' },
                 { title: 'INSTRUCTIONS', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), icon: '📜' },
@@ -810,7 +818,7 @@
         let contentElement;
         switch (game.phase) {
             case 0:
-                contentElement = renderPhase0();
+                contentElement = renderPhase0();  //  Menu
                 break;
             case 1:
                 contentElement = renderPhase_boot(); // Original Phase 1
