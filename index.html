@@ -164,6 +164,7 @@
             currentTopic: '',
             questionData: null,   // {question, correctAnswer, wrongAnswers[]}
             selectedAnswer: null, // The answer the player clicked
+            purchasedItems: [], // New: Tracks items bought in the shop
             message: 'Initializing...',
             error: null
         };
@@ -414,8 +415,8 @@
                 const endTime = performance.now();
 
                 const duration = endTime - startTime;
-                console.log('Duration:', duration, ' -- This is what I am getting:', parsed)
-                const parsed;
+                console.log('Duration:', duration, ' -- This is what I am getting:', output)
+                
                 parsed.question = output
                 parsed.correctAnswer = 'Testing correct'
                 parsed.wrongAnswers = ['Wrong 1', 'Wrong 2', 'Wrong 3']
@@ -592,14 +593,24 @@
             const grid = createElement('div', 'grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl flex-1 overflow-y-auto');
 
             shopData.forEach(item => {
+                const isOwned = game.purchasedItems.some(i => i.name === item.name);
                 const canAfford = game.score >= item.price;
                 
                 const card = createElement('div', `item-card p-4 rounded-lg flex flex-col items-center text-center transition ${canAfford ? 'cursor-pointer hover:bg-gray-800' : 'opacity-50 cursor-not-allowed'}`);
                 
                 card.onclick = () => {
+                    if (isOwned) {
+                        setPhase(4, `${item.name} already owned. Select another item.`);
+                        return;
+                    }
                     if (canAfford) {
-                        setPhase(4, `PURCHASE SUCCESSFUL: ${item.name} for $${item.price}.`);
-                        game.score -= item.price;
+                        game.purchasedItems.push({ name: item.name, icon: item.icon }); // Record purchase
+                        const newScore = game.score - item.price; // Calculate new score
+                        updateState({ 
+                            score: newScore, 
+                            message: `PURCHASE SUCCESSFUL: ${item.name} for $${item.price}.`,
+                            phase: 4 // Keep phase 4 to refresh shop content immediately
+                        });
                     } else {
                         setPhase(4, `INSUFFICIENT FUNDS! Need $${item.price - game.score} more for ${item.name}.`);
                     }
@@ -762,7 +773,7 @@
                 <!-- RIGHT PANEL: Player Info -->
                 <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-l-4 border-electric-cyan">
                     <div class="text-center space-y-3">
-                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PILOT DATA</h3>
+                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PLAYER DATA</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-yellow-400 speed-icon">
                             <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                         </svg>
@@ -770,6 +781,20 @@
                             <p class="text-sm font-mono text-gray-400">SCORE REGISTER</p>
                             <p class="text-4xl font-extrabold text-yellow-400 title-font">$${game.score}</p>
                             <p class="text-xs text-gray-200">TARGET: $1000</p>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-gray-700 w-full">
+                            <p class="text-sm font-mono text-gray-400 mb-2">INVENTORY</p>
+                            <div id="inventory-display" class="grid grid-cols-4 gap-2">
+                                ${game.purchasedItems.length === 0 
+                                    ? '<p class="text-xs text-gray-500 italic col-span-4">No items acquired.</p>'
+                                    : game.purchasedItems.map(item => `
+                                        <div class="p-1 text-center bg-gray-600 rounded-md border border-electric-cyan/70 hover:bg-gray-500" title="${item.name}">
+                                            <span class="text-2xl">${item.icon}</span>
+                                        </div>
+                                    `).join('')
+                                }
+                            </div>
                         </div>
                     </div>
                     <div class="text-center text-xs text-gray-500">
