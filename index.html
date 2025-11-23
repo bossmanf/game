@@ -153,7 +153,6 @@
 
 
         // --- Phase 1: Initialization ---
-
         /**
          * Simulates LLM Model Loading and checks API connectivity.
          */
@@ -347,7 +346,7 @@
             Task: Create one multiple-choice trivia question about the topic ${topic}
             Constraints:
             The question must be based on real-world facts.
-            Exactly ONE question. Concise answers.
+            Exactly ONE question.
             `.trim();
 
 
@@ -362,7 +361,7 @@
 
                 const duration = endTime - startTime;
                 console.log('Duration:', duration, ' -- This is what I am getting:', parsed)
-
+                const parsed;
                 parsed.question = output
                 parsed.correctAnswer = 'Testing correct'
                 parsed.wrongAnswers = ['Wrong 1', 'Wrong 2', 'Wrong 3']
