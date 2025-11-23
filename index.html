@@ -172,7 +172,7 @@
                     isLoading: true
                     });
                 }
-                const MODEL_NAME = "Phi-3.5-mini-instruct-q4f16_1-MLC" // "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" //"TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC" //
+                const MODEL_NAME = "gemma-2-2b-it-q4f16_1-MLC" // "Phi-3.5-mini-instruct-q4f16_1-MLC" // "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" //"TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC" //
                 
                 llmInference = await CreateMLCEngine(
                     MODEL_NAME,
@@ -266,7 +266,7 @@
 
 
 
-        async function runLLM_API_Call(prompt) {
+        async function runLLM_API_Call(prompt, responseSchema) {
 
             if (!llmInference) {
                 throw new Error("LLM not initialized.");
@@ -280,7 +280,10 @@
                   { role: "user", content: prompt }
                 ],
                 stream: true,
-                temperature: 0.01
+                temperature: 0.01,
+                response_format: {
+                    type: "json_object", responseSchema
+                }
             });
 
 
@@ -375,15 +378,12 @@
                 The question and answers must be based on real-world facts.
                 The output MUST be a single JSON object.
                 The output MUST NOT contain any markdown fences, surrounding text, explanations, or commentary.
-                The output must strictly adhere to the JSON schema provided below.
-                The resulting question must have:
+                The output must strictly adhere to the JSON schema provided.
+                The resulting output must have:
+                Exactly one question.
                 Exactly one correct answer.
                 Exactly THREE plausible but incorrect answers (wrongAnswers array size must be 3). Do not repeat answers.
                 Concise answers.
-                --- JSON SCHEMA DEFINITION ---
-                {"type": "object", "additionalProperties": false, "properties": {"question": {"type": "string", "minLength": 5, "description": "The main trivia question text."}, "wrongAnswers": {"type": "array", "description": "An array containing exactly three plausible, incorrect answers.", "items": {"type": "string", "minLength": 1}, "minItems": 3, "maxItems": 3, "uniqueItems": true}, "correctAnswer": {"type": "string", "minLength": 1, "description": "The single, correct answer to the question."}}, "required": ["question", "wrongAnswers", "correctAnswer"]}
-                --- END OF SCHEMA DEFINITION ---
-
                 GENERATE THE FINAL JSON OBJECT ONLY.
             `.trim();
 
@@ -391,7 +391,7 @@
 
             try {
 
-                const parsed = await this.runLLM_API_Call(userRequestPrompt);
+                const parsed = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
                 console.log('This is what I am getting:', parsed)
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
