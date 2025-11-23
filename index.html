@@ -276,7 +276,7 @@
             console.log('This is the full Prompt:', prompt)
             const stream = await llmInference.chat.completions.create({
                 messages: [
-                  { role: "system", content: "You are a challenging and knowledgeable Trivia Master." },
+                  { role: "system", content: "You are a knowledgeable Trivia Master." },
                   { role: "user", content: prompt }
                 ],
                 stream: true,
@@ -361,6 +361,11 @@
                   "required": ["question", "wrongAnswers", "correctAnswer"]
                 }
 
+            const example = {
+                question: "Which gas is most responsible for the greenhouse effect on Earth?",
+                wrongAnswers: ["Oxygen", "Hydrogen", "Ozone"],
+                correctAnswer: "Carbon dioxide"
+              };
             const schemaString = JSON.stringify(responseSchema, null, 2);
 
             const userRequestPrompt = `
@@ -374,6 +379,8 @@
             --- JSON SCHEMA DEFINITION ---
             ${schemaString}
             --- END OF SCHEMA DEFINITION ---
+            EXAMPLE OUTPUT (structure only; different content):
+            ${JSON.stringify(example, null, 2)}
                 `.trim();
 
             try {
