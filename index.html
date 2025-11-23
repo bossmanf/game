@@ -276,7 +276,7 @@
             console.log('This is the full Prompt:', prompt)
             const stream = await llmInference.chat.completions.create({
                 messages: [
-                  { role: "system", content: "You are a challenging and knowledgeable Trivia Master. Your ONLY output must be the requested JSON object" },
+                  { role: "system", content: "You are a challenging and knowledgeable Trivia Master." },
                   { role: "user", content: prompt }
                 ],
                 stream: true,
