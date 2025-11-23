@@ -483,7 +483,7 @@
                 `;
             } else if (game.isLLMLoaded) {
                 const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
-                startButton.onclick = getTopics;
+                startButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
                 welcomeContent.append(
                     createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
                     startButton
@@ -522,11 +522,11 @@
             const title = createElement('h3', 'text-5xl font-extrabold title-font text-neon-pink text-center mb-10', 'ARCADE ASCENT');
             title.style.textShadow = '0 0 10px #ff00ff';
             menuContent.appendChild(title);
-
             const buttonGrid = createElement('div', 'grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-2xl');
 
+
             const buttons = [
-                { title: 'TRIVIA', phase: 2, action: initiateTrivia, icon: '🧠' }, // Go to Topic Selection (Phase 2)
+                { title: 'TRIVIA', phase: 2, action: getTopics;, icon: '🧠' }, // Go to Topic Selection (Phase 2)
                 { title: 'WORDLE', phase: 0, action: () => setPhase(0, 'WORDLE not implemented yet. Try Trivia!'), icon: '🔠' },
                 { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Gear up for the Ultimate Ascent!'), icon: '🛒' },
                 { title: 'INSTRUCTIONS', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), icon: '📜' },
@@ -648,7 +648,6 @@
             `;
         } else if (game.isLLMLoaded) {
             const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
-            startButton.onclick = getTopics;
             welcomeContent.append(
                 createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
                 startButton
