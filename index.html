@@ -172,7 +172,7 @@
                     isLoading: true
                     });
                 }
-                const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" 
+                const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" //24
 
                 //"gemma-2-2b-it-q4f16_1-MLC" // 42
 
@@ -281,7 +281,7 @@
             console.log('This is the full Prompt:', prompt)
             const stream = await llmInference.chat.completions.create({
                 messages: [
-                  { role: "system", content: "You are a specialized JSON generation engine. Your ONLY output is the requested JSON object. Do not include any markdown fences (```json), surrounding text, explanations, or commentary. You must strictly adhere to the provided JSON schema."  },
+                  { role: "system", content: "You are an useful assistant. Return one question related to the provided topic"  },
                   { role: "user", content: prompt }
                 ],
                 stream: true,
@@ -378,7 +378,7 @@
             const responseSchemaStr= JSON.stringify(responseSchema, null, 2);
 
             const userRequestPrompt = `
-                Task: Create one multiple-choice trivia question about the topic "Punchy Punk Rock".
+                Task: Create one multiple-choice trivia question about the topic ${topic}
                 Constraints:
                 The question and answers must be based on real-world facts.
                 The output MUST be a single JSON object.
@@ -393,11 +393,29 @@
             `.trim();
 
 
+            const userRequestPrompt = `
+            Task: Create one multiple-choice trivia question about the topic ${topic}
+            Constraints:
+            The question must be based on real-world facts.
+            Exactly ONE question. Concise answers.
+            `.trim();
+
+
+
+            const startTime = performance.now();
+        
+
+
 
             try {
 
                 const parsed = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
-                console.log('This is what I am getting:', parsed)
+
+                const endTime = performance.now();
+
+                const duration = endTime - startTime;
+                console.log('Duration:', duration, ' -- This is what I am getting:', parsed)
+
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
                         questionData: parsed,
