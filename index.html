@@ -356,13 +356,16 @@
 
             try {
 
-                const parsed = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
+                const output = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
 
                 const endTime = performance.now();
 
                 const duration = endTime - startTime;
                 console.log('Duration:', duration, ' -- This is what I am getting:', parsed)
 
+                parsed.question = output
+                parsed.correctAnswer = 'Testing correct'
+                parsed.wrongAnswers = ['Wrong 1', 'Wrong 2', 'Wrong 3']
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
                         questionData: parsed,
