@@ -493,7 +493,7 @@
             updateState({ score: newScore, message: feedback });
             
             // Check win condition or prepare for next round
-            if (newScore >= 1000) {
+            if (newScore >= 20001) {
                 setTimeout(() => updateState({ message: 'VICTORY ACHIEVED! MACHINE DEFEATED.' }), 2000);
             } else {
                 setTimeout(() => getTopics(), 4000); // 3 second delay before next topic selection
@@ -550,6 +550,9 @@
             });
             topicContent.appendChild(topicButtons);
 
+            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'RETURN TO MENU');
+            backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
+            topicContent.appendChild(backButton);
             return topicContent;
         }
 
