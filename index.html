@@ -74,6 +74,54 @@
         .speed-icon {
             filter: drop-shadow(0 0 4px var(--electric-cyan));
         }
+
+        /* ROCK AESTHETIC - Phase 4 */
+        .rock-card {
+            background: linear-gradient(145deg, #1f1f1f 10%, #000000 90%);
+            border: 5px solid #cc0000;
+            border-radius: 10px;
+            box-shadow: 0 0 25px #cc0000, inset 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        .rock-title {
+            color: #ff0000;
+            text-shadow: 3px 3px 0 #000, -3px -3px 0 #ff0000;
+            font-size: 3rem;
+            line-height: 1;
+        }
+        .item-card {
+            background-color: rgba(50, 50, 50, 0.7);
+            border: 2px dashed #999;
+            transition: transform 0.2s;
+        }
+        .item-card:hover {
+            transform: scale(1.05);
+            border-color: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        /* PUNK AESTHETIC - Phase 5 */
+        .punk-bg {
+            background: repeating-linear-gradient(-45deg, #222, #222 5px, #000 5px, #000 10px);
+            border: 4px dashed #99ff00;
+            box-shadow: 0 0 20px #99ff00;
+        }
+        .punk-text {
+            font-family: monospace;
+            color: #ff00ff;
+            text-shadow: 2px 2px #000;
+            text-transform: uppercase;
+        }
+        .punk-button {
+            background-color: #ff00ff;
+            color: black;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0 #000;
+        }
+        .punk-button:hover {
+            background-color: #99ff00;
+            box-shadow: 2px 2px 0 #000;
+            transform: translate(2px, 2px);
+        }
     </style>
 </head>
 <body>
@@ -268,6 +316,12 @@
             }
         }
 
+        function setPhase(newPhase, message = 'Awaiting Command...') {
+            game.phase = newPhase;
+            game.message = message;
+            game.isLoading = false;
+            renderGame();
+        }
 
 
         async function runLLM_API_Call(prompt, responseSchema) {
@@ -418,7 +472,7 @@
 
         // --- UI Rendering ---
         
-        function renderPhase1() {
+        function renderPhase_boot() {
             const welcomeContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8');
             
             if (game.isLoading) {
@@ -460,6 +514,137 @@
 
             return topicContent;
         }
+
+        function renderPhase0() {
+            const menuContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8 space-y-6');
+
+            const title = createElement('h3', 'text-5xl font-extrabold title-font text-neon-pink text-center mb-10', 'ARCADE ASCENT');
+            title.style.textShadow = '0 0 10px #ff00ff';
+            menuContent.appendChild(title);
+
+            const buttonGrid = createElement('div', 'grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-2xl');
+
+            const buttons = [
+                { title: 'TRIVIA', phase: 2, action: initiateTrivia, icon: '🧠' }, // Go to Topic Selection (Phase 2)
+                { title: 'WORDLE', phase: 0, action: () => setPhase(0, 'WORDLE not implemented yet. Try Trivia!'), icon: '🔠' },
+                { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Gear up for the Ultimate Ascent!'), icon: '🛒' },
+                { title: 'INSTRUCTIONS', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), icon: '📜' },
+                { title: 'X (Empty)', phase: 0, action: () => setPhase(0, 'X functionality pending.'), icon: '❌' },
+                { title: 'Y (Empty)', phase: 0, action: () => setPhase(0, 'Y functionality pending.'), icon: '⭕' },
+            ];
+
+            buttons.forEach(btn => {
+                const button = createElement('button', 'metal-button py-6 text-xl flex flex-col items-center justify-center space-y-2', 
+                    `<span class="text-3xl">${btn.icon}</span><span>${btn.title}</span>`);
+                button.onclick = btn.action;
+                buttonGrid.appendChild(button);
+            });
+
+            menuContent.appendChild(buttonGrid);
+            return menuContent;
+        }
+
+        function renderPhase5() {
+            const instructionsContent = createElement('div', 'flex flex-col items-center justify-between h-full p-8 punk-bg rounded-lg shadow-xl text-center');
+
+            const title = createElement('h3', 'text-4xl font-extrabold punk-text mt-4 mb-8', 'The Mission: ASCENSION');
+            instructionsContent.appendChild(title);
+
+            const mainText = createElement('p', 'text-2xl leading-relaxed punk-text max-w-3xl border-4 border-double border-neon-pink p-6', 
+                'TO WIN THE GAME COLLECT POINTS PLAYING GAMES AND UNLOCK THE MAGIC EQUIPMENT IN THE SHOP');
+            instructionsContent.appendChild(mainText);
+
+            const imageContainer = createElement('div', 'mt-10 mb-4');
+            const image = createElement('img', 'max-w-full h-auto rounded-xl border-4 border-punk-green shadow-xl', '');
+            image.src = 'https://media.tenor.com/qmeZTTXg164AAAAM/regular-show-rigby.gif';
+            image.alt = 'Rigby from Regular Show dancing';
+            imageContainer.appendChild(image);
+            instructionsContent.appendChild(imageContainer);
+            
+            const backButton = createElement('button', 'punk-button px-8 py-3 text-xl font-bold mt-auto', 'BACK TO MENU');
+            backButton.onclick = () => setPhase(0, 'Ready for the next challenge.');
+            instructionsContent.appendChild(backButton);
+
+            return instructionsContent;
+        }
+
+        function renderPhase4() {
+            const shopData = [
+                { name: 'Magic Zataar Spices', price: 50, icon: '🌶️', desc: 'Boosts your focus.' },
+                { name: 'Chicken Pho', price: 100, icon: '🍜', desc: 'Restores maximum health.' },
+                { name: 'Beenie', price: 200, icon: '🧢', desc: 'Unlocks '},
+                { name: 'Metallica Album', price: 400, icon: '🎸', desc: 'Doubles score bonus.' },
+                { name: 'Wrestling Gear', price: 750, icon: '🤼', desc: 'Grants temporary invincibility.' },
+                { name: 'Billie Eilish Tickets', price: 1200, icon: '🎤', desc: 'Charms a hostile AI.' },
+                { name: 'Morello\'s Guitar', price: 2000, icon: '🤘', desc: 'Ultimate Rock Power-Up.' },
+                { name: 'Iphone 25 Mega Pro', price: 5000, icon: '📱', desc: 'Instant win condition.' },
+                { name: 'Ultimate Meteorite Ring', price: 10000, icon: '💍', desc: 'Game Master Status.' },
+            ];
+
+            const shopContent = createElement('div', 'flex flex-col items-center h-full p-6 rock-card shadow-2xl');
+
+            // Impressive Rock Title
+            const titleContainer = createElement('div', 'mb-8 p-4 border-b-4 border-rock-red w-full text-center');
+            titleContainer.innerHTML = `<h3 class="rock-title title-font font-black tracking-widest uppercase">SHOP!</h3>`;
+            shopContent.appendChild(titleContainer);
+
+            // Shop Grid 3x3
+            const grid = createElement('div', 'grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl flex-1 overflow-y-auto');
+
+            shopData.forEach(item => {
+                const canAfford = game.score >= item.price;
+                
+                const card = createElement('div', `item-card p-4 rounded-lg flex flex-col items-center text-center transition ${canAfford ? 'cursor-pointer hover:bg-gray-800' : 'opacity-50 cursor-not-allowed'}`);
+                
+                card.onclick = () => {
+                    if (canAfford) {
+                        setPhase(4, `PURCHASE SUCCESSFUL: ${item.name} for $${item.price}.`);
+                        game.score -= item.price;
+                    } else {
+                        setPhase(4, `INSUFFICIENT FUNDS! Need $${item.price - game.score} more for ${item.name}.`);
+                    }
+                };
+
+                card.innerHTML = `
+                    <span class="text-6xl mb-2">${item.icon}</span>
+                    <p class="font-bold text-xl text-yellow-400 title-font">${item.name}</p>
+                    <p class="text-lg font-mono mt-1 text-rock-red">$${item.price}</p>
+                    <p class="text-xs text-gray-400 mt-2">${item.desc}</p>
+                    <button class="w-full mt-3 py-2 text-sm rounded ${canAfford ? 'bg-green-700 hover:bg-green-600' : 'bg-gray-500 cursor-not-allowed'}" ${canAfford ? '' : 'disabled'}>
+                        ${canAfford ? 'BUY' : 'TOO EXPENSIVE'}
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+
+            shopContent.appendChild(grid);
+            
+            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'RETURN TO MENU');
+            backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
+            shopContent.appendChild(backButton);
+
+
+            return shopContent;
+        }
+
+    function renderPhase_boot() {
+        const welcomeContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8');
+        
+        if (game.isLoading) {
+            welcomeContent.innerHTML = `
+                <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
+                <p class="mt-6 text-xl text-gray-400 title-font">${game.message}</p>
+            `;
+        } else if (game.isLLMLoaded) {
+            const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
+            startButton.onclick = getTopics;
+            welcomeContent.append(
+                createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
+                startButton
+            );
+        }
+        return welcomeContent;
+    }
 
         function renderPhase3() {
             if (game.isLoading || !game.questionData) {
@@ -512,110 +697,120 @@
             return qContent;
         }
         
-        function renderWinScreen() {
-            const winContent = createElement('div', 'flex flex-col items-center justify-center h-full text-center bg-gray-800 p-10 rounded-xl shadow-2xl');
-            winContent.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-electric-cyan mb-6 speed-icon">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
-                </svg>
-                <h3 class="text-5xl font-extrabold title-font text-electric-cyan">SYSTEM OVERRIDE!</h3>
-                <p class="text-2xl text-gray-300 mt-4">MACHINE DEFEATED. FINAL SCORE: $${game.score}</p>
-            `;
-            const restartButton = createElement('button', 'metal-button w-2/3 py-4 text-xl mt-8 bg-red-600 hover:bg-red-700', 'REBOOT CHALLENGE');
-            restartButton.onclick = () => window.location.reload();
-            winContent.appendChild(restartButton);
-            return winContent;
+        
+    function renderWinScreen() {
+        const winContent = createElement('div', 'flex flex-col items-center justify-center h-full text-center bg-gray-800 p-10 rounded-xl shadow-2xl');
+        winContent.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-electric-cyan mb-6 speed-icon">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
+            </svg>
+            <h3 class="text-5xl font-extrabold title-font text-electric-cyan">SYSTEM OVERRIDE!</h3>
+            <p class="text-2xl text-gray-300 mt-4">MACHINE DEFEATED. FINAL SCORE: $${game.score}</p>
+        `;
+        const restartButton = createElement('button', 'metal-button w-2/3 py-4 text-xl mt-8 bg-red-600 hover:bg-red-700', 'REBOOT CHALLENGE');
+        restartButton.onclick = () => window.location.reload();
+        winContent.appendChild(restartButton);
+        return winContent;
+    }
+
+
+    /**
+     * Main render function: builds the entire UI based on game state.
+     */
+    function renderGame() {
+        if (game.score >= 1000) {
+            appContainer.innerHTML = '';
+            appContainer.appendChild(renderWinScreen());
+            return;
         }
 
-
-        /**
-         * Main render function: builds the entire UI based on game state.
-         */
-        function renderGame() {
-            if (game.score >= 1000) {
-                appContainer.innerHTML = '';
-                appContainer.appendChild(renderWinScreen());
-                return;
-            }
-
-            // Game Panels Structure
-            appContainer.innerHTML = `
-                <div class="flex w-full metal-card min-h-[700px]">
-                    <!-- LEFT PANEL: Conductor Info -->
-                    <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-r-4 border-electric-cyan">
-                        <div class="text-center space-y-3">
-                            <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">A.I. CONDUCTOR</h3>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-electric-cyan speed-icon">
-                                <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
-                            </svg>
-                            <div class="text-sm font-mono mt-4 p-2 bg-gray-700 rounded-lg border border-electric-cyan/50">
-                                <p>STATUS: ${game.isLoading ? 'LOADING' : 'IDLE'}</p>
-                                <p>PHASE: ${game.phase}</p>
-                            </div>
-                        </div>
-                        <div class="text-center text-xs text-gray-500">
-                            <p>Lux Aeterna!</p>
+        // Game Panels Structure
+        appContainer.innerHTML = `
+            <div class="flex w-full metal-card min-h-[700px]">
+                <!-- LEFT PANEL: Conductor Info -->
+                <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-r-4 border-electric-cyan">
+                    <div class="text-center space-y-3">
+                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">A.I. CONDUCTOR</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-electric-cyan speed-icon">
+                            <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
+                        </svg>
+                        <div class="text-sm font-mono mt-4 p-2 bg-gray-700 rounded-lg border border-electric-cyan/50">
+                            <p>STATUS: ${game.isLoading ? 'LOADING' : 'IDLE'}</p>
+                            <p>PHASE: ${game.phase}</p>
                         </div>
                     </div>
-
-                    <!-- CENTER PANEL: Game Interaction -->
-                    <div id="center-panel" class="flex-1 p-6 flex flex-col justify-between">
-                        <h2 class="text-4xl font-extrabold text-white mb-4 text-center title-font">
-                           ${game.phase > 1 ? 'LIVE CHALLENGE INTERFACE' : 'BOOT SEQUENCE'}
-                        </h2>
-                        
-                        <!-- Game Message Panel -->
-                        <div class="p-4 mb-6 text-center rounded-sm font-semibold shadow-md bg-electric-blue/20 text-electric-cyan border border-electric-blue">
-                            ${game.message}
-                        </div>
-
-                        <!-- Dynamic Phase Content Placeholder -->
-                        <div id="dynamic-content" class="flex-1"></div>
-                    </div>
-
-                    <!-- RIGHT PANEL: Player Info -->
-                    <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-l-4 border-electric-cyan">
-                        <div class="text-center space-y-3">
-                            <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PILOT DATA</h3>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-yellow-400 speed-icon">
-                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                            </svg>
-                            <div class="mt-4 p-3 bg-gray-700 rounded-lg border border-yellow-400/50 shadow-xl">
-                                <p class="text-sm font-mono text-gray-400">SCORE REGISTER</p>
-                                <p class="text-4xl font-extrabold text-yellow-400 title-font">$${game.score}</p>
-                                <p class="text-xs text-gray-200">TARGET: $1000</p>
-                            </div>
-                        </div>
-                        <div class="text-center text-xs text-gray-500">
-                            <p>Chase that light!</p>
-                        </div>
+                    <div class="text-center text-xs text-gray-500">
+                        <p>Lux Aeterna!</p>
                     </div>
                 </div>
-            `;
-            
-            // Render phase-specific content
-            const dynamicContent = document.getElementById('dynamic-content');
-            dynamicContent.innerHTML = '';
-            
-            let contentElement;
-            switch (game.phase) {
-                case 1:
-                    contentElement = renderPhase1();
-                    break;
-                case 2:
-                    contentElement = renderPhase2();
-                    break;
-                case 3:
-                    contentElement = renderPhase3();
-                    break;
-                default:
-                    contentElement = createElement('div', 'text-center p-8 text-red-500', 'UNKNOWN GAME STATE');
-            }
-            dynamicContent.appendChild(contentElement);
-        }
 
-        // Initialize the game when the window loads
-        window.onload = initializeLLM;
+                <!-- CENTER PANEL: Game Interaction -->
+                <div id="center-panel" class="flex-1 p-6 flex flex-col justify-between">
+                    <h2 class="text-4xl font-extrabold text-white mb-4 text-center title-font">
+                        ${game.phase > 1 ? 'LIVE CHALLENGE INTERFACE' : (game.phase === 0 ? 'SYSTEM MENU' : 'BOOT SEQUENCE')}
+                    </h2>
+                    
+                    <!-- Game Message Panel -->
+                    <div class="p-4 mb-6 text-center rounded-sm font-semibold shadow-md bg-electric-blue/20 text-electric-cyan border border-electric-blue">
+                        ${game.message}
+                    </div>
+
+                    <!-- Dynamic Phase Content Placeholder -->
+                    <div id="dynamic-content" class="flex-1"></div>
+                </div>
+
+                <!-- RIGHT PANEL: Player Info -->
+                <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-l-4 border-electric-cyan">
+                    <div class="text-center space-y-3">
+                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PILOT DATA</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-yellow-400 speed-icon">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <div class="mt-4 p-3 bg-gray-700 rounded-lg border border-yellow-400/50 shadow-xl">
+                            <p class="text-sm font-mono text-gray-400">SCORE REGISTER</p>
+                            <p class="text-4xl font-extrabold text-yellow-400 title-font">$${game.score}</p>
+                            <p class="text-xs text-gray-200">TARGET: $1000</p>
+                        </div>
+                    </div>
+                    <div class="text-center text-xs text-gray-500">
+                        <p>Chase that light!</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Render phase-specific content
+        const dynamicContent = document.getElementById('dynamic-content');
+        dynamicContent.innerHTML = '';
+        
+        let contentElement;
+        switch (game.phase) {
+            case 0:
+                contentElement = renderPhase0();
+                break;
+            case 1:
+                contentElement = renderPhase_boot(); // Original Phase 1
+                break;
+            case 2:
+                contentElement = renderPhase2();
+                break;
+            case 3:
+                contentElement = renderPhase3();
+                break;
+            case 4:
+                contentElement = renderPhase4(); // New Shop Phase
+                break;
+            case 5:
+                contentElement = renderPhase5(); // New Instructions Phase
+                break;
+            default:
+                contentElement = createElement('div', 'text-center p-8 text-red-500', 'UNKNOWN GAME STATE');
+        }
+        dynamicContent.appendChild(contentElement);
+    }
+
+    // Initialize the game when the window loads
+    window.onload = initializeLLM;
     </script>
 </body>
 </html>
