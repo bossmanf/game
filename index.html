@@ -393,7 +393,7 @@
             `.trim();
 
 
-            const userRequestPrompt = `
+            userRequestPrompt = `
             Task: Create one multiple-choice trivia question about the topic ${topic}
             Constraints:
             The question must be based on real-world facts.
@@ -403,9 +403,6 @@
 
 
             const startTime = performance.now();
-        
-
-
 
             try {
 
