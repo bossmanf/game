@@ -535,7 +535,7 @@
 
             buttons.forEach(btn => {
                 // Note: We use btn.iconHtml which contains the full SVG string.
-                const buttonInnerHtml = `<div class="mb-2">${btn.iconHtml}</div><span>${btn.title}</span>`;
+                const buttonInnerHtml = `<div class="w-full space-y-6">${btn.iconEmoji}</div><span>${btn.title}</span>`;
                 
                 const button = createElement('button', 'metal-button py-6 text-xl flex flex-col items-center justify-center space-y-2 hover:scale-[1.02] transition-transform', buttonInnerHtml);
                 
