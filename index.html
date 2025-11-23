@@ -276,12 +276,13 @@
             console.log('This is the full Prompt:', prompt)
             const stream = await llmInference.chat.completions.create({
                 messages: [
-                  { role: "system", content: "You are a knowledgeable Trivia Master." },
+                  { role: "system", content: "You are a specialized JSON generation engine. Your ONLY output is the requested JSON object. Do not include any markdown fences (```json), surrounding text, explanations, or commentary. You must strictly adhere to the provided JSON schema."  },
                   { role: "user", content: prompt }
                 ],
                 stream: true,
                 temperature: 0.01
             });
+
 
 
             // Process the streaming output
@@ -369,23 +370,21 @@
             const responseSchemaStr= JSON.stringify(responseSchema, null, 2);
 
             const userRequestPrompt = `
-            Task: Create one multiple-choice trivia question with one correct answer and an array with three plausible but incorrect answers about the topic "${topic}".
-            - The generated question and answers must be based on real-world facts.
-            - Exactly one correct answer.
-            - Exactly three plausible but incorrect answers.
-            - Answers must be concise.
-            - Do NOT copy the example content; only copy the structure.
+                Task: Create one multiple-choice trivia question about the topic "Punchy Punk Rock".
+                Constraints:
+                The question and answers must be based on real-world facts.
+                The output MUST be a single JSON object.
+                The output MUST NOT contain any markdown fences, surrounding text, explanations, or commentary.
+                The output must strictly adhere to the JSON schema provided below.
+                The resulting question must have:
+                Exactly one correct answer.
+                Exactly three plausible but incorrect answers (wrongAnswers array size must be 3).
+                Concise answers.
+                --- JSON SCHEMA DEFINITION ---
+                {"type": "object", "additionalProperties": false, "properties": {"question": {"type": "string", "minLength": 5, "description": "The main trivia question text."}, "wrongAnswers": {"type": "array", "description": "An array containing exactly three plausible, incorrect answers.", "items": {"type": "string", "minLength": 1}, "minItems": 3, "maxItems": 3, "uniqueItems": true}, "correctAnswer": {"type": "string", "minLength": 1, "description": "The single, correct answer to the question."}}, "required": ["question", "wrongAnswers", "correctAnswer"]}
+                --- END OF SCHEMA DEFINITION ---
 
-            EXAMPLE OUTPUT (structure only; different content):
-            ${JSON.stringify(example, null, 2)}
-
-            Follow the same shape for the topic "${topic}".
-
-            Output must strictly match the JSON schema below. Return ONLY a single JSON object. No markdown code fences, no extra text, no comments.
-
-            --- SCHEMA START ---
-            ${JSON.stringify(responseSchemaStr, null, 2)}
-            --- SCHEMA END ---
+                GENERATE THE FINAL JSON OBJECT ONLY.
             `.trim();
 
 
