@@ -172,48 +172,6 @@
         const errorDisplay = document.getElementById('error-display');
         const errorMessageElement = document.getElementById('error-message');
         
-        const TriviaIconHtml = () => `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-electric-cyan drop-shadow-[0_0_5px_rgba(0,255,255,0.8)]">
-            <path d="M9.663 17h4.673M12 3a7 7 0 0 1 7 7c0 2.38-1.19 4.468-3.018 5.737-.586.406-1.17.944-1.17 1.983v.53m-2.38-13.85c.63-.21 1.294-.32 1.985-.32 3.866 0 7 3.134 7 7 0 1.81-.684 3.463-1.808 4.714" />
-            <path d="M12 21v.01" class="stroke-neon-pink" stroke-width="3"/>
-          </svg>
-        `;
-
-        const WordleIconHtml = () => `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-green-400 drop-shadow-[0_0_5px_rgba(74,222,128,0.8)]">
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <path d="M9 3v18" />
-            <path d="M15 3v18" />
-            <path d="M3 9h18" />
-            <path d="M3 15h18" />
-          </svg>
-        `;
-
-        const ShopIconHtml = () => `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]">
-            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-            <path d="M3 6h18" />
-            <path d="M16 10a4 4 0 0 1-8 0" />
-          </svg>
-        `;
-
-        const InstructionsIconHtml = () => `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-neon-pink drop-shadow-[0_0_5px_rgba(255,0,255,0.8)]">
-            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-            <polyline points="14 2 14 8 20 8" />
-            <line x1="8" y1="13" x2="16" y2="13" />
-            <line x1="8" y1="17" x2="16" y2="17" />
-            <line x1="10" y1="9" x2="8" y2="9" />
-          </svg>
-        `;
-
-        const LockedIconHtml = () => `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-gray-500 opacity-50">
-            <rect x="3" y="11" width="18" height="11" rx="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            <path d="M12 15v2" />
-          </svg>
-        `;
         let llmInference = null;
 
         
@@ -564,14 +522,16 @@
             menuContent.appendChild(title);
             const buttonGrid = createElement('div', 'grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-2xl');
 
+
             const buttons = [
-                { title: 'TRIVIA', phase: 2, action: initiateTrivia, iconHtml: TriviaIconHtml() },
-                { title: 'WORDLE', phase: 0, action: () => setPhase(0, 'WORDLE not implemented yet. Try Trivia!'), iconHtml: WordleIconHtml() },
-                { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Gear up for the Ultimate Ascent!'), iconHtml: ShopIconHtml() },
-                { title: 'MISSION', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), iconHtml: InstructionsIconHtml() },
-                { title: 'X (LOCKED)', phase: 0, action: () => setPhase(0, 'Sector X is currently locked.'), iconHtml: LockedIconHtml() },
-                { title: 'Y (LOCKED)', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconHtml: LockedIconHtml() },
-            ];
+                { title: 'MISSION', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), iconEmoji: '🎯', color: 'bg-indigo-600 hover:bg-indigo-700' },
+                { title: 'TRIVIA', phase: 2, action: initiateTrivia, iconEmoji: '💡', color: 'bg-green-600 hover:bg-green-700' },
+                { title: 'WORDLE', phase: 0, action: () => setPhase(0, 'WORDLE not implemented yet. Try Trivia!'), iconEmoji: '📝', color: 'bg-yellow-600 hover:bg-yellow-700' },
+                { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Gear up for the Ultimate Ascent!'), iconEmoji: '🛒', color: 'bg-blue-600 hover:bg-blue-700' },
+                { title: 'CARDS', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconEmoji: '🃏', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'BONUS', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconEmoji: '🎁', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'X (LOCKED)', phase: 0, action: () => setPhase(0, 'Sector X is currently locked.'), iconEmoji: '🔒', color: 'bg-gray-500 hover:bg-gray-600' },
+              ];
 
             buttons.forEach(btn => {
                 // Note: We use btn.iconHtml which contains the full SVG string.
@@ -617,10 +577,10 @@
                 { name: 'Magic Zataar Spices', price: 50, icon: '🌶️', desc: 'Boosts your focus.' },
                 { name: 'Chicken Pho', price: 100, icon: '🍜', desc: 'Restores maximum health.' },
                 { name: 'Beenie', price: 200, icon: '🧢', desc: 'Unlocks '},
-                { name: 'Metallica Album', price: 400, icon: '🎸', desc: 'Doubles score bonus.' },
+                { name: 'Metallica VIP tickets', price: 400, icon: '🤘', desc: 'Doubles score bonus.' },
                 { name: 'Wrestling Gear', price: 750, icon: '🤼', desc: 'Grants temporary invincibility.' },
                 { name: 'Billie Eilish Tickets', price: 1200, icon: '🎤', desc: 'Charms a hostile AI.' },
-                { name: 'Morello\'s Guitar', price: 2000, icon: '🤘', desc: 'Ultimate Rock Power-Up.' },
+                { name: 'Morello\'s Guitar', price: 2000, icon: '🎸', desc: 'Ultimate Rock Power-Up.' },
                 { name: 'Iphone 25 Mega Pro', price: 5000, icon: '📱', desc: 'Instant win condition.' },
                 { name: 'Ultimate Meteorite Ring', price: 10000, icon: '💍', desc: 'Game Master Status.' },
             ];
