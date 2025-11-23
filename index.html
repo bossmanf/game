@@ -473,11 +473,7 @@
             }
         }
 
-        // --- Phase 3: Answer Logic ---
 
-        /**
-         * Handles player answer selection and score update.
-         */
         function handleAnswerSelect(answer) {
             if (game.selectedAnswer !== null || game.isLoading) return; 
 
@@ -509,18 +505,15 @@
         function renderPhase_boot() {
             const welcomeContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8');
             
+            
+
             if (game.isLoading) {
                 welcomeContent.innerHTML = `
                     <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
                     <p class="mt-6 text-xl text-gray-400 title-font">${game.message}</p>
                 `;
             } else if (game.isLLMLoaded) {
-                const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
-                startButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
-                welcomeContent.append(
-                    createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
-                    startButton
-                );
+
                 updateState({ 
                     isLoading: false, 
                     currentTopic: '', 
@@ -530,6 +523,13 @@
                     phase: 0,
                     //message: 'QUERYING SYSTEM for next target...'
                 });
+                const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
+                startButton.onclick = renderGame();
+                welcomeContent.append(
+                    createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
+                    startButton
+                );
+                
             }
             return welcomeContent;
         }
@@ -861,10 +861,10 @@
                 contentElement = renderPhase_boot(); // Original Phase 1
                 break;
             case 2:
-                contentElement = renderPhase2();
+                contentElement = renderPhase2(); // show 2 topics
                 break;
             case 3:
-                contentElement = renderPhase3();
+                contentElement = renderPhase3(); // show trivia question
                 break;
             case 4:
                 contentElement = renderPhase4(); // New Shop Phase
