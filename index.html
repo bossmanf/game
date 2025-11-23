@@ -475,6 +475,7 @@
             } else if (game.isLLMLoaded) {
                 const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
                 startButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
+                renderGame()
                 welcomeContent.append(
                     createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
                     startButton
