@@ -214,7 +214,7 @@
                 updateState({ message: 'Core not ready. Please wait for initialization.', phase: 1 });
             }
         }
-        
+
         async function initializeLLM(){
             updateState({ message: 'SYSTEM: Loading Machine Core...', isLoading: true, error: null });
 
@@ -231,7 +231,6 @@
                 const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" //24
 
                 //"gemma-2-2b-it-q4f16_1-MLC" // 42
-
                 //"Phi-3.5-mini-instruct-q4f16_1-MLC" - took long to load //85
                 // "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" 
 
@@ -258,12 +257,6 @@
                 
         }
 
-
-        // --- Phase 2: Topic Selection ---
-
-        /**
-         * Calls LLM to generate two topics.
-         */
         async function getTopics() {
             if (game.score >= 1000) return; // Win check
 
@@ -276,7 +269,6 @@
                 phase: 2,
                 message: 'QUERYING SYSTEM for next target...'
             });
-
 
             try {
 
@@ -332,7 +324,6 @@
             renderGame();
         }
 
-
         async function runLLM_API_Call(prompt, responseSchema) {
 
             if (!llmInference) {
@@ -343,14 +334,12 @@
             console.log('This is the full Prompt:', prompt)
             const stream = await llmInference.chat.completions.create({
                 messages: [
-                  { role: "system", content: "You are a expert trivia master host"  },
+                  { role: "system", content: "You are an expert trivia master host"  },
                   { role: "user", content: prompt }
                 ],
                 stream: true,
                 temperature: 0.01
             });
-
-
 
             // Process the streaming output
             for await (const chunk of stream) {
@@ -360,7 +349,6 @@
                         // Optional: Update UI with streamed content here
                     }
             }
-            
             console.log('FULL RAW RESPONSE:', fullResponseText)
             return fullResponseText;
             
@@ -406,25 +394,20 @@
 
 
             userRequestPrompt = `
-            Task: Create one multiple-choice trivia question about the topic ${topic}
+            Task: Create one trivia question about the topic ${topic}
             Constraints:
             The question must be based on real-world facts.
-            Exactly ONE question.
+            Exactly ONE question. Do not include answers.
             `.trim();
-
 
 
             const startTime = performance.now();
 
             try {
-
                 const output = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
-
                 const endTime = performance.now();
-
                 const duration = endTime - startTime;
                 console.log('Duration:', duration, ' -- This is what I am getting:', output)
-                
                 parsed.question = output
                 parsed.correctAnswer = 'Testing correct'
                 parsed.wrongAnswers = ['Wrong 1', 'Wrong 2', 'Wrong 3']
