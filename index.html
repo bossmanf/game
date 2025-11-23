@@ -172,8 +172,13 @@
                     isLoading: true
                     });
                 }
-                const MODEL_NAME = "gemma-2-2b-it-q4f16_1-MLC" // "Phi-3.5-mini-instruct-q4f16_1-MLC" // "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" //"TinyLlama-1.1B-Chat-v0.4-q4f16_1-MLC" //
-                
+                const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" 
+
+                //"gemma-2-2b-it-q4f16_1-MLC" // 42
+
+                //"Phi-3.5-mini-instruct-q4f16_1-MLC" - took long to load //85
+                // "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" 
+
                 llmInference = await CreateMLCEngine(
                     MODEL_NAME,
                     { initProgressCallback: initProgressCallback }, // engineConfig
@@ -380,8 +385,8 @@
                 The output MUST NOT contain any markdown fences, surrounding text, explanations, or commentary.
                 The output must strictly adhere to the JSON schema provided.
                 The resulting output must have:
-                Exactly one question.
-                Exactly one correct answer.
+                Exactly ONE question.
+                Exactly ONE correct answer (This is not an array)
                 Exactly THREE plausible but incorrect answers (wrongAnswers array size must be 3). Do not repeat answers.
                 Concise answers.
                 GENERATE THE FINAL JSON OBJECT ONLY.
