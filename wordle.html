@@ -1,0 +1,411 @@
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { RefreshCcw, XCircle, CheckCircle, ArrowRight } from 'lucide-react'; // Using lucide-react for icons
+
+// --- Game Constants ---
+const WORD_LENGTH = 5;
+const MAX_GUESSES = 6;
+// Hardcoded dictionary of common 5-letter words for validation.
+// A real app would load a much larger list.
+const VALID_WORDS = [
+  'PIZZA', 'APPLE', 'GRAPE', 'CANDY', 'SUGAR', 'BREAD', 'WATER', 'GLASS',
+  'SMART', 'HELLO', 'WORLD', 'REACT', 'TASTY', 'FUNNY', 'HOUSE', 'BEACH',
+  'CHAIR', 'TABLE', 'POWER', 'PLANT', 'TRAIN', 'BUSES', 'TRUCK', 'CABIN',
+  'DRIVE', 'RIVER', 'OCEAN', 'CLOUD', 'FROGS', 'SHARK', 'EAGLE', 'CIGAR',
+  'SHEEP', 'MONEY', 'PARTY', 'LIGHT', 'DREAM', 'MAGIC', 'SHAPE', 'STARS'
+];
+
+// The secret word is chosen here.
+const SECRET_WORD = VALID_WORDS[Math.floor(Math.random() * VALID_WORDS.length)];
+
+// --- Helper Functions ---
+
+/**
+ * Determines the color status (Absent, Present, Correct) for each letter in a guess.
+ * @param {string} guess - The user's guessed word.
+ * @param {string} solution - The secret word.
+ * @returns {Array<{letter: string, status: 'absent'|'present'|'correct'}>}
+ */
+const checkGuess = (guess, solution) => {
+  const result = [];
+  const solutionMap = {};
+  const checkedLetters = Array(WORD_LENGTH).fill(false);
+
+  // 1. Build frequency map of solution letters
+  for (const letter of solution) {
+    solutionMap[letter] = (solutionMap[letter] || 0) + 1;
+  }
+
+  // 2. First pass: Check for 'correct' (Green) matches
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    const letter = guess[i];
+    if (letter === solution[i]) {
+      result.push({ letter, status: 'correct' });
+      solutionMap[letter]--;
+      checkedLetters[i] = true;
+    } else {
+      // Placeholder for non-correct letters
+      result.push({ letter, status: 'unknown' });
+    }
+  }
+
+  // 3. Second pass: Check for 'present' (Yellow) and 'absent' (Gray) matches
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    if (checkedLetters[i]) continue; // Skip already 'correct' letters
+
+    const letter = guess[i];
+    
+    if (solutionMap[letter] > 0) {
+      // Present in the word, but not in the correct spot
+      result[i].status = 'present';
+      solutionMap[letter]--;
+    } else {
+      // Not present in the word, or already accounted for by a 'present'/other 'absent'
+      result[i].status = 'absent';
+    }
+  }
+
+  return result;
+};
+
+// --- Sub-Components ---
+
+// Grid Cell Component
+const Cell = ({ letter, status }) => {
+  let bgColor = 'bg-gray-700 text-white';
+  let borderColor = 'border-gray-500';
+  const animation = status !== '' ? 'animate-flip' : '';
+
+  switch (status) {
+    case 'correct':
+      bgColor = 'bg-green-500 text-white';
+      borderColor = 'border-green-500';
+      break;
+    case 'present':
+      bgColor = 'bg-yellow-500 text-white';
+      borderColor = 'border-yellow-500';
+      break;
+    case 'absent':
+      bgColor = 'bg-gray-500 text-white';
+      borderColor = 'border-gray-500';
+      break;
+    case 'active': // Only for the current guess row
+      borderColor = 'border-white';
+      break;
+    default:
+      bgColor = 'bg-gray-800 text-white';
+      borderColor = 'border-gray-600';
+  }
+
+  return (
+    <div
+      className={`
+        w-14 h-14 md:w-16 md:h-16
+        border-2 ${borderColor}
+        flex items-center justify-center
+        text-3xl font-bold uppercase
+        rounded-lg transition-all duration-300 ease-in-out
+        ${status !== 'unknown' && bgColor}
+        ${animation}
+      `}
+    >
+      {letter}
+    </div>
+  );
+};
+
+// Grid Row Component
+const Row = ({ guess, statusData, isCurrent }) => {
+  const cells = [];
+  const guessArray = guess.split('');
+
+  // Combine guess letters with status data
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    const letter = guessArray[i] || '';
+    const status = statusData ? statusData[i]?.status : (isCurrent && letter ? 'active' : 'unknown');
+    cells.push(<Cell key={i} letter={letter} status={status} />);
+  }
+
+  // Fill remaining cells
+  for (let i = guessArray.length; i < WORD_LENGTH; i++) {
+    cells.push(<Cell key={i} letter={''} status={'unknown'} />);
+  }
+
+  return <div className="flex space-x-2 justify-center">{cells}</div>;
+};
+
+// Virtual Keyboard Component
+const Keyboard = ({ onKeyClick, letterStatuses }) => {
+  const keyboardLayout = [
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE']
+  ];
+
+  const getButtonClass = (key) => {
+    let colorClass = 'bg-gray-600 hover:bg-gray-500'; // Default
+    const status = letterStatuses[key];
+
+    switch (status) {
+      case 'correct':
+        colorClass = 'bg-green-500 hover:bg-green-400';
+        break;
+      case 'present':
+        colorClass = 'bg-yellow-500 hover:bg-yellow-400';
+        break;
+      case 'absent':
+        colorClass = 'bg-gray-700 opacity-50';
+        break;
+      default:
+        // Use default
+    }
+
+    // Special keys
+    if (key === 'ENTER' || key === 'DELETE') {
+      colorClass = 'bg-sky-700 hover:bg-sky-600 text-sm font-medium';
+    }
+
+    return `
+      p-2 m-0.5 rounded-md text-white font-bold uppercase
+      cursor-pointer transition-colors duration-150
+      flex items-center justify-center
+      ${key.length > 1 ? 'w-14 text-xs' : 'w-8 md:w-10 h-12 md:h-14'}
+      ${colorClass}
+    `;
+  };
+
+  return (
+    <div className="flex flex-col items-center mt-6 p-2 bg-gray-900 rounded-lg shadow-xl">
+      {keyboardLayout.map((row, rowIndex) => (
+        <div key={rowIndex} className="flex justify-center my-0.5">
+          {row.map((key) => (
+            <button
+              key={key}
+              className={getButtonClass(key)}
+              onClick={() => onKeyClick(key)}
+            >
+              {key === 'DELETE' ? <XCircle size={16} /> : key}
+            </button>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Game Message/Toast Component
+const Toast = ({ message, type }) => {
+    if (!message) return null;
+
+    const icon = type === 'success' ? <CheckCircle className="mr-2" size={24} /> : <ArrowRight className="mr-2" size={24} />;
+    const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+
+    return (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
+            <div className={`flex items-center p-3 rounded-xl shadow-2xl text-white font-semibold ${bgColor} transition-opacity duration-300 animate-slide-down`}>
+                {icon}
+                {message}
+            </div>
+        </div>
+    );
+};
+
+
+// --- Main App Component ---
+
+const App = () => {
+  const [currentGuess, setCurrentGuess] = useState('');
+  const [history, setHistory] = useState([]); // Array of { guess: string, results: [] }
+  const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost'
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('info');
+
+  // Memoize the secret word to avoid re-calculating on every render
+  const solution = useMemo(() => SECRET_WORD, []);
+
+  // Toast handler
+  const showMessage = useCallback((text, type = 'info', duration = 2000) => {
+    setMessage(text);
+    setMessageType(type);
+    setTimeout(() => setMessage(''), duration);
+  }, []);
+
+  // Calculates the best status for every letter on the keyboard
+  const keyboardLetterStatuses = useMemo(() => {
+    const statuses = {};
+    history.forEach(turn => {
+      turn.results.forEach(({ letter, status }) => {
+        const currentStatus = statuses[letter];
+
+        // 'correct' is the highest priority
+        if (currentStatus !== 'correct') {
+          // 'present' is next
+          if (currentStatus !== 'present' || status === 'correct') {
+            statuses[letter] = status;
+          }
+        }
+      });
+    });
+    return statuses;
+  }, [history]);
+
+  // Main input handler logic
+  const handleInput = useCallback((key) => {
+    if (gameState !== 'playing') return;
+
+    // Handle letters
+    if (/^[A-Z]$/.test(key) && currentGuess.length < WORD_LENGTH) {
+      setCurrentGuess((prev) => prev + key);
+      return;
+    }
+
+    // Handle delete
+    if ((key === 'DELETE' || key === 'BACKSPACE') && currentGuess.length > 0) {
+      setCurrentGuess((prev) => prev.slice(0, -1));
+      return;
+    }
+
+    // Handle enter/submit
+    if (key === 'ENTER' && currentGuess.length === WORD_LENGTH) {
+      if (!VALID_WORDS.includes(currentGuess)) {
+        showMessage('Not a valid word!', 'error', 1500);
+        return;
+      }
+
+      const results = checkGuess(currentGuess, solution);
+
+      // Add to history
+      setHistory((prev) => [
+        ...prev,
+        { guess: currentGuess, results, guessNumber: prev.length }
+      ]);
+      setCurrentGuess('');
+
+      // Check win condition
+      const isWin = results.every(r => r.status === 'correct');
+      if (isWin) {
+        setGameState('won');
+        showMessage('You won! 🎉', 'success', 5000);
+      } else if (history.length + 1 >= MAX_GUESSES) {
+        // Check loss condition
+        setGameState('lost');
+        showMessage(`Game Over! The word was: ${solution}`, 'error', 10000);
+      }
+    }
+  }, [currentGuess, gameState, history.length, solution, showMessage]);
+
+  // Physical keyboard listener
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const key = e.key.toUpperCase();
+      // Translate physical keys to virtual keys
+      if (key === 'BACKSPACE') {
+        handleInput('DELETE');
+      } else {
+        handleInput(key);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleInput]);
+
+  // Restart Game Function
+  const restartGame = () => {
+    // Note: Since SECRET_WORD is a constant at the top, a full reset
+    // would require managing the secret word state locally, but for simplicity
+    // in this single-file demo, we'll just reset the game state.
+    // In a real app, you'd select a new word here.
+    setHistory([]);
+    setCurrentGuess('');
+    setGameState('playing');
+    setMessage('Game restarted! Try a new word.');
+    setMessageType('info');
+    // For a real game, you might want to reload the page or manage the SECRET_WORD state.
+  };
+
+  // Render the grid rows
+  const gridRows = useMemo(() => {
+    const rows = [];
+    const currentRowIndex = history.length;
+
+    // Render completed guesses from history
+    history.forEach((turn) => {
+      rows.push(<Row key={turn.guessNumber} guess={turn.guess} statusData={turn.results} isCurrent={false} />);
+    });
+
+    // Render the current active guess
+    if (gameState === 'playing' && currentRowIndex < MAX_GUESSES) {
+      rows.push(<Row key={currentRowIndex} guess={currentGuess} isCurrent={true} />);
+    }
+
+    // Render remaining empty rows
+    for (let i = currentRowIndex + 1; i < MAX_GUESSES; i++) {
+      rows.push(<Row key={i} guess={''} isCurrent={false} />);
+    }
+
+    return rows;
+  }, [history, currentGuess, gameState]);
+
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white font-inter flex flex-col items-center p-4">
+      <style jsx global>{`
+        /* Custom Keyframe for the flip animation */
+        @keyframes flip {
+          0% { transform: rotateX(0deg); }
+          50% { transform: rotateX(90deg); }
+          100% { transform: rotateX(0deg); }
+        }
+        .animate-flip {
+          animation: flip 0.6s ease-in-out forwards;
+        }
+
+        /* Custom Keyframe for toast slide-down */
+        @keyframes slide-down {
+          from { transform: translate(-50%, -100%); opacity: 0; }
+          to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .animate-slide-down {
+          animation: slide-down 0.3s ease-out forwards;
+        }
+      `}</style>
+      
+      <header className="w-full max-w-lg flex justify-between items-center pb-4 border-b border-gray-700 mb-6">
+        <h1 className="text-4xl font-extrabold tracking-widest text-center text-sky-400">WORDLE</h1>
+        <button
+          onClick={restartGame}
+          className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow-lg transition-colors duration-200 flex items-center"
+          title="Restart Game"
+        >
+          <RefreshCcw size={20} />
+        </button>
+      </header>
+
+      <Toast message={message} type={messageType} />
+
+      <main className="flex-grow flex flex-col items-center w-full max-w-sm md:max-w-md">
+        <div className="space-y-2 mb-6 w-full">
+          {gridRows}
+        </div>
+      </main>
+
+      <Keyboard onKeyClick={handleInput} letterStatuses={keyboardLetterStatuses} />
+
+      {/* Game Over Message Display (Below Keyboard) */}
+      {(gameState === 'won' || gameState === 'lost') && (
+        <div className="mt-4 p-4 rounded-lg bg-gray-800 shadow-2xl text-center">
+            <p className="text-lg font-semibold">
+                {gameState === 'won' ? 'Congratulations!' : 'Better luck next time!'}
+            </p>
+            {gameState === 'lost' && (
+                <p className="text-sm mt-1 text-gray-400">
+                    The secret word was <span className="font-bold text-sky-400">{solution}</span>.
+                </p>
+            )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;

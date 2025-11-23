@@ -364,13 +364,13 @@
             const schemaString = JSON.stringify(responseSchema, null, 2);
 
             const userRequestPrompt = `
-            Task: Create one multiple-choice trivia question about the topic "${topic}".
+            Task: Create one multiple-choice trivia question with one correct answer and an array with three plausible but incorrect answers about the topic "${topic}".
             - The generated question and answers must be based on real-world facts.
             - Exactly one correct answer.
             - Exactly three plausible but incorrect answers.
             - Answers must be concise.
 
-            The output MUST be a single, valid JSON object that strictly adheres to the structure defined below. Do NOT include any commentary, explanations, or text outside of the final JSON object.
+            The output MUST be a single, valid JSON object following the structure defined below. Do NOT include any commentary, explanations, or text outside of the final JSON object.
             --- JSON SCHEMA DEFINITION ---
             ${schemaString}
             --- END OF SCHEMA DEFINITION ---
