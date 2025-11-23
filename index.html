@@ -281,14 +281,11 @@
             console.log('This is the full Prompt:', prompt)
             const stream = await llmInference.chat.completions.create({
                 messages: [
-                  { role: "system", content: "You are an useful assistant. Return one question related to the provided topic"  },
+                  { role: "system", content: "You are a expert trivia master host"  },
                   { role: "user", content: prompt }
                 ],
                 stream: true,
-                temperature: 0.01,
-                response_format: {
-                    type: "json_object", responseSchema
-                }
+                temperature: 0.01
             });
 
 
@@ -344,20 +341,6 @@
               };
             const responseSchemaStr= JSON.stringify(responseSchema, null, 2);
 
-            userRequestPrompt = `
-                Task: Create one multiple-choice trivia question about the topic ${topic}
-                Constraints:
-                The question and answers must be based on real-world facts.
-                The output MUST be a single JSON object.
-                The output MUST NOT contain any markdown fences, surrounding text, explanations, or commentary.
-                The output must strictly adhere to the JSON schema provided.
-                The resulting output must have:
-                Exactly ONE question.
-                Exactly ONE correct answer (This is not an array)
-                Exactly THREE plausible but incorrect answers (wrongAnswers array size must be 3). Do not repeat answers.
-                Concise answers.
-                GENERATE THE FINAL JSON OBJECT ONLY.
-            `.trim();
 
 
             userRequestPrompt = `
