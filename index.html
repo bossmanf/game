@@ -381,7 +381,7 @@
                 const response = await fetchWithRetry(fetcher);
                 const result = await response.json();
                 const candidate = result.candidates?.[0];
-                console.log('Prompt:', prompt)
+                //console.log('Prompt:', prompt)
                 if (candidate && candidate.content?.parts?.[0]?.text) {
                     const text = candidate.content.parts[0].text;
                     let sources = [];
@@ -396,7 +396,42 @@
                             .filter(source => source.uri && source.title); 
                     }
                     console.log('this is the text', text)
-                    return { text };
+
+
+                      let jsonString = (text || "").trim();
+
+                      // If model ignored the "no fences" rule, strip them
+                      const fenceMatch = jsonString.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+                      if (fenceMatch) jsonString = fenceMatch[1].trim();
+
+                      // Find first '{' and truncate after last '}'
+                      const start = jsonString.indexOf("{");
+                      if (start === -1) {
+                        throw new Error("Model output did not contain a JSON start bracket '{'. Raw: " + fullResponseText);
+                      }
+                      jsonString = jsonString.slice(start);
+                      const end = jsonString.lastIndexOf("}");
+                      if (end !== -1) jsonString = jsonString.slice(0, end + 1);
+
+                      // Remove stray trailing characters
+                      while (/[.\n\r\s]$/.test(jsonString)) jsonString = jsonString.slice(0, -1);
+
+                      let parsed;
+                      console.log('This is the jsonString:', jsonString)
+
+                      try {
+                        parsed = JSON.parse(jsonString);
+                      } catch (e) {
+                        // Last-resort salvage: extract first balanced {...}
+                        const match = jsonString.match(/\{[\s\S]*\}/);
+                        if (match) {
+                          parsed = JSON.parse(match[0]);
+                        } else {
+                          throw new Error("Failed to parse LLM output. Raw: " + fullResponseText);
+                        }
+                      }
+                      console.log('And this is parsed:', parsed)
+                      return parsed
 
                 } else if (result.error) {
                     return { text: `API Error: ${result.error.message}`, sources: [] };
