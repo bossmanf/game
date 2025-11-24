@@ -371,8 +371,6 @@
                 },
             };
 
-            console.log('fetcher')
-
             const fetcher = () => fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -380,12 +378,10 @@
             });
 
             try {
-                console.log('fetchWithRetry')
                 const response = await fetchWithRetry(fetcher);
                 const result = await response.json();
-                
                 const candidate = result.candidates?.[0];
-
+                console.log('Prompt:', prompt)
                 if (candidate && candidate.content?.parts?.[0]?.text) {
                     const text = candidate.content.parts[0].text;
                     let sources = [];
@@ -399,7 +395,7 @@
                             }))
                             .filter(source => source.uri && source.title); 
                     }
-                    console.log('this is the text')
+                    console.log('this is the text', text)
                     return { text };
 
                 } else if (result.error) {
@@ -472,7 +468,7 @@
 
             try {
                 const parsed = await this.runLLM_API_Call(userRequestPrompt);
-                
+
                 const endTime = performance.now();
                 const duration = endTime - startTime;
                 console.log('Duration:', duration, ' -- This is what I am getting:', output)
