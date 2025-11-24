@@ -416,14 +416,6 @@
 
 
 
-
-
-
-
-
-            
-        
-
         /**
          * Calls LLM to generate a question, correct answer, and 3 wrong answers.
          */
@@ -461,29 +453,33 @@
               };
             const responseSchemaStr= JSON.stringify(responseSchema, null, 2);
 
-
-
             userRequestPrompt = `
-            Task: Create one trivia question about the topic ${topic}
+            Task: Create one multiple-choice trivia question about the topic ${topic}
             Constraints:
-            The question must be based on real-world facts.
-            Exactly ONE question. Do not include answers.
+            The question and answers must be based on real-world facts.
+            The resulting output must have:
+            Exactly ONE question.
+            Exactly ONE correct answer (This is not an array)
+            Exactly THREE plausible but incorrect answers (wrongAnswers array size must be 3). Do not repeat answers.
+            Concise answers.
+            GENERATE THE FINAL JSON OBJECT ONLY
+            The output MUST NOT contain any markdown fences, surrounding text, explanations, or commentary.
+            The output must strictly adhere to this JSON schema provided: ${responseSchemaStr}  
             `.trim();
 
 
             const startTime = performance.now();
 
             try {
-                const output = await this.runLLM_API_Call(userRequestPrompt, responseSchema);
+                const parsed = await this.runLLM_API_Call(userRequestPrompt);
+                
                 const endTime = performance.now();
                 const duration = endTime - startTime;
                 console.log('Duration:', duration, ' -- This is what I am getting:', output)
-                parsed.question = output
-                parsed.correctAnswer = 'Testing correct'
-                parsed.wrongAnswers = ['Wrong 1', 'Wrong 2', 'Wrong 3']
+
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
-                        questionData: parsed,
+                        questionData: output,
                         message: 'COMMENCE ENGAGEMENT.',
                         isLoading: false
                     });
