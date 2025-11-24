@@ -215,61 +215,29 @@
             }
         }
 
-        // --- Utility Functions ---
-
-        /**
-         * Simple Base64 decoding utility (needed for exponential backoff)
-         */
-        const base64ToArrayBuffer = (base64) => {
-            const binary_string = window.atob(base64);
-            const len = binary_string.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binary_string.charCodeAt(i);
-            }
-            return bytes.buffer;
-        };
-
-        /**
-         * Exponential backoff retry loop for API calls.
-         * @param {Function} fetcher - The function that performs the fetch request.
-         * @param {number} maxRetries - Maximum number of retries.
-         */
-        async function fetchWithRetry(fetcher, maxRetries = 5) {
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetcher();
-                    if (!response.ok) {
-                        // Throw error if response is not 2xx
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response;
-                } catch (error) {
-                    console.error(`Attempt ${i + 1} failed:`, error.message);
-                    if (i === maxRetries - 1) throw error; // Re-throw if last attempt failed
-                    
-                    // Wait 2^i * 1000ms
-                    const delay = Math.pow(2, i) * 1000;
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                }
-            }
-        }
-
-
         async function initializeLLM(){
             updateState({ message: 'SYSTEM: Loading Machine Core...', isLoading: true, error: null });
 
             try {
-               
-                updateState({ 
-                message: 'Loading model...',
-                isLoading: true
-                });
-                
+                const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm');
 
+                const initProgressCallback = (initProgress) => {
+                    console.log(initProgress);
+                    updateState({ 
+                    message: 'Loading model...',
+                    isLoading: true
+                    });
+                }
+                const MODEL_NAME = "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" //24
 
+                //"gemma-2-2b-it-q4f16_1-MLC" // 42
+                //"Phi-3.5-mini-instruct-q4f16_1-MLC" - took long to load //85
+                // "TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" 
 
-
+                llmInference = await CreateMLCEngine(
+                    MODEL_NAME,
+                    { initProgressCallback: initProgressCallback }, // engineConfig
+                );
                 updateState({ 
                     isLLMLoaded: true, 
                     message: 'CORE ONLINE. Ready to Challenge.', 
@@ -356,72 +324,35 @@
             renderGame();
         }
 
-        async function runLLM_API_Call(prompt) {
+        async function runLLM_API_Call(prompt, responseSchema) {
 
-            const apiKey = ""; 
-            const modelName = 'gemini-2.5-flash-preview-09-2025';
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+            if (!llmInference) {
+                throw new Error("LLM not initialized.");
+            }
+            let fullResponseText = "";
 
-            const systemPrompt = "You are a professional trivia master"
-
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                // Using Google Search grounding for potentially factual game events or ideas
-                tools: [{ "google_search": {} }], 
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-            };
-
-            const fetcher = () => fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+            console.log('This is the full Prompt:', prompt)
+            const stream = await llmInference.chat.completions.create({
+                messages: [
+                  { role: "system", content: "You are an expert trivia master host"  },
+                  { role: "user", content: prompt }
+                ],
+                stream: true,
+                temperature: 0.01
             });
 
-            try {
-                const response = await fetchWithRetry(fetcher);
-                const result = await response.json();
-                
-                const candidate = result.candidates?.[0];
-
-                if (candidate && candidate.content?.parts?.[0]?.text) {
-                    const text = candidate.content.parts[0].text;
-                    let sources = [];
-                    const groundingMetadata = candidate.groundingMetadata;
-                    
-                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
-                        sources = groundingMetadata.groundingAttributions
-                            .map(attribution => ({
-                                uri: attribution.web?.uri,
-                                title: attribution.web?.title,
-                            }))
-                            .filter(source => source.uri && source.title); 
+            // Process the streaming output
+            for await (const chunk of stream) {
+                    const piece = chunk?.choices?.[0]?.delta?.content ?? ""; 
+                    if (piece) {
+                        fullResponseText += piece;
+                        // Optional: Update UI with streamed content here
                     }
-
-                    return { text };
-
-                } else if (result.error) {
-                    return { text: `API Error: ${result.error.message}`, sources: [] };
-                } else {
-                    return { text: 'Unknown error occurred or empty response received.', sources: [] };
-                }
-
-            } catch (error) {
-                console.error("API Call Failed:", error);
-                return { text: `Failed to connect to the AI server. Check console for details.`, sources: [] };
             }
-        }
-
-
-
-
-
-
-
-
+            console.log('FULL RAW RESPONSE:', fullResponseText)
+            return fullResponseText;
             
-        
+        }
 
         /**
          * Calls LLM to generate a question, correct answer, and 3 wrong answers.
