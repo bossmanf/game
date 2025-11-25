@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Conductor: Rhythm Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tone.js for music simulation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+        
+        /* Custom Fonts */
+        .title-font { font-family: 'Orbitron', sans-serif; }
+        .mono-font { font-family: 'Share Tech Mono', monospace; }
+
+        /* Custom Colors & Structure */
+        .metal-card { 
+            background: linear-gradient(145deg, #1f2937, #111827); 
+            border: 4px solid #1f2937;
+            box-shadow: 0 10px 25px rgba(0, 255, 255, 0.2), 
+                        0 0 10px rgba(0, 255, 255, 0.5) inset;
+            border-radius: 0.75rem; /* rounded-xl */
+        }
+        .electric-cyan { color: #00ffff; }
+        .electric-blue { color: #0077ff; }
+        
+        /* Neon Button Style */
+        .neon-button {
+            background-color: #00ffff;
+            color: #000000;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+            text-shadow: 0 0 4px rgba(0,0,0,0.5);
+            font-weight: 700;
+        }
+        .neon-button:hover {
+            background-color: #00e5e5;
+            box-shadow: 0 0 15px #00e5e5, 0 0 30px #00e5e5;
+            transform: translateY(-2px);
+        }
+        
+        /* Visualizer Pulse (for Phase 8) */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; }
+            50% { box-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff; }
+            100% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; }
+        }
+        .music-pulse {
+            animation: pulse 1s infinite alternate;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .record-spin {
+            animation: spin 3s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen p-4">
+
+    <div id="app-container" class="w-full max-w-7xl">
+        <!-- Game UI will be rendered here by renderGame() -->
+    </div>
+
+    <script type="module">
+        // Global Game State
+        const game = {
+            score: 500,
+            phase: 0, // 0: Menu, 1: Boot, 2-7: Challenges, 8: Music Game
+            isLoading: false,
+            message: "Welcome, Operator. Select a system protocol to engage.",
+            purchasedItems: [
+                { name: "Focus Chip", icon: "🧠" },
+                { name: "Speed Boost", icon: "⚡" }
+            ],
+            // Phase 8 specific state
+            currentBand: '',
+            currentSong: '',
+            timer: 30,
+            timerInterval: null,
+            synth: null, // Tone.js synth instance
+            challengeActive: false
+        };
+
+        let appContainer; 
+        
+        // --- Simulated MIDI Data (Based on X/Y.midi format request) ---
+        const SIMULATED_MIDI_LIST = [
+            "Iron_Maiden/The_Trooper.midi",
+            "Led_Zeppelin/Stairway_to_Heaven.midi",
+            "Pink_Floyd/Comfortably_Numb.midi",
+            "Queen/Bohemian_Rhapsody.midi",
+            "Nirvana/Smells_Like_Teen_Spirit.midi",
+            "Metallica/Enter_Sandman.midi",
+        ];
+
+        // --- Tone.js Music Functions (Simulating playback) ---
+
+        /**
+         * Starts a simple, rhythmic sequence using Tone.js to simulate the audio track.
+         */
+        async function playMusicChallenge() {
+            if (game.synth) {
+                stopMusic();
+            }
+            
+            await Tone.start();
+
+            // Use a stronger sound for the music challenge aesthetic
+            game.synth = new Tone.PolySynth(Tone.DuoSynth, {
+                oscillator: { type: "sawtooth" },
+                envelope: { attack: 0.01, decay: 0.5, sustain: 0.4, release: 1 }
+            }).toDestination();
+            
+            // A simple rock-like rhythm and bass line
+            const pattern = new Tone.Sequence((time, note) => {
+                game.synth.triggerAttackRelease(note, "8n", time);
+            }, [["C3", "G3"], ["C3", "F3"], ["C3", "A3"], ["C3", "G3"]], "4n").start(0);
+
+            Tone.Transport.bpm.value = 140; // Fast rock tempo
+            Tone.Transport.start();
+        }
+
+        /**
+         * Stops the Tone.js transport and disposes of the synth.
+         */
+        function stopMusic() {
+            if (game.synth) {
+                Tone.Transport.stop();
+                Tone.Transport.cancel();
+                game.synth.dispose();
+                game.synth = null;
+            }
+        }
+
+        // --- Game Logic Functions ---
+
+        function startPhase8Challenge() {
+            game.challengeActive = true;
+            
+            // 1. Pick a random MIDI entry and parse X/Y.midi format
+            const rawIndex = Math.floor(Math.random() * SIMULATED_MIDI_LIST.length);
+            const rawMidi = SIMULATED_MIDI_LIST[rawIndex]; // e.g., "Iron_Maiden/The_Trooper.midi"
+
+            const parts = rawMidi.split('/');
+            const bandRaw = parts[0]; // "Iron_Maiden"
+            const songRaw = parts[1].replace('.midi', ''); // "The_Trooper"
+
+            game.currentBand = bandRaw.replace(/_/g, ' ');
+            game.currentSong = songRaw.replace(/_/g, ' ');
+            game.timer = 30; // Reset timer
+
+            // 2. Play the audio track
+            playMusicChallenge();
+
+            // 3. Start the countdown
+            startTimer();
+
+            // 4. Update message
+            game.message = `Now streaming: ${game.currentSong}. GUESS THE BAND in 30 seconds!`;
+            renderGame(); // Force full re-render to display challenge UI
+        }
+
+        function startTimer() {
+            if (game.timerInterval) {
+                clearInterval(game.timerInterval);
+            }
+            
+            game.timerInterval = setInterval(() => {
+                game.timer--;
+                
+                // Update timer element directly to avoid full UI rebuild
+                const countdownEl = document.getElementById('countdown-display');
+                if (countdownEl) {
+                    countdownEl.innerText = game.timer;
+                    const parentDiv = countdownEl.closest('.p-3');
+                    if(parentDiv) {
+                         // Apply visual warning when time is low
+                         parentDiv.className = `p-3 w-40 text-center rounded-lg mono-font text-4xl font-bold bg-red-800 border-2 shadow-xl ${game.timer <= 10 ? 'border-yellow-500 text-yellow-300 music-pulse' : 'border-red-500 text-white'}`;
+                    }
+                }
+
+                if (game.timer <= 0) {
+                    clearInterval(game.timerInterval);
+                    handleGuessSubmission(true); // Treat as a loss due to timeout
+                }
+            }, 1000);
+        }
+
+        function handleGuessSubmission(isTimeout = false) {
+            const inputElement = document.getElementById('guess-input');
+            const playerGuess = inputElement ? inputElement.value.trim().toLowerCase() : '';
+
+            if (!game.challengeActive && !isTimeout) return; 
+
+            stopMusic();
+            clearInterval(game.timerInterval);
+            game.challengeActive = false;
+            
+            const correctBand = game.currentBand.toLowerCase();
+            let resultMessage = '';
+
+            if (isTimeout) {
+                game.score -= 50;
+                resultMessage = `TIME OUT! Challenge Failed. You lose 50 points. Correct: ${game.currentBand}.`;
+            } else if (playerGuess === correctBand) {
+                game.score += 1000;
+                resultMessage = `CORRECT! +1000 Points. Band: ${game.currentBand}.`;
+            } else {
+                game.score -= 50;
+                resultMessage = `INCORRECT. -50 Points. Correct Band: ${game.currentBand}.`;
+            }
+
+            game.message = resultMessage;
+            
+            // Wait 3 seconds, then move to the menu
+            setTimeout(() => {
+                game.phase = 0;
+                game.message = "Challenge complete. Returning to System Menu.";
+                renderGame();
+            }, 3000);
+
+            renderGame(); // Immediate update with result message
+        }
+
+        // --- DOM HELPER FUNCTIONS ---
+
+        function createElement(tag, className, innerText = '') {
+            const el = document.createElement(tag);
+            el.className = className;
+            el.innerText = innerText;
+            return el;
+        }
+
+        // --- Render Phase Functions ---
+
+        function renderWinScreen() {
+            const div = document.createElement('div');
+            div.className = "text-center p-20 bg-green-900 rounded-xl metal-card";
+            div.innerHTML = `
+                <h2 class="text-6xl font-extrabold text-green-400 title-font animate-pulse">VICTORY!</h2>
+                <p class="text-2xl text-white mt-4">System Target Score Reached. Well done, Operator.</p>
+                <p class="text-xl font-mono text-green-300 mt-2">Final Score: $${game.score}</p>
+            `;
+            return div;
+        }
+
+        function renderPhase0() {
+            const div = document.createElement('div');
+            div.className = "text-center space-y-8 p-12 bg-gray-900 rounded-xl shadow-inner border border-electric-cyan/50";
+            div.innerHTML = `
+                <p class="text-xl mono-font text-white">Select a System Protocol to engage.</p>
+                <div class="space-y-4">
+                    <button class="w-full neon-button py-3 px-6 rounded-lg text-lg" onclick="setPhase(7)">Protocol 7: Wordle Challenge (TEST)</button>
+                    <button class="w-full neon-button py-3 px-6 rounded-lg text-lg" onclick="setPhase(8)">Protocol 8: Music Challenge (LIVE)</sbutton>
+                    <button class="w-full neon-button py-3 px-6 rounded-lg text-lg bg-gray-700 text-electric-cyan hover:bg-gray-600" onclick="setPhase(1)">Protocol 1: Boot Sequence</button>
+                </div>
+            `;
+            return div;
+        }
+
+        function renderPhase_boot() { return createElement('div', 'text-center p-8 text-white mono-font text-2xl', 'INITIALIZING CORE SYSTEMS...'); }
+        function renderPhase2() { return createElement('div', 'text-center p-8 text-white mono-font text-2xl', 'PHASE 2: TOPIC SELECTION INTERRUPTED'); }
+        function renderPhase3() { return createElement('div', 'text-center p-8 text-white mono-font text-2xl', 'PHASE 3: TRIVIA ACCESS DENIED'); }
+        function renderPhase4() { return createElement('div', 'text-center p-8 text-white mono-font text-2xl', 'PHASE 4: SHOP INTERFACE OFFLINE'); }
+        function renderPhase5() { return createElement('div', 'text-center p-8 text-white mono-font text-2xl', 'PHASE 5: INSTRUCTIONS DATA MISSING'); }
+        function renderPhase6() { return createElement('div', 'text-center p-8 text-white mono-font text-2xl', 'PHASE 6: NEXT CHALLENGE PENDING'); }
+        function renderPhase7() { return createElement('div', 'text-center p-8 text-white mono-font text-2xl', 'PHASE 7: WORDLE GAME PREP'); }
+
+
+        /**
+         * Renders the Music Guessing Challenge (Phase 8).
+         */
+        function renderPhase8() {
+            const div = document.createElement('div');
+            div.className = "flex flex-col items-center justify-center h-full space-y-10 p-10 bg-black/50 rounded-xl border-4 border-electric-blue";
+            
+            const challengeStarted = game.currentBand !== '';
+
+            // Initial state: Button to start the challenge
+            if (!challengeStarted || !game.challengeActive) {
+                const startButton = createElement('button', 'neon-button py-4 px-10 text-2xl rounded-xl', 'ENGAGE MUSIC CHALLENGE');
+                startButton.onclick = startPhase8Challenge;
+                div.appendChild(startButton);
+                return div;
+            }
+
+            // Challenge Active UI
+            const inputId = 'guess-input';
+            
+            // Get current value from the DOM if it exists to preserve typing progress
+            let currentValue = '';
+            const existingInput = document.getElementById(inputId);
+            if (existingInput) {
+                currentValue = existingInput.value;
+            }
+            
+            // Determine if input should be disabled
+            const isDisabled = !game.challengeActive;
+
+            div.innerHTML = `
+                <!-- Audio Visual Indicator -->
+                <div class="text-center space-y-4">
+                    <div class="w-32 h-32 rounded-full border-4 border-yellow-400 flex items-center justify-center mx-auto record-spin bg-gray-900 ${game.challengeActive ? 'music-pulse' : ''}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M7.75 16.25l-2.5 2.5"/><path d="M16.25 7.75l2.5-2.5"/><path d="M16.25 16.25l2.5 2.5"/><path d="M7.75 7.75l-2.5-2.5"/>
+                        </svg>
+                    </div>
+                    <p class="text-xl title-font ${game.challengeActive ? 'text-yellow-400' : 'text-gray-400'}">AUDIO TRACK ${game.challengeActive ? 'LIVE' : 'STOPPED'}</p>
+                    <p class="text-xs mono-font text-gray-500">${game.currentSong} (Simulated MIDI)</p>
+                </div>
+
+                <!-- Timer -->
+                <div class="p-3 w-40 text-center rounded-lg mono-font text-4xl font-bold bg-red-800 border-2 shadow-xl ${game.timer <= 10 && game.challengeActive ? 'border-yellow-500 text-yellow-300 music-pulse' : 'border-red-500 text-white'}">
+                    <span id="countdown-display">${game.timer}</span>s
+                </div>
+
+                <!-- Input Field -->
+                <div class="w-full max-w-md space-y-4">
+                    <label for="${inputId}" class="block text-lg font-semibold text-electric-cyan title-font">GUESS THE ARTIST/BAND NAME:</label>
+                    <input type="text" id="${inputId}" class="w-full p-4 text-xl text-white bg-gray-900 border-2 border-electric-cyan rounded-lg mono-font focus:ring-4 focus:ring-electric-blue focus:border-electric-blue" placeholder="Type your answer here..." value="${currentValue}" ${isDisabled ? 'disabled' : ''}>
+                    <button id="submit-button" class="w-full neon-button py-3 text-xl rounded-lg" onclick="handleGuessSubmission()" ${isDisabled ? 'disabled' : ''}>
+                        SUBMIT GUESS
+                    </button>
+                    <p class="text-sm text-gray-400 text-center">Challenge ends automatically on timeout or incorrect guess.</p>
+                </div>
+            `;
+            
+            // Attach event listener for Enter key and set focus
+            if (!isDisabled) {
+                setTimeout(() => {
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.focus();
+                        // Only add keypress listener if game is active
+                        input.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') {
+                                document.getElementById('submit-button').click();
+                            }
+                        });
+                    }
+                }, 0);
+            }
+            
+            return div;
+        }
+
+
+        /**
+         * Main render function: builds the entire UI based on game state.
+         */
+        function renderGame() {
+            // Rebuilds the entire container's content
+            if (!appContainer) return;
+
+            if (game.score >= 20001) {
+                appContainer.innerHTML = '';
+                appContainer.appendChild(renderWinScreen());
+                return;
+            }
+            
+            // Pre-calculate inventory HTML since it's tricky inside a template literal
+            const inventoryHtml = game.purchasedItems.length === 0 
+                ? '<p class="text-xs text-gray-500 italic col-span-4">No items acquired.</p>'
+                : game.purchasedItems.map(item => `
+                        <div class="p-1 text-center bg-gray-600 rounded-md border border-electric-cyan/70 hover:bg-gray-500" title="${item.name}">
+                            <span class="text-2xl">${item.icon}</span>
+                        </div>
+                    `).join('');
+
+            // Game Panels Structure (User's monolithic structure)
+            appContainer.innerHTML = `
+                <div class="flex w-full metal-card min-h-[700px] rounded-xl overflow-hidden">
+                    <!-- LEFT PANEL: Conductor Info -->
+                    <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-r-4 border-electric-cyan">
+                        <div class="text-center space-y-3">
+                            <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">A.I. CONDUCTOR</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-electric-cyan speed-icon ${game.phase === 8 && game.challengeActive ? 'music-pulse' : ''}">
+                                <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
+                            </svg>
+                            <div class="text-sm font-mono mt-4 p-2 bg-gray-700 rounded-lg border border-electric-cyan/50 mono-font">
+                                <p>STATUS: ${game.isLoading ? 'LOADING' : 'IDLE'}</p>
+                                <p>PHASE: ${game.phase}</p>
+                            </div>
+                        </div>
+                        <div class="text-center text-xs text-gray-500 mono-font">
+                            <p>Lux Aeterna!</p>
+                        </div>
+                    </div>
+
+                    <!-- CENTER PANEL: Game Interaction -->
+                    <div id="center-panel" class="flex-1 p-6 flex flex-col justify-between bg-gray-800">
+                        <h2 class="text-4xl font-extrabold text-white mb-4 text-center title-font">
+                            ${game.phase === 8 ? 'RHYTHM DECODING INTERFACE' : (game.phase > 1 ? 'LIVE CHALLENGE INTERFACE' : (game.phase === 0 ? 'SYSTEM MENU' : 'BOOT SEQUENCE'))}
+                        </h2>
+                        
+                        <!-- Game Message Panel -->
+                        <div class="p-4 mb-6 text-center rounded-lg font-semibold shadow-md bg-electric-blue/20 text-electric-cyan border border-electric-blue mono-font min-h-[56px] flex items-center justify-center">
+                            ${game.message}
+                        </div>
+
+                        <!-- Dynamic Phase Content Placeholder -->
+                        <div id="dynamic-content" class="flex-1 flex items-center justify-center"></div>
+                    </div>
+
+                    <!-- RIGHT PANEL: Player Info -->
+                    <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-l-4 border-electric-cyan">
+                        <div class="text-center space-y-3">
+                            <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PLAYER DATA</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-yellow-400 speed-icon">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <div class="mt-4 p-3 bg-gray-700 rounded-lg border border-yellow-400/50 shadow-xl mono-font">
+                                <p class="text-sm font-mono text-gray-400">SCORE REGISTER</p>
+                                <p class="text-4xl font-extrabold text-yellow-400 title-font">$${game.score}</p>
+                                <p class="text-xs text-gray-200">TARGET: $20001</p>
+                            </div>
+
+                            <div class="mt-6 pt-4 border-t border-gray-700 w-full">
+                                <p class="text-sm font-mono text-gray-400 mb-2 mono-font">INVENTORY</p>
+                                <div id="inventory-display" class="grid grid-cols-4 gap-2">
+                                    ${inventoryHtml}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center text-xs text-gray-500 mono-font">
+                            <p>Chase that light!</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Render phase-specific content into the dynamic placeholder
+            const dynamicContent = document.getElementById('dynamic-content');
+            if (dynamicContent) {
+                let contentElement;
+                switch (game.phase) {
+                    case 0: contentElement = renderPhase0(); break;
+                    case 1: contentElement = renderPhase_boot(); break;
+                    case 2: contentElement = renderPhase2(); break;
+                    case 3: contentElement = renderPhase3(); break;
+                    case 4: contentElement = renderPhase4(); break;
+                    case 5: contentElement = renderPhase5(); break;
+                    case 6: contentElement = renderPhase6(); break;
+                    case 7: contentElement = renderPhase7(); break;
+                    case 8: contentElement = renderPhase8(); break;
+                    default: contentElement = createElement('div', 'text-center p-8 text-red-500', 'UNKNOWN GAME STATE');
+                }
+                dynamicContent.appendChild(contentElement);
+            }
+        }
+
+        // Expose functions globally for inline HTML event handlers
+        window.renderGame = renderGame;
+        window.setPhase = function(phase) {
+            if (game.phase === 8) {
+                // Ensure music is stopped if exiting Phase 8
+                stopMusic(); 
+                clearInterval(game.timerInterval);
+                game.challengeActive = false;
+            }
+            game.phase = phase;
+            game.challengeActive = false; 
+            renderGame();
+        };
+        window.handleGuessSubmission = handleGuessSubmission;
+        window.startPhase8Challenge = startPhase8Challenge;
+
+
+        // --- Initialization ---
+        function initializeGame() {
+            // Get the app container reference
+            appContainer = document.getElementById('app-container');
+            if (appContainer) {
+                renderGame();
+            } else {
+                console.error("Critical Error: #app-container element was not found.");
+            }
+        }
+
+        // Call the initialization function immediately after the script loads
+        initializeGame();
+
+    </script>
+</body>
+</html>

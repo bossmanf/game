@@ -148,6 +148,38 @@
         .key-present { background-color: #b59f3b !important; }
         .key-correct { background-color: #538d4e !important; }
 
+        /* Neon Button Style */
+        .neon-button {
+            background-color: #00ffff;
+            color: #000000;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+            text-shadow: 0 0 4px rgba(0,0,0,0.5);
+            font-weight: 700;
+        }
+        .neon-button:hover {
+            background-color: #00e5e5;
+            box-shadow: 0 0 15px #00e5e5, 0 0 30px #00e5e5;
+            transform: translateY(-2px);
+        }
+        
+        /* Visualizer Pulse (for Phase 8) */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; }
+            50% { box-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff; }
+            100% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; }
+        }
+        .music-pulse {
+            animation: pulse 1s infinite alternate;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .record-spin {
+            animation: spin 3s linear infinite;
+        }
+
         /* ROCK AESTHETIC - Phase 4 */
         .rock-card {
             background: linear-gradient(145deg, #1f1f1f 10%, #000000 90%);
@@ -235,6 +267,7 @@
             isLoading: false,
             topics: [],
             words: [],
+            midis: []
             currentTopic: '',
             questionData: null,   // {question, correctAnswer, wrongAnswers[]}
             selectedAnswer: null, // The answer the player clicked
@@ -343,6 +376,17 @@
                     .split('\n')
                     .map(t => t.trim())
                     .filter(t => t.length > 0);
+
+                read_midis = await fetch('./midis_list.txt');
+                if (!read_midis.ok) throw new Error(`HTTP error! status: ${read_midis.status}`);
+
+                // Fetch, split, trim, and filter in one chain
+                game.midis = (await read_midis.text())
+                    .split('\n')
+                    .map(t => t.trim())
+                    .filter(t => t.length > 0);
+
+
                 updateState({ 
                 message: 'Loading model...',
                 isLoading: true
@@ -432,6 +476,12 @@
             game.phase = newPhase;
             game.message = message;
             game.isLoading = false;
+            if (game.phase === 8) {
+                // Ensure music is stopped if exiting Phase 8
+                stopMusic(); 
+                clearInterval(game.timerInterval);
+                game.challengeActive = false;
+            }
             renderGame();
         }
         async function runLLM_API_Call(prompt) {
@@ -1118,9 +1168,204 @@
     
 
 
-        
+        async function playMusicChallenge() {
+            if (game.synth) {
+                stopMusic();
+            }
+            
+            await Tone.start();
 
+            // Use a stronger sound for the music challenge aesthetic
+            game.synth = new Tone.PolySynth(Tone.DuoSynth, {
+                oscillator: { type: "sawtooth" },
+                envelope: { attack: 0.01, decay: 0.5, sustain: 0.4, release: 1 }
+            }).toDestination();
+            
+            // A simple rock-like rhythm and bass line
+            const pattern = new Tone.Sequence((time, note) => {
+                game.synth.triggerAttackRelease(note, "8n", time);
+            }, [["C3", "G3"], ["C3", "F3"], ["C3", "A3"], ["C3", "G3"]], "4n").start(0);
 
+            Tone.Transport.bpm.value = 140; // Fast rock tempo
+            Tone.Transport.start();
+        }
+
+        /**
+         * Stops the Tone.js transport and disposes of the synth.
+         */
+        function stopMusic() {
+            if (game.synth) {
+                Tone.Transport.stop();
+                Tone.Transport.cancel();
+                game.synth.dispose();
+                game.synth = null;
+            }
+        }
+  
+        function startPhase8Challenge() {
+            game.challengeActive = true;
+            
+            // 1. Pick a random MIDI entry and parse X/Y.midi format
+            const rawIndex = Math.floor(Math.random() * game.midis.length);
+            const rawMidi = game.midis[rawIndex]; // e.g., "Iron_Maiden/The_Trooper.midi"
+
+            const parts = rawMidi.split('/');
+            const bandRaw = parts[0]; // "Iron_Maiden"
+            const songRaw = parts[1].replace('.midi', ''); // "The_Trooper"
+
+            game.currentBand = bandRaw.replace(/_/g, ' ');
+            game.currentSong = songRaw.replace(/_/g, ' ');
+            game.timer = 30; // Reset timer
+
+            // 2. Play the audio track
+            playMusicChallenge();
+
+            // 3. Start the countdown
+            startTimer();
+
+            // 4. Update message
+            game.message = `Now streaming: ${game.currentSong}. GUESS THE BAND in 30 seconds!`;
+            renderGame(); // Force full re-render to display challenge UI
+        }
+
+        function startTimer() {
+            if (game.timerInterval) {
+                clearInterval(game.timerInterval);
+            }
+            
+            game.timerInterval = setInterval(() => {
+                game.timer--;
+                
+                // Update timer element directly to avoid full UI rebuild
+                const countdownEl = document.getElementById('countdown-display');
+                if (countdownEl) {
+                    countdownEl.innerText = game.timer;
+                    const parentDiv = countdownEl.closest('.p-3');
+                    if(parentDiv) {
+                         // Apply visual warning when time is low
+                         parentDiv.className = `p-3 w-40 text-center rounded-lg mono-font text-4xl font-bold bg-red-800 border-2 shadow-xl ${game.timer <= 10 ? 'border-yellow-500 text-yellow-300 music-pulse' : 'border-red-500 text-white'}`;
+                    }
+                }
+
+                if (game.timer <= 0) {
+                    clearInterval(game.timerInterval);
+                    handleGuessSubmission(true); // Treat as a loss due to timeout
+                }
+            }, 1000);
+        }
+
+        function handleGuessSubmission(isTimeout = false) {
+            const inputElement = document.getElementById('guess-input');
+            const playerGuess = inputElement ? inputElement.value.trim().toLowerCase() : '';
+
+            if (!game.challengeActive && !isTimeout) return; 
+
+            stopMusic();
+            clearInterval(game.timerInterval);
+            game.challengeActive = false;
+            
+            const correctBand = game.currentBand.toLowerCase();
+            let resultMessage = '';
+
+            if (isTimeout) {
+                game.score -= 50;
+                resultMessage = `TIME OUT! Challenge Failed. You lose 50 points. Correct: ${game.currentBand}.`;
+            } else if (playerGuess === correctBand) {
+                game.score += 1000;
+                resultMessage = `CORRECT! +1000 Points. Band: ${game.currentBand}.`;
+            } else {
+                game.score -= 50;
+                resultMessage = `INCORRECT. -50 Points. Correct Band: ${game.currentBand}.`;
+            }
+
+            game.message = resultMessage;
+            
+            // Wait 3 seconds, then move to the menu
+            setTimeout(() => {
+                game.phase = 0;
+                game.message = "Challenge complete. Returning to System Menu.";
+                renderGame();
+            }, 3000);
+
+            renderGame(); // Immediate update with result message
+        }
+
+        /**
+         * Renders the Music Guessing Challenge (Phase 8).
+         */
+        function renderPhase8() {
+            const div = document.createElement('div');
+            div.className = "flex flex-col items-center justify-center h-full space-y-10 p-10 bg-black/50 rounded-xl border-4 border-electric-blue";
+            
+            const challengeStarted = game.currentBand !== '';
+
+            // Initial state: Button to start the challenge
+            if (!challengeStarted || !game.challengeActive) {
+                const startButton = createElement('button', 'neon-button py-4 px-10 text-2xl rounded-xl', 'ENGAGE MUSIC CHALLENGE');
+                startButton.onclick = startPhase8Challenge;
+                div.appendChild(startButton);
+                return div;
+            }
+
+            // Challenge Active UI
+            const inputId = 'guess-input';
+            
+            // Get current value from the DOM if it exists to preserve typing progress
+            let currentValue = '';
+            const existingInput = document.getElementById(inputId);
+            if (existingInput) {
+                currentValue = existingInput.value;
+            }
+            
+            // Determine if input should be disabled
+            const isDisabled = !game.challengeActive;
+
+            div.innerHTML = `
+                <!-- Audio Visual Indicator -->
+                <div class="text-center space-y-4">
+                    <div class="w-32 h-32 rounded-full border-4 border-yellow-400 flex items-center justify-center mx-auto record-spin bg-gray-900 ${game.challengeActive ? 'music-pulse' : ''}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M7.75 16.25l-2.5 2.5"/><path d="M16.25 7.75l2.5-2.5"/><path d="M16.25 16.25l2.5 2.5"/><path d="M7.75 7.75l-2.5-2.5"/>
+                        </svg>
+                    </div>
+                    <p class="text-xl title-font ${game.challengeActive ? 'text-yellow-400' : 'text-gray-400'}">AUDIO TRACK ${game.challengeActive ? 'LIVE' : 'STOPPED'}</p>
+                    <p class="text-xs mono-font text-gray-500">${game.currentSong} (Simulated MIDI)</p>
+                </div>
+
+                <!-- Timer -->
+                <div class="p-3 w-40 text-center rounded-lg mono-font text-4xl font-bold bg-red-800 border-2 shadow-xl ${game.timer <= 10 && game.challengeActive ? 'border-yellow-500 text-yellow-300 music-pulse' : 'border-red-500 text-white'}">
+                    <span id="countdown-display">${game.timer}</span>s
+                </div>
+
+                <!-- Input Field -->
+                <div class="w-full max-w-md space-y-4">
+                    <label for="${inputId}" class="block text-lg font-semibold text-electric-cyan title-font">GUESS THE ARTIST/BAND NAME:</label>
+                    <input type="text" id="${inputId}" class="w-full p-4 text-xl text-white bg-gray-900 border-2 border-electric-cyan rounded-lg mono-font focus:ring-4 focus:ring-electric-blue focus:border-electric-blue" placeholder="Type your answer here..." value="${currentValue}" ${isDisabled ? 'disabled' : ''}>
+                    <button id="submit-button" class="w-full neon-button py-3 text-xl rounded-lg" onclick="handleGuessSubmission()" ${isDisabled ? 'disabled' : ''}>
+                        SUBMIT GUESS
+                    </button>
+                    <p class="text-sm text-gray-400 text-center">Challenge ends automatically on timeout or incorrect guess.</p>
+                </div>
+            `;
+            
+            // Attach event listener for Enter key and set focus
+            if (!isDisabled) {
+                setTimeout(() => {
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.focus();
+                        // Only add keypress listener if game is active
+                        input.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') {
+                                document.getElementById('submit-button').click();
+                            }
+                        });
+                    }
+                }, 0);
+            }
+            
+            return div;
+        }
         
     function renderWinScreen() {
         const winContent = createElement('div', 'flex flex-col items-center justify-center h-full text-center bg-gray-800 p-10 rounded-xl shadow-2xl');
@@ -1247,6 +1492,8 @@
             case 7:
                 contentElement = renderPhase7(); // Wordle Game!
                 break;
+            case 8:
+                contentElement = renderPhase8(); // Midi Game!
             default:
                 contentElement = createElement('div', 'text-center p-8 text-red-500', 'UNKNOWN GAME STATE');
         }
