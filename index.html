@@ -939,7 +939,7 @@
                     updateUI();
                     return;
                 }
-        
+
                 const result = Array(5).fill('absent');
                 const targetMap = {};
                 for (const char of targetWord) {
@@ -980,13 +980,16 @@
                     const scoreIncrease = 500 - (guesses.length * 50); // Better score for fewer guesses
                     game.score += scoreIncrease;
                     localMessage = `WIN! ${targetWord} was the word. You earned $${scoreIncrease}! Returning to menu...`;
+                    updateUI(); // Update UI for next gue
                     setTimeout(returnToMainMenu, 3500);
                 } else if (guesses.length >= 6) {
                     gameStatus = 'lose';
                     localMessage = `DEFEAT! The word was ${targetWord}. Returning to menu...`;
+                    updateUI(); // Update UI for next gue
                     setTimeout(returnToMainMenu, 3500);
                 } else {
                     localMessage = 'Guess submitted. Try again.';
+                    updateUI(); // Update UI for next gue
                 }
 
                 updateUI();
