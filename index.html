@@ -17,6 +17,25 @@
             --electric-blue: #3b82f6;
         }
 
+        /* Define custom keyframes for animations */
+        @keyframes flip {
+            0% { transform: rotateX(0deg); }
+            50% { transform: rotateX(90deg); }
+            100% { transform: rotateX(0deg); }
+        }
+        .animate-flip-in {
+            animation: flip 0.6s ease-in-out forwards;
+        }
+
+        @keyframes slide-down {
+            from { transform: translate(-50%, -100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .animate-slide-down {
+            animation: slide-down 0.3s ease-out forwards;
+        }
+
+
         body {
             background: url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center 
             font-family: 'Inter', sans-serif;
@@ -352,10 +371,9 @@
             game.isLoading = false;
             renderGame();
         }
-
         async function runLLM_API_Call(prompt) {
 
-            const apiKey = "AIzaSyD5UaLv60u7-nieYWaSrm13fG9C3gNsvbw"; 
+            const apiKey = "AIzaSyDAm-XQ00gZ4H4wF-pJoQ8cBtXMi-3FeyM"; 
             const modelName = 'gemini-2.5-flash-preview-09-2025';
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
