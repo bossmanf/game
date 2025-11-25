@@ -234,6 +234,7 @@
             isLLMLoaded: false,
             isLoading: false,
             topics: [],
+            words: []
             currentTopic: '',
             questionData: null,   // {question, correctAnswer, wrongAnswers[]}
             selectedAnswer: null, // The answer the player clicked
@@ -241,7 +242,6 @@
             message: 'Initializing...',
             error: null
         };
-        const read_wordle.ok = false 
         const appContainer = document.getElementById('game-container');
         const errorDisplay = document.getElementById('error-display');
         const errorMessageElement = document.getElementById('error-message');
@@ -339,7 +339,7 @@
                 if (!read_wordle.ok) throw new Error(`HTTP error! status: ${read_wordle.status}`);
 
                 // Fetch, split, trim, and filter in one chain
-                const wordList = (await res.text())
+                game.words = (await res.text())
                     .split('\n')
                     .map(t => t.trim())
                     .filter(t => t.length > 0);
@@ -878,10 +878,8 @@
         function renderPhase7() {
         // --- Local Wordle Game State ---
 
-            
-
             //const wordList = ['LIGHT', 'MUSIC', 'STARS', 'BEATS', 'POWER', 'FUSION', 'RHYTHM'];
-            const targetWord = wordList[Math.floor(Math.random() * wordList.length)];
+            const targetWord = game.words[Math.floor(Math.random() * game.words.length)];
             let guesses = []; // Array of {word: '...', result: ['absent', 'present', 'correct', ...]}
             let currentGuess = '';
             let gameStatus = 'playing'; // 'playing', 'win', 'lose'
