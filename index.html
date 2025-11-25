@@ -339,7 +339,7 @@
                 if (!read_wordle.ok) throw new Error(`HTTP error! status: ${read_wordle.status}`);
 
                 // Fetch, split, trim, and filter in one chain
-                game.words = (await res.text())
+                game.words = (await read_wordle.text())
                     .split('\n')
                     .map(t => t.trim())
                     .filter(t => t.length > 0);
