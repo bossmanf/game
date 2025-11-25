@@ -944,8 +944,7 @@
                 }
 
                         //Dictionary Check ---
-                if (!game.words.includes(guess)) {
-                    console.log('All the words in game.words:', game.words)
+                if (!game.words.includes(toLowerCase(guess))) {
                     console.log('Guess:', guess)
                     localMessage = `ERROR: "${guess}" is not in the dictionary.`;
                     currentGuess = ''; // Clear guess to force re-entry
@@ -961,7 +960,7 @@
 
                 // Pass 1: Check for correct (green)
                 for (let i = 0; i < 5; i++) {
-                    if (guess[i] === targetWord[i]) {
+                    if (toLowerCase(guess[i]) === targetWord[i]) {
                         result[i] = 'correct';
                         targetMap[guess[i]]--;
                         availableKeys[guess[i]] = 'correct';
@@ -985,10 +984,10 @@
                     }
                 }
 
-                guesses.push({ word: guess, result: result });
+                guesses.push({ word: toLowerCase(guess), result: result });
                 currentGuess = '';
 
-                if (guess === targetWord) {
+                if (toLowerCase(guess) === targetWord) {
                     gameStatus = 'win';
                     const scoreIncrease = 500 - (guesses.length * 50); // Better score for fewer guesses
                     game.score += scoreIncrease;
