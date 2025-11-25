@@ -945,7 +945,6 @@
 
                         //Dictionary Check ---
                 if (!game.words.includes(toLowerCase(guess))) {
-                    console.log('Guess:', guess)
                     localMessage = `ERROR: "${guess}" is not in the dictionary.`;
                     currentGuess = ''; // Clear guess to force re-entry
                     updateUI();
