@@ -17,25 +17,6 @@
             --electric-blue: #3b82f6;
         }
 
-        /* Define custom keyframes for animations */
-        @keyframes flip {
-            0% { transform: rotateX(0deg); }
-            50% { transform: rotateX(90deg); }
-            100% { transform: rotateX(0deg); }
-        }
-        .animate-flip-in {
-            animation: flip 0.6s ease-in-out forwards;
-        }
-
-        @keyframes slide-down {
-            from { transform: translate(-50%, -100%); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-        .animate-slide-down {
-            animation: slide-down 0.3s ease-out forwards;
-        }
-
-
         body {
             background: url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center 
             font-family: 'Inter', sans-serif;
@@ -811,17 +792,9 @@
         
 
         function renderPhase7() {
-            // 1. Initialize React Root if it doesn't exist
-            if (!reactRoot) {
-                reactRoot = createRoot(dynamicContent);
-            }
             
-            // 2. Render the React component into the existing DOM node
-            reactRoot.render('wordle.jsx');
-            
-            // 3. IMPORTANT: Return null or a dummy element.
-            
-            return createElement('div', 'hidden', ''); 
+
+
         }
 
 
