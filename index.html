@@ -153,14 +153,8 @@
 
     </div>
 
-    <script type="module">
-        // --- REACT IMPORTS ---
-        import { createRoot } from 'https://unpkg.com/react-dom@18/umd/react-dom.development.js';
-
-        import Wordle from './wordle.jsx'; 
-
+    <script>
         // Global Game State
-
         const game = {
             phase: 1,             // 1: Welcome, 2: Topic Selection, 3: Question
             score: 20000,
@@ -180,7 +174,7 @@
         
         let llmInference = null;
 
-        
+        import { RefreshCcw, XCircle, CheckCircle, ArrowRight } from 'lucide-react'; // Using lucide-react for icons
         /**
          * Updates the global game state and re-renders the UI.
          */
@@ -630,7 +624,7 @@
             const buttons = [
                 { title: 'MISSION', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), iconEmoji: '🎯', color: 'bg-indigo-600 hover:bg-indigo-700' },
                 { title: 'TRIVIA', phase: 2, action: initiateTrivia, iconEmoji: '💡', color: 'bg-green-600 hover:bg-green-700' },
-                { title: 'WORDLE', phase: 7, action: () => setPhase(7, 'WORDLE'), iconEmoji: '📝', color: 'bg-yellow-600 hover:bg-yellow-700' },
+                { title: 'WORDLE', phase: 7, action: () => setPhase(7, 'WORDLE not implemented yet. Try Trivia!'), iconEmoji: '📝', color: 'bg-yellow-600 hover:bg-yellow-700' },
                 { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Gear up for the Ultimate Ascent!'), iconEmoji: '🛒', color: 'bg-blue-600 hover:bg-blue-700' },
                 { title: 'CARDS', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconEmoji: '🃏', color: 'bg-gray-500 hover:bg-gray-600' },
                 { title: 'BONUS', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconEmoji: '🎁', color: 'bg-gray-500 hover:bg-gray-600' },
