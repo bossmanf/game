@@ -343,7 +343,6 @@
                     .split('\n')
                     .map(t => t.trim())
                     .filter(t => t.length > 0);
-                console.log('These are the words:', game.words)
                 updateState({ 
                 message: 'Loading model...',
                 isLoading: true
@@ -876,8 +875,10 @@
 
         function renderPhase7() {
         // --- Local Wordle Game State ---
-            console.log('These are the words in 7:', game.words)
+            console.log(game.words.length)
+            console.log(game.words[Math.floor(Math.random() * game.words.length)])
             const targetWord = game.words[Math.floor(Math.random() * game.words.length)];
+
             let guesses = []; // Array of {word: '...', result: ['absent', 'present', 'correct', ...]}
             let currentGuess = '';
             let gameStatus = 'playing'; // 'playing', 'win', 'lose'
@@ -942,8 +943,10 @@
                     return;
                 }
 
-                        // --- NEW IMPLEMENTATION: Dictionary Check ---
+                        //Dictionary Check ---
                 if (!game.words.includes(guess)) {
+                    console.log('All the words in game.words:', game.words)
+                    console.log('Guess:', guess)
                     localMessage = `ERROR: "${guess}" is not in the dictionary.`;
                     currentGuess = ''; // Clear guess to force re-entry
                     updateUI();
