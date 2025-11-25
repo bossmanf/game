@@ -866,7 +866,17 @@
 
         function renderPhase7() {
         // --- Local Wordle Game State ---
-            const wordList = ['LIGHT', 'MUSIC', 'STARS', 'BEATS', 'POWER', 'FUSION', 'RHYTHM'];
+
+            const res = await fetch('./wordle.txt');
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+            // Fetch, split, trim, and filter in one chain
+            const wordList = (await res.text())
+                .split('\n')
+                .map(t => t.trim())
+                .filter(t => t.length > 0);
+
+            //const wordList = ['LIGHT', 'MUSIC', 'STARS', 'BEATS', 'POWER', 'FUSION', 'RHYTHM'];
             const targetWord = wordList[Math.floor(Math.random() * wordList.length)];
             let guesses = []; // Array of {word: '...', result: ['absent', 'present', 'correct', ...]}
             let currentGuess = '';
