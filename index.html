@@ -343,7 +343,7 @@
                     .split('\n')
                     .map(t => t.trim())
                     .filter(t => t.length > 0);
-
+                console.log('These are the words:', game.words)
                 updateState({ 
                 message: 'Loading model...',
                 isLoading: true
@@ -876,7 +876,7 @@
 
         function renderPhase7() {
         // --- Local Wordle Game State ---
-
+            console.log('These are the words in 7:', game.words)
             const targetWord = game.words[Math.floor(Math.random() * game.words.length)];
             let guesses = []; // Array of {word: '...', result: ['absent', 'present', 'correct', ...]}
             let currentGuess = '';
