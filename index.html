@@ -744,6 +744,17 @@
 
         function renderPhase0() {
             const menuContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8 space-y-6');
+            
+
+            menuContent.className = "text-center space-y-8 p-12 bg-gray-900 rounded-xl shadow-inner border border-electric-cyan/50";
+            div.innerHTML = `
+                <p class="text-xl mono-font text-white">Select a System Protocol to engage.</p>
+                <div class="space-y-4">
+                    <button class="w-full neon-button py-3 px-6 rounded-lg text-lg" onclick="setPhase(7)">Protocol 7: Wordle Challenge (TEST)</button>
+                    <button class="w-full neon-button py-3 px-6 rounded-lg text-lg" onclick="setPhase(8)">Protocol 8: Music Challenge (LIVE)</sbutton>
+                    <button class="w-full neon-button py-3 px-6 rounded-lg text-lg bg-gray-700 text-electric-cyan hover:bg-gray-600" onclick="setPhase(1)">Protocol 1: Boot Sequence</button>
+                </div>
+            `;
 
             const title = createElement('h3', 'text-5xl font-extrabold title-font text-neon-pink text-center mb-10', 'MAIN MENU');
             title.style.textShadow = '0 0 10px #ff00ff';
