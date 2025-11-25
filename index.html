@@ -350,7 +350,6 @@
                 });
                 
 
-
                 updateState({ 
                     isLLMLoaded: true, 
                     message: 'CORE ONLINE. Ready to Challenge.', 
@@ -878,7 +877,6 @@
         function renderPhase7() {
         // --- Local Wordle Game State ---
 
-            //const wordList = ['LIGHT', 'MUSIC', 'STARS', 'BEATS', 'POWER', 'FUSION', 'RHYTHM'];
             const targetWord = game.words[Math.floor(Math.random() * game.words.length)];
             let guesses = []; // Array of {word: '...', result: ['absent', 'present', 'correct', ...]}
             let currentGuess = '';
@@ -945,7 +943,7 @@
                 }
 
                         // --- NEW IMPLEMENTATION: Dictionary Check ---
-                if (!wordList.includes(guess)) {
+                if (!game.words.includes(guess)) {
                     localMessage = `ERROR: "${guess}" is not in the dictionary.`;
                     currentGuess = ''; // Clear guess to force re-entry
                     updateUI();
