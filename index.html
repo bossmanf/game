@@ -1189,7 +1189,11 @@
                 stopMusic();
             }
             
-            await Tone.start();
+            //await Tone.start();
+
+            // Use a stronger sound for the music challenge aesthetic
+            
+            Tone.Transport.bpm.value = 120; // Fast rock tempo
             Tone.Transport.start();
         }
 
@@ -1219,6 +1223,19 @@
             game.currentBand = bandRaw.replace(/_/g, ' ');
             game.currentSong = songRaw.replace(/_/g, ' ');
             game.timer = 30; // Reset timer
+
+
+            const startChallenge = useCallback(async () => {
+            if (!Tone) return console.error("Tone.js not loaded.");
+            
+            try {
+                await Tone.start(); // This is called directly by the button's execution path.
+                console.log("AudioContext resumed successfully.");
+            } catch (error) {
+                console.error("Failed to start Tone AudioContext:", error);
+                setGame(prev => ({ ...prev, message: "Error starting audio. Check browser permissions." }));
+                return;
+            }
 
             // 2. Play the audio track
             playMusicChallenge();
