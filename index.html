@@ -427,7 +427,7 @@
 
             try {
 
-                console.log("Fetching topics from ./topics.txt...");
+                //console.log("Fetching topics from ./topics.txt...");
                 const res = await fetch('./topics.txt');
                 
                 if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -525,7 +525,7 @@
                             }))
                             .filter(source => source.uri && source.title); 
                     }
-                    console.log('this is the text', text)
+                    //console.log('this is the text', text)
 
 
                       let jsonString = (text || "").trim();
@@ -547,7 +547,7 @@
                       while (/[.\n\r\s]$/.test(jsonString)) jsonString = jsonString.slice(0, -1);
 
                       let parsed;
-                      console.log('This is the jsonString:', jsonString)
+                      //console.log('This is the jsonString:', jsonString)
 
                       try {
                         parsed = JSON.parse(jsonString);
@@ -560,7 +560,7 @@
                           throw new Error("Failed to parse LLM output. Raw: " + fullResponseText);
                         }
                       }
-                      console.log('And this is parsed:', parsed)
+                      //console.log('And this is parsed:', parsed)
                       return parsed
 
                 } else if (result.error) {
@@ -937,8 +937,6 @@
 
         function renderPhase7() {
         // --- Local Wordle Game State ---
-            console.log(game.words.length)
-            console.log(game.words[Math.floor(Math.random() * game.words.length)])
             const targetWord = game.words[Math.floor(Math.random() * game.words.length)];
 
             let guesses = []; // Array of {word: '...', result: ['absent', 'present', 'correct', ...]}
@@ -1008,7 +1006,7 @@
 
                         //Dictionary Check ---
                 if (!game.words.includes(guess)) {
-                    console.log('Guess:', guess)
+                    //console.log('Guess:', guess)
                     localMessage = `ERROR: "${guess}" is not in the dictionary.`;
                     currentGuess = ''; // Clear guess to force re-entry
                     updateUI();
@@ -1479,6 +1477,7 @@
         dynamicContent.innerHTML = '';
         
         let contentElement;
+        console.log(game.phase)
         switch (game.phase) {
             case 0:
                 contentElement = renderPhase0();  //  Menu
@@ -1507,7 +1506,12 @@
             case 8:
                 contentElement = renderPhase8(); // Midi Game!
             default:
-                contentElement = createElement('div', 'text-center p-8 text-red-500', 'UNKNOWN GAME STATE');
+                console.log(game.phase)
+                const topicContent = createElement('div', 'flex flex-col items-center justify-center h-full space-y-8 p-8', 'UNKNOWN GAME STATE');
+                const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'RETURN TO MENU');
+                backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
+                topicContent.appendChild(backButton);
+                return topicContent;
         }
         dynamicContent.appendChild(contentElement);
     }
