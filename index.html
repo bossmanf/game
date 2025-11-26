@@ -1201,23 +1201,34 @@
             
             await Tone.start();
 
+            // 3. Setup Audio Chain: Synth -> Gain -> Limiter -> Destination
             const limiter = new Tone.Limiter(-6).toDestination();
-            const gain = new Tone.Gain(0.7).connect(limiter); // Slight volume reduction
+            // Reduced gain to 0.5 to provide more headroom and prevent polyphonic clipping
+            const gain = new Tone.Gain(0.5).connect(limiter); 
+            
+            // Setup PolySynth
             const newSynth = new Tone.PolySynth(Tone.Synth, {
-                oscillator: { type: "square" }, // Cleaner tone than sawtooth/duosynth for polyphonic playback
+                oscillator: { type: "square" }, 
                 envelope: { 
                     attack: 0.02, 
                     decay: 0.1, 
                     sustain: 0.2, 
-                    release: 0.3 // Shortened release significantly to prevent overlap/mush
+                    release: 0.3 
                 }
-            }).connect(gain); // Connect to the controlled output chain
+            }).connect(gain); 
             
-            const pattern = new Tone.Sequence((time, note) => {
-                newSynth.triggerAttackRelease(note, "8n", time);
-            }, [["C3", "G3"], ["C3", "F3"], ["C3", "A3"], ["C3", "G3"]], "4n").start(0);
+            game.synth = newSynth; // Store the synth instance
 
-            Tone.Transport.bpm.value = 120; // Maintain fast tempo
+            // 4. Setup Sequence
+            const pattern = new Tone.Sequence((time, note) => {
+                // Crucial fix: Use "16n" duration instead of "8n" for a tighter, non-overlapping sound.
+                newSynth.triggerAttackRelease(note, "16n", time); 
+            }, [["C3", "G3"], ["C3", "F3"], ["C3", "A3"], ["C3", "G3"]], "4n").start(0);
+            
+            game.pattern = pattern; // Store the sequence instance
+            
+            // 5. Start Transport
+            Tone.Transport.bpm.value = 120; 
             Tone.Transport.start();
         }
 
