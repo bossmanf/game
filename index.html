@@ -1199,29 +1199,35 @@
                 stopMusic();
             }
             
+            // 2. Start Tone.js context
             await Tone.start();
 
-            // 3. Setup Audio Chain: Synth -> Gain -> Limiter -> Destination
+            // --- FIX 3: Setup Audio Chain with Reverb ---
             const limiter = new Tone.Limiter(-6).toDestination();
-            // Reduced gain to 0.5 to provide more headroom and prevent polyphonic clipping
-            const gain = new Tone.Gain(0.5).connect(limiter); 
+            
+            // Add Reverb to the chain for a richer sound
+            const reverb = new Tone.Reverb({ decay: 1.5, preDelay: 0.01, wet: 0.2 }).connect(limiter);
+            
+            // Reduced gain to 0.5 to provide more headroom
+            const gain = new Tone.Gain(0.5).connect(reverb); 
             
             // Setup PolySynth
             const newSynth = new Tone.PolySynth(Tone.Synth, {
-                oscillator: { type: "square" }, 
+                // --- FIX 1: Change to 'sine' for a gentler, less buzzy sound ---
+                oscillator: { type: "sine" }, 
+                // --- FIX 2: Softer, longer envelope ---
                 envelope: { 
-                    attack: 0.02, 
-                    decay: 0.1, 
-                    sustain: 0.2, 
-                    release: 0.3 
+                    attack: 0.05, // Slightly slower attack
+                    decay: 0.3,  // Longer decay time
+                    sustain: 0.6, // Higher sustain level
+                    release: 0.7  // Smoother fade-out
                 }
             }).connect(gain); 
             
             game.synth = newSynth; // Store the synth instance
 
-            // 4. Setup Sequence
+            // 4. Setup Sequence (Keeps the non-overlapping '16n' duration)
             const pattern = new Tone.Sequence((time, note) => {
-                // Crucial fix: Use "16n" duration instead of "8n" for a tighter, non-overlapping sound.
                 newSynth.triggerAttackRelease(note, "16n", time); 
             }, [["C3", "G3"], ["C3", "F3"], ["C3", "A3"], ["C3", "G3"]], "4n").start(0);
             
