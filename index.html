@@ -1416,10 +1416,84 @@
         }
 
         function renderPhase9() {
+            // 1. Setup New Challenge
+            const randomIndex = Math.floor(Math.random() * JUST_ONE_CHALLENGES.length);
+            const newChallenge = JUST_ONE_CHALLENGES[randomIndex];
+            
+            // 2. Reset and Configure State
+            game.challengeState9 = {
+                challenge: newChallenge,
+                guess: '',
+                status: 'active',
+                timer: 60,
+                timerIntervalId: null,
+                cardsFlipped: false, // Start unflipped
+            };
+
+            updateGame({ message: 'Protocol 9 activated. The Oracle awaits your insight.' });
+
+            // 3. Start Staggered Card Flip Animation
+            setTimeout(() => {
+                game.challengeState9.cardsFlipped = true;
+                renderGame();
+            }, 500); 
+
+            // 4. Start Timer
+            const intervalId = setInterval(() => {
+                game.challengeState9.timer -= 1;
+                if (game.challengeState9.timer <= 0) {
+                    clearInterval(game.challengeState9.timerIntervalId);
+                    handlePhase9Submission(true); // Timeout
+                }
+                renderGame();
+            }, 1000);
+            game.challengeState9.timerIntervalId = intervalId;
+            renderGame(); // Initial render
+        }
+
+        function handlePhase9Submission(isTimeout = false) {
+            // Clear timer
+            if (game.challengeState9.timerIntervalId) {
+                clearInterval(game.challengeState9.timerIntervalId);
+                game.challengeState9.timerIntervalId = null;
+            }
+
+            // Stop if already completed
+            if (game.challengeState9.status !== 'active' && !isTimeout) return;
+
+            const { challenge, guess } = game.challengeState9;
+            const normalizedGuess = guess.toLowerCase().trim();
+            const normalizedWord = challenge.word.toLowerCase();
+            
+            let resultMessage = '';
+            let pointsChange = 0;
+
+            if (isTimeout) {
+                pointsChange = -50;
+                resultMessage = `TIME OUT! -50 points. The word was "${challenge.word}". Returning to menu...`;
+                game.challengeState9.status = 'timeout';
+            } else if (normalizedGuess === normalizedWord) {
+                pointsChange = challenge.points;
+                resultMessage = `CORRECT! +${pointsChange} points. The word was "${challenge.word}".`;
+                game.challengeState9.status = 'correct';
+            } else {
+                pointsChange = -50;
+                resultMessage = `INCORRECT! -50 points. The correct word was "${challenge.word}".`;
+                game.challengeState9.status = 'wrong';
+            }
+            
+            updateGame({ 
+                score: game.score + pointsChange,
+                message: resultMessage 
+            });
+
+            // Display result, then transition back
+            setTimeout(() => setPhase(0), 4000);
+        }
+
+
+
         
-
-
-        }  
 
     /**
      * Main render function: builds the entire UI based on game state.
