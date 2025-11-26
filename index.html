@@ -1224,9 +1224,6 @@
             game.currentSong = songRaw.replace(/_/g, ' ');
             game.timer = 30; // Reset timer
 
-
-            const startChallenge = useCallback(async () => {
-            if (!Tone) return console.error("Tone.js not loaded.");
             
             try {
                 await Tone.start(); // This is called directly by the button's execution path.

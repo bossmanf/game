@@ -1,0 +1,575 @@
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+
+// --- Placeholder for Firebase Imports (Mandatory Setup) ---
+// import { initializeApp } from 'firebase/app';
+// import { getAuth, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
+// import { getFirestore, doc, setDoc } from 'firebase/firestore';
+
+// --- Tone.js for Music Simulation (Phase 8) ---
+const Tone = window.Tone; 
+
+// --- Game Initialization Data ---
+const INITIAL_GAME_STATE = {
+    score: 500,
+    phase: 0, // 0: Menu, 8: Music, 9: Just One
+    isLoading: false,
+    message: "Welcome, Operator. Select a system protocol to engage.",
+    purchasedItems: [
+        { name: "Focus Chip", icon: "🧠" },
+        { name: "Speed Boost", icon: "⚡" }
+    ],
+};
+
+const SIMULATED_MIDI_LIST = [
+    { band: "Iron Maiden", song: "The Trooper" },
+    { band: "Led Zeppelin", song: "Stairway to Heaven" },
+    { band: "Pink Floyd", song: "Comfortably Numb" },
+    { band: "Queen", song: "Bohemian Rhapsody" },
+];
+
+const JUST_ONE_CHALLENGES = [
+    { word: "OAK", clues: ["MIGHTY", "WOOD", "ACORN", "TREE"], points: 500 },
+    { word: "PINE", clues: ["NEEDLE", "CHRISTMAS", "CONE", "SAP"], points: 450 },
+    { word: "STREAM", clues: ["FLOWING", "BROOK", "CANOE", "FISH"], points: 600 },
+    { word: "CABIN", clues: ["WOOD", "RENTAL", "LAKE", "COZY"], points: 700 },
+    { word: "DEER", clues: ["BUCK", "VENISON", "FOREST", "ANTLER"], points: 550 },
+];
+
+// ----------------------------------------------------------------------
+// REACT COMPONENT DEFINITIONS
+// ----------------------------------------------------------------------
+
+// --- Phase 9: Just One Component ---
+const Phase9JustOne = ({ game, setGame, setPhase }) => {
+    const [challenge, setChallenge] = useState(null);
+    const [clueVisibility, setClueVisibility] = useState([false, false, false, false]);
+    const [guess, setGuess] = useState('');
+    const [status, setStatus] = useState('loading'); // loading, active, correct, wrong
+    const [timer, setTimer] = useState(60); // 60 seconds for Just One
+    const [timerIntervalId, setTimerIntervalId] = useState(null);
+
+    // Aesthetics: Big Bear/Forest Theme Colors
+    const treeGreen = 'rgb(34, 139, 34)'; // Forest Green
+    const woodBrown = 'rgb(139, 69, 19)'; // Saddle Brown
+
+    // 1. Initialization and Setup
+    useEffect(() => {
+        // Stop any previous timers
+        if (timerIntervalId) clearInterval(timerIntervalId);
+        
+        // Pick a random challenge
+        const randomIndex = Math.floor(Math.random() * JUST_ONE_CHALLENGES.length);
+        const newChallenge = JUST_ONE_CHALLENGES[randomIndex];
+        setChallenge(newChallenge);
+        setClueVisibility(new Array(newChallenge.clues.length).fill(false));
+        setGuess('');
+        setStatus('active');
+        setTimer(60);
+
+        // Start timer
+        const intervalId = setInterval(() => {
+            setTimer(prevTime => {
+                if (prevTime <= 1) {
+                    clearInterval(intervalId);
+                    handleTimeout(newChallenge);
+                    return 0;
+                }
+                return prevTime - 1;
+            });
+        }, 1000);
+        setTimerIntervalId(intervalId);
+
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
+    }, []);
+
+    // 2. Game Logic Handlers
+    const handleClueClick = useCallback((index) => {
+        if (status === 'active') {
+            setClueVisibility(prev => prev.map((visible, i) => (i === index ? true : visible)));
+        }
+    }, [status]);
+
+    const handleTimeout = (currentChallenge) => {
+        if (status !== 'active') return;
+        setStatus('wrong');
+        setGame(prev => ({ ...prev, score: prev.score - 50 }));
+        setGame(prev => ({ ...prev, message: `TIME OUT! -50 points. The word was "${currentChallenge.word}". Returning to menu...` }));
+        setTimeout(() => setPhase(0), 4000);
+    };
+
+    const handleSubmit = useCallback((e) => {
+        e.preventDefault();
+        if (status !== 'active' || !challenge) return;
+        
+        clearInterval(timerIntervalId);
+
+        const normalizedGuess = guess.toLowerCase().trim();
+        const normalizedWord = challenge.word.toLowerCase();
+        
+        if (normalizedGuess === normalizedWord) {
+            setStatus('correct');
+            const newScore = game.score + challenge.points;
+            setGame(prev => ({ ...prev, score: newScore, message: `CORRECT! +${challenge.points} points. The word was "${challenge.word}".` }));
+        } else {
+            setStatus('wrong');
+            const newScore = game.score - 50;
+            setGame(prev => ({ ...prev, score: newScore, message: `INCORRECT! -50 points. The correct word was "${challenge.word}".` }));
+        }
+        
+        // Transition back to Phase 0 after result is displayed
+        setTimeout(() => setPhase(0), 4000);
+
+    }, [guess, status, challenge, game.score, setGame, setPhase, timerIntervalId]);
+
+    // 3. UI Helper Components (Clue Card)
+    const ClueCard = ({ clue, isVisible, index }) => {
+        const flipStyle = isVisible ? 'rotateY(180deg)' : 'rotateY(0deg)';
+        
+        return (
+            <div 
+                onClick={() => handleClueClick(index)}
+                className={`relative w-full h-32 cursor-pointer perspective-1000 ${!isVisible && status === 'active' ? 'hover:scale-[1.02]' : ''} transition-transform duration-300`}
+            >
+                <div 
+                    style={{ transform: flipStyle, backgroundColor: isVisible ? woodBrown : treeGreen }}
+                    className="absolute w-full h-full rounded-xl shadow-xl transition-transform duration-700 transform-style-3d border-2 border-amber-800"
+                >
+                    {/* Card Front (Unflipped) */}
+                    <div className="absolute w-full h-full backface-hidden flex flex-col items-center justify-center p-4 text-white text-center">
+                        <span className="text-5xl">🌲</span>
+                        <p className="text-xs mt-1 mono-font">Clue {index + 1} (Click to reveal)</p>
+                    </div>
+
+                    {/* Card Back (Flipped) */}
+                    <div className="absolute w-full h-full backface-hidden flex items-center justify-center p-4 text-white text-center rotateY-180">
+                        <p className="text-xl font-bold title-font">{clue}</p>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    if (status === 'loading' || !challenge) {
+        return <div className="text-center text-xl text-white">Loading Forest Data...</div>;
+    }
+
+    // 4. Main Render
+    return (
+        <div className="flex flex-col items-center justify-center space-y-8 h-full">
+            
+            {/* Header and Timer */}
+            <div className="flex justify-between items-center w-full max-w-lg p-3 rounded-lg border-b-4 border-lime-600 bg-lime-800/50 shadow-lg">
+                <h3 className="text-xl title-font text-yellow-300">Guiding Word Challenge</h3>
+                <div className={`p-2 rounded-full font-bold mono-font ${timer <= 10 ? 'bg-red-600 text-white animate-pulse' : 'bg-green-600 text-black'}`}>
+                    {timer}s
+                </div>
+            </div>
+
+            {/* Clue Cards Grid */}
+            <div className="grid grid-cols-2 gap-6 w-full max-w-lg">
+                {challenge.clues.map((clue, index) => (
+                    <ClueCard 
+                        key={index}
+                        clue={clue}
+                        isVisible={clueVisibility[index] || status !== 'active'} // Reveal all on finish
+                        index={index}
+                    />
+                ))}
+            </div>
+
+            {/* Guess Input and Feedback */}
+            <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
+                <label htmlFor="guess-input-9" className="block text-center text-lg font-semibold text-lime-400 title-font">
+                    {status === 'active' ? 'What word connects these clues?' : 'Challenge Complete.'}
+                </label>
+                <input
+                    id="guess-input-9"
+                    type="text"
+                    value={guess}
+                    onChange={(e) => setGuess(e.target.value)}
+                    className="w-full p-4 text-xl text-black bg-white/90 border-4 border-lime-600 rounded-lg mono-font text-center focus:outline-none"
+                    placeholder="Type your guess here..."
+                    disabled={status !== 'active'}
+                />
+                <button
+                    type="submit"
+                    className={`w-full py-3 text-xl rounded-lg title-font transition-all duration-300
+                        ${status === 'active' 
+                            ? 'bg-yellow-500 text-black hover:bg-yellow-400 shadow-lg hover:shadow-xl' 
+                            : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                        }`}
+                    disabled={status !== 'active'}
+                >
+                    SUBMIT ANSWER
+                </button>
+            </form>
+        </div>
+    );
+};
+
+// --- Phase 8: Music Challenge Component (Updated for 120 BPM) ---
+
+const Phase8MusicChallenge = ({ game, setGame, setPhase }) => {
+    const [challenge, setChallenge] = useState(null);
+    const [timer, setTimer] = useState(30);
+    const [timerIntervalId, setTimerIntervalId] = useState(null);
+    const [status, setStatus] = useState('menu'); // menu, active, correct, wrong, timeout
+    const [guess, setGuess] = useState('');
+    const [synth, setSynth] = useState(null);
+    const inputId = 'guess-input-8';
+
+    // Stop and dispose of audio components
+    const stopMusic = useCallback(() => {
+        if (synth) {
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+            synth.dispose();
+            setSynth(null);
+        }
+        if (timerIntervalId) {
+            clearInterval(timerIntervalId);
+            setTimerIntervalId(null);
+        }
+    }, [synth, timerIntervalId]);
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            stopMusic();
+        };
+    }, [stopMusic]);
+
+
+    const startChallenge = useCallback(async () => {
+        if (!Tone) return console.error("Tone.js not loaded.");
+        
+        // --- FIX: Ensure AudioContext starts immediately upon user gesture ---
+        try {
+            await Tone.start();
+            console.log("AudioContext resumed successfully.");
+        } catch (error) {
+            console.error("Failed to start Tone AudioContext:", error);
+            setGame(prev => ({ ...prev, message: "Error starting audio. Check browser permissions." }));
+            return;
+        }
+        
+        // 1. Reset any previous audio/timer state
+        stopMusic();
+        
+        // 2. Select Challenge
+        const randomIndex = Math.floor(Math.random() * SIMULATED_MIDI_LIST.length);
+        const newChallenge = SIMULATED_MIDI_LIST[randomIndex];
+        
+        // 3. Setup New Audio Synth
+        const newSynth = new Tone.PolySynth(Tone.DuoSynth, {
+            oscillator: { type: "sawtooth" },
+            envelope: { attack: 0.01, decay: 0.5, sustain: 0.4, release: 1 }
+        }).toDestination();
+        
+        const pattern = new Tone.Sequence((time, note) => {
+            newSynth.triggerAttackRelease(note, "8n", time);
+        }, [["C3", "G3"], ["C3", "F3"], ["C3", "A3"], ["C3", "G3"]], "4n").start(0);
+
+        // --- UPDATE: Changed tempo from 140 to 120 BPM (Standard MIDI tempo) ---
+        Tone.Transport.bpm.value = 120; // Standard MIDI tempo
+        Tone.Transport.start();
+        setSynth(newSynth);
+
+        // 4. Update Game State
+        setChallenge(newChallenge);
+        setTimer(30);
+        setGuess('');
+        setStatus('active');
+        setGame(prev => ({ ...prev, message: `Now streaming: ${newChallenge.song}. GUESS THE BAND in 30 seconds!` }));
+
+        // 5. Start Timer
+        const intervalId = setInterval(() => {
+            setTimer(prevTime => {
+                if (prevTime <= 1) {
+                    clearInterval(intervalId);
+                    handleSubmission(true, newChallenge);
+                    return 0;
+                }
+                return prevTime - 1;
+            });
+        }, 1000);
+        setTimerIntervalId(intervalId);
+    }, [setGame, stopMusic]);
+
+    const handleSubmission = useCallback((isTimeout = false, forcedChallenge = null) => {
+        const currentChallenge = forcedChallenge || challenge;
+        if (status !== 'active' && !isTimeout) return;
+        
+        stopMusic();
+        
+        const correctBand = currentChallenge.band.toLowerCase();
+        const playerGuess = guess.toLowerCase().trim();
+        let resultMessage = '';
+        let pointsChange = 0;
+
+        if (isTimeout) {
+            pointsChange = -50;
+            resultMessage = `TIME OUT! Challenge Failed. You lose 50 points. Correct: ${currentChallenge.band}.`;
+            setStatus('timeout');
+        } else if (playerGuess === correctBand) {
+            pointsChange = 1000;
+            resultMessage = `CORRECT! +1000 Points. Band: ${currentChallenge.band}.`;
+            setStatus('correct');
+        } else {
+            pointsChange = -50;
+            resultMessage = `INCORRECT. -50 Points. Correct Band: ${currentChallenge.band}.`;
+            setStatus('wrong');
+        }
+
+        setGame(prev => ({ ...prev, score: prev.score + pointsChange, message: resultMessage }));
+        
+        setTimeout(() => setPhase(0), 4000);
+    }, [guess, status, challenge, setGame, setPhase, stopMusic]);
+
+    const isDisabled = status !== 'active';
+    const isPulsing = status === 'active';
+
+    if (status === 'menu') {
+        return (
+            <div className="text-center p-8">
+                <button 
+                    className="neon-button py-4 px-10 text-2xl rounded-xl bg-purple-600 text-white shadow-lg hover:bg-purple-500"
+                    onClick={startChallenge}
+                >
+                    ENGAGE MUSIC CHALLENGE
+                </button>
+            </div>
+        );
+    }
+    
+    return (
+        <div className="flex flex-col items-center justify-center h-full space-y-10 p-10 bg-black/50 rounded-xl border-4 border-electric-blue">
+            
+            <div className="text-center space-y-4">
+                <div className={`w-32 h-32 rounded-full border-4 border-yellow-400 flex items-center justify-center mx-auto record-spin bg-gray-900 ${isPulsing ? 'music-pulse' : ''}`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
+                        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M7.75 16.25l-2.5 2.5"/><path d="M16.25 7.75l2.5-2.5"/><path d="M16.25 16.25l2.5 2.5"/><path d="M7.75 7.75l-2.5-2.5"/>
+                    </svg>
+                </div>
+                <p className={`text-xl title-font ${isPulsing ? 'text-yellow-400' : 'text-gray-400'}`}>AUDIO TRACK {isPulsing ? 'LIVE' : 'STOPPED'}</p>
+                <p className="text-xs mono-font text-gray-500">{challenge?.song} (Simulated MIDI)</p>
+            </div>
+
+            <div className={`p-3 w-40 text-center rounded-lg mono-font text-4xl font-bold border-2 shadow-xl ${timer <= 10 && isPulsing ? 'bg-red-800 border-yellow-500 text-yellow-300 music-pulse' : 'bg-red-800 border-red-500 text-white'}`}>
+                {timer}s
+            </div>
+
+            <form onSubmit={e => handleSubmission(false)} className="w-full max-w-md space-y-4">
+                <label htmlFor={inputId} className="block text-lg font-semibold text-electric-cyan title-font text-center">GUESS THE ARTIST/BAND NAME:</label>
+                <input
+                    id={inputId}
+                    type="text"
+                    value={guess}
+                    onChange={(e) => setGuess(e.target.value)}
+                    className="w-full p-4 text-xl text-white bg-gray-900 border-2 border-electric-cyan rounded-lg mono-font focus:ring-4 focus:ring-electric-blue focus:border-electric-blue text-center"
+                    placeholder="Type your answer here..."
+                    disabled={isDisabled}
+                    autoFocus
+                />
+                <button
+                    type="submit"
+                    className={`w-full py-3 text-xl rounded-lg title-font transition-all duration-300 ${isDisabled ? 'bg-gray-600' : 'neon-button'}`}
+                    disabled={isDisabled}
+                >
+                    SUBMIT GUESS
+                </button>
+                <p className="text-sm text-gray-400 text-center">Challenge ends automatically on timeout or incorrect guess.</p>
+            </form>
+        </div>
+    );
+};
+
+// --- General UI Components ---
+
+const GameScreenWrapper = ({ title, message, score, inventory, children, phase }) => {
+    // Inventory Display rendering
+    const inventoryHtml = inventory.length === 0 
+        ? <p className="text-xs text-gray-500 italic col-span-4">No items acquired.</p>
+        : inventory.map(item => (
+            <div key={item.name} className="p-1 text-center bg-gray-600 rounded-md border border-electric-cyan/70 hover:bg-gray-500" title={item.name}>
+                <span className="text-2xl">{item.icon}</span>
+            </div>
+        ));
+
+    const gameTitle = phase === 9 ? 'INTUITION INTERFACE' : (phase === 8 ? 'RHYTHM DECODING INTERFACE' : (phase > 1 ? 'LIVE CHALLENGE INTERFACE' : (phase === 0 ? 'SYSTEM MENU' : 'BOOT SEQUENCE')));
+
+    return (
+        <div className="flex w-full metal-card min-h-[700px] rounded-xl overflow-hidden">
+            {/* LEFT PANEL: Conductor Info */}
+            <div className="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-r-4 border-electric-cyan">
+                <div className="text-center space-y-3">
+                    <h3 className="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">A.I. CONDUCTOR</h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={`mx-auto text-electric-cyan speed-icon ${phase === 8 ? 'music-pulse' : ''}`}>
+                        <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
+                    </svg>
+                    <div className="text-sm font-mono mt-4 p-2 bg-gray-700 rounded-lg border border-electric-cyan/50 mono-font">
+                        <p>STATUS: IDLE</p>
+                        <p>PHASE: {phase}</p>
+                    </div>
+                </div>
+                <div className="text-center text-xs text-gray-500 mono-font">
+                    <p>Lux Aeterna!</p>
+                </div>
+            </div>
+
+            {/* CENTER PANEL: Game Interaction */}
+            <div className="flex-1 p-6 flex flex-col justify-between bg-gray-800">
+                <h2 className="text-4xl font-extrabold text-white mb-4 text-center title-font">
+                    {gameTitle}
+                </h2>
+                
+                {/* Game Message Panel */}
+                <div className="p-4 mb-6 text-center rounded-lg font-semibold shadow-md bg-electric-blue/20 text-electric-cyan border border-electric-blue mono-font min-h-[56px] flex items-center justify-center">
+                    {message}
+                </div>
+
+                {/* Dynamic Phase Content Placeholder */}
+                <div id="dynamic-content" className="flex-1 flex items-center justify-center">
+                    {children}
+                </div>
+            </div>
+
+            {/* RIGHT PANEL: Player Info */}
+            <div className="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-l-4 border-electric-cyan">
+                <div className="text-center space-y-3">
+                    <h3 className="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PLAYER DATA</h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-yellow-400 speed-icon">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <div className="mt-4 p-3 bg-gray-700 rounded-lg border border-yellow-400/50 shadow-xl mono-font">
+                        <p className="text-sm font-mono text-gray-400">SCORE REGISTER</p>
+                        <p className="text-4xl font-extrabold text-yellow-400 title-font">${score}</p>
+                        <p className="text-xs text-gray-200">TARGET: $20001</p>
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-gray-700 w-full">
+                        <p className="text-sm font-mono text-gray-400 mb-2 mono-font">INVENTORY</p>
+                        <div id="inventory-display" className="grid grid-cols-4 gap-2">
+                            {inventoryHtml}
+                        </div>
+                    </div>
+                </div>
+                <div className="text-center text-xs text-gray-500 mono-font">
+                    <p>Chase that light!</p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const Phase0Menu = ({ setPhase }) => {
+    return (
+        <div className="text-center space-y-8 p-12 bg-gray-900 rounded-xl shadow-inner border border-electric-cyan/50 w-full max-w-lg">
+            <p className="text-xl mono-font text-white">Select a System Protocol to engage.</p>
+            <div className="space-y-4">
+                <button className="w-full neon-button py-3 px-6 rounded-lg text-lg bg-green-500 text-black hover:bg-green-400 shadow-lg" onClick={() => setPhase(9)}>
+                    Protocol 9: Just One Challenge (NEW)
+                </button>
+                <button className="w-full neon-button py-3 px-6 rounded-lg text-lg bg-purple-600 text-white hover:bg-purple-500 shadow-lg" onClick={() => setPhase(8)}>
+                    Protocol 8: Music Challenge
+                </button>
+                <button className="w-full neon-button py-3 px-6 rounded-lg text-lg bg-gray-700 text-electric-cyan hover:bg-gray-600" onClick={() => setPhase(1)}>
+                    Protocol 1: Boot Sequence
+                </button>
+            </div>
+        </div>
+    );
+};
+
+const PlaceholderPhase = ({ phase }) => {
+    let text;
+    switch(phase) {
+        case 1: text = 'INITIALIZING CORE SYSTEMS...'; break;
+        case 2: text = 'PHASE 2: TOPIC SELECTION INTERRUPTED'; break;
+        case 3: text = 'PHASE 3: TRIVIA ACCESS DENIED'; break;
+        case 4: text = 'PHASE 4: SHOP INTERFACE OFFLINE'; break;
+        case 5: text = 'PHASE 5: INSTRUCTIONS DATA MISSING'; break;
+        case 6: text = 'PHASE 6: NEXT CHALLENGE PENDING'; break;
+        case 7: text = 'PHASE 7: WORDLE GAME PREP'; break;
+        default: text = 'UNKNOWN GAME STATE';
+    }
+    return <div className="text-center p-8 text-white mono-font text-2xl">{text}</div>;
+};
+
+// --- Main App Component ---
+
+const App = () => {
+    // Game state managed by React
+    const [game, setGame] = useState(INITIAL_GAME_STATE);
+    const [isAuthReady, setIsAuthReady] = useState(false); // Authentication state tracker
+
+    // 1. Firebase/Auth Setup (Mandatory per instructions)
+    useEffect(() => {
+        // This is a placeholder for the mandated Firebase/Auth setup.
+        const setupFirebase = async () => {
+             try {
+                // Firebase initialization and sign-in logic here...
+            } catch (error) {
+                console.error("Firebase setup failed:", error);
+            } finally {
+                setIsAuthReady(true);
+            }
+        };
+
+        setupFirebase();
+    }, []);
+    
+    // Function to change phase (wrapper for existing logic)
+    const setPhase = (phase) => {
+        setGame(prev => ({ 
+            ...prev, 
+            phase: phase, 
+            message: phase === 0 ? "Select a System Protocol to engage." : (phase === 9 ? "Protocol 9 activated. Prepare for guiding word challenge." : prev.message) 
+        }));
+    };
+
+    // 2. Render Phase Content based on game.phase
+    const renderPhaseContent = useMemo(() => {
+        if (!isAuthReady) {
+            return <div className="text-center text-4xl text-yellow-500 title-font">Initializing System Protocols...</div>;
+        }
+
+        if (game.score >= 20001) {
+             return (
+                <div className="text-center p-20 bg-green-900 rounded-xl metal-card">
+                    <h2 className="text-6xl font-extrabold text-green-400 title-font animate-pulse">VICTORY!</h2>
+                    <p className="text-2xl text-white mt-4">System Target Score Reached. Well done, Operator.</p>
+                    <p className="text-xl font-mono text-green-300 mt-2">Final Score: ${game.score}</p>
+                </div>
+            );
+        }
+
+        switch (game.phase) {
+            case 0:
+                return <Phase0Menu setPhase={setPhase} />;
+            case 8:
+                return <Phase8MusicChallenge game={game} setGame={setGame} setPhase={setPhase} />;
+            case 9:
+                return <Phase9JustOne game={game} setGame={setGame} setPhase={setPhase} />;
+            default:
+                return <PlaceholderPhase phase={game.phase} />;
+        }
+    }, [game, isAuthReady]); 
+
+    // 3. Main Return (Wraps the phase content in the full UI shell)
+    return (
+        <GameScreenWrapper 
+            title="AI Conductor" 
+            message={game.message} 
+            score={game.score} 
+            inventory={game.purchasedItems}
+            phase={game.phase}
+        >
+            {renderPhaseContent}
+        </GameScreenWrapper>
+    );
+};
+
+export default App;
