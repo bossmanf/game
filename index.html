@@ -6,6 +6,7 @@
     <title>Change this title!</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
     <!-- Load aggressive/angular fonts: Orbitron for titles, Inter for body -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -273,6 +274,11 @@
             selectedAnswer: null, // The answer the player clicked
             purchasedItems: [], // New: Tracks items bought in the shop
             message: 'Initializing...',
+            currentBand: '',
+            currentSong: '',
+            timer: 30,
+            timerInterval: null,
+            synth: null, // Tone.js synth instance
             error: null
         };
         const appContainer = document.getElementById('game-container');
@@ -1477,7 +1483,6 @@
         dynamicContent.innerHTML = '';
         
         let contentElement;
-        console.log(game.phase)
         switch (game.phase) {
             case 0:
                 contentElement = renderPhase0();  //  Menu
@@ -1507,7 +1512,6 @@
                 contentElement = renderPhase8(); // Midi Game!
                 break;
             default:
-                console.log(game.phase)
                 const topicContent = createElement('div', 'flex flex-col items-center justify-center h-full space-y-8 p-8', 'UNKNOWN GAME STATE');
                 const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'RETURN TO MENU');
                 backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
