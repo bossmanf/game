@@ -1190,19 +1190,6 @@
             }
             
             await Tone.start();
-
-            // Use a stronger sound for the music challenge aesthetic
-            game.synth = new Tone.PolySynth(Tone.DuoSynth, {
-                oscillator: { type: "sawtooth" },
-                envelope: { attack: 0.01, decay: 0.5, sustain: 0.4, release: 1 }
-            }).toDestination();
-            
-            // A simple rock-like rhythm and bass line
-            const pattern = new Tone.Sequence((time, note) => {
-                game.synth.triggerAttackRelease(note, "8n", time);
-            }, [["C3", "G3"], ["C3", "F3"], ["C3", "A3"], ["C3", "G3"]], "4n").start(0);
-
-            Tone.Transport.bpm.value = 140; // Fast rock tempo
             Tone.Transport.start();
         }
 
