@@ -1189,12 +1189,25 @@
                 stopMusic();
             }
             
-            //await Tone.start();
+            await Tone.start();
 
-            // Use a stronger sound for the music challenge aesthetic
+            const limiter = new Tone.Limiter(-6).toDestination();
+            const gain = new Tone.Gain(0.7).connect(limiter); // Slight volume reduction
+            const newSynth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: "square" }, // Cleaner tone than sawtooth/duosynth for polyphonic playback
+                envelope: { 
+                    attack: 0.02, 
+                    decay: 0.1, 
+                    sustain: 0.2, 
+                    release: 0.3 // Shortened release significantly to prevent overlap/mush
+                }
+            }).connect(gain); // Connect to the controlled output chain
             
-            Tone.Transport.bpm.value = 120; // Fast rock tempo
-            Tone.Transport.start();
+            const pattern = new Tone.Sequence((time, note) => {
+                newSynth.triggerAttackRelease(note, "8n", time);
+            }, [["C3", "G3"], ["C3", "F3"], ["C3", "A3"], ["C3", "G3"]], "4n").start(0);
+
+            Tone.Transport.bpm.value = 120; // Maintain fast tempo
         }
 
         /**
@@ -1223,16 +1236,6 @@
             game.currentBand = bandRaw.replace(/_/g, ' ');
             game.currentSong = songRaw.replace(/_/g, ' ');
             game.timer = 30; // Reset timer
-
-            
-            try {
-                await Tone.start(); // This is called directly by the button's execution path.
-                console.log("AudioContext resumed successfully.");
-            } catch (error) {
-                console.error("Failed to start Tone AudioContext:", error);
-                setGame(prev => ({ ...prev, message: "Error starting audio. Check browser permissions." }));
-                return;
-            }
 
             // 2. Play the audio track
             playMusicChallenge();
