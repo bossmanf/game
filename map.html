@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive San Francisco Landmark Map</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Using a stylized font fitting a music/retro theme -->
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --music-accent: #E53E3E; /* Red/Crimson for Rock Theme */
+            --background-deep: #1A202C;
+            --panel-bg: #2D3748;
+        }
+        body {
+            background-color: var(--background-deep);
+            font-family: 'Chakra Petch', sans-serif;
+            color: #F7FAFC;
+        }
+        .container {
+            border: 3px solid var(--music-accent);
+            border-radius: 1rem;
+            box-shadow: 0 0 30px rgba(229, 62, 62, 0.7);
+            max-width: 1100px;
+            overflow: hidden;
+        }
+        
+        /* Map Host Setup */
+        #map-host {
+            position: relative;
+            width: 100%;
+            /* ViewBox is 1000x800 for better vertical space matching the stylized map */
+            padding-bottom: 80%; 
+            
+            /* IMPORTANT: Placeholder for your sf.jpg image. 
+               Replace the URL with your image's base64 data or a working public URL.
+            */
+            background-image: url('https://placehold.co/1000x800/2D3748/FFFFFF?text=SF+STYLIZED+MAP+V5');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .sf-map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent; 
+        }
+
+        /* Landmark Node Group (Invisible clickable box) */
+        .landmark-group {
+            cursor: pointer;
+            transition: filter 0.2s;
+        }
+        .landmark-group:hover {
+            /* Static Glow effect instead of scale */
+            filter: drop-shadow(0 0 8px var(--music-accent));
+        }
+
+        /* Landmark Marker Styling (The visible emoji/text) */
+        .landmark-emoji {
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+        
+        .landmark-name {
+            fill: #FFFFFF;
+            font-size: 10px; /* Small font size as requested */
+            font-weight: 600;
+            text-shadow: 0 0 3px #000000;
+            pointer-events: none; /* Allows click-through to the group/rect */
+        }
+
+        /* Music Panel Styling */
+        .music-panel {
+             background-color: var(--panel-bg);
+             border-top: 4px dashed var(--music-accent);
+             font-family: 'VT323', monospace; /* Retro terminal font */
+             color: #A0EEFF;
+             box-shadow: inset 0 0 10px rgba(229, 62, 62, 0.5);
+        }
+        .music-panel .title {
+            color: var(--music-accent);
+            text-shadow: 0 0 5px var(--music-accent);
+        }
+    </style>
+</head>
+<body>
+
+<div class="flex flex-col items-center justify-center p-4">
+    <div class="container w-full mx-auto p-2 md:p-4 mt-6 mb-6">
+        <h1 class="text-3xl md:text-4xl text-center font-extrabold mb-4 pt-2">
+            SF CULTURAL INTERFACE V5.0: STATIC MARKERS
+        </h1>
+
+        <!-- Map Host (Full width) -->
+        <div id="map-host" class="rounded-lg overflow-hidden">
+            <svg class="sf-map-overlay" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" id="sf-map">
+                <!-- Markers will be rendered here -->
+            </svg>
+        </div>
+        
+        <!-- Music Themed Status Panel -->
+        <div id="status-panel" class="mt-6 p-4 rounded-lg shadow-2xl music-panel">
+            <p class="title text-xl mb-1">>>> STAGE INFO ACQUIRED <<<</p>
+            <div id="output-message" class="text-lg text-white">
+                <span class="block">// Status: Awaiting Input. Click any marker to initiate a unique action sequence.</span>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    const mapElement = document.getElementById('sf-map');
+    const outputMessage = document.getElementById('output-message');
+
+    // ViewBox is 1000x800.
+    const landmarkData = {
+        // Commercial / Transit
+        "Ferry Building": { X: 540, Y: 220, W: 30, H: 30, category: "Commercial", emoji: "🚢", actionKey: "transit", description: "Historic marketplace and transit nexus, linking SF to the Bay." },
+        "Salesforce Tower": { X: 570, Y: 280, W: 30, H: 30, category: "Commercial", emoji: "🏙️", actionKey: "commercial", description: "SF's tallest building, dominating the skyline." },
+        "SF Fitness Mission": { X: 500, Y: 470, W: 40, H: 30, category: "Commercial", emoji: "💪", actionKey: "commercial", description: "A local fitness center in the busy Mission District." },
+        
+        // Residential / Neighborhood
+        "Bayside Village": { X: 640, Y: 350, W: 40, H: 40, category: "Residential", emoji: "🏠", actionKey: "neighborhood", description: "Modern residential area near the waterfront." },
+        "Inner Richmond": { X: 260, Y: 300, W: 70, H: 50, category: "Residential", emoji: "🏘️", actionKey: "neighborhood", description: "Quiet neighborhood west of Presidio, known for Asian cuisine." },
+        "Inner Sunset": { X: 230, Y: 430, W: 60, H: 40, category: "Residential", emoji: "☕", actionKey: "neighborhood", description: "Fog-prone, relaxed neighborhood adjacent to Golden Gate Park." },
+        "Haight-Ashbury": { X: 400, Y: 380, W: 50, H: 40, category: "Cultural", emoji: "☮️", actionKey: "cultural", description: "Birthplace of the 1960s counterculture movement." },
+
+        // Parks / Nature
+        "Golden Gate Park": { X: 280, Y: 360, W: 150, H: 90, category: "Park/Nature", emoji: "🌳", actionKey: "nature", description: "Massive urban park featuring museums and gardens." },
+        
+        // Infrastructure / Historical
+        "Golden Gate Bridge": { X: 200, Y: 150, W: 50, H: 50, category: "Infrastructure", emoji: "🌉", actionKey: "infrastructure", description: "Iconic suspension bridge connecting SF to Marin County." },
+        "Alcatraz": { X: 480, Y: 140, W: 30, H: 30, category: "Historical", emoji: "🏛️", actionKey: "historical", description: "Infamous former federal prison on an island in the Bay." },
+        "SFO Airport": { X: 690, Y: 670, W: 60, H: 40, category: "Infrastructure", emoji: "✈️", actionKey: "infrastructure", description: "Major international airport serving the Bay Area." },
+        "Chase Arena": { X: 640, Y: 450, W: 40, H: 30, category: "Sports/Venue", emoji: "🏀", actionKey: "sports", description: "Modern home of the Golden State Warriors." },
+        "Fisherman's Wharf": { X: 360, Y: 180, W: 40, H: 30, category: "Commercial", emoji: "🦀", actionKey: "cultural", description: "Tourist hub with Pier 39, sea lions, and seafood." },
+        
+        // Academic / Regional (Off-map data kept for unique function assignment)
+        "Berkeley": { X: 900, Y: 200, W: 50, H: 40, category: "Academic", emoji: "🎓", actionKey: "academic", description: "East Bay academic zone." },
+        "Stanford": { X: 1050, Y: 850, W: 50, H: 40, category: "Academic", emoji: "🧠", actionKey: "academic", description: "OFF-MAP: South Peninsula Campus." },
+        "San Jose": { X: 1050, Y: 900, W: 60, H: 50, category: "Regional", emoji: "💻", actionKey: "regional", description: "OFF-MAP: Silicon Valley Core." },
+
+        // Music Venues
+        "The Chapel": { X: 490, Y: 400, W: 30, H: 30, category: "Music Venue", emoji: "🎸", actionKey: "venue", description: "Mid-sized venue in the Mission District, hosts diverse acts." },
+        "Great American Music Hall": { X: 460, Y: 330, W: 30, H: 30, category: "Music Venue", emoji: "🎷", actionKey: "venue", description: "Elegant, historic hall known for its intricate decor and varied lineup." },
+        "The Warfield": { X: 520, Y: 340, W: 30, H: 30, category: "Music Venue", emoji: "🥁", actionKey: "venue", description: "Historic theater in Mid-Market, popular for rock and electronic shows." },
+        "The Fillmore": { X: 370, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "🎙️", actionKey: "venue", description: "Legendary rock music venue, famously known for its concert posters." },
+    };
+
+    /**
+     * Report Generation Functions (Simulate unique actions for each type)
+     * These functions are called based on the 'actionKey' assigned to the landmark.
+     */
+    const actionRegistry = {
+        
+        // --- Music Venues ---
+        venue: (name, data) => {
+            return `
+                <span class="block text-xl title">// CONCERT LOG: ${name.toUpperCase()} ACTIVATED //</span>
+                <span class="block">>> VENUE TYPE: Historic Music Hall (${data.emoji})</span>
+                <span class="block">>> SCHEDULED EVENTS: 7 upcoming acts this week.</span>
+                <span class="block">>> DESCRIPTION: ${data.description}</span>
+            `;
+        },
+
+        // --- Major Infrastructure (Bridges, Airports) ---
+        infrastructure: (name, data) => {
+            return `
+                <span class="block text-xl title">// INFRASTRUCTURE STATUS: ${name.toUpperCase()} //</span>
+                <span class="block">>> SYSTEM CHECK: Green. Traffic Flow: Optimal.</span>
+                <span class="block">>> MAINTENANCE ALERT: None.</span>
+                <span class="block">>> DESCRIPTION: ${data.description}</span>
+            `;
+        },
+
+        // --- Historical & Cultural Sites ---
+        historical: (name, data) => {
+            return `
+                <span class="block text-xl title">// CULTURAL ARCHIVE: ${name.toUpperCase()} //</span>
+                <span class="block">>> ARCHIVE ID: ${data.category.substring(0, 3)}-${data.X}-${data.Y}</span>
+                <span class="block">>> HISTORICAL SUMMARY: ${data.description}</span>
+                <span class="block">>> RECOMMENDED ACTION: Research.</span>
+            `;
+        },
+
+        // --- Neighborhoods & Residential Areas ---
+        neighborhood: (name, data) => {
+            return `
+                <span class="block text-xl title">// NEIGHBORHOOD PROFILE: ${name.toUpperCase()} //</span>
+                <span class="block">>> ZONING: Mixed-Residential. Avg. Fog Index: High.</span>
+                <span class="block">>> CORE ATTRIBUTE: ${data.description}</span>
+            `;
+        },
+
+        // --- Academic/Regional (Off-map data will trigger this too) ---
+        academic: (name, data) => {
+            return `
+                <span class="block text-xl title">// ACADEMIC NETWORK: ${name.toUpperCase()} //</span>
+                <span class="block">>> RESEARCH PRIORITY: High.</span>
+                <span class="block">>> STATUS: Off-Map Access. ${data.description}</span>
+            `;
+        },
+        
+        // --- Default/Commercial/Catch-all ---
+        commercial: (name, data) => {
+            return `
+                <span class="block text-xl title">// COMMERCIAL HUB: ${name.toUpperCase()} //</span>
+                <span class="block">>> ECONOMIC STATUS: Active.</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+            `;
+        },
+
+        // --- Sports Venue ---
+        sports: (name, data) => {
+            return `
+                <span class="block text-xl title">// SPORTS VENUE: ${name.toUpperCase()} //</span>
+                <span class="block">>> PRIMARY TENANT: GSW.</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+            `;
+        },
+
+        // --- Cultural Hubs ---
+        cultural: (name, data) => {
+             return `
+                <span class="block text-xl title">// CULTURAL ZONE: ${name.toUpperCase()} //</span>
+                <span class="block">>> PRIMARY ACTIVITY: Tourism/Counterculture.</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+            `;
+        },
+        
+        // --- Transit Center ---
+        transit: (name, data) => {
+             return `
+                <span class="block text-xl title">// TRANSIT HUB: ${name.toUpperCase()} //</span>
+                <span class="block">>> FERRY ROUTES: 4 active.</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+            `;
+        },
+        
+        // --- Regional (South Bay) ---
+        regional: (name, data) => {
+            return `
+                <span class="block text-xl title">// REGIONAL HUB: ${name.toUpperCase()} //</span>
+                <span class="block">>> DISTANCE FROM SF: HIGH.</span>
+                <span class="block">>> STATUS: Silicon Valley Core. ${data.description}</span>
+            `;
+        },
+    };
+
+    /**
+     * Main click handler that routes the interaction to the appropriate, unique function.
+     * @param {string} landmarkName - The name of the landmark clicked.
+     */
+    function handleClick(landmarkName) {
+        const data = landmarkData[landmarkName];
+        
+        if (data) {
+            const actionFunc = actionRegistry[data.actionKey];
+            let message = '';
+
+            if (actionFunc) {
+                // Execute the unique function associated with this landmark's category
+                message = actionFunc(landmarkName, data);
+            } else {
+                // Fallback message if actionKey is missing
+                message = `<span class="block text-xl title">// ERROR: ACTION KEY MISSING //</span>
+                           <span class="block">>> Location: ${landmarkName}. Action key '${data.actionKey}' not found.</span>`;
+            }
+            
+            // Update the status panel
+            outputMessage.innerHTML = message;
+            
+        } else {
+            outputMessage.innerHTML = `<span class="block text-xl title">// ERROR: DATA NOT FOUND //</span>
+                                       <span class="block">>> Location: ${landmarkName} data missing from landmark list.</span>`;
+        }
+    }
+
+    /**
+     * Renders all landmark markers and their bounding boxes.
+     */
+    function renderLandmarks() {
+        // Clear all previous children
+        mapElement.innerHTML = ''; 
+
+        for (const name in landmarkData) {
+            const bbox = landmarkData[name];
+            
+            // Only render nodes that are visible on the map (Y < 800)
+            const isRendered = bbox.Y < 800;
+
+            if (isRendered) {
+                // Calculate center of bounding box for the visual node
+                const centerX = bbox.X + (bbox.W / 2);
+                const centerY = bbox.Y + (bbox.H / 2);
+                
+                // --- Create a group for the whole landmark (emoji + name + click area) ---
+                const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                group.setAttribute('class', 'landmark-group');
+                group.setAttribute('title', name);
+                group.onclick = () => handleClick(name);
+                
+                // --- 1. Draw the Invisible Bounding Box (Clickable Area) ---
+                // This rect serves as the primary touch/click target and defines the hover area.
+                const nodeRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                nodeRect.setAttribute('x', bbox.X - 5); /* Extend hitbox slightly */
+                nodeRect.setAttribute('y', bbox.Y - 5); /* Extend hitbox slightly */
+                nodeRect.setAttribute('width', bbox.W + 10);
+                nodeRect.setAttribute('height', bbox.H + 10);
+                nodeRect.setAttribute('fill', '#000');
+                nodeRect.setAttribute('opacity', 0); // Completely invisible
+                
+                group.appendChild(nodeRect); 
+                
+                // --- 2. Draw the Visual Landmark Marker (Emoji) ---
+                const markerEmoji = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                markerEmoji.setAttribute('x', centerX);
+                markerEmoji.setAttribute('y', centerY + 3); /* Positioned for center */
+                markerEmoji.setAttribute('font-size', '20'); 
+                markerEmoji.setAttribute('text-anchor', 'middle');
+                markerEmoji.setAttribute('class', 'landmark-emoji');
+                markerEmoji.textContent = bbox.emoji; 
+                
+                group.appendChild(markerEmoji);
+                
+                // --- 3. Draw the Location Name (Small Text) ---
+                const markerName = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                markerName.setAttribute('x', centerX);
+                markerName.setAttribute('y', centerY + 20); /* Positioned below the emoji */
+                markerName.setAttribute('text-anchor', 'middle');
+                markerName.setAttribute('class', 'landmark-name');
+                
+                // Truncate name if necessary to avoid excessive clutter
+                let displayName = name;
+                if (name.length > 15) {
+                    displayName = name.split(' ')[0]; // Use only the first word
+                }
+                markerName.textContent = displayName.toUpperCase();
+                
+                group.appendChild(markerName);
+                
+                mapElement.appendChild(group);
+            }
+        }
+    }
+
+    // Initialize the application
+    window.onload = renderLandmarks;
+
+</script>
+
+</body>
+</html>

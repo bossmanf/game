@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
         
         body {
@@ -44,7 +45,14 @@
             currentTopic: '',
             questionData: null,   // {question, correctAnswer, wrongAnswers[]}
             selectedAnswer: null, // The answer the player clicked
-            purchasedItems: [], // New: Tracks items bought in the shop
+            purchasedItems: [
+                 purchasedItems: [
+                { name: "Driver's License ID", icon: '🆔' , desc: 'Necessary for identification'} ,
+                { name: 'Chicken Pho', price: 100, icon: '🍜', desc: 'Restores maximum health.' },
+                 { name: 'Magic Zataar Spices', price: 50, icon: '🌶️', desc: 'Boosts your focus.' }// <-- INITIAL ITEM ADDED HERE
+            ],
+
+            ], // New: Tracks items bought in the shop
             message: 'Initializing...',
             error: null
         };
@@ -105,7 +113,8 @@
                 // Note: We use btn.iconHtml which contains the full SVG string.
                 const buttonInnerHtml = `<div class="w-full space-y-6">${btn.iconEmoji}</div><span>${btn.title}</span>`;
                 
-                const button = createElement('button', 'metal-button py-6 text-xl flex flex-col items-center justify-center space-y-2 hover:scale-[1.02] transition-transform', buttonInnerHtml);
+                const button = createElement('button', 'metal-button py-6 text-xl flex flex-col items-center justify-center space-y-2 hover:scale-[1.02] transition-transform ' + (btn.title.includes('(LOCKED)') ? 'opacity-50 cursor-not-allowed' : ''), buttonInnerHtml);
+
                 
                 button.onclick = btn.action;
                 buttonGrid.appendChild(button);
@@ -118,7 +127,7 @@
 
        
 
-        function renderPhase9() {
+        function renderPhase11() {
             
 
 
@@ -245,8 +254,8 @@
             case 5:
                 contentElement = renderPhase5(); // New Instructions Phase
                 break;
-            case 6:
-                contentElement = renderPhase9();
+            case 11:
+                contentElement = renderPhase11();
                 break;
             default:
                 contentElement = createElement('div', 'text-center p-8 text-red-500', 'UNKNOWN GAME STATE');

@@ -1,0 +1,234 @@
+<!--
+    This file contains the CSS styles and JavaScript function to display a visually striking
+    "New Topic Acquired" notification, styled as a sharp, white speech bubble.
+
+    NOTE: This code assumes the existence of the global `game` object and the
+    `createElement` helper function for creating DOM elements easily, as implied
+    by the original code snippet.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Topic Acquired</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bubble-color: #ffffff;
+            --text-color: #1a1a1a;
+            --accent-color: #3b82f6; /* Blue for sharpness */
+        }
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Existing Styles for comparison (Dreamy Memory) */
+        .dreamy-cloud {
+            /* ... (Existing styles for the cloud, keyframes omitted for brevity) ... */
+        }
+
+        /* ------------------------------------------- */
+        /* NEW STYLES: Sharp Speech Bubble (.topic-bubble) */
+        /* ------------------------------------------- */
+
+        /* Animation for a sharp, attention-grabbing entrance */
+        @keyframes acquiredEntrance {
+            0% { transform: scale(0.8) rotateX(10deg); opacity: 0; }
+            80% { transform: scale(1.05) rotateX(0deg); opacity: 1; }
+            100% { transform: scale(1) rotateX(0deg); opacity: 1; }
+        }
+
+        /* The main speech bubble container */
+        .topic-bubble {
+            position: relative;
+            background-color: var(--bubble-color);
+            color: var(--text-color);
+            border-radius: 20px; /* Sharp rounded corners */
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), /* Stronger shadow for sharpness */
+                        0 0 0 5px var(--accent-color); /* Bright blue outline */
+            cursor: pointer;
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+            animation: acquiredEntrance 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* Sharp entrance */
+            transform-origin: center bottom;
+        }
+
+        .topic-bubble:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6),
+                        0 0 0 7px var(--accent-color);
+        }
+
+        /* Speech bubble tail (triangle pointing down/left) */
+        .topic-bubble::after {
+            content: "";
+            position: absolute;
+            bottom: -30px; /* Position below the box */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border: 15px solid transparent;
+            border-top-color: var(--bubble-color); /* Main bubble color */
+            border-bottom: 0;
+            z-index: 10;
+        }
+
+        /* Outline for the tail */
+        .topic-bubble::before {
+            content: "";
+            position: absolute;
+            bottom: -36px; /* Slightly lower than the main tail */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border: 18px solid transparent;
+            border-top-color: var(--accent-color); /* Accent color outline */
+            border-bottom: 0;
+            z-index: 9; /* Behind the white tail */
+        }
+
+        .topic-content {
+            padding: 15px;
+            border: 3px dashed var(--text-color);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="game-root" class="p-8">
+    <h1 class="text-3xl font-bold mb-4">Game Interface (Simulated)</h1>
+    <p>Click the button below to see the 'New Topic Acquired' notification.</p>
+    <button id="triggerButton" class="px-6 py-3 mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow-lg">
+        Acquire Topic: 'Quantum Computing'
+    </button>
+</div>
+
+<script>
+    // -------------------------------------------
+    // SIMULATED GLOBALS (MUST BE PRESENT IN GAME)
+    // -------------------------------------------
+
+    const game = {
+        phase: 1,
+        score: 20000,
+        isLLMLoaded: false,
+        isLoading: false,
+        // The topics structure is adjusted here to show where 'newTopicA' will be placed.
+        topics: {
+            unlocked: ['History of Science'],
+            newTopicA: null, // Will hold the latest acquired topic string
+        },
+        currentTopic: '',
+        questionData: null,
+        selectedAnswer: null,
+        purchasedItems: [],
+        message: 'Initializing...',
+        error: null
+    };
+
+    // Helper function assumed to exist in the original context
+    const createElement = (tag, classList) => {
+        const el = document.createElement(tag);
+        if (classList) {
+            el.className = classList;
+        }
+        return el;
+    };
+
+    // A simulated function to re-render the main game state
+    const renderGame = () => {
+        console.log(`[Game] Rerendering game state. New topic: ${game.topics.newTopicA}`);
+        const topicsElement = document.getElementById('acquired-topics');
+        if (topicsElement) {
+             topicsElement.textContent = `Latest Acquired Topic: ${game.topics.newTopicA || 'None'}`;
+        }
+    };
+
+    // -------------------------------------------
+    // NEW FUNCTION: displayNewTopicAcquired
+    // -------------------------------------------
+
+    /**
+     * Displays a sharp, speech-bubble modal informing the user that a new
+     * conversation topic has been acquired.
+     * @param {string} topicName The name of the conversation topic acquired.
+     */
+    function displayNewTopicAcquired(topicName) {
+        // 1. Add the topic to the game state as requested
+        game.topics.newTopicA = topicName;
+
+        // 2. Setup modal overlay
+        const modalOverlay = createElement('div', 'fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm');
+        modalOverlay.id = 'topic-modal';
+
+        // 3. Setup the topic bubble box (using the new sharp CSS class)
+        const topicBox = createElement('div', 'topic-bubble mx-auto transition-all duration-500');
+
+        // Content
+        const headerHtml = `
+            <h3 class="text-3xl font-black mb-4 uppercase text-blue-500" style="text-shadow: 1px 1px 0 #1a1a1a;">
+                <span class="mr-2 text-4xl">💬</span>
+                NEW TOPIC ACQUIRED
+                <span class="ml-2 text-4xl">💬</span>
+            </h3>
+        `;
+        const contentHtml = `
+            <div class="topic-content bg-gray-50/50">
+                <p class="text-xl font-bold italic mb-2">You can now talk about:</p>
+                <p class="text-3xl font-extrabold text-blue-800">${topicName}</p>
+            </div>
+        `;
+        const closeText = `<p class="text-sm mt-6 opacity-80 font-medium">(Click anywhere on the bubble to continue)</p>`;
+
+        topicBox.innerHTML = headerHtml + contentHtml + closeText;
+
+        // 4. Close mechanism
+        const closeTopicBox = () => {
+            modalOverlay.remove();
+            renderGame(); // Re-render the game to reflect the new topic
+        };
+
+        // Attach close handlers
+        topicBox.onclick = (e) => {
+            e.stopPropagation();
+            closeTopicBox();
+        };
+
+        // Allow clicking the overlay to close (optional, but standard for modals)
+        modalOverlay.onclick = () => closeTopicBox();
+
+        // 5. Display
+        modalOverlay.appendChild(topicBox);
+        document.body.appendChild(modalOverlay);
+
+        // Optional: Trigger a slight animation after a short delay
+        setTimeout(() => {
+            // No need to change opacity/scale here as the CSS animation handles the entrance,
+            // but if we were controlling it via JS, this is where we'd add the final classes.
+        }, 50);
+    }
+
+    // -------------------------------------------
+    // DEMO IMPLEMENTATION
+    // -------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+        // Display status of acquired topic
+        const statusDiv = createElement('div', 'mt-6 p-4 bg-gray-100 rounded-lg shadow-inner');
+        statusDiv.innerHTML = '<p id="acquired-topics" class="font-mono text-sm"></p>';
+        document.getElementById('game-root').appendChild(statusDiv);
+        renderGame(); // Initial render
+
+        document.getElementById('triggerButton').addEventListener('click', () => {
+            displayNewTopicAcquired('Quantum Computing');
+        });
+    });
+
+</script>
+</body>
+</html>
