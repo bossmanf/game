@@ -871,6 +871,85 @@
         .chop-item-paper:last-child {
             border-bottom: none;
         }
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-yellow: #f3ff00;
+            --neon-cyan: #00f6ff;
+        }
+
+        body {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                        url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Inter', sans-serif;
+            color: #d1d5db;
+            overflow-x: hidden;
+        }
+
+        .punk-title {
+            font-family: 'Permanent Marker', cursive;
+            text-transform: uppercase;
+            transform: rotate(-2deg);
+            text-shadow: 3px 3px 0px var(--neon-pink);
+        }
+
+        .hardcore-input {
+            background: #1a1a1a;
+            border: 3px solid #333;
+            border-left: 8px solid var(--neon-yellow);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .hardcore-input:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 5px 5px 0px var(--neon-pink);
+            transform: translateX(5px);
+        }
+
+        .punk-button {
+            background: var(--neon-yellow);
+            color: black;
+            font-family: 'Permanent Marker', cursive;
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: 0.1s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+
+        .punk-button:hover {
+            background: var(--neon-pink);
+            color: white;
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+
+        .label-tag {
+            background: white;
+            color: black;
+            font-weight: 900;
+            padding: 2px 8px;
+            display: inline-block;
+            margin-bottom: 5px;
+            transform: skewX(-10deg);
+        }
+
+        .glitch-border {
+            border: 4px solid white;
+            position: relative;
+        }
+        .glitch-border::before {
+            content: '';
+            position: absolute;
+            top: -10px; left: -10px; right: 10px; bottom: 10px;
+            border: 2px solid var(--neon-pink);
+            z-index: -1;
+        }
 
 
     </style>
@@ -975,12 +1054,58 @@
             questionData: null,   // {question, correctAnswer, wrongAnswers[]}
             selectedAnswer: null, // The answer the player clicked
             inventory_items: [
-                { name: "Driver's License ID", icon: '🪪', acquired: true, desc: 'Necessary for identification. Looks legitimate.' , actions: { 'Ferry Building': 'sid_key_action' } },
-                { name: "Chops list", icon: '📜',  acquired: false, desc: 'List of chops to unlock' },
-                { name: 'Chicken Pho', icon: '🍜', acquired: true, desc: 'Restores maximum health and focus.', price: 100 },
-                { name: 'Magic Zataar Spices', icon: '🌶️', acquired: true,desc: 'Boosts your focus and gives charisma.', price: 50 },
-                { name: 'Positive Grid Spark Footswitch', icon: '🦶', acquired: true, desc: 'Unblock Stage Presence Training.', price: 150 },
+                { name: "Driver's License ID", icon: '🪪', acquired: true, desc: 'Necessary for identification. Looks legitimate.' ,  
+                    messages: 
+                        { 'BESTIE': 'So pretty!!!',
+                        'BITTER END': 'Yep, you are not 18 anymore...',
+                        'Metallica Pop-up Store': 'I know you are an adult, sir',
+                        'HSB Festival' : 'You do not need it here' ,
+                        'The 440' : 'Such a baby!'} 
 
+                    },
+
+                { name: "Chops list", icon: '📜',  acquired: false, desc: 'List of chops to unlock' ,
+                    actions: {'The 440': 'dj_chops'},
+                    messages: 
+                        { 'BESTIE': 'I have no idea but...',
+                        'BITTER END': 'I can definitely tell you more if you surprise me with something I want.',
+                        'Metallica Pop-up Store': 'I love it! Follow your dream! I wish I could help you',
+                        'HSB Festival' : 'I can help you with that but you need to help me first!',
+                        'The 440' : 'I can definitely teach you about Rhythm if you help me' } 
+                    },
+
+
+                { name: "Metallica t-shirt", icon: '👕',  acquired: true, desc: 'Ultimate Metallica T-shirt!' ,
+                    actions: {'BITTER END': 'kevind_action3'},
+                    messages: 
+                        { 'BESTIE': 'Ugh... Really?',
+                        'Metallica Pop-up Store': 'No refunds!',
+                        'HSB Festival' : 'No worries. You can keep it',
+                        'The 440' : 'Not my thing...' } 
+                    },
+
+
+                {name: 'Galactic Silver glitter', price: 25, icon:'✨', acquired: true, desc: 'Robbie seems to like this glitter brand', actions : {'The 440': 'dj_action1'},
+                    messages:
+                        {'BESTIE': 'Ummm... Really? No way!',
+                        'Metallica Pop-up Store': 'No refunds!',
+                        'HSB Festival' : 'Please! I am trying to work!',
+                        'The 440': 'Thanks!'} 
+                    },
+
+                {name: 'Disco Ball', price: 2, icon:'🪩', acquired: false, given: false, desc: 'Love these guys!', actions : {'BESTIE': 'sid_action1'},
+                    messages:
+                        {'BESTIE': 'YAY!',
+                        'Metallica Pop-up Store': 'No refunds!',
+                        'HSB Festival' : 'Please! I am trying to work!',
+                        'The 440': 'I have trillions of these!'} 
+                    },
+
+
+                { name: 'Chicken Pho', icon: '🍜', acquired: false, desc: 'Restores maximum health and focus.', price: 100 },
+                { name: 'Magic Zataar Spices', icon: '🌶️', acquired: false,desc: 'Boosts your focus and gives charisma.', price: 50 },
+                { name: 'Positive Grid Spark Footswitch', icon: '🦶', acquired: false, desc: 'Unblock Stage Presence Training.', price: 150 },
+                 {name: 'Luxury Copper Cookware Set', price: 2000, icon:'🍳',  acquired: false, desc: 'Best set for a culinary quest'},
                 { name: 'Funk Black Beenie', acquired: false, price: 80, icon: '🧢', desc: '+10 Stage Presence'},
                     { name: 'Arn Anderson VHS', acquired: false, price: 100, icon: '🤼', desc: 'Grants motivation boost' },
                     { name: 'Black Gummies', acquired: false, price: 20, icon: '🍬', desc: 'Restores 10 Motivation' },
@@ -997,8 +1122,21 @@
 
                     {name:"Musician career",icon:'🎶',acquired:true,actions: {
                      'BITTER END': 'kevind_action1', 
-                     'BESTIE': 'X',} },
-                    {name:"Metallica tour",icon:'🤘',acquired:false,actions: { 'BITTER END': 'kevind_action2' } }
+                     'BESTIE': 'sid_key_action',
+                     'THE 440': 'I LOVE IT!' }},
+
+                    {name:"Metallica tour", ruffle: false, icon:'🤘',acquired:false,actions: { 
+                    'BITTER END': 'kevind_action2',
+                    'Metallica Pop-up Store': 'popup_action1',
+                    'THE 440': 'You will not see me there!' } },
+
+                    {name:"Ultimate Metallica t-shirt",icon:'👕',acquired:true,
+                        messages:
+                            {'BESTIE': 'MMmmm... really?',
+                            'Metallica Pop-up Store': 'No refunds!',
+                            'HSB Festival' : 'Please! I am trying to work!',
+                            'BITTER END': 'I would be so happy with that t-shirt...',
+                            'THE 440': 'Thanks but NO!'}}
 
                 ],
                 newTopicA: null, // Will hold the latest acquired topic string
@@ -1066,7 +1204,19 @@
             sids_buttons :
             {
                 showMoneyButton: true,
-                showCheerButton: true
+                showCheerButton: true,
+                showHelpButton: true 
+            },
+            bridget_buttons:
+            {
+                showHelpButton:true
+            },
+            dj_buttons:
+            {
+                showHelpButton:true
+            },
+            bestie2_buttons:{
+                showHelpButton :true
             },
             iphoneState: {
                 view: 'notifications', // 'notifications' or 'message'
@@ -1078,7 +1228,8 @@
             },
             currentBuildingName: 'home',
             currentLocationId: 'home', 
-        
+
+            
         };
 
 
@@ -1130,58 +1281,71 @@
 
             "BITTER END": { X: 330, Y: 325, W: 50, H: 40, category: "bar", emoji: "🍻", actionKey: "bar", description: "Dive bar in the Richmond.", hidden: true , character: game.names.bestie3},
 
-            "Metallica Pop-up Store": { X: 420, Y: 470, W: 50, H: 40, category: "popup", emoji: "🍻", actionKey: "popup", description: "Temporary Metallica pop-up store", hidden: true , character: 'Sandra Popero'},
+            "Metallica Pop-up Store": { X: 690, Y: 540, W: 40, H: 30, category: "popup", emoji: "🛍️", actionKey: "popup", description: "Temporary Metallica pop-up store", hidden: true , character: 'Merchandise Handler'},
 
-            "BESTIE": { X: 640, Y: 350, W: 40, H: 40, category: "sids", emoji: "🏠", actionKey: "sids",  description:"The perfect apartment",  hidden: true, character: game.names.bestie },
+            "BESTIE": { X: 640, Y: 350, W: 40, H: 40, category: "sids", emoji: "🏠", actionKey: "sids",  description:"The perfect apartment",  hidden: false, character: game.names.bestie },
+
+            "Castro": { X: 410, Y: 440, W: 60, H: 40, category: "castro", emoji: "🏳️‍🌈", actionKey: "castro", description: "Historic LGBTQ+ cultural heart of the city.", hidden: false , character: 'Character X'},
+            "HSB Festival": { X: 150, Y: 360, W: 150, H: 90, category: "hsb", emoji: "🌳", actionKey: "hsb", description: "Massive urban park featuring museums and gardens.", hidden: false, character: 'Bridget' },
+
+            "The Fillmore": { X: 410, Y: 310, W: 30, H: 30, category: "the_fillmore", emoji: "🎙️", actionKey: "the_fillmore", description: "Legendary rock music venue.", hidden: true, character: 'Bouncer' },
+
+            "The 440": { X: 410, Y: 440, W: 60, H: 40, category: "t440", emoji: "🏳️‍🌈", actionKey: "t440", description: "Gay bar in the district", hidden: true , character: 'DJ Robbie'},
+
+             "Cliff\'s Variety": { X: 410, Y: 440, W: 60, H: 40, category: "cliffs", emoji: "🛒", actionKey: "cliffs", description: "Friendly store in the district", hidden: true , found: false, character: 'Bartender'},
+           
+            "Peets": { X: 410, Y: 440, W: 60, H: 40, category: "peets", emoji: "☕", actionKey: "peets", description: "Chill Coffee place", hidden: true , character: game.names.bestie2},
+
+
+
+
 
 
 
             // Commercial / Transit
-            "Ferry Building": { X: 720, Y: 260, W: 30, H: 30, category: "building", emoji: "🚢", actionKey: "building", description: "Historic marketplace and transit nexus.", hidden: false , character: game.names.bestie},
+            "Ferry Building": { X: 720, Y: 260, W: 30, H: 30, category: "building", emoji: "🚢", actionKey: "building", description: "Historic marketplace and transit nexus.", hidden: true , character: game.names.bestie},
             "Work": { X: 640, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "work", description: "SF's tallest building.", hidden: false , character: 'Character X'},
-            "SF Fitness": { X: 570, Y: 450, W: 40, H: 30, category: "Commercial", emoji: "💪", actionKey: "commercial", description: "A local fitness center.", hidden: false , character: 'Character X' },
+            "SF Fitness": { X: 570, Y: 450, W: 40, H: 30, category: "Commercial", emoji: "💪", actionKey: "commercial", description: "A local fitness center.", hidden: true , character: 'Character X' },
             "Oasis": { X: 560, Y: 370, W: 40, H: 30, category: "Infrastructure", emoji: "👠", actionKey: "infrastructure", description: "Major international airport.", hidden: true, character: 'Character X' },
             // Residential / Neighborhood
 
             "HOME": { X: 270, Y: 450, W: 60, H: 40, category: "Residential", emoji: "🏠", actionKey: "neighborhood", hidden: false , character: 'Character X'},
-            "AMOEBA": { X: 360, Y: 390, W: 50, H: 40, category: "Cultural", emoji: "☮️", actionKey: "cultural", description: "Birthplace of the 1960s counterculture movement.", hidden: false, character: 'Character X' },
+            "AMOEBA": { X: 360, Y: 390, W: 50, H: 40, category: "Cultural", emoji: "☮️", actionKey: "cultural", description: "Birthplace of the 1960s counterculture movement.", hidden: true, character: 'Character X' },
             
             // --- NEW LOCATIONS: Neighborhoods/Cultural ---
-            "Castro": { X: 410, Y: 440, W: 60, H: 40, category: "Cultural", emoji: "🏳️‍🌈", actionKey: "cultural", description: "Historic LGBTQ+ cultural heart of the city.", hidden: false , character: 'Character X'},
-            "City Lights": { X: 590, Y: 250, W: 30, H: 30, category: "Cultural", emoji: "📚", actionKey: "cultural", description: "Legendary independent bookstore and publisher in North Beach.", hidden: false , character: 'Character X'},
-            "Public Library": { X: 580, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "📖", actionKey: "venue", description: "Historic theater in Mid-Market.", hidden: false, character: 'Character X'},
-
-            // Parks / Nature
-            "Golden Gate Park": { X: 180, Y: 360, W: 150, H: 90, category: "Park/Nature", emoji: "🌳", actionKey: "nature", description: "Massive urban park featuring museums and gardens.", hidden: false, character: 'Character X' },
+            
+            "City Lights": { X: 590, Y: 250, W: 30, H: 30, category: "Cultural", emoji: "📚", actionKey: "cultural", description: "Legendary independent bookstore and publisher in North Beach.", hidden: true , character: 'Character X'},
+            "Public Library": { X: 580, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "📖", actionKey: "venue", description: "Historic theater in Mid-Market.", hidden: true, character: 'Character X'},
+            
             // --- NEW LOCATION: Park ---
-            "Dolores Park": { X: 480, Y: 458, W: 40, H: 40, category: "Park/Nature", emoji: "🏞️", actionKey: "nature", description: "Popular spot in the Mission District with a great skyline view.", hidden: false, character: 'Character X' },
-            "Land's End": { X: 90, Y: 270, W: 60, H: 40, category: "Park/Nature", emoji: "🌊", actionKey: "nature", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: false, character: 'Character X' },
-            "Painted Ladies": { X: 450, Y: 360, W: 50, H: 40, category: "Cultural", emoji: "🎨", actionKey: "cultural", description: "Iconic Victorian and Edwardian houses near Alamo Square.", hidden: false, character: 'Character X' },
+            "Dolores Park": { X: 480, Y: 458, W: 40, H: 40, category: "Park/Nature", emoji: "🏞️", actionKey: "nature", description: "Popular spot in the Mission District with a great skyline view.", hidden: true, character: 'Character X' },
+            "Land's End": { X: 90, Y: 270, W: 60, H: 40, category: "Park/Nature", emoji: "🌊", actionKey: "nature", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: true, character: 'Character X' },
+            "Painted Ladies": { X: 450, Y: 360, W: 50, H: 40, category: "Cultural", emoji: "🎨", actionKey: "cultural", description: "Iconic Victorian and Edwardian houses near Alamo Square.", hidden: true, character: 'Character X' },
+            "Karaoke": { X: 450, Y: 320, W: 50, H: 40, category: "Cultural", emoji: "🎤", actionKey: "cultural", description: "Iconic Victorian and Edwardian houses near Alamo Square.", hidden: true, character: 'Character X' },
 
             // Infrastructure / Historical
-            "Golden Gate Bridge": { X: 200, Y: 150, W: 50, H: 50, category: "Infrastructure", emoji: "🌉", actionKey: "infrastructure", description: "Iconic suspension bridge.", hidden: false, character: 'Character X' },
-            "Alcatraz": { X: 580, Y: 30, W: 30, H: 30, category: "Historical", emoji: "🏛️", actionKey: "historical", description: "Infamous former federal prison.", hidden: false, character: 'Character X' },
-            "SFO Airport⬇️": { X: 690, Y: 750, W: 60, H: 40, category: "Infrastructure", emoji: "✈️", actionKey: "infrastructure", description: "Major international airport.", hidden: false, character: 'Character X' },
-            "Fisherman's Wharf": { X: 530, Y: 160, W: 40, H: 30, category: "Commercial", emoji: "🦀", actionKey: "cultural", description: "Tourist hub with Pier 39.", hidden: false, character: 'Character X' },
+            "Golden Gate Bridge": { X: 200, Y: 150, W: 50, H: 50, category: "Infrastructure", emoji: "🌉", actionKey: "infrastructure", description: "Iconic suspension bridge.", hidden: true, character: 'Character X' },
+            "Alcatraz": { X: 580, Y: 30, W: 30, H: 30, category: "Historical", emoji: "🏛️", actionKey: "historical", description: "Infamous former federal prison.", hidden: true, character: 'Character X' },
+            "SFO Airport⬇️": { X: 690, Y: 750, W: 60, H: 40, category: "Infrastructure", emoji: "✈️", actionKey: "infrastructure", description: "Major international airport.", hidden: true, character: 'Character X' },
+            "Fisherman's Wharf": { X: 530, Y: 160, W: 40, H: 30, category: "Commercial", emoji: "🦀", actionKey: "cultural", description: "Tourist hub with Pier 39.", hidden: true, character: 'Character X' },
 
             // Music Venues
-            "Open Mic Bar": { X: 120, Y: 600, W: 60, H: 40, category: "Park/Nature", emoji: "🎤", actionKey: "nature", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: false, character: 'Character X' },
-            "The Chapel": { X: 520, Y: 500, W: 30, H: 30, category: "Music Venue", emoji: "🎸", actionKey: "venue", description: "Mid-sized venue in the Mission District.", hidden: false, character: 'Character X' },
-            "GAMH": { X: 510, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "🎷", actionKey: "venue", description: "Elegant, historic hall.", hidden: false, character: 'Character X' },
-            "Warfield": { X: 570, Y: 340, W: 30, H: 30, category: "Music Venue", emoji: "🥁", actionKey: "venue", description: "Historic theater in Mid-Market.", hidden: false, character: 'Character X' },
-            "The Fillmore": { X: 410, Y: 310, W: 30, H: 30, category: "Music Venue", emoji: "🎙️", actionKey: "venue", description: "Legendary rock music venue.", hidden: false, character: 'Character X' },
+            "Open Mic Bar": { X: 120, Y: 600, W: 60, H: 40, category: "Park/Nature", emoji: "🎤", actionKey: "nature", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: true, character: 'Character X' },
+            "The Chapel": { X: 520, Y: 500, W: 30, H: 30, category: "Music Venue", emoji: "🎸", actionKey: "venue", description: "Mid-sized venue in the Mission District.", hidden: true, character: 'Character X' },
+            "GAMH": { X: 510, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "🎷", actionKey: "venue", description: "Elegant, historic hall.", hidden: true, character: 'Character X' },
+            "Warfield": { X: 570, Y: 340, W: 30, H: 30, category: "Music Venue", emoji: "🥁", actionKey: "venue", description: "Historic theater in Mid-Market.", hidden: true, character: 'Character X' },
             // --- NEW LOCATION: Venue ---
-            "Slim's": { X: 580, Y: 380, W: 30, H: 30, category: "Music Venue", emoji: "🎤", actionKey: "venue", description: "Closed but iconic former music venue in SOMA.", hidden: false, character: 'Character X' },
-            "Bottom of the Hill": { X: 620, Y: 520, W: 40, H: 30, category: "Music Venue", emoji: "🎤", actionKey: "venue", description: "Long-standing venue in the Potrero Hill/Dogpatch area.", hidden: false, character: 'Character X' },
-            "Chase Center": { X: 690, Y: 440, W: 40, H: 30, category: "Sports/Venue", emoji: "🏀", actionKey: "sports", description: "Modern home of the Golden State Warriors.", hidden: false, character: 'Character X' },
-            "Oracle Park": { X: 700, Y: 390, W: 40, H: 30, category: "Sports/Venue", emoji: "⚾", actionKey: "sports", description: "Modern home of the Golden State Warriors.", hidden: false, character: 'Character X' },
+            "Slim's": { X: 580, Y: 380, W: 30, H: 30, category: "Music Venue", emoji: "🎤", actionKey: "venue", description: "Closed but iconic former music venue in SOMA.", hidden: true, character: 'Character X' },
+            "Bottom of the Hill": { X: 620, Y: 520, W: 40, H: 30, category: "Music Venue", emoji: "🎤", actionKey: "venue", description: "Long-standing venue in the Potrero Hill/Dogpatch area.", hidden: true, character: 'Character X' },
+            "Chase Center": { X: 690, Y: 440, W: 40, H: 30, category: "Sports/Venue", emoji: "🏀", actionKey: "sports", description: "Modern home of the Golden State Warriors.", hidden: true, character: 'Character X' },
+            "Oracle Park": { X: 700, Y: 390, W: 40, H: 30, category: "Sports/Venue", emoji: "⚾", actionKey: "sports", description: "Modern home of the Golden State Warriors.", hidden: true, character: 'Character X' },
 
             // Off-map data (Still rendered if Y < 800 but kept separate)
-            "Berkeley": { X: 900, Y: 150, W: 50, H: 40, category: "Academic", emoji: "🎓", actionKey: "academic", description: "East Bay academic zone.", hidden: false, character: 'Character X' },
+            "Berkeley": { X: 900, Y: 150, W: 50, H: 40, category: "Academic", emoji: "🎓", actionKey: "academic", description: "East Bay academic zone.", hidden: true, character: 'Character X' },
             // --- NEW LOCATION: Off-map City ---
-            "MAMA⬇️": { X: 550, Y: 750, W: 60, H: 40, category: "City", emoji: "🌃", actionKey: "transit", description: "Major city in the South Bay Area.", hidden: false, character: 'Character X' },
-            "Daly Shitty Underground Club⬇️": { X: 220, Y: 750, W: 50, H: 40, category: "City", emoji: "🌉", actionKey: "transit", description: "The gateway city immediately south of San Francisco.", hidden: false, character: 'Character X' },
-            "In-N-Out⬇️": { X: 340, Y: 750, W: 50, H: 40, category: "City", emoji: "🍔", actionKey: "transit", description: "The gateway city immediately south of San Francisco.", hidden: false, character: 'Character X' },
+            "MAMA⬇️": { X: 550, Y: 750, W: 60, H: 40, category: "City", emoji: "🌃", actionKey: "transit", description: "Major city in the South Bay Area.", hidden: true, character: 'Character X' },
+            "Daly Shitty Underground Club⬇️": { X: 220, Y: 750, W: 50, H: 40, category: "City", emoji: "🌉", actionKey: "transit", description: "The gateway city immediately south of San Francisco.", hidden: true, character: 'Character X' },
+            "In-N-Out⬇️": { X: 340, Y: 750, W: 50, H: 40, category: "City", emoji: "🍔", actionKey: "transit", description: "The gateway city immediately south of San Francisco.", hidden: true, character: 'Character X' },
 
 
         };
@@ -1236,19 +1400,53 @@
         }
 
 
+        function sid_action1(){
+            game.sids_buttons.showHelpButton = false;
+            let inventoryItem = game.inventory_items.find(i => i.name === 'Disco Ball');
+            if (!inventoryItem) {
+                console.error(`Item not found: ${itemName}`);
+                return;
+            }
+            inventoryItem.acquired = false;
+            inventoryItem.given = true;
+
+
+            playMovie('./videos/sid-disco.mp4', 'Sid is disco fashion!'); 
+
+        }
 
         function sid_key_action() {
             // Simulate giving the player money or a resource
-            updateStatusBar('DATA HACK' ,' SID_MONEY_ACTION', 'Initiating black market data transfer... Access granted. You receive 1,000 credits.');
-            game.score += 1000; 
-            playMovie('./videos/sid-money.mp4', 'Sid gives money'); 
-        };
+            game.currentLocationId = 'BESTIE'
+            let inventoryItem = game.inventory_items.find(i => i.name === 'Disco Ball');
+            if (!inventoryItem) {
+                console.error(`Item not found: ${itemName}`);
+                return;
+            }
+            console.log('Disco ball status:', inventoryItem)
 
-        function sids_money(){
-                game.score += 1000; 
-                playMovie('./videos/sid-money.mp4', 'Sid gives money'); 
-                game.sids_buttons.showMoneyButton = false
+            console.log(inventoryItem.given)
+            if (inventoryItem.given===true) {
+                console.log('ENTERED!', inventoryItem.given)
+
+                // --- HELP / LEARN LOGIC ---
+                game.score += 1000;
+                playMovie('./videos/sid-money.mp4', 'Sid wants to help you in your musician career');
+                
+                    
+                
+            } else {
+
+                const statusBar = document.getElementById('status-bar-output');
+                if (statusBar) {
+                statusBar.innerHTML = `
+                        <p class="italic">I do not have the time to listen now. I need to finish my costume!</p>
+                        `
+                }
+            }
         }
+
+        
 
         function sids_cheer(){
                 toggleLandmarkVisibilityByName('Oasis', false);
@@ -1266,6 +1464,7 @@
 
         function kevind_action1(){
             console.log('action activated kevind 1')
+            game.currentLocationId = 'BITTER END'
             const statusBar = document.getElementById('status-bar-output');
             if (statusBar) {
                 statusBar.innerHTML = `<p class="italic"> BLA BLA BLA CHOPS BLA BLA BLA </p>
@@ -1282,17 +1481,25 @@
             displayNewItemAcquired('Chops list')
                 }
         }
+
         function kevind_action2(){
             toggleLandmarkVisibilityByName('Metallica Pop-up Store', false);
+            game.currentLocationId = 'BITTER END'
+            const newTopic = game.conversation_topics.unlocked.find(i => i.name === 'Ultimate Metallica t-shirt');
+            
+            newTopic.acquired = true;
 
             const statusBar = document.getElementById('status-bar-output');
             if (statusBar) {
                 statusBar.innerHTML = `<p class="italic"> I KNOW! They just opened a Metallica pop-up store! They ran out of Ultimate tour t'shirts! I wish I had one! </p>
+
+                <p class="italic"> New topic acquired: Ultimate Metallica t-shirt 👕 </p>
+
                 
             <div class="flex justify-center mt-6 w-full">
                 <!-- Button to switch to the Question Grid view -->
                 <button onclick=" displayNewLocationAcquired('Metallica Pop-up Store');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                <span class="text-base font-bold">Obtain the list </span>
+                <span class="text-base font-bold">Get the location</span>
                 </button>
             </div>
             `;
@@ -1300,14 +1507,225 @@
             else{
             displayNewItemAcquired('Chops list')
                 }
-
+            
 
         }
 
+        function dj_action1(){
+            let inventoryItem = game.inventory_items.find(i => i.name === 'Disco Ball');
+            if (!inventoryItem) {
+                console.error(`Item not found: ${itemName}`);
+                return;
+            }
+            inventoryItem.acquired = true;
+
+            inventoryItem = game.inventory_items.find(i => i.name === 'Galactic Silver glitter');
+            if (!inventoryItem) {
+                console.error(`Item not found: ${itemName}`);
+                return;
+            }
+            inventoryItem.acquired = false;
+
+            const statusBar = document.getElementById('status-bar-output');
+
+//            game.pendingAcquisition.item = 'Disco Ball'
+            playMovie('./videos/dj-ball.mp4','Thanks for helping me! This is for you!' );
+
+            if (statusBar) {
+                statusBar.innerHTML = `<p class="italic"> Thanks for helping me! This is for you!</p>
+                
+            <div class="flex justify-center mt-6 w-full">
+                <!-- Button to switch to the Question Grid view -->
+                <button onclick="displayNewItemAcquired('Metallica t-shirt')" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                <span class="text-base font-bold">Get the Disco Ball! </span>
+                </button>
+            </div>
+            `;
+            }
+            else{
+            displayNewItemAcquired('Metallica t-shirt')
+                }
+
+        }
+
+
+
+        function dj_chops() {
+            // Simulate giving the player money or a resource
+            game.currentLocationId = 'The 440'
+            let inventoryItem = game.inventory_items.find(i => i.name === 'Disco Ball');
+            if (!inventoryItem) {
+                console.error(`Item not found: ${itemName}`);
+                return;
+            }
+            console.log('Disco ball status:', inventoryItem)
+
+            console.log(inventoryItem.given)
+            if (inventoryItem.acquired===true || inventoryItem.given===true)  {
+                 const statusBar = document.getElementById('status-bar-output');
+                if (statusBar) {
+                statusBar.innerHTML = `
+                        <p class="italic">OK. I can teach you chops...</p>
+                        `
+                }
+                
+            } else {
+
+                const statusBar = document.getElementById('status-bar-output');
+                if (statusBar) {
+                statusBar.innerHTML = `
+                        <p class="italic">I will teach you if you help me first...</p>
+                        `
+                }
+            }
+        }
+
+
+
+        function kevind_action3(){
+
+            landmarkImageRegistry["BITTER END"] = "./sprites/kevind-bar2.jpg";
+            const inventoryItem = game.inventory_items.find(i => i.name === 'Metallica t-shirt');
+            if (!inventoryItem) {
+                console.error(`Item not found: ${itemName}`);
+                return;
+            }
+
+            const conversation_topic = game.conversation_topics.unlocked.find(i => i.name === 'Ultimate Metallica t-shirt');
+            conversation_topic.acquired = false;
+
+            inventoryItem.acquired = false;
+            const statusBar = document.getElementById('status-bar-output');
+            if (statusBar) {
+                statusBar.innerHTML = `<p class="italic"> THANKS DUDE!!! I am ready to help you! Let me explain what I know about Chop 1 BLA BLA BLA
+                
+                <div class="flex justify-center mt-6 w-full">
+                <button onclick="playMovie('./videos/sid-money.mp4', 'You learned Chop 1!'); 
+                ;" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                <span class="text-base font-bold">Learn Chop 1</span>
+                </button>
+            </div>
+            `;
+            }
+
+        }
+
+        function handleRaffleEntry() {
+            // Find the specific conversation topic
+            const newTopic = game.conversation_topics.unlocked.find(i => i.name === 'Metallica tour');
+            const statusBar = document.getElementById('status-bar-output');
+
+            if (!newTopic) {
+                if (statusBar) {
+                     statusBar.innerHTML = `
+                        <p class="text-lg font-bold text-yellow-400">⚠️ Topic Not Found</p>
+                        <p class="text-sm italic mt-1">The Metallica tour topic is not available to enter the raffle.</p>
+                    `;
+                }
+                return;
+            }
+
+            // 1. Check if already entered
+            if (newTopic.ruffle === true) {
+                if (statusBar) {
+                    statusBar.innerHTML = `
+                        <p class="text-lg font-bold text-blue-400">ℹ️ Already Entered</p>
+                        <p class="text-sm italic mt-1">You have already entered the Metallica raffle. Score: $${game.score}</p>
+                    `;
+                }
+                return; // Stop execution if already entered
+            }
+
+            // 2. Check for sufficient score (only runs if not already entered)
+            if (game.score < 5) {
+                if (statusBar) {
+                    statusBar.innerHTML = `
+                        <p class="text-lg font-bold text-red-400">🛑 Cannot Enter!</p>
+                        <p class="text-sm italic mt-1">You need $5 to enter the raffle. Current Score: $${game.score}</p>
+                    `;
+                }
+                return;
+            }
+
+            // 3. Successful entry (only runs if topic exists, not already entered, and score is sufficient)
+            newTopic.ruffle = true;
+            game.score -= 5;
+            iphoneNotifications = appendNotification(iphoneNotifications,'Bridget', 'Hey! I can totally use your help at the Hardly Strictly Bluegrass Festival right now!', '💬', 'HSB Festival')
+
+
+            // Update the status bar to confirm the action was successful
+            if (statusBar) {
+                statusBar.innerHTML = `
+                    <p class="text-lg font-bold text-green-400">✅ Entry Confirmed!</p>
+                    <p class="text-sm italic mt-1">You are now entered into the Metallica raffle. Score: $${game.score}</p>
+                `;
+            }
+        }
+
+        function popup_action1() {
+            const statusBar = document.getElementById('status-bar-output');
+            if (statusBar) {
+                // IMPORTANT: The button uses window.handleRaffleEntry() which is now guaranteed to exist
+                statusBar.innerHTML = `
+                    <p class="italic"> Don’t miss your shot! 🎟️ We’re raffling off tickets to the massive Metallica show this month. Enter now for your chance to win for just $5!</p>
+
+                    <button onclick="window.handleRaffleEntry();" class="metal-button px-6 py-3 w-3/4 sm:w-1/2 mt-4">
+                        <span class="text-base font-bold">Enter the raffle</span>
+                    </button>
+                `;
+            }
+        }
+        function popup_action2(){
+
+            const statusBar = document.getElementById('status-bar-output');
+            if (statusBar) {
+                statusBar.innerHTML = `<p class="italic"> We sold out those t-shirts. A girl wearing a purple shirt with the letters HSB bought a whole set</p>
+            `;
+            }
+          
+        }
+
+        function bridget_action1(){
+            const newTopic = game.conversation_topics.unlocked.find(i => i.name === 'Ultimate Metallica t-shirt');
+            newTopic.acquired = false;
+            const statusBar = document.getElementById('status-bar-output');
+
+            game.pendingAcquisition.item = 'Metallica t-shirt'
+
+            playMovie('./videos/bridget-2.mp4','Oh yes! I got a bunch for the artists. I can give you one but do not tell anyone!' );
+
+            if (statusBar) {
+                statusBar.innerHTML = `<p class="italic"> Oh yes! I got a bunch for the artists. I can give you one but don't tell anyone!</p>
+                
+            <div class="flex justify-center mt-6 w-full">
+                <!-- Button to switch to the Question Grid view -->
+                <button onclick="displayNewItemAcquired('Metallica t-shirt')" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                <span class="text-base font-bold">Get the t-shirt </span>
+                </button>
+            </div>
+            `;
+            }
+            else{
+            displayNewItemAcquired('Metallica t-shirt')
+                }
+
+        }
+
+
         const customActions = {
             'sid_key_action': sid_key_action,
+            'sid_action1'   : sid_action1,
             'kevind_action1': kevind_action1,
-            'kevind_action2': kevind_action2
+            'kevind_action2': kevind_action2,
+            'kevind_action3': kevind_action3,
+            'popup_action1' : popup_action1,
+            'popup_action2' : popup_action2,
+            'handleRaffleEntry' : handleRaffleEntry,
+            'dj_action1' : dj_action1,
+            'dj_chops'  : dj_chops,
+            'bridget_action1' : bridget_action1
+            
+
         };
 
         let currentContext = { 
@@ -1343,9 +1761,230 @@
             }
         }
 
+        const bestie2_help_dialogue_data = [
+                { 
+                    speaker: 'Player', 
+                    text: "Hey {bestie}, I really wanted to get your thoughts on my musician dream... I've been writing some new stuff." },
+                { 
+                    speaker: 'Bestie', 
+                    text: "Normally, I'm all ears for your 'rockstar' era, {player}, but I’ve got a major distraction. You. Me. The Giants game tonight. Does that sound like a home run or what?" },
+                { 
+                    speaker: 'Player', 
+                    text: "A Giants game? You seem a little frantic for a casual night at the yard, though. What's the hold-up?" },
+                { 
+                    speaker: 'Bestie', 
+                    text: "It’s not just a game, it’s a vibe! But I’m having a total aesthetic meltdown. I can't show up to Oracle Park looking like a rookie. No orange, no black, no soul, babe." },
+                { 
+                    speaker: 'Bestie', 
+                    text: "I’m stuck here perfecting my 'Kiss Cam' look—it's high stakes! I need you to go find me some top-tier Giants gear. Do that, and maybe I’ll be your biggest fan during the seventh-inning stretch." },
+                { 
+                    speaker: 'Player', 
+                    text: "The 'Kiss Cam' look? Alright, you win. Let me see what legendary gear I can find to get us into the bleachers..." },
+            ];
 
+
+
+
+       
+        const sids_help_dialogue_data = [
+            { speaker: 'Player', text: "Hey {bestie}, I want to tell you about my musician dream..." },
+            { speaker: 'Bestie', text: "Man, I would love to hear, {player}. But I'm in the middle of a total fashion crisis. I'm kinda freaking out." },
+            { speaker: 'Player', text: "A crisis? What is it? You look stressed." },
+            { speaker: 'Bestie', text: "The 'Studio 54' revival party is tonight! I've got the bell-bottoms, but I'm missing the essential complements. No sequins, no soul, man." },
+            { speaker: 'Bestie', text: "I'm stuck here practicing my hustle moves, so I can't leave. I need you to find my missing gear before I can even think about music." },
+            { speaker: 'Player', text: "Yeah, absolutely. Let me see what I can find... " },
+        ];
+
+         const bridget_help_dialogue_data = [
+            { speaker: 'Player', text: "Hey Bridget, What is it? You look stressed." },
+            { speaker: 'Bridget', text: "It's Bob Mould. He was supposed to show for a session, but He's gone radio silent. I need to find him, and I can't leave this spot right now." },
+            { speaker: 'Bridget', text: "I need eyes on the ground. Can you help me out?" },
+            { speaker: 'Player', text: "Yeah, absolutely. I know Bob. Where should I start looking? Do you have any leads?" },
+            { speaker: 'Bridget', text: "He usually hangs out at *THE FILLMORE AUDITORIUM*. I'll mark it on your map. Go check it out. And be careful." },
+        ];
+        const dj_help_dialogue_data = [
+            {speaker: 'DJ Robbie', text: "OH YEAH! {player} in the house! The legend! The myth! The man with the rhythm in his soul!"},
+            {speaker: 'Player',text: "Whoa, Robbie! You're sounding more hyped than usual today. Everything good?"},
+            {speaker: 'DJ Robbie',text: "Good? It’s DISCO-TASTIC, baby! But I've got a problem that’s totally killing my shine. Literally!"},
+            {speaker: 'DJ Robbie',text: "The main stage set is tonight and I'm currently 100% sparkle-deficient. I'm talking a total glitter-blackout!"},
+            {speaker: 'DJ Robbie',text: "Do me a massive solid, superstar—sprint over to Cliff's Variety across the street. Grab me a bucket of 'Galactic Silver' glitter. I need to be visible from space!"},
+            {speaker: 'Player', text: "Cliff’s Variety? Consider it done, Robbie. I'll get you that glitter before the first beat drops."},
+            {speaker: 'DJ Robbie',text: "That’s why you’re the MVP! Bring the shine, and then we’ll talk about your musician dreams. Now MOVE! GO! GO! GO!"}
+            ];
+
+
+        
     const actionRegistry = {
         
+
+        hsb: (name, data) => {
+            currentContext = { name, data };
+
+            return `
+                <span class="block text-xl title">// Welcome to ${name.toUpperCase()} !//</span>
+                <span class="block">>> Style: Bluegrass Festival!</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
+                                    <p class="italic"> Pretty chaotic here...</p>
+                                </div>
+
+                ${game.bridget_buttons.showHelpButton ? `
+                <div class="flex justify-center mt-4" id="sids-help-button-container">
+                    <button onclick="bridget_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
+                    </button>
+                </div>
+                ` : ''}
+
+                <div id="main-action-buttons" class="flex flex-col items-center">
+                        <div class="flex justify-center mt-6 w-full">
+                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                                <span class="text-base font-bold">Interact with Bridget</span>
+                            </button>
+                        </div>
+                </div>
+
+            `;
+               
+        },
+
+
+        castro: (name, data) => {
+            currentContext = { name, data };
+
+                    return `
+                <span class="block text-xl title">// Welcome to ${name.toUpperCase()} !//</span>
+                <span class="block">>> Style: Everyone is welcome</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+                
+                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
+                    <p class="italic"> It is quiet now</p>
+                </div>
+
+                <div id="main-action-buttons" class="flex flex-col items-center">
+                    <!-- Always visible button -->
+                    <div class="flex justify-center mt-6 w-full">
+                        <button onclick="handleClick('The 440');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                            <span class="text-base font-bold">Go to the 440 bar</span>
+                        </button>
+                    </div>
+
+            
+
+
+                    ${landmarkData['Cliff\'s Variety'].found ? `
+                    <div class="flex justify-center mt-4 w-full">
+                        <button onclick="handleClick('Cliff\\'s Variety');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                            <span class="text-base font-bold">Go to Cliffs Variety</span>
+                        </button>
+                    </div>
+                    ` : ''}
+                </div>
+
+                    <div class="flex justify-center mt-6 w-full">
+                        <button onclick="handleClick('Peets');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                            <span class="text-base font-bold">Swing by Peets Coffee</span>
+                        </button>
+                    </div>
+
+
+
+
+            `;
+        },
+
+        peets: (name, data) => {
+            currentContext = { name, data };
+
+            return `
+                <span class="block text-xl title">// Welcome to ${name.toUpperCase()} !//</span>
+                <span class="block">>> Style: Friendly vibe</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
+                                    <p class="italic"> Your buddy is here!</p>
+                                </div>
+
+                ${game.bestie2_buttons.showHelpButton ? `
+                <div class="flex justify-center mt-4" id="sids-help-button-container">
+                    <button onclick="bestie2_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                        <span class="text-sm font-bold text-yellow-300">Greet ${game.names.bestie2}</span>
+                    </button>
+                </div>
+                ` : ''}
+
+                <div id="main-action-buttons" class="flex flex-col items-center">
+                        <div class="flex justify-center mt-6 w-full">
+                            <!-- Button to switch to the Question Grid view -->
+                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                                <span class="text-base font-bold">Interact with ${game.names.bestie2} </span>
+                            </button>
+                        </div>
+                </div>
+
+            `;
+               
+
+        },
+
+
+        t440: (name, data) => {
+            currentContext = { name, data };
+
+            return `
+                <span class="block text-xl title">// Welcome to ${name.toUpperCase()} !//</span>
+                <span class="block">>> Style: Everyone is welcome</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
+                                    <p class="italic"> Men mingling everywhere</p>
+                                </div>
+
+                ${game.dj_buttons.showHelpButton ? `
+                <div class="flex justify-center mt-4" id="sids-help-button-container">
+                    <button onclick="dj_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                        <span class="text-sm font-bold text-yellow-300">Greet DJ Robbie</span>
+                    </button>
+                </div>
+                ` : ''}
+
+                <div id="main-action-buttons" class="flex flex-col items-center">
+                        <div class="flex justify-center mt-6 w-full">
+                            <!-- Button to switch to the Question Grid view -->
+                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                                <span class="text-base font-bold">Interact with Dj Robbie </span>
+                            </button>
+                        </div>
+                </div>
+
+            `;
+               
+
+        },
+
+        cliffs: (name, data) => {
+            currentContext = { name, data };
+
+            return `
+                <span class="block text-xl title">// Welcome to ${name.toUpperCase()} !//</span>
+                <span class="block">>> Style: Shop everything you can think of!</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
+                                    <p class="italic"> SO MANY THINGS I WANT TO BUY!</p>
+                                </div>
+               
+                 <div id="main-action-buttons" class="flex flex-col items-center">
+                        <div class="flex justify-center mt-6 w-full">
+                            <button onclick="setPhase(19, 'Gear up for the Ultimate Ascent!');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                                <span class="text-base font-bold">Go shopping!</span>
+                            </button>
+                        </div>
+                </div>
+
+
+            `;
+               
+
+        },
+
 
 
         bar: (name, data) => {
@@ -1363,18 +2002,19 @@
                         <div class="flex justify-center mt-6 w-full">
                             <!-- Button to switch to the Question Grid view -->
                             <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-base font-bold">Ask ${game.names.bestie3} </span>
+                                <span class="text-base font-bold">Interact with ${game.names.bestie3} </span>
                             </button>
                         </div>
                 </div>
             `;
+
                
         },
 
         sids: (name, data) => {
             currentContext = { name, data };
 
-            const noActionsAvailable = !game.sids_buttons.showMoneyButton && !game.sids_buttons.showCheerButton;
+            const noActionsAvailable = !game.sids_buttons.showMoneyButton && !game.sids_buttons.showCheerButton && !game.sids_buttons.showHelpButton;
             return `
                 <span class="block text-xl title">// ${game.names.bestie.toUpperCase()}'S PLACE: ${name.toUpperCase()} //</span>
                 <span class="block">>> PRIMARY TENANT: GSW.</span>
@@ -1383,31 +2023,23 @@
                                     <p class="italic"> </p>
                                 </div>
 
-            ${game.sids_buttons.showMoneyButton ? `
-            <div class="flex justify-center mt-4" id="sids-money-button-container">
-                <button onclick="sids_money()" class="metal-button px-6 py-2">
-                    <span class="text-sm">Tell ${game.names.bestie} about your music goals</span>
+            ${game.sids_buttons.showHelpButton ? `
+            <div class="flex justify-center mt-4" id="sids-help-button-container">
+                <button onclick="sids_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                    <span class="text-sm font-bold text-yellow-300">Greet ${game.names.bestie}</span>
                 </button>
             </div>
-            ` : ''}
+            `  : ''}
+            
 
-                <!-- Button 2: Ask for cheer-up (Conditionally rendered) -->
             ${game.sids_buttons.showCheerButton ? `
             <div class="flex justify-center mt-4" id="sids-cheer-button-container">
                 <button onclick="sids_cheer()" class="metal-button px-6 py-2">
-                    <span class="text-sm">Ask ${game.names.bestie} to cheer you up</span>
+                    <span class="text-sm">Interact with ${game.names.bestie} to cheer you up</span>
                 </button>
             </div>
         ` : ''}
 
-            <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-6 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-base font-bold">Ask ${game.names.bestie} </span>
-                            </button>
-                        </div>
-                </div>
 
               ${noActionsAvailable ? `
             <div class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
@@ -1415,7 +2047,14 @@
             </div>
             ` : ''}
 
-            `;
+            <div id="main-action-buttons" class="flex flex-col items-center">
+                        <div class="flex justify-center mt-6 w-full">
+                            <!-- Button to switch to the Question Grid view -->
+                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                                <span class="text-base font-bold">Interact with ${game.names.bestie} </span>
+                            </button>
+                        </div>
+                </div>`;
         },
 
 
@@ -1434,7 +2073,7 @@
                         <div class="flex justify-center mt-6 w-full">
                             <!-- Button to switch to the Question Grid view -->
                             <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-base font-bold">Ask Pop-up girl </span>
+                                <span class="text-base font-bold">Interact with ${data.character} </span>
                             </button>
                         </div>
                 </div>
@@ -1873,6 +2512,115 @@
 
         
 
+        function renderDialogue(dialogueData, character) {
+            const playerStyle = 'bg-blue-800/60 self-start text-white border-l-4 border-blue-400';
+            const bestieStyle = 'bg-green-800/60 self-end text-white border-r-4 border-green-400';
+
+            const dialogueHtml = dialogueData.map(line => {
+                        let style = '';
+                        let speakerName = '';
+                        let speakerKey = '';
+
+                        if (line.speaker === 'Player') {
+                            style = playerStyle;
+                            speakerName = game.names.main;
+                            speakerKey = '{player}';
+                        } else {
+                            style = bestieStyle;
+                            speakerName = character;
+                            speakerKey = '{bestie}';
+                        }
+
+                        // Interpolate character names into the dialogue text
+                        const text = line.text
+                            .replace('{player}', game.names.main)
+                            .replace('{bestie}', character);
+
+                        return `
+                            <div class="flex flex-col mb-4 max-w-xs sm:max-w-md ${line.speaker === 'Player' ? 'items-start' : 'items-end'}">
+                                <div class="px-4 py-3 rounded-xl shadow-xl transition-all ${style}">
+                                    <p class="text-xs font-bold uppercase mb-1 text-gray-200">${speakerName}:</p>
+                                    <p class="text-base">${text}</p>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    return `
+                        <div class="flex flex-col h-full overflow-y-auto p-4 space-y-2 bg-gray-900/70 rounded-lg">
+                            <h3 class="text-2xl font-extrabold text-center title-font electric-cyan mb-4 border-b border-gray-700 pb-2">
+                                [ CONVERSATION: ${character.toUpperCase()} ]
+                            </h3>
+                            ${dialogueHtml}
+                            
+                            <div class="mt-6 pt-4 border-t border-gray-700 text-center">
+                                <button onclick="exitCinematic();" class="metal-button px-6 py-3 bg-gray-600">
+                                    END DIALOGUE
+                                </button>
+                            </div>
+                        </div>
+                    `;
+            }
+
+
+        function bestie2_request_help(){
+            const dialogueHtml = renderDialogue(bestie2_help_dialogue_data, game.names.bestie2);
+            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
+            switchToView(contentDiv);
+
+
+        }
+
+
+        function sids_request_help() {
+            const dialogueHtml = renderDialogue(sids_help_dialogue_data, game.names.bestie);
+
+            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
+            switchToView(contentDiv);
+
+            //game.sids_buttons.showHelpButton = false;
+            
+            console.log("Quest 'Find Lyra' started. Fillmore Auditorium should now be a key location.");
+        }
+
+
+        function dj_request_help() {
+            game.previousPhase = 10;
+            game.currentLocationId = 'The 440'
+            game.pendingAcquisition.location = 'Cliff\'s Variety';
+            const dialogueHtml = renderDialogue(dj_help_dialogue_data, 'DJ Robbie');
+            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
+            landmarkData['Cliff\'s Variety'].found = true;
+            switchToView(contentDiv);
+            
+        }
+
+        function bridget_request_help() {
+            game.previousPhase = 10;
+            game.currentLocationId = 'HSB Festival'
+            game.pendingAcquisition.location = 'The Fillmore';
+            const dialogueHtml = renderDialogue(bridget_help_dialogue_data, 'Bridget');
+            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
+            switchToView(contentDiv);
+            game.bridget_buttons.showHelpButton = true;
+            
+        }
+
+        // --- Helper to return to the main view (New) ---
+        function returnToMainView() {
+            const output = document.getElementById(MAIN_OUTPUT_ID);
+            const actionKey = currentContext.data.actionKey;
+            const actionFunc = actionRegistry[actionKey];
+
+            if (output && actionFunc) {
+                // Re-render the location view using the saved context
+                output.innerHTML = actionFunc(currentContext.name, currentContext.data);
+            } else if (output) {
+                output.innerHTML = `<span class="block text-red-400">// ERROR: Cannot return to previous location. //</span>`;
+            }
+        }
+
+
         function showQuestionGrid() {
             // Switch to the new grid view returned by renderQuestionGrid
             const gridContent = renderQuestionGrid();
@@ -1913,9 +2661,8 @@
                 console.error(`Error: Could not find item/topic named ${name}.`);
                 return;
             }
-            
             const actionName = item.actions ? item.actions[currentLocationId] : null;
-         //   console.log(item.actions, item.actions[currentLocationId] );
+
             console.log('Action name info:', actionName, customActions[actionName]);
 
             if (actionName ) {
@@ -1929,6 +2676,13 @@
                 }
             }
             
+            let itemResponse = item.messages ? item.messages[currentLocationId] : null;
+
+            if (!itemResponse) {
+                itemResponse = "I have cross-referenced the "+ name +"data point. It seems vital to Project Aether. I'm detecting a faint energy signature tied to it. Further analysis required, Conductor."
+            }
+            
+
             // --- 1. Construct the dedicated status message ---
             const icon = item.icon || (isItem ? '❓' : '🗣️');
             const source = isItem ? 'Inventory Item' : 'Conversation Topic';
@@ -1949,7 +2703,7 @@
                 
                 <!-- 4th line: The character's appealing response -->
                 <p class="mt-2 p-3 bg-gray-700/50 rounded-md text-base text-gray-200 border border-electric-cyan/50 shadow-md">
-                    "I have cross-referenced the ${name} data point. It seems vital to Project Aether. I'm detecting a faint energy signature tied to it. Further analysis required, Conductor."
+                    ${itemResponse}
                 </p>
             `;
 
@@ -1982,8 +2736,8 @@
 
         function renderQuestionGrid() {
             const content = createElement('div', 'flex flex-col items-center p-4 h-full bg-gray-900 rounded-lg shadow-2xl');
-            const heading = createElement('h3', 'text-3xl font-extrabold title-font electric-cyan mb-6 border-b border-gray-700 pb-2', 'SELECT QUERY TARGET');
-            content.appendChild(heading);
+           // const heading = createElement('h3', 'text-3xl font-extrabold title-font electric-cyan mb-6 border-b border-gray-700 pb-2', 'SELECT QUERY TARGET');
+           // content.appendChild(heading);
 
             // 1. Prepare Data
             const inventoryData = game.inventory_items.filter(item => item.acquired).map(item => ({
@@ -2103,7 +2857,7 @@
             // 4. Close mechanism
             const closeTopicBox = () => {
                 modalOverlay.remove();
-                renderGame(); // Re-render the game to reflect the new topic
+                exitCinematic(); // Re-render the game to reflect the new topic
             };
 
             // Attach close handlers
@@ -2156,7 +2910,7 @@
             // 4. Close mechanism
             const closeNotification = () => {
                 modalOverlay.remove();
-                renderGame(); // Re-render the game to reflect the new location
+                exitCinematic(); // Re-render the game to reflect the new location
             };
 
             // Attach close handlers
@@ -2181,7 +2935,6 @@
                 return;
             }
 
-            // Prevent showing the modal if it's already acquired (for this demo)
             if (inventoryItem.acquired) {
                 console.log(`${itemName} already acquired.`);
                 const statusBar = document.getElementById('status-bar-output');
@@ -2227,7 +2980,7 @@
             // 4. Close mechanism
             const closeNotification = () => {
                 modalOverlay.remove();
-                renderGame(); // Re-render the game to reflect the new location
+                exitCinematic(); // Re-render the game to reflect the new location
             };
 
             // Attach close handlers
@@ -2249,6 +3002,8 @@
                 modalOverlay.style.opacity = '1';
                 itemBox.style.transform = 'scale(1)';
             }, 10);
+
+
         }
         
 
@@ -2904,6 +3659,7 @@
                 { title: 'MAP', phase: 10, action: () => setPhase(10, 'Map of Funky town.'), iconEmoji: '🗺️', color: 'bg-gray-500 hover:bg-gray-600' },
                 { title: 'CARDS', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconEmoji: '🃏', color: 'bg-gray-500 hover:bg-gray-600' },
                 { title: 'YAY)', phase: 0, action: () => showSuccessAnimation(), iconEmoji: '🤘', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'SETUP)', phase: 18, action: () => setPhase(18, 'Name setup') , iconEmoji: '📛', color: 'bg-gray-500 hover:bg-gray-600' },
                 { title: 'CHOPS)', phase: 0, action: () => setPhase(17, 'Chops'), iconEmoji: '📜', color: 'bg-gray-500 hover:bg-gray-600' },
                 { title: 'INTRO)', phase: 12, action: () => setPhase(12, 'Intro is vital'), iconEmoji: '🎦', color: 'bg-gray-500 hover:bg-gray-600' },
                 { title: 'SONG MIXER)', phase: 13, action: () => setPhase(13, 'Intro is vital'), iconEmoji: '🎛️', color: 'bg-gray-500 hover:bg-gray-600' },
@@ -2927,6 +3683,51 @@
             menuContent.appendChild(title0);
             menuContent.appendChild(buttonGrid);
             return menuContent;
+        }
+
+         function renderPhase_setup() {
+            const container = createElement('div', 'bg-black/80 p-8 glitch-border');
+            
+            const title = createElement('h2', 'text-4xl punk-title text-white mb-8', 'WHO THE HELL ARE YOU?');
+            
+            const grid = createElement('div', 'grid grid-cols-1 md:grid-cols-2 gap-8');
+
+            const inputs = [
+                { key: 'main', label: 'THE PROTAGONIST (YOU)', placeholder: 'Real Name...', description: 'The one who burns it all down.' },
+                { key: 'bestie', label: 'POSH PARTY ANIMAL', placeholder: 'Trust Fund Name...', description: 'Too rich for this scene, but here anyway.' },
+                { key: 'bestie2', label: 'INTELLECTUAL GYM BUDDY', placeholder: 'Buff Scholar Name...', description: 'Quotes Nietzsche while benching 300.' },
+                { key: 'bestie3', label: 'BAR MUSIC BUDDY', placeholder: 'Cool Alias...', description: 'Knows every B-side of every 7-inch record.' }
+            ];
+
+            inputs.forEach(input => {
+                const wrapper = createElement('div', 'flex flex-col');
+                const label = createElement('div', 'label-tag mb-2', input.label);
+                const field = createElement('input', 'hardcore-input p-4 text-lg w-full');
+                field.placeholder = input.placeholder;
+                field.value = game.names[input.key] || '';
+                field.oninput = (e) => { game.names[input.key] = e.target.value; };
+                
+                const desc = createElement('p', 'text-xs text-gray-500 mt-1 italic uppercase tracking-widest', input.description);
+                
+                wrapper.append(label, field, desc);
+                grid.append(wrapper);
+            });
+
+            const footer = createElement('div', 'mt-12 flex justify-end');
+            const submitBtn = createElement('button', 'punk-button bg-cyan-400', 'SAVE IDENTITY');
+            submitBtn.onclick = () => {
+                // Validate quickly
+                if (!game.names.main || !game.names.bestie) {
+                    game.message = "IDENTITY INCOMPLETE. FILL THE VOID.";
+                    renderGame();
+                    return;
+                }
+                setPhase(0, "SYSTEMS READY. WELCOME TO THE UNDERGROUND.");
+            };
+
+            footer.append(submitBtn);
+            container.append(title, grid, footer);
+            return container;
         }
 
         function renderPhase5() {
@@ -2953,7 +3754,7 @@
             return instructionsContent;
         }
 
-        function appendNotification(notifications, appName, fullText, emoji = '🔔') {
+        function appendNotification(notifications, appName, fullText, emoji = '🔔', location) {
             const maxId = notifications.reduce((max, notification) => Math.max(max, notification.id), 0);
             const newId = maxId + 1;
 
@@ -2967,6 +3768,7 @@
                 emoji: emoji,
                 summary: summaryText,
                 fullContent: fullText,
+                location: location,
                 unread: true // Always set to true
             };
 
@@ -3068,6 +3870,92 @@
         }
 
     
+
+        function renderCliffs() {
+
+            const shopData = [
+                   
+                    {name: 'Galactic Silver glitter', price: 25, icon:'✨', desc: 'Robbie seems to like this glitter brand'},
+                    { name: 'Black Gummies', price: 20, icon: '🍬', desc: 'Restores 10 Motivation' },
+                    {name: 'Luxury Copper Cookware Set', price: 2000, icon:'🍳', desc: 'Best set for a culinary quest'}
+
+            ];
+
+            const shopContent = createElement('div', 'flex flex-col items-center h-full p-6 rock-card shadow-2xl');
+
+            // Impressive Rock Title
+            const titleContainer = createElement('div', 'mb-8 p-4 border-b-4 border-rock-red w-full text-center');
+            titleContainer.innerHTML = `<h3 class="rock-title title-font font-black tracking-widest uppercase">CLIFF'S VARIETY</h3>`;
+            shopContent.appendChild(titleContainer);
+
+            // Shop Grid 3x3
+            const grid = createElement('div', 'grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl flex-1 overflow-y-auto');
+
+            let itemsRendered = 0;
+
+            shopData.forEach(shopItem => {
+                // Find the global inventory item by name to check ownership status
+                const inventoryItem = game.inventory_items.find(i => i.name === shopItem.name);
+                
+                // If the item doesn't exist globally (shouldn't happen if inventory is set up correctly) OR it's already acquired, skip rendering.
+                if (!inventoryItem || inventoryItem.acquired === true) {
+                    return; // Skip this item (already owned or missing from global inventory)
+                }
+
+                // If we reach here, the item is sold at this shop and is not yet acquired.
+                itemsRendered++;
+
+                const canAfford = game.score >= shopItem.price;
+                
+                const card = createElement('div', `item-card p-4 rounded-lg flex flex-col items-center text-center bg-gray-900 border-2 border-rock-red/50 ${canAfford ? 'cursor-pointer hover:bg-gray-800 hover:border-rock-red transition transform hover:scale-[1.02]' : 'opacity-60 cursor-not-allowed'}`);
+                
+                card.onclick = () => {
+                    // Re-check ownership and affordability on click, using the inventoryItem reference
+                    if (inventoryItem.acquired) {
+                        setPhase(4, `${shopItem.name} already owned. Select another item.`);
+                        return;
+                    }
+
+                    if (canAfford) {
+                        // Mark the global inventory item as acquired
+                        inventoryItem.acquired = true; 
+                        
+                        const newScore = game.score - shopItem.price;
+                        updateState({
+                            score: newScore,
+                            message: `PURCHASE SUCCESSFUL: ${shopItem.name} for $${shopItem.price}. Check your Inventory (12).`,
+                            phase: 4 // Refresh the shop to remove the purchased item
+                        });
+                    } else {
+                        setPhase(4, `INSUFFICIENT FUNDS! Need $${shopItem.price - game.score} more for ${shopItem.name}.`);
+                    }
+                };
+
+                card.innerHTML = `
+                    <span class="text-6xl mb-2">${shopItem.icon}</span>
+                    <p class="font-bold text-xl text-yellow-400 title-font">${shopItem.name}</p>
+                    <p class="text-lg font-mono mt-1 text-rock-red">$${shopItem.price}</p>
+                    <p class="text-xs text-gray-400 mt-2">${shopItem.desc}</p>
+                    <button class="w-full mt-3 py-2 text-sm rounded transition metal-button ${canAfford ? 'bg-green-700 hover:bg-green-600' : 'bg-gray-500 cursor-not-allowed border-gray-400'}" ${canAfford ? '' : 'disabled'}>
+                        ${canAfford ? 'BUY' : 'TOO EXPENSIVE'}
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+
+            if (itemsRendered === 0) {
+                grid.innerHTML = '<p class="text-2xl text-yellow-500 col-span-full text-center p-8">SOLD OUT! You own everything available at Cliff\'s variety</p>';
+            }
+
+            shopContent.appendChild(grid);
+            
+            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'RETURN TO MENU');
+            backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
+            shopContent.appendChild(backButton);
+
+            return shopContent;
+        }
+
 
         function renderPhase3() {
             if (game.isLoading || !game.questionData) {
@@ -3890,13 +4778,19 @@
             return feudContent;
         }
 
-        const landmarkImageRegistry = {
+        let landmarkImageRegistry = {
             "Ferry Building": './sprites/kevind-bar.jpg',
             "Work": './sprites/kevind-bar.jpg',
             "SF Fitness": './sprites/kevind-bar.jpg',
             "BESTIE": './sprites/sids.jpg',
             "BITTER END": "./sprites/kevind-bar.jpg",
-            "Metallica Pop-up Store":  "./sprites/kevind-bar.jpg"
+            "Metallica Pop-up Store":  "./sprites/popup.jpg",
+            "Castro": "./sprites/castro.jpg",
+            "Peets" : "./sprites/peets.jpg",
+            "HSB Festival": "./sprites/hsb1.jpg",
+            "The 440": "./sprites/djrobbie_bar.jpg",
+            "Cliff\'s Variety": "./sprites/cliffs-habibi.jpg"
+
         };
 
         function renderMap(){
@@ -3916,7 +4810,7 @@
                     
                     <!-- Music Themed Status Panel -->
                     <div id="status-panel" class="mt-6 p-4 rounded-lg shadow-2xl music-panel">
-                        <p class="title text-xl mb-1">>>> STAGE INFO ACQUIRED <<<</p>
+                        <!-- p class="title text-xl mb-1">>>> List of Topics / Items to interact <<<</p> -->
                         <div id="output-message" class="text-lg text-white">
                             <span class="block">// Status: Awaiting Input. Click any marker to initiate a unique action sequence.</span>
                         </div>
@@ -4119,8 +5013,7 @@
         const outputMessage = document.getElementById('output-message');
         const newImageUrl = landmarkImageRegistry[name];
         const data = landmarkData[name];
-
-
+        game.previousPhase = 10;
         game.currentLocationId = name;
         game.currentBuildingName = name;
         game.currentCharacter = data.character;
@@ -4173,78 +5066,113 @@
      * Renders all landmark markers and their bounding boxes.
      */
     function renderLandmarks() {
-     const mapElement = document.getElementById('sf-map');
-        if (!mapElement) return;
-        
-        // Clear all previous children
-        mapElement.innerHTML = ''; 
+      const mapElement = document.getElementById('sf-map');
+    if (!mapElement) return;
 
-        for (const name in landmarkData) {
-            const bbox = landmarkData[name];
-            
-            // Only render nodes that are visible on the map (Y < 800)
-            const isRendered = bbox.Y < 800;
+    // Clear all previous children
+    mapElement.innerHTML = '';
 
-            if (isRendered) {
-                
-                // Read the 'hidden' property
-                const isHidden = bbox.hidden || false; 
+    // Constants for background sizing
+    const TEXT_HEIGHT = 20; // Estimated height of the text area
+    const TEXT_BASELINE_OFFSET = 24; // Y position offset for the text baseline
+    const CHAR_WIDTH_ESTIMATE = 9; // Estimated pixel width per character
+    const PADDING = 12; // Padding around the text
 
-                // Calculate center of bounding box for the visual node
-                const centerX = bbox.X + (bbox.W / 2);
-                const centerY = bbox.Y + (bbox.H / 2);
-                
-                // --- Create a group for the whole landmark (emoji + name + click area) ---
-                // Add the 'hidden' class based on the data property
-                const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-                group.setAttribute('class', `landmark-group ${isHidden ? 'hidden' : ''}`); 
-                group.setAttribute('title', name);
-                group.onclick = () => handleClick(name);
-                
-                // --- 1. Draw the Invisible Bounding Box (Clickable Area) ---
-                const nodeRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                nodeRect.setAttribute('x', bbox.X - 5);
-                nodeRect.setAttribute('y', bbox.Y - 5);
-                nodeRect.setAttribute('width', bbox.W + 10);
-                nodeRect.setAttribute('height', bbox.H + 10);
-                nodeRect.setAttribute('fill', '#000');
-                nodeRect.setAttribute('opacity', 0);
-                
-                group.appendChild(nodeRect); 
-                
-                // --- 2. Draw the Visual Landmark Marker (Emoji) ---
-                const markerEmoji = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                markerEmoji.setAttribute('x', centerX);
-                markerEmoji.setAttribute('y', centerY + 3);
-                markerEmoji.setAttribute('font-size', '24'); 
-                markerEmoji.setAttribute('text-anchor', 'middle');
-                markerEmoji.setAttribute('class', 'landmark-emoji');
-                markerEmoji.textContent = bbox.emoji; 
-                
-                group.appendChild(markerEmoji);
-                
-                // --- 3. Draw the Location Name (With Highlighting) ---
-                const markerName = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                markerName.setAttribute('x', centerX);
-                markerName.setAttribute('y', centerY + 24); 
-                markerName.setAttribute('text-anchor', 'middle');
-                markerName.setAttribute('class', 'landmark-name');
-                
-                let displayName = name;
-                if (name.length > 15 && name.indexOf(' ') !== -1) {
-                    displayName = name.split(' ')[0] + '...'; 
-                } else if (name.length > 15) {
-                    displayName = name.substring(0, 12) + '...';
+    for (const name in landmarkData) {
+        const bbox = landmarkData[name];
+
+        // Only render nodes that are visible on the map (Y < 800)
+        const isRendered = bbox.Y < 800;
+
+        if (isRendered) {
+
+            // Read the 'hidden' property
+            const isHidden = bbox.hidden || false;
+
+            // Calculate center of bounding box for the visual node
+            const centerX = bbox.X + (bbox.W / 2);
+            const centerY = bbox.Y + (bbox.H / 2);
+
+            // --- Create a group for the whole landmark (emoji + name + click area) ---
+            const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            group.setAttribute('class', `landmark-group ${isHidden ? 'hidden' : ''}`);
+            group.setAttribute('title', name);
+            group.onclick = () => handleClick(name);
+
+            // --- 1. Draw the Invisible Bounding Box (Clickable Area) ---
+            const nodeRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            // Add padding around the bounding box for easier clicking
+            nodeRect.setAttribute('x', bbox.X - 5);
+            nodeRect.setAttribute('y', bbox.Y - 5);
+            nodeRect.setAttribute('width', bbox.W + 10);
+            nodeRect.setAttribute('height', bbox.H + 10);
+            nodeRect.setAttribute('fill', '#000');
+            nodeRect.setAttribute('opacity', 0);
+
+            group.appendChild(nodeRect);
+
+            // --- 2. Draw the Visual Landmark Marker (Emoji) ---
+            const markerEmoji = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            markerEmoji.setAttribute('x', centerX);
+            markerEmoji.setAttribute('y', centerY + 3);
+            markerEmoji.setAttribute('font-size', '24');
+            markerEmoji.setAttribute('text-anchor', 'middle');
+            markerEmoji.setAttribute('class', 'landmark-emoji');
+           // markerEmoji.setAttribute('fill', '#fff'); //
+            markerEmoji.textContent = bbox.emoji;
+
+            group.appendChild(markerEmoji);
+
+            // --- 3. Name Truncation Logic ---
+            let displayName = name;
+            const maxChars = 12;
+
+            if (name.length > 15) {
+                // Prefer splitting by space if the first word is short enough
+                if (name.indexOf(' ') !== -1 && name.split(' ')[0].length < maxChars) {
+                    displayName = name.split(' ')[0] + '...';
+                } else {
+                    // Otherwise, just truncate
+                    displayName = name.substring(0, maxChars) + '...';
                 }
-
-                markerName.textContent = displayName.toUpperCase();
-                
-                group.appendChild(markerName);
-                
-                mapElement.appendChild(group);
             }
+
+            displayName = displayName.toUpperCase(); // Ensure uppercase for map
+
+            // Estimate background width based on the final display name length
+            const backgroundWidth = Math.max(70, displayName.length * CHAR_WIDTH_ESTIMATE + PADDING); // Min 70px
+
+            // --- 4. Draw the Shading Background (Rectangle) ---
+            const markerBg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            // Y position calculation: text baseline (24) minus text height (20) to place the box over the text area
+            const bgY = centerY + TEXT_BASELINE_OFFSET - TEXT_HEIGHT;
+            const bgX = centerX - (backgroundWidth / 2);
+
+            markerBg.setAttribute('x', bgX);
+            markerBg.setAttribute('y', bgY);
+            markerBg.setAttribute('width', backgroundWidth);
+            markerBg.setAttribute('height', TEXT_HEIGHT);
+            markerBg.setAttribute('rx', 4); // Rounded corners
+            markerBg.setAttribute('fill', 'rgba(200, 200, 200, 0.7)'); // Semi-transparent dark background
+            markerBg.setAttribute('class', 'landmark-name-bg');
+
+            group.appendChild(markerBg); // Must be appended before text
+
+            // --- 5. Draw the Location Name (Text) ---
+            const markerName = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            markerName.setAttribute('x', centerX);
+            markerName.setAttribute('y', centerY + TEXT_BASELINE_OFFSET);
+            markerName.setAttribute('text-anchor', 'middle');
+            markerName.setAttribute('class', 'landmark-name');
+            markerName.setAttribute('fill', '#000'); // White text for high contrast
+            markerName.textContent = displayName;
+
+            group.appendChild(markerName);
+
+            mapElement.appendChild(group);
         }
-        return mapElement;
+    }
+    return mapElement;
     }
 
       const cinematicScript = [
@@ -4735,7 +5663,7 @@
 
 
 
-        function playMovie(videoPath, cinematicText, returnPhase = game.phase) {
+        function playMovie(videoPath, cinematicText, returnPhase = game.phase, text) {
             game.previousPhase = returnPhase;
             game.cinematicData = { videoPath, cinematicText };
             setPhase(99, 'Cinematic Sequence Initiated. Stand by for data feed.');
@@ -4776,7 +5704,7 @@
             </div>
         </div>
 
-        <button onclick="setPhase(10, 'Skip sequence');" class="metal-button px-10 py-4 text-xl w-3/4 sm:w-1/2 bg-gray-600 hover:bg-gray-700">
+        <button onclick="exitCinematic();" class="metal-button px-10 py-4 text-xl w-3/4 sm:w-1/2 bg-gray-600 hover:bg-gray-700">
                                 <span class="title-font tracking-widest">SKIP SEQUENCE</span>
                             </button>
     `;
@@ -4802,6 +5730,8 @@
         function displayNotificationMessage(index) {
             const notification = iphoneNotifications[index];
             
+            game.previousPhase = 16;
+
             // Only proceed if the notification exists and is currently unread
             if (!notification ) {
               //  console.log(`Notification at index ${index} is already read or does not exist.`);
@@ -4850,6 +5780,40 @@
             renderGame(); // Force a full game render to update UI.
         }
 
+        function exitCinematic() {
+            const prevPhase = game.previousPhase;
+            const currentLocationId = game.currentLocationId;
+            
+            // 1. Return to the previous game phase
+            setPhase(prevPhase, 'Exited cinematic sequence.'); 
+
+            // 2. If the previous phase was the Map (Phase 10), re-trigger the location click.
+            // This is crucial to ensure the location's action content is displayed immediately,
+            // rather than just the base map.
+            if (prevPhase === 10 && currentLocationId) {
+                console.log(`[CINEMATIC EXIT] Returning to Map (Phase 10) and refreshing location: ${currentLocationId}`);
+                // Use a slight delay to ensure the DOM has re-rendered Phase 10 elements
+                setTimeout(() => {
+                    handleClick(currentLocationId);
+                }, 50); 
+            } else {
+                 console.log(`[CINEMATIC EXIT] Returning to Phase ${prevPhase}.`);
+            }
+
+            if (game.pendingAcquisition.location) {
+                // New Location found, display the location screen
+                displayNewLocationAcquired(game.pendingAcquisition.location);
+            } else if (game.pendingAcquisition.topic) {
+                // New Topic found, display the topic screen
+                displayNewTopicAcquired(game.pendingAcquisition.topic);
+            } else if (game.pendingAcquisition.item) {
+                // New Topic found, display the topic screen
+                displayNewItemAcquired(game.pendingAcquisition.item);
+            }
+            game.pendingAcquisition = { location: null, topic: null , item: null};
+        }
+
+
         function closeMessageView() {
             game.iphoneState.view = 'notifications';
             game.iphoneState.selectedMessageIndex = null;
@@ -4860,9 +5824,11 @@
             } else if (game.pendingAcquisition.topic) {
                 // New Topic found, display the topic screen
                 displayNewTopicAcquired(game.pendingAcquisition.topic);
+            } else if (game.pendingAcquisition.item) {
+                // New Topic found, display the topic screen
+                displayNewItemcAcquired(game.pendingAcquisition.topic);
             }
-        
-            game.pendingAcquisition = { location: null, topic: null };
+            game.pendingAcquisition = { location: null, topic: null , item: null};
 
 
             // Rerender the phone screen
@@ -5426,6 +6392,12 @@
             case 17:
                 contentElement = renderChops();
                 break
+            case 18:
+                contentElement = renderPhase_setup();
+                break
+            case 19:
+                contentElement = renderCliffs();
+                break
             case 99: // NEW: Cinematic Phase
                 contentElement = renderCinematic();
                 break;
@@ -5462,11 +6434,29 @@
     window.loadNextFeudQuestion = loadNextFeudQuestion;
     window.displayNewItemAcquired = displayNewItemAcquired;
     window.displayNewLocationAcquired = displayNewLocationAcquired;
-    window.sids_money = sids_money;
+    window.sid_action1 = sid_action1;
     window.sids_cheer = sids_cheer;
     window.go_to_work = go_to_work;
     window.kevind_action1 = kevind_action1;
     window.kevind_action2 = kevind_action2;
+    window.kevind_action3 = kevind_action3;
+    window.handleRaffleEntry = handleRaffleEntry;
+    window.popup_action1 = popup_action1;
+    window.popup_action2 = popup_action2;
+    window.bridget_action1 = bridget_action1;
+    window.bestie2_request_help = bestie2_request_help;
+    window.sids_request_help = sids_request_help;
+    window.bridget_request_help = bridget_request_help;
+    window.dj_request_help = dj_request_help;
+    window.dj_action1 = dj_action1;
+    window.dj_chops = dj_chops;
+    window.returnToMainView = returnToMainView;
+    window.reloadCurrentLocation = reloadCurrentLocation;
+    window.handleClick = handleClick;
+    window.exitCinematic = exitCinematic;
+
+
+
 
  
 
