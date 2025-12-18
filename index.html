@@ -1064,6 +1064,20 @@
 
                     },
 
+                { name: "Photo", icon: '😎', acquired: true, desc: 'Necessary for identification. Looks legitimate.' ,  
+                    actions: {
+                    'HSB Festival': 'bridget_action3';
+                    },
+                    messages: 
+                        { 'BESTIE': 'So pretty!!!',
+                        'BITTER END': 'Yep, you are not 18 anymore...',
+                        'Metallica Pop-up Store': 'I know you are an adult, sir',
+                        'HSB Festival' : 'You do not need it here' ,
+                        'The 440' : 'Such a baby!'} 
+
+                    },
+
+
                 { name: "Chops list", icon: '📜',  acquired: false, desc: 'List of chops to unlock' ,
                     actions: {'The 440': 'dj_chops'},
                     messages: 
@@ -1122,8 +1136,20 @@
 
                     {name:"Musician career",icon:'🎶',acquired:true,actions: {
                      'BITTER END': 'kevind_action1', 
-                     'BESTIE': 'sid_key_action',
+                     'BESTIE': 'sid_key_action'
+                 },messages:{
                      'THE 440': 'I LOVE IT!' }},
+                 
+
+                    {name:"Accreditation",icon:'🎫',acquired:true,actions:{
+                    'HSB Festival': 'bridget_action2',
+                    'Metallica Pop-up Store': 'popup_action3'
+                    },
+                    messages: {
+                     'BITTER END': 'I wish I could help you', 
+                     'BESTIE': 'Already getting in trouble?',
+                     'THE 440': 'I wish I had one' }},
+
 
                     {name:"Metallica tour", ruffle: false, icon:'🤘',acquired:false,actions: { 
                     'BITTER END': 'kevind_action2',
@@ -1211,6 +1237,10 @@
             {
                 showHelpButton:true
             },
+            bouncer_buttons:
+            {
+                showHelpButton:true
+            },
             dj_buttons:
             {
                 showHelpButton:true
@@ -1281,14 +1311,14 @@
 
             "BITTER END": { X: 330, Y: 325, W: 50, H: 40, category: "bar", emoji: "🍻", actionKey: "bar", description: "Dive bar in the Richmond.", hidden: true , character: game.names.bestie3},
 
-            "Metallica Pop-up Store": { X: 690, Y: 540, W: 40, H: 30, category: "popup", emoji: "🛍️", actionKey: "popup", description: "Temporary Metallica pop-up store", hidden: true , character: 'Merchandise Handler'},
+            "Metallica Pop-up Store": { X: 690, Y: 540, W: 40, H: 30, category: "popup", emoji: "🛍️", actionKey: "popup", description: "Temporary Metallica pop-up store", hidden: false , character: 'Merchandise Handler'},
 
             "BESTIE": { X: 640, Y: 350, W: 40, H: 40, category: "sids", emoji: "🏠", actionKey: "sids",  description:"The perfect apartment",  hidden: false, character: game.names.bestie },
 
             "Castro": { X: 410, Y: 440, W: 60, H: 40, category: "castro", emoji: "🏳️‍🌈", actionKey: "castro", description: "Historic LGBTQ+ cultural heart of the city.", hidden: false , character: 'Character X'},
             "HSB Festival": { X: 150, Y: 360, W: 150, H: 90, category: "hsb", emoji: "🌳", actionKey: "hsb", description: "Massive urban park featuring museums and gardens.", hidden: false, character: 'Bridget' },
 
-            "The Fillmore": { X: 410, Y: 310, W: 30, H: 30, category: "the_fillmore", emoji: "🎙️", actionKey: "the_fillmore", description: "Legendary rock music venue.", hidden: true, character: 'Bouncer' },
+            "The Fillmore": { X: 410, Y: 310, W: 30, H: 30, category: "fillmore", emoji: "🎙️", actionKey: "fillmore", description: "Legendary rock music venue.", hidden: false, character: 'Intimidating Bouncer' },
 
             "The 440": { X: 410, Y: 440, W: 60, H: 40, category: "t440", emoji: "🏳️‍🌈", actionKey: "t440", description: "Gay bar in the district", hidden: true , character: 'DJ Robbie'},
 
@@ -1583,7 +1613,7 @@
 
 
         function kevind_action3(){
-
+            game.currentLocationId = 'BITTER END'
             landmarkImageRegistry["BITTER END"] = "./sprites/kevind-bar2.jpg";
             const inventoryItem = game.inventory_items.find(i => i.name === 'Metallica t-shirt');
             if (!inventoryItem) {
@@ -1663,6 +1693,8 @@
         }
 
         function popup_action1() {
+            game.currentLocationId = 'Metallica Pop-up Store'
+
             const statusBar = document.getElementById('status-bar-output');
             if (statusBar) {
                 // IMPORTANT: The button uses window.handleRaffleEntry() which is now guaranteed to exist
@@ -1676,6 +1708,7 @@
             }
         }
         function popup_action2(){
+            game.currentLocationId = 'Metallica Pop-up Store'
 
             const statusBar = document.getElementById('status-bar-output');
             if (statusBar) {
@@ -1685,7 +1718,33 @@
           
         }
 
+        function popup_action3(){
+            game.currentLocationId = 'Metallica Pop-up Store'
+            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Accreditation');
+            topic.acquired = false;
+            let item = game.conversation_topics.unlocked.find(i => i.name === 'Photo');
+            item.acquired = True;
+            game.points -=5;
+
+            if (statusBar) {
+                statusBar.innerHTML = `<p class="italic"> Sure! It's $5!</p>
+                
+                <div class="flex justify-center mt-6 w-full">
+                    <!-- Button to switch to the Question Grid view -->
+                    <button onclick="displayNewItemAcquired('Photo');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                    <span class="text-base font-bold">Use the Photo Booth! </span>
+                    </button>
+                </div>
+                `;
+            }
+            else{
+                displayNewItemAcquired('Photo');
+            }
+
+        }
+
         function bridget_action1(){
+            game.currentLocationId = 'HSB Festival';
             const newTopic = game.conversation_topics.unlocked.find(i => i.name === 'Ultimate Metallica t-shirt');
             newTopic.acquired = false;
             const statusBar = document.getElementById('status-bar-output');
@@ -1711,6 +1770,43 @@
 
         }
 
+        function bridget_action2(){
+            game.currentLocationId = 'HSB Festival';
+            const statusBar = document.getElementById('status-bar-output');
+
+            if (statusBar) {
+                statusBar.innerHTML = `<p class="italic"> I see... If you bring me a photo I can create a HSB accreditation for you to use</p>
+            `;
+            }
+            
+
+        }
+        function bridget_action3(){
+            game.currentLocationId = 'HSB Festival';
+            let inventoryItem = game.inventory_items.find(i => i.name === 'Accreditation');
+            if (!inventoryItem) {
+                console.error(`Item not found: ${itemName}`);
+                return;
+            }
+            else{
+                inventoryItem.acquired = True;
+
+            }
+            inventoryItem = game.inventory_items.find(i => i.name === 'Photo');
+            if (!inventoryItem) {
+                console.error(`Item not found: ${itemName}`);
+                return;
+            }
+            else{
+                inventoryItem.acquired = false;
+
+            }
+            console.log('Disco ball status:', inventoryItem)
+            
+
+        }
+
+
 
         const customActions = {
             'sid_key_action': sid_key_action,
@@ -1720,10 +1816,13 @@
             'kevind_action3': kevind_action3,
             'popup_action1' : popup_action1,
             'popup_action2' : popup_action2,
+            'popup_action3' : popup_action3,
             'handleRaffleEntry' : handleRaffleEntry,
             'dj_action1' : dj_action1,
             'dj_chops'  : dj_chops,
-            'bridget_action1' : bridget_action1
+            'bridget_action1' : bridget_action1,
+            'bridget_action2' : bridget_action2,
+            'bridget_action3' : bridget_action3
             
 
         };
@@ -1783,8 +1882,13 @@
             ];
 
 
-
-
+        const bouncer_help_dialogue_data = [
+            {speaker: 'Player', text: "Excuse me, I need to get backstage. I'm here to talk to Bob Mould." },
+            {speaker: 'Bouncer', text: "You and everyone else in this city, kid. But unless your name is on the manifest or you’ve got official journal accreditation, you’re staying behind the velvet rope." },
+            { speaker: 'Player', text: "Journal accreditation? Is there really no other way? I just need five minutes of his time." },
+            { speaker: 'Bouncer', text: "Strict rules tonight. No press pass, no entry. Management's orders." },
+            { speaker: 'Player', text: "Fine. I'll go get that accreditation. Don't go anywhere." }
+        ];
        
         const sids_help_dialogue_data = [
             { speaker: 'Player', text: "Hey {bestie}, I want to tell you about my musician dream..." },
@@ -1960,6 +2064,39 @@
 
         },
 
+        fillmore: (name, data) => {
+            currentContext = { name, data };
+
+            return `
+                <span class="block text-xl title">// Welcome to ${name.toUpperCase()} !//</span>
+                <span class="block">>> Style: Rock Historic venue</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
+                                    <p class="italic"> A bouncer is blocking the entrance</p>
+                                </div>
+
+                ${game.bouncer_buttons.showHelpButton ? `
+                <div class="flex justify-center mt-4" id="sids-help-button-container">
+                    <button onclick="bouncer_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
+                    </button>
+                </div>
+                ` : ''}
+
+                <div id="main-action-buttons" class="flex flex-col items-center">
+                        <div class="flex justify-center mt-6 w-full">
+                            <!-- Button to switch to the Question Grid view -->
+                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                                <span class="text-base font-bold">Interact with ${data.character} </span>
+                            </button>
+                        </div>
+                </div>
+
+            `;
+               
+
+        },
+
         cliffs: (name, data) => {
             currentContext = { name, data };
 
@@ -2069,6 +2206,14 @@
                                     <p class="italic"> </p>
                                 </div>
 
+                ${game.bouncer_buttons.showHelpButton ? `
+            <div class="flex justify-center mt-4" id="sids-cheer-button-container">
+                <button onclick="popup_action3" class="metal-button px-6 py-2">
+                    <span class="text-sm">Use Photo Booth to take a photo</span>
+                </button>
+            </div>
+        ` : ''}
+
                 <div id="main-action-buttons" class="flex flex-col items-center">
                         <div class="flex justify-center mt-6 w-full">
                             <!-- Button to switch to the Question Grid view -->
@@ -2077,6 +2222,7 @@
                             </button>
                         </div>
                 </div>
+
             `;
                
         },
@@ -2104,35 +2250,6 @@
             `;
         },
 
-        // --- Major Infrastructure (Bridges, Airports) ---
-        infrastructure: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                <span class="block text-xl title">// INFRASTRUCTURE STATUS: ${name.toUpperCase()} //</span>
-                <span class="block">>> SYSTEM CHECK: Green. Traffic Flow: Optimal.</span>
-                <span class="block">>> MAINTENANCE ALERT: None.</span>
-                <span class="block">>> DESCRIPTION: ${data.description}</span>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                                    <p class="italic"> </p>
-                                </div>
-
-                <div class="flex justify-center mt-4 space-x-4">
-                    <button onclick="toggleLandmarkVisibilityByName('The Fillmore', true)" class="metal-button px-6 py-2 bg-red-800 hover:bg-red-700">
-                        <span class="text-sm">HIDE THE FILLMORE</span>
-                    </button>
-                    <button onclick="toggleLandmarkVisibilityByName('Great American Music Hall', true)" class="metal-button px-6 py-2 bg-red-800 hover:bg-red-700">
-                        <span class="text-sm">HIDE MUSIC HALL</span>
-                    </button>
-                </div>
-
-                 <div class="flex justify-center mt-4" id="sids-cheer-button-container">
-                <button onclick="renderQuestionGrid()" class="metal-button px-6 py-2">
-                    <span class="text-sm">Question mode </span>
-                </button>
-                </div>
-            `;
-        },
         // --- Historical & Cultural Sites ---
         historical: (name, data) => {
             currentContext = { name, data };
@@ -2563,6 +2680,14 @@
             }
 
 
+        function bouncer_request_help(){
+            game.pendingAcquisition.topic = 'Accreditation';
+            const dialogueHtml = renderDialogue(bouncer_help_dialogue_data, "Intimidating Bouncer");
+            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
+            switchToView(contentDiv);
+
+        }
+
         function bestie2_request_help(){
             const dialogueHtml = renderDialogue(bestie2_help_dialogue_data, game.names.bestie2);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
@@ -2599,6 +2724,7 @@
             game.previousPhase = 10;
             game.currentLocationId = 'HSB Festival'
             game.pendingAcquisition.location = 'The Fillmore';
+            toggleLandmarkVisibilityByName('The Fillmore', false);
             const dialogueHtml = renderDialogue(bridget_help_dialogue_data, 'Bridget');
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
@@ -2904,7 +3030,6 @@
                 </div>
             `;
             
-
             locationBox.innerHTML = headerHtml + contentHtml ;
 
             // 4. Close mechanism
@@ -4789,7 +4914,8 @@
             "Peets" : "./sprites/peets.jpg",
             "HSB Festival": "./sprites/hsb1.jpg",
             "The 440": "./sprites/djrobbie_bar.jpg",
-            "Cliff\'s Variety": "./sprites/cliffs-habibi.jpg"
+            "Cliff\'s Variety": "./sprites/cliffs-habibi.jpg",
+            "The Fillmore" : "./sprites/fillmore.jpg"
 
         };
 
@@ -6443,8 +6569,12 @@
     window.handleRaffleEntry = handleRaffleEntry;
     window.popup_action1 = popup_action1;
     window.popup_action2 = popup_action2;
+    window.popup_action3 = popup_action3;
     window.bridget_action1 = bridget_action1;
+    window.bridget_action2 = bridget_action2;
+    window.bridget_action3 = bridget_action3;
     window.bestie2_request_help = bestie2_request_help;
+    window.bouncer_request_help = bouncer_request_help;
     window.sids_request_help = sids_request_help;
     window.bridget_request_help = bridget_request_help;
     window.dj_request_help = dj_request_help;
