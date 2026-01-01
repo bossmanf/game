@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habibi's Dream - Cinematic Fix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background: #000 url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center fixed; 
+            background-size: cover;
+            font-family: 'Inter', sans-serif;
+            color: #d1d5db;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .hidden { display: none !important; }
+        
+        /* The cinematicView must be fixed and have the highest z-index */
+        #cinematicView {
+            z-index: 10000;
+            background-color: rgba(0, 0, 0, 0.95);
+            transition: opacity 0.8s ease;
+        }
+
+        .title-font { font-family: 'Orbitron', sans-serif; }
+        
+        .metal-button {
+            background: linear-gradient(145deg, #1f2937, #111827);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .metal-button:hover {
+            border-color: #00f2ff;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="min-h-screen p-4 md:p-8 flex flex-col items-center">
+        <div id="game-container" class="w-full max-w-6xl">
+            </div>
+    </div>
+
+    <div id="cinematicView" class="hidden fixed inset-0 flex flex-col items-center justify-center p-4 opacity-0 cursor-pointer" onclick="displayNextSentence()">
+        <div class="mb-6 flex justify-center w-full max-w-4xl">
+            <video id="videoDisplay" class="rounded-xl transition-opacity duration-700 opacity-0 w-full h-auto max-h-[60vh] object-cover shadow-2xl" muted playsinline></video>
+        </div>
+
+        <div id="textBox" class="w-full max-w-4xl p-6 text-2xl font-sans text-center rounded-xl bg-black/40">
+            <p id="cinematicText" class="text-gray-100 italic">Initializing transmission...</p>
+        </div>
+        <p class="text-xs text-gray-500 mt-4 tracking-wider uppercase animate-pulse">Click anywhere to advance</p>
+    </div>
+
+    <script>
+        const game = {
+            phase: 1,
+            score: 20000,
+            message: 'System Online',
+            isLLMLoaded: true,
+            isLoading: false,
+            purchasedItems: []
+        };
+
+        const cinematicScript = [
+            { text: "The moon hung low, a fractured disc of pale light over the sleeping city.", videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" },
+            { text: "Only the distant hum of the ventilation systems betrayed any sign of life.", videoUrl: "https://vjs.zencdn.net/v/oceans.mp4" },
+            { text: "It was the Watcher, a figure of myth and chrome, observing from the heights.", videoUrl: "https://www.w3schools.com/html/movie.mp4" }
+        ];
+
+        let cinematicScriptIndex = -1;
+        const appContainer = document.getElementById('game-container');
+
+        // --- Core Functions ---
+
+        function updateState(newState) {
+            Object.assign(game, newState);
+            renderGame();
+        }
+
+        function setPhase(newPhase, msg) {
+            game.phase = newPhase;
+            game.message = msg;
+            renderGame();
+        }
+
+        function createElement(tag, classes, innerHTML = '') {
+            const el = document.createElement(tag);
+            if(classes) el.className = classes;
+            if(innerHTML) el.innerHTML = innerHTML;
+            return el;
+        }
+
+        // --- Cinematic Logic ---
+
+        function startCinematic() {
+            const mainUI = document.getElementById('app');
+            const cinematicView = document.getElementById('cinematicView');
+            
+            // Hide Game, Show Overlay
+            if (mainUI) mainUI.classList.add('hidden');
+            cinematicView.classList.remove('hidden');
+            
+            // Fade In
+            setTimeout(() => {
+                cinematicView.classList.replace('opacity-0', 'opacity-100');
+                displayNextSentence(); 
+            }, 50);
+        }
+
+        function displayNextSentence() {
+            const video = document.getElementById('videoDisplay');
+            const text = document.getElementById('cinematicText');
+            
+            cinematicScriptIndex++;
+
+            if (cinematicScriptIndex < cinematicScript.length) {
+                const scene = cinematicScript[cinematicScriptIndex];
+                
+                // Transition effect
+                video.classList.remove('opacity-100');
+                
+                setTimeout(() => {
+                    video.src = scene.videoUrl;
+                    text.textContent = scene.text;
+                    video.load();
+                    video.play().catch(e => console.log("Autoplay prevented", e));
+                    
+                    video.oncanplay = () => video.classList.add('opacity-100');
+                }, 400);
+
+            } else {
+                exitCinematic();
+            }
+        }
+
+        function exitCinematic() {
+            const cinematicView = document.getElementById('cinematicView');
+            const mainUI = document.getElementById('app');
+            
+            cinematicView.classList.replace('opacity-100', 'opacity-0');
+            
+            setTimeout(() => {
+                cinematicView.classList.add('hidden');
+                mainUI.classList.remove('hidden');
+                cinematicScriptIndex = -1;
+                setPhase(0, "Sequence Complete.");
+            }, 800);
+        }
+
+        // --- Rendering ---
+
+        function renderPhase12() {
+            const div = createElement('div', 'flex flex-col items-center justify-center p-12 text-center');
+            div.innerHTML = `
+                <h1 class="text-5xl font-extrabold mb-8 text-cyan-400 title-font">THE SILENT WATCHER</h1>
+                <button id="startBtn" class="metal-button text-white font-bold py-4 px-10 rounded-xl text-xl">
+                    LAUNCH CINEMATIC
+                </button>
+            `;
+            setTimeout(() => {
+                document.getElementById('startBtn').onclick = startCinematic;
+            }, 0);
+            return div;
+        }
+
+        function renderPhase0() {
+            const div = createElement('div', 'flex flex-col items-center p-8');
+            div.innerHTML = `<h2 class="text-3xl title-font mb-6">SYSTEM MENU</h2>`;
+            const btn = createElement('button', 'metal-button py-4 px-8 rounded-lg', '🎬 OPEN MISSION 12');
+            btn.onclick = () => setPhase(12, "Loading Cinematic Data...");
+            div.appendChild(btn);
+            return div;
+        }
+
+        function renderGame() {
+            appContainer.innerHTML = '';
+            const frame = createElement('div', 'bg-gray-900/80 backdrop-blur-md border-2 border-cyan-900 rounded-2xl min-h-[500px] flex flex-col');
+            
+            const header = createElement('div', 'p-4 border-b border-cyan-900 text-center text-cyan-500 font-mono', game.message);
+            frame.appendChild(header);
+
+            const contentArea = createElement('div', 'flex-1');
+            if (game.phase === 12) contentArea.appendChild(renderPhase12());
+            else contentArea.appendChild(renderPhase0());
+
+            frame.appendChild(contentArea);
+            appContainer.appendChild(frame);
+        }
+
+        window.onload = renderGame;
+    </script>
+</body>
+</html>

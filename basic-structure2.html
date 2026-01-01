@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="https://cdn.tailwindcss.com"></script>
+            <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+                
+            <style>
+                            
+                        body {
+                                    background: url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center     
+                                    font-family: 'Inter', sans-serif;
+                                    color: #d1d5db;
+                        }
+                            
+            </style>
+</head>
+<body>
+
+            <div id="app" class="min-h-screen p-4 md:p-8 flex flex-col items-center">
+
+                        <div id="game-container" class="w-full max-w-4xl">
+                                    <div className="mx-auto w-11/12 md:w-2/3 mb-10 border-4 border-yellow-500 rounded-lg overflow-hidden shadow-xl">
+                                                <img     
+                                                            src="https://media.gettyimages.com/id/1363411424/photo/smiling-young-man-playing-an-acoustic-guitar.jpg?s=2048x2048&w=gi&k=20&c=z8m_ZT1x5gFEstoTfBIulNKpBzp6D-XAbbfA7b7e2B8="
+                                                            alt="Habibi is the best"     
+                                                            className="w-full h-auto object-cover"
+                                                            onError={(e) => 'Error loading'
+                                                />
+                                    </div>
+                                    <!-- Content will be rendered here by JavaScript -->
+                        </div>
+
+            </div>
+
+            <script>
+                        // Global Game State
+                        const game = {
+                                    phase: 1,                                         // 1: Welcome, 2: Topic Selection, 3: Question
+                                    score: 20000,
+                                    isLLMLoaded: false,
+                                    isLoading: false,
+                                    topics: [],
+                                    selectedItem: null, // New state variable to hold the item being inspected
+                                    alltopics: [],
+                                    words: [],
+                                    midis: [],
+                                    fans: 0,
+                                    isFanPanelVisible: true, // NEW: Control fan panel visibility
+                                    currentTopic: '',
+                                    questionData: null,           // {question, correctAnswer, wrongAnswers[]}
+                                    selectedAnswer: null, // The answer the player clicked
+                                    artists: ['The Beatles', 'U2', 'Metallica', 'Smashing Pumpkins', 'Prince'],
+                                    artists_bought: ['U2', 'Metallica'],
+                                    selectedPracticeArtist : null,
+                                    inventory_items: [
+                                                { name: "Driver's License ID", icon: '🪪', acquired: true, desc: 'Necessary for identification. Looks legitimate.' ,          
+                                                            messages:     
+                                                                        { 'BESTIE': 'So pretty!!!',
+                                                                        'BITTER END': 'Yep, you are not 18 anymore...',
+                                                                        'Metallica Pop-up Store': 'I know you are an adult, sir',
+                                                                        'HSB Festival' : 'You do not need it here' ,
+                                                                        'The 440' : 'Such a baby!'}     
+
+                                                            },
+
+                                                            { name: "Cash", icon: '💵', acquired: true, desc: 'Cash' ,          
+                                                            messages:     
+                                                                        { 'BESTIE': 'Really?',
+                                                                        'BITTER END': 'Thanks, buddy, but no need',
+                                                                        'Metallica Pop-up Store': 'Why do not you use it in the Photo Booth?',
+                                                                        'HSB Festival' : 'I do not need it' ,
+                                                                        'The 440' : 'I am fine',
+                                                                        'The Fillmore': 'I hope you are NOT trying to bribe me...'}     
+
+                                                            },
+
+                                                            { name: "Accreditation", icon: '🛂', acquired: false, desc: 'Accreditation' ,          
+                                                                        actions: {'The Fillmore': 'bouncer_action1'},
+                                                            messages:     
+                                                                        { 'BESTIE': 'Cool?',
+                                                                        'BITTER END': 'Look at you!',
+                                                                        'Metallica Pop-up Store': 'So what?',
+                                                                        'HSB Festival' : 'Hopefully it works!' ,
+                                                                        'The 440' : 'So fancy!'}     
+
+                                                            },
+
+                                                { name: "Photo", icon: '😎', acquired: false, desc: 'Necessary for identification. Looks legitimate.' ,          
+                                                            actions: {
+                                                            'HSB Festival': 'bridget_action3'
+                                                            },
+                                                            messages:     
+                                                                        { 'BESTIE': 'So pretty!!!',
+                                                                        'BITTER END': 'Yep, you are not 18 anymore...',
+                                                                        'Metallica Pop-up Store': 'I know you are an adult, sir',
+                                                                        'HSB Festival' : 'You do not need it here' ,
+                                                                        'The 440' : 'Such a baby!'}     
+
+                                                            },
+
+
+                                                { name: "Chops list", icon: '📜',      acquired: true, desc: 'List of chops to unlock' ,
+                                                            actions: {
+                                                                                          'The 440': 'dj_action2',
+                                                                                          'The Fillmore ': 'bob_chops',
+                                                                                          'HSB Festival' : 'bridget_chops',
+                                                                                          'BESTIE' : 'sid_chops',
+                                                                                          'BITTER END' : 'kevind_action4',
+                                                                                          'Peets' : 'bestie2_chops',
+                                                                                          'Crazy K' : 'crazy_action3'
+                                                                              },
+                                                            messages:     
+                                                                        {     
+                                                                            
+                                                                        'Metallica Pop-up Store': 'I love it! Follow your dream! I wish I could help you',
+                                                                        'HSB Festival' : 'I can help you with Circuit Navigation but you need to help me first!',
+                                                                        'The 440' : 'I can definitely teach you about Rhythm Mastery if you do me a favor' ,
+                                                                        'The Fillmore ': 'I can help you with Stage Presence if I recover my mojo',
+                                                                        'Peets': 'I can help you with Lyrical flow but I need to get my inspiration back...',
+                                                                        'Crazy K': 'Instrument Synergy is my jam but where is my Yin?'
+
+                                                                        }     
+                                                            },
+
+
+                                                { name: "Metallica t-shirt", icon: '👕',      acquired: false, desc: 'Ultimate Metallica T-shirt!' ,
+                                                            actions: {'BITTER END': 'kevind_action3'},
+                                                            messages:     
+                                                                        { 'BESTIE': 'Ugh... Really?',
+                                                                        'Metallica Pop-up Store': 'No refunds!',
+                                                                        'HSB Festival' : 'No worries. You can keep it',
+                                                                        'The 440' : 'Not my thing...' }     
+                                                            },
+
+
+                                                {name: 'Galactic Silver glitter', price: 25, icon:'✨', acquired: true, given: false, desc: 'Robbie seems to like this glitter brand', actions : {'The 440': 'dj_action1'},
+                                                            messages:
+                                                                        {'BESTIE': 'Ummm... Really? No way!',
+                                                                        'Metallica Pop-up Store': 'No refunds!',
+                                                                        'HSB Festival' : 'Please! I am trying to work!',
+                                                                        'The 440': 'Thanks!'}     
+                                                            },
+
+                                                {name: 'Disco Ball', price: 2, icon:'🪩', acquired: false, given: false, desc: 'Love these guys!', actions : {'BESTIE': 'sid_action1'},
+                                                            messages:
+                                                                        {'BESTIE': 'YAY!',
+                                                                        'Metallica Pop-up Store': 'No refunds!',
+                                                                        'HSB Festival' : 'Please! I am trying to work!',
+                                                                        'The 440': 'I have trillions of these!'}     
+                                                            },
+
+                                                { name: 'Arn Anderson VHS', acquired: true, given: false, price: 100, icon: '📼', desc: 'Footage of this legendary wrestler' , actions : {'The Fillmore ': 'bob_action1'},
+                                                                        messages:
+                                                                                    {'BESTIE': 'I mean...',
+                                                                                    'Metallica Pop-up Store': 'No refunds!',
+                                                                                    'HSB Festival' : 'Ugh...',
+                                                                                    'The 440': 'Woof!',
+                                                                                    'Peets': 'Yes! That will help!'}     
+                                                                        },
+
+                                               { name: 'Don Quixote', acquired: false, price: 25, icon: '📕', desc: 'Don Quixote' ,     
+                                                messages:
+                                                            {'BESTIE': 'Interesting and long',
+                                                            'Metallica Pop-up Store': 'No refunds!',
+                                                            'HSB Festival' : 'Are you kidding me?',
+                                                            'The 440': 'Wait, what"',
+                                                            'Peets': 'Mmm... Thanks, but I already read it',
+                                                            'Crazy K' : 'I do not want it. How about the street library?'}     
+                                                },
+                                                    
+                                                { name: 'On The Road by Kerouac', acquired: true, given: false, price: 35, icon: '📘', desc: 'On The Road by Kerouac' ,
+                                                actions:{ 'Peets': 'bestie2_action2'} ,
+                                                            messages:
+                                                                        {'BESTIE': 'Interesting and long',
+                                                                        'Metallica Pop-up Store': 'No refunds!',
+                                                                        'HSB Festival' : 'Are you kidding me?',
+                                                                        'The 440': 'Wait, what"',
+                                                                        'Peets': 'Mmm... Thanks, but I already read it',
+                                                                        'Crazy K' : 'I do not want it. How about the street library?'}     
+                                                            },
+
+                                    ],     
+
+                                    conversation_topics: {
+                                    unlocked: [
+
+                                                            {name:"Musician career",icon:'🎶',acquired:true,actions: {
+                                                                 'BITTER END': 'kevind_action1',     
+                                                                 'BESTIE': 'sid_key_action'
+                                                     },messages:{
+                                                                 'THE 440': 'I LOVE IT!',
+                                                                 'BESTIE': 'I know nothing but maybe ${game.names.bestie3} can help you!',
+                                                                 'Peets': 'No idea but maybe your music buddy knows about it!',
+                                                                 'The Fillmore ': 'I can definitely help you! Do you have a list of chops?' },
+                                                                 'Crazy K': 'Wonderful! What are your technical skills?'},
+                                                     
+
+                                                            {name:"Accreditation",icon:'🛂',acquired:false,actions:{
+                                                            'HSB Festival': 'bridget_action2'
+                                                            },
+                                                            messages: {
+                                                                 'BITTER END': 'I wish I could help you',     
+                                                                 'BESTIE': 'Already getting in trouble?',
+                                                                 'THE 440': 'I wish I had one' }},
+
+
+                                                            {name:"Metallica tour", ruffle: false, icon:'🤘',acquired:false,actions: {     
+                                                            'BITTER END': 'kevind_action2',
+                                                            'Metallica Pop-up Store': 'popup_action1',
+                                                            'THE 440': 'You will not see me there!' } },
+
+                                                            {name:"Ultimate Metallica t-shirt",icon:'👕',acquired:true,actions: {
+                                                            'HSB Festival' : 'bridget_action1'},
+                                                                        messages:
+                                                                                    {'BESTIE': 'MMmmm... really?',
+                                                                                    'Metallica Pop-up Store': 'We sold out those t-shirts. A girl wearing a purple shirt with the letters HSB bought a whole set',
+                                                                                    'BITTER END': 'I would be so happy with that t-shirt...',
+                                                                                    'THE 440': 'Thanks but NO!'},
+                                                            },
+
+                                                            {name: 'A.A.?', icon:'🅰️', acquired: false, desc: 'Bob needs motivation from this mysterious name ', actions : {'Peets': 'bestie2_action1'},
+                                                            messages:
+                                                                        {'BESTIE': 'No clue!',
+                                                                        'Metallica Pop-up Store': 'What?',
+                                                                        'HSB Festival' : 'No idea what he is talking about...',
+                                                                        'The 440': 'Is this a diva?'}     
+                                                            },
+
+                                                                 {name: 'Fretboard List', icon:'📋', acquired: false, desc: 'The list to master Fretboar control', actions : {'BITTER END': 'kevind_action5', 'The Fillmore ':'bob_action2'},
+                                                            messages:
+                                                                        {'BESTIE': 'No clue!',
+                                                                        'Metallica Pop-up Store': 'Sounds so complicated...',
+                                                                        'HSB Festival' : 'No idea what he is talking about...',
+                                                                        'The 440': 'This is not vibing for me',
+                                                                        'Crazy K': 'Have you found any of the ingredientes?'}     
+                                                            },
+                                                ],
+                                                newTopicA: null, // Will hold the latest acquired topic string
+                                    },
+
+
+                                    message: 'Initializing...',
+                                    currentBand: '',
+                                    currentSong: '',
+                                    timer: 30,
+                                    timerInterval: null,
+                                    synth: null, // Tone.js synth instance
+                                    error: null,
+                                    leadSynth: null,                 // Polyphonic Synth for lead/melody
+                                    musicTransport: null, // Tone.Transport for scheduling
+                                    musicLoop: null,                 // The scheduled musical event,
+                                    names: {
+                                                main : 'Hassan',
+                                                bestie: 'Sid',
+                                                bestie2: 'Kevin W',
+                                                bestie3: 'Kevin D',
+                                                partner: 'Fran',
+                                                company: 'Evil Sales company'
+
+                                    },
+                                    familyFeud: {
+                                                Challenges: [], // Filled by setupFeudGame
+                                                currentChallenge: null,
+                                                revealedAnswers: [], // Array of booleans [false, true, ...]
+                                                strikes: 0,
+                                                roundPoints: 0,
+                                                isRoundActive: false,
+                                                totalPointsScored: 0,
+                                    },
+                                    level: 0,
+                                    totalXP: 0,
+                                    songCounts: 0,
+                                    // Musician Chop Skills (XP values)
+                                    chops: [
+                                                { name: "Social Influence", points: 2, level: 0, isUnlocked: true, icon: '📣' },
+                                                { name: "Instrument Synergy", points: 2, level: 1, isUnlocked: false, icon: '🎸' },
+                                                { name: "Rhythm Mastery", points: 0, level: 0, isUnlocked: false, icon: '🎼' },
+                                                { name: "Lyrical Flow", points: 0, level: 0, isUnlocked: false, icon: '🖋️' },
+                                                { name: "Circuit Navigation", points: 0, level: 0, isUnlocked: false, icon: '🗺️' },
+                                                { name: "Stage Presence", points: 0, level: 0, isUnlocked: false, icon: '🎤' }
+                                    ],
+
+                                        
+                                    memories: {
+                                                Awe: 0,
+                                                Motivation: 0,
+                                                Anger: 1,
+                                                Happiness: 0,
+                                                Love: 0,
+                                                Identity: 0,
+                                                Nostalgia: 0,
+                                                Freedom: 0,
+                                                Gratitude: 0,
+                                                Resilience: 1,
+                                    },
+                                    songRecipes: songRecipesData,
+                                    mixedScore: { grit: 0, soul: 0, depth: 0 },
+                                    mixingBoard: [], // Stores the theme name of the memories currently on the board
+                                    cinematicData: { videoPath: '', cinematicText: '' }, // NEW: Cinematic data container
+                                    sids_buttons :
+                                    {
+                                                showMoneyButton: true,
+                                                showCheerButton: true,
+                                                showHelpButton: true     
+                                    },
+                                    kevind_buttons :     
+                                    {
+                                                practiceChop: false,
+                                                guitar: false
+                                    },
+
+                                    bridget_buttons:
+                                    {
+                                                showHelpButton:true,
+                                                photo: false
+                                    },
+                                    crazy_buttons:
+                                    {
+                                                showHelpButton:true,
+                                                showLibrary:true,
+                                                showPoker:false
+                                    },
+                                    cliffs_buttons:
+                                    {
+                                                showHelpButton:true
+
+                                    },
+                                    mama_buttons:{
+                                                showHelpButton:true
+                                    },
+                                    bouncer_buttons:
+                                    {
+                                                showHelpButton:true,
+                                                description: 'A giant gorilla is guarding the entrance'
+                                    },
+                                    bob_buttons:
+                                    {
+                                                showHelpButton:true,
+                                                guitar: false
+                                    },
+                                    dj_buttons:
+                                    {
+                                                showHelpButton:true,
+                                                showCD: false
+                                    },
+                                    bestie2_buttons:{
+                                                showHelpButton :true,
+                                                practiceChop : false
+                                    },
+                                    iphoneState: {
+                                                view: 'notifications', // 'notifications' or 'message'
+                                                selectedMessageIndex: null // Index of the message to display
+                                    },
+                                    pendingAcquisition: {
+                                    location: null,
+                                    topic: null,
+                                    item: null,
+                                    chop: null,
+                                    },
+                                    currentBuildingName: 'home',
+                                    currentLocationId: 'home',     
+                                    paigow: null
+
+                                        
+                        };
+
+
+                            
+                        let iphoneNotifications = [
+                                    { id: 1, app: game.names.bestie, emoji: '💬', summary: 'New message', fullContent: "Hey boboo! Let's meet at my place. It's been a while", unread: true , location: 'BESTIE', topic: null},
+
+                                    { id: 2, app: 'SF Weather', emoji: '☀️', summary: 'Karl’s Vacation', fullContent: "Karl the Fog has officially packed his bags! Expect a rare streak of clear blue skies for the next few weeks. Sunglasses: Required. 😎", unread: true, location: null},
+
+                                        
+                                    { id: 6, app: game.names.bestie3, emoji: '💬', summary: 'New message', fullContent: "Hey buddy! Come meet me at the Bitter End for a couple of beers!", unread: true , location: 'BITTER END', topic: null},
+                                    { id: 5, app: 'News', emoji: '📰', summary: 'Breaking News', fullContent: "JUST IN: Heavy metal icons and Bay Area legends Metallica have officially confirmed they will be taking over San Francisco’s Oracle Park for a massive stadium performance later this month! 🤘", unread: true, location: null , topic: 'Metallica tour'}
+                                   
+                                    // max is 6
+
+                        ];
+
+                        const memoryComponentMatrix = {
+                                    Resilience: { name: 'Resilience', description: '💪 strength, courage, perseverance' ,color: 'Red', grit: 3, soul: -1, depth: 1, purpose: 'Maximize Intensity.', emoji: '💪', tailwind: 'bg-red-600' },
+                                    Freedom: { name: 'Freedom', description: '🕊️ liberation, adventure, spontaneity',color: 'Black', grit: 1, soul: 1, depth: 1, purpose: 'Versatile, well-rounded rebellion.', emoji: '🕊️', tailwind: 'bg-gray-900 border border-white' },
+                                    Anger: {      name: 'Anger', description: '💥 disappointment, regret, learning', color: 'Grey', grit: 2, soul: -1, depth: 1, purpose: 'Raw, dissonant sound.', emoji: '💥', tailwind: 'bg-gray-500' },
+                                    Motivation: {name: 'Motivation', description: '🚀 drive, inspiration, energy', color: 'Orange', grit: 1, soul: 0, depth: 2, purpose: 'Drives structure and energy.', emoji: '🚀', tailwind: 'bg-orange-500' },
+                                    Awe: { name: 'Awe', description: '🌌 feelings of wonder, amazement', color: 'Blue', grit: -1, soul: 1, depth: 3, purpose: 'Maximize Complexity/Scale.', emoji: '🌌', tailwind: 'bg-blue-600' },
+                                    Identity: { name: 'Identity', description: '👤 self-discovery, growth, expression' ,color: 'Purple', grit: 1, soul: 2, depth: 1, purpose: 'Personal, emotional core.', emoji: '👤', tailwind: 'bg-purple-600' },
+                                    Love: { name: 'Love', description: '💖 romance, affection, connection',color: 'Pink', grit: -1, soul: 3, depth: 1, purpose: 'Maximize Melody/Heart.', emoji: '💖', tailwind: 'bg-pink-500' },
+                                    Gratitude: { name: 'Gratitude', description: '🙏 appreciation, thanks, blessing' ,color: 'Green', grit: 0, soul: 2, depth: 1, purpose: 'Warmth, balance.', emoji: '🙏', tailwind: 'bg-green-600' },
+                                    Happiness: { name: 'Happiness', description: '😊 joy, contentment, elixir' , color: 'Yellow', grit: -1, soul: 2, depth: 1, purpose: 'Light, positive emotion.', emoji: '😊', tailwind: 'bg-yellow-400' },
+                                    Nostalgia: { name: 'Nostalgia', description: '🕰️ memories, longing, heritage',color: 'Gold', grit: 1, soul: 1, depth: 2, purpose: 'Reflective, complex past.', emoji: '🕰️', tailwind: 'bg-yellow-600' },
+                        };
+
+
+
+                        const appContainer = document.getElementById('game-container');
+                        const matrixModal = document.getElementById('matrix-modal');
+                        const errorDisplay = document.getElementById('error-display');
+                        const errorMessageElement = document.getElementById('error-message');
+                        // ViewBox is 1000x800.
+
+                  const landmarkData = {
+
+                                    "Home": { X: 270, Y: 450, W: 60, H: 40, category: "home", emoji: "🏠", actionKey: "home", hidden: false , description: "An amazing place to live", character: 'game.names.main'},
+
+                                    "BITTER END": { X: 310, Y: 325, W: 50, H: 40, category: "bar", emoji: "🍻", actionKey: "bar", description: "Dive bar in the Richmond.", hidden: false, character: game.names.bestie3},
+
+                                    "Metallica Pop-up Store": { X: 690, Y: 540, W: 40, H: 30, category: "popup", emoji: "🛍️", actionKey: "popup", description: "Temporary Metallica pop-up store", hidden: true , character: 'Merchandise Handler'},
+
+                                    "BESTIE": { X: 640, Y: 350, W: 40, H: 40, category: "sids", emoji: "🏠", actionKey: "sids",      description:"The perfect apartment",      hidden: true, character: game.names.bestie },
+
+                                    "Castro": { X: 410, Y: 440, W: 60, H: 40, category: "castro", emoji: "🏳️‍🌈", actionKey: "castro", description: "Historic LGBTQ+ cultural heart of the city.", hidden: false , character: 'Character X'},
+           
+
+                       
+      const appContainer = document.getElementById('game-container');
+                        const errorDisplay = document.getElementById('error-display');
+                        const errorMessageElement = document.getElementById('error-message');
+                            
+                        // --- UI Rendering ---
+                            
+                        function renderPhase_boot() {
+                                    const welcomeContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8');
+                                        
+                                        
+                                    if (game.isLoading) {
+                                                welcomeContent.innerHTML = `
+                                                            <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
+                                                            <p class="mt-6 text-xl text-gray-400 title-font">${game.message}</p>
+                                                `;
+                                    } else if (game.isLLMLoaded) {
+                                                // LLM is loaded, show the START button
+
+                                                const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
+                                                    
+                                                // FIX: Assign an anonymous function to onclick that calls setPhase(0).
+                                                // This prevents the function from running immediately upon rendering.
+                                                startButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
+
+                                                welcomeContent.append(
+                                                            createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
+                                                            startButton
+                                                );
+                                                    
+                                    }
+                                    return welcomeContent;
+                        }
+
+                            
+                        function renderPhase0() {
+                                    const menuContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8 space-y-6');
+
+                                    const title = createElement('h3', 'text-5xl font-extrabold title-font text-neon-pink text-center mb-10', 'MAIN MENU');
+                                    title.style.textShadow = '0 0 10px #ff00ff';
+                                    menuContent.appendChild(title);
+                                    const buttonGrid = createElement('div', 'grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-2xl');
+
+
+                                    const buttons = [
+                                    
+                                                { title: 'CARDS', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconEmoji: '🃏', color: 'bg-gray-500 hover:bg-gray-600' },
+                                                { title: 'BONUS', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconEmoji: '🎁', color: 'bg-gray-500 hover:bg-gray-600' },
+                                                { title: 'X (LOCKED)', phase: 0, action: () => setPhase(0, 'Sector X is currently locked.'), iconEmoji: '🔒', color: 'bg-gray-500 hover:bg-gray-600' },
+                                          ];
+
+                                    buttons.forEach(btn => {
+                                                // Note: We use btn.iconHtml which contains the full SVG string.
+                                                const buttonInnerHtml = `<div class="w-full space-y-6">${btn.iconEmoji}</div><span>${btn.title}</span>`;
+                                                    
+                                                    buttons.forEach(btn => {
+                                                // Note: We use btn.iconHtml which contains the full SVG string.
+                                                const buttonInnerHtml = `<div class="w-full space-y-6">${btn.iconEmoji}</div><span>${btn.title}</span>`;
+                                                    
+                                                const button = createElement('button', 'metal-button py-6 text-xl flex flex-col items-center justify-center space-y-2 hover:scale-[1.02] transition-transform ' + (btn.title.includes('(LOCKED)') ? 'opacity-50 cursor-not-allowed' : ''), buttonInnerHtml);
+
+                                                    
+                                                button.onclick = btn.action;
+                                                buttonGrid.appendChild(button);
+                                    });
+
+
+                                    menuContent.appendChild(buttonGrid);
+                                    return menuContent;
+                        }
+
+                       
+
+                        function renderPhase11() {
+                                        
+
+
+                        }
+
+
+                            
+            function renderWinScreen() {
+                       const winContent = createElement('div', 'flex flex-col items-center justify-center h-full text-center bg-gray-800 p-10 rounded-xl shadow-2xl');
+                        winContent.innerHTML = `
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-electric-cyan mb-6 speed-icon">
+                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
+                                    </svg>
+                                    <h3 class="text-5xl font-extrabold title-font text-electric-cyan">SYSTEM OVERRIDE!</h3>
+                                    <p class="text-2xl text-gray-300 mt-4">MACHINE DEFEATED. FINAL SCORE: $${game.score}</p>
+                        `;
+                        const restartButton = createElement('button', 'metal-button w-2/3 py-4 text-xl mt-8 bg-red-600 hover:bg-red-700', 'REBOOT CHALLENGE');
+                        restartButton.onclick = () => window.location.reload();
+                        winContent.appendChild(restartButton);
+                        return winContent;
+            }
+
+
+            /**
+                 * Main render function: builds the entire UI based on game state.
+                 */
+            function renderGame() {
+                        if (game.score >= 20001) {
+                                    appContainer.innerHTML = '';
+                                    appContainer.appendChild(renderWinScreen());
+                                    return;
+                        }
+
+                        // Game Panels Structure
+                        appContainer.innerHTML = `
+                                    <div class="flex w-full metal-card min-h-[700px]">
+                                                <!-- LEFT PANEL: Conductor Info -->
+                                                <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-r-4 border-electric-cyan">
+                                                            <div class="text-center space-y-3">
+                                                                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">A.I. CONDUCTOR</h3>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-electric-cyan speed-icon">
+                                                                                    <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
+                                                                        </svg>
+                                                                        <div class="text-sm font-mono mt-4 p-2 bg-gray-700 rounded-lg border border-electric-cyan/50">
+                                                                                    <p>STATUS: ${game.isLoading ? 'LOADING' : 'IDLE'}</p>
+                                                                                    <p>PHASE: ${game.phase}</p>
+                                                                        </div>
+                                                            </div>
+                                                            <div class="text-center text-xs text-gray-500">
+                                                                        <p>Lux Aeterna!</p>
+                                                            </div>
+                                                </div>
+
+                                                <!-- CENTER PANEL: Game Interaction -->
+                                                <div id="center-panel" class="flex-1 p-6 flex flex-col justify-between">
+                                                            <h2 class="text-4xl font-extrabold text-white mb-4 text-center title-font">
+                                                                        ${game.phase > 1 ? 'LIVE CHALLENGE INTERFACE' : (game.phase === 0 ? 'SYSTEM MENU' : 'BOOT SEQUENCE')}
+                                                            </h2>
+                                                                
+                                                            <!-- Game Message Panel -->
+                                                            <div class="p-4 mb-6 text-center rounded-sm font-semibold shadow-md bg-electric-blue/20 text-electric-cyan border border-electric-blue">
+                                                                        ${game.message}
+                                                            </div>
+
+                                                            <!-- Dynamic Phase Content Placeholder -->
+                                                            <div id="dynamic-content" class="flex-1"></div>
+                                                </div>
+
+                                                <!-- RIGHT PANEL: Player Info -->
+                                                <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-l-4 border-electric-cyan">
+                                                            <div class="text-center space-y-3">
+                                                                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PLAYER DATA</h3>
+                                                                      <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-yellow-400 speed-icon">
+                                                                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                                                                        </svg>
+                                                                        <div class="mt-4 p-3 bg-gray-700 rounded-lg border border-yellow-400/50 shadow-xl">
+                                                                                    <p class="text-sm font-mono text-gray-400">SCORE REGISTER</p>
+                                                                                    <p class="text-4xl font-extrabold text-yellow-400 title-font">$${game.score}</p>
+                                                                                    <p class="text-xs text-gray-200">TARGET: $1000</p>
+                                                                        </div>
+
+                                                                        <div class="mt-6 pt-4 border-t border-gray-700 w-full">
+                                                                                    <p class="text-sm font-mono text-gray-400 
+                                                                                    iv class="p-1 text-center bg-gray-600 rounded-md border border-electric-cyan/70 hover:bg-gray-500" title="${item.name}">
+                                                                                                                                    <span class="text-2xl">${item.icon}</span>
+                                                                                                                        </div>
+                                                                                                            `).join('')
+                                                                                                }
+                                                                                    </div>
+                                                                        </div>
+                                                            </div>
+                                                            <div class="text-center text-xs text-gray-500">
+                                                                        <p>Chase that light!</p>
+                                                            </div>
+                                                </div>
+                                    </div>
+                        `;
+                            
+                        // Render phase-specific content
+                        const dynamicContent = document.getElementById('dynamic-content');
+                        dynamicContent.innerHTML = '';
+                            
+                        let contentElement;
+                        switch (game.phase) {
+                                    case 0:
+                                                contentElement = renderPhase0();      //      Menu
+                                                break;
+                                    case 1:
+                                                contentElement = renderPhase_boot(); // Original Phase 1
+                                                break;
+                                    case 11:
+                                                contentElement = renderPhase11();
+                                                break;
+                                    default:
+                                                contentElement = createElement('div', 'text-center p-8 text-red-500', 'UNKNOWN GAME STATE');
+                        }
+                        dynamicContent.appendChild(contentElement);
+            }
+
+            // Initialize the game when the window loads
+            window.onload = initializeLLM;
+            </script>
+</body>
+</html>

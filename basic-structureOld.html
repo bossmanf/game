@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        
+        body {
+            background: url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center; 
+            font-family: 'Inter', sans-serif;
+            color: #d1d5db;
+        }
+        .hidden { display: none !important; }
+        .opacity-100 { opacity: 1 !important; }
+        .opacity-0 { opacity: 0 !important; }
+
+        /* Custom Colors if not using Tailwind config */
+        :root {
+            --electric-cyan: #00f2ff;
+            --electric-blue: #0047ff;
+        }
+        .text-electric-cyan { color: var(--electric-cyan); }
+        .border-electric-cyan { border-color: var(--electric-cyan); }
+        .bg-electric-blue\/20 { background-color: rgba(0, 71, 255, 0.2); }
+        #cinematicView {
+            z-index: 9999; /* Ensure it's above the game UI */
+            background-color: black;
+        }
+        #videoDisplay {
+            background-color: #1a1a1a; /* Visual placeholder while loading */
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div id="app" class="min-h-screen p-4 md:p-8 flex flex-col items-center">
+
+        <div id="game-container" class="w-full max-w-4xl">
+            <div className="mx-auto w-11/12 md:w-2/3 mb-10 border-4 border-yellow-500 rounded-lg overflow-hidden shadow-xl">
+                
+            </div>
+            <!-- Content will be rendered here by JavaScript -->
+        </div>
+
+    </div>
+
+
+     <div id="cinematicView" class="hidden fixed inset-0 flex flex-col items-center justify-center p-4 bg-black/90 opacity-0" onclick="displayNextSentence()">
+        
+        <!-- Image Container -->
+        <div class="mb-6 flex justify-center w-full max-w-4xl">
+
+            <video id="videoDisplay" src="" class="rounded-xl transition-opacity duration-700 opacity-0 w-full h-auto max-h-[60vh] object-cover shadow-2xl" muted playsinline></video>
+
+          
+        </div>
+
+        <!-- Text Box (Larger and centered) -->
+        <div id="textBox" class="w-full max-w-4xl p-6 text-2xl font-sans text-center rounded-xl transition-all duration-500 hover:shadow-2xl hover:bg-opacity-95">
+            <p id="cinematicText" class="text-gray-100 italic">Click anywhere to begin...</p>
+        </div>
+
+        <!-- Optional instruction/hint -->
+        <p class="text-xs text-gray-500 mt-4 tracking-wider uppercase">Click anywhere on the screen to advance the story.</p>
+    </div>
+
+    <script>
+        // Global Game State
+            const game = {
+            phase: 1,             // 1: Welcome, 2: Topic Selection, 3: Question
+            score: 20000,
+            message: 'Initializing...',
+            isLLMLoaded: false,
+            isLoading: false,
+            topics: [],
+            selectedItem: null, // New state variable to hold the item being inspected
+            alltopics: [],
+            purchasedItems : [],
+            words: [],
+            midis: [],
+            fans: 0,
+            isFanPanelVisible: true, // NEW: Control fan panel visibility
+            currentTopic: '',
+            questionData: null,   // {question, correctAnswer, wrongAnswers[]}
+            selectedAnswer: null, // The answer the player clicked
+            inventory_items: [
+                { name: "Driver's License ID", icon: '🪪', acquired: true, desc: 'Necessary for identification. Looks legitimate.' , actions: { 'BESTIE': 'X' } , 
+                    messages: 
+                        { 'BESTIE': 'So pretty!!!',
+                        'BITTER END': 'Yep, you are not 18 anymore...',
+                        'Metallica Pop-up Store': 'I know you are an adult, sir',
+                        'HSB Festival' : 'You do not need it here' } 
+
+                    },
+
+            ], 
+
+        };
+
+
+
+        const appContainer = document.getElementById('game-container');
+        const errorDisplay = document.getElementById('error-display');
+        const errorMessageElement = document.getElementById('error-message');
+        
+        // --- UI Rendering ---
+        
+          async function initializeLLM(){
+           
+            try {
+                updateState({ isLLMLoaded: true, isLoading: false });
+                initCinematicVariables(); 
+                renderMainMenu();//renderGame()
+
+            } catch (e) {
+                console.error("Failed to initialize Game in loading txt/json functions.", e);
+                updateState({ 
+                    error: `Initialization Failure: ${e.message}. Check Network.`, 
+                    message: 'FATAL ERROR.', 
+                    isLoading: false 
+                });
+            }  
+                
+        }
+
+        function createElement(tag, classes, innerHTML = '') {
+            const el = document.createElement(tag);
+            if(classes){
+                el.className = classes;
+            }
+            if (innerHTML){
+                el.innerHTML = innerHTML;
+            }
+            return el;
+        }
+
+             function setPhase(newPhase, message, item = null) {
+            if (item) {
+                game.selectedItem = item;
+            }
+            updateState({ phase: newPhase, message: message });
+        }
+       
+          function updateState(newState) {
+            Object.assign(game, newState);
+            if (errorDisplay && errorMessageElement) {
+                if (game.error) {
+                    errorMessageElement.textContent = game.error;
+                    errorDisplay.classList.remove('hidden');
+                    console.error("Game Error:", game.error);
+                } else {
+                    errorDisplay.classList.add('hidden');
+                }
+            } else {
+                 // Fallback if the error UI elements are still missing for some reason
+                 if (game.error) console.error("Game Error (UI Missing):", game.error);
+            }
+            renderGame();
+        }
+
+        function renderMainMenu() {
+            const container = createElement('div', 'flex flex-col items-center py-12 px-6 space-y-12');
+            
+            container.innerHTML = `
+                
+                <div class="text-center space-y-4">
+                        Habibi's Dream
+                </div>
+            `;
+
+            const btnGroup = createElement('div', 'flex flex-col w-full max-w-sm space-y-4');
+            const buttons = [
+                { text: 'NEW JOURNEY', icon: '🎸', action: () => { game.phase = 1; renderGame(); } },
+                { text: 'CHOP GALLERY', icon: '🏆', action: () => alert("Locked until Chapter 1") },
+                { text: 'OPTIONS', icon: '⚙️', action: () => {} }
+            ];
+
+            buttons.forEach(b => {
+                const btn = createElement('button', 'menu-button flex items-center justify-between px-8 py-5 rounded-xl text-lg font-bold title-font text-white');
+                btn.innerHTML = `<span>${b.icon} &nbsp; ${b.text}</span> <span class="opacity-50 text-sm">→</span>`;
+                btn.onclick = b.action; 
+                btnGroup.appendChild(btn);
+            });
+
+            container.appendChild(btnGroup);
+            container.appendChild(createElement('div', 'text-zinc-500 text-xs font-mono pt-8', 'VER 1.0.9 | BAY AREA CHAPTER'));
+            
+            return container;
+        }
+
+
+        function renderPhase_boot() {
+            const welcomeContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8');
+            
+            
+            if (game.isLoading) {
+                welcomeContent.innerHTML = `
+                    <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
+                    <p class="mt-6 text-xl text-gray-400 title-font">${game.message}</p>
+                `;
+            } else if (game.isLLMLoaded) {
+                // LLM is loaded, show the START button
+
+                const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
+                
+                // FIX: Assign an anonymous function to onclick that calls setPhase(0).
+                // This prevents the function from running immediately upon rendering.
+                startButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
+
+                welcomeContent.append(
+                    createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
+                    startButton
+                );
+                
+            }
+            return welcomeContent;
+        }
+
+        
+        function renderPhase0() {
+            const menuContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8 space-y-6');
+
+            const title = createElement('h3', 'text-5xl font-extrabold title-font text-neon-pink text-center mb-10', 'MAIN MENU');
+            title.style.textShadow = '0 0 10px #ff00ff';
+            menuContent.appendChild(title);
+            const buttonGrid = createElement('div', 'grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-2xl');
+
+
+            const buttons = [
+                { title: 'MISSION', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), iconEmoji: '🎯', color: 'bg-indigo-600 hover:bg-indigo-700' },
+                { title: 'X (LOCKED)', phase: 0, action: () => setPhase(0, 'Sector X is currently locked.'), iconEmoji: '🔒', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'MISSION12', phase: 12, action: () => setPhase(12, 'Watch the transmission.'), iconEmoji: '🎬', color: 'bg-indigo-600' }
+              ];
+
+            buttons.forEach(btn => {
+                // Note: We use btn.iconHtml which contains the full SVG string.
+                const buttonInnerHtml = `<div class="w-full space-y-6">${btn.iconEmoji}</div><span>${btn.title}</span>`;
+                
+                const button = createElement('button', 'metal-button py-6 text-xl flex flex-col items-center justify-center space-y-2 hover:scale-[1.02] transition-transform ' + (btn.title.includes('(LOCKED)') ? 'opacity-50 cursor-not-allowed' : ''), buttonInnerHtml);
+
+                
+                button.onclick = btn.action;
+                buttonGrid.appendChild(button);
+            });
+
+
+            menuContent.appendChild(buttonGrid);
+            return menuContent;
+        }
+    function renderPhase11() {
+        
+    }
+
+   const cinematicScript = [
+    { text: "The moon hung low, a fractured disc of pale light over the sleeping city.", videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4" }
+        ];
+
+    let cinematicView; 
+    let cinematicText;
+    let videoDisplay; 
+    let mainGamePanel; 
+    let cinematicScriptIndex = -1;
+
+    /**
+     * Attempts to link the JS variables to the DOM elements.
+     * Returns true if successful.
+     */
+    function initCinematicVariables() {
+        // Look for the game panel to hide
+        mainGamePanel = document.querySelector('#game-container .metal-card');
+        
+        // Look for the cinematic overlay elements
+        cinematicView = document.getElementById('cinematicView');
+        cinematicText = document.getElementById('cinematicText');
+        
+        // Attempt to find videoDisplay. 
+        // NOTE: If your HTML still has <img id="videoDisplay">, this will fail.
+        // Ensure you change that <img> tag to a <video id="videoDisplay"> tag in your HTML.
+        videoDisplay = document.getElementById('videoDisplay');
+        
+        if (!cinematicView || !videoDisplay || !cinematicText) {
+            console.warn("Cinematic elements not found. Checking DOM...");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Starts the cinematic sequence.
+     */
+    function startCinematic() {
+        // Always try to initialize right before starting
+        if (!initCinematicVariables()) {
+            // If elements are missing, it might be because the UI is still rendering.
+            // We'll try one more time after a tiny delay to be safe.
+            setTimeout(() => {
+                if (initCinematicVariables()) {
+                    executeCinematicStart();
+                } else {
+                    console.error("Critical Error: videoDisplay or cinematicView missing from DOM. Check your HTML IDs.");
+                    // Fallback: If you haven't renamed your HTML tag yet, try to find videoDisplay
+                    const fallbackImg = document.getElementById('imageDisplay');
+                    if (fallbackImg) {
+                        console.warn("Found 'imageDisplay' instead of 'videoDisplay'. Please update your HTML tag from <img> to <video>.");
+                    }
+                }
+            }, 100);
+            return;
+        }
+        executeCinematicStart();
+    }
+
+    /**
+     * Internal helper to handle the visual transition into cinematic mode.
+     */
+   function executeCinematicStart() {
+        // 1. Find the main game UI and hide it
+        const mainUI = document.getElementById('app'); 
+        if (mainUI) mainUI.classList.add('hidden');
+
+        // 2. Show the cinematic overlay
+        if (cinematicView) {
+            cinematicView.classList.remove('hidden');
+            // Small timeout to allow the 'hidden' removal to register before opacity transition
+            setTimeout(() => {
+                cinematicView.classList.add('opacity-100');
+                displayNextSentence(); // Automatically start the first clip
+            }, 10);
+        }
+    }
+
+    /**
+     * Cycles through the script and updates the video source.
+     */
+    function displayNextSentence() {
+        // Re-check elements in case of dynamic re-renders
+        if (!videoDisplay || !cinematicText) {
+            initCinematicVariables();
+        }
+
+
+
+        if (!videoDisplay) {
+            console.error("Critical Error: videoDisplay element is missing from the DOM.");
+            return;
+        }
+
+        cinematicScriptIndex++;
+
+        if (cinematicScriptIndex < cinematicScript.length) {
+            const currentScene = cinematicScript[cinematicScriptIndex];
+            
+            // 1. Fade out current content
+            videoDisplay.classList.remove('opacity-100'); 
+            
+            setTimeout(() => {
+                // 2. Load and Play new video
+                videoDisplay.src = currentScene.videoUrl;
+                
+                // Check if it's a video element before calling video-specific methods
+                if (videoDisplay.tagName === 'VIDEO') {
+                    videoDisplay.load(); 
+                    videoDisplay.play().catch(e => {
+                        console.warn("Autoplay blocked. User interaction usually fixes this.", e);
+                    });
+                } else {
+                    console.error("videoDisplay is not a <video> element. Current tag:", videoDisplay.tagName);
+                }
+                
+                videoDisplay.onerror = () => {  
+                    console.error(`Error loading file at: ${currentScene.videoUrl}`);
+                    cinematicText.textContent = "⚠️ [FILE NOT FOUND]: " + currentScene.text;
+
+                };
+
+                // 3. Fade in new content
+                setTimeout(() => {
+                    videoDisplay.classList.add('opacity-100'); 
+                }, 50); 
+            }, 300); 
+
+            // 4. Update Text
+            if (cinematicText) {
+                cinematicText.textContent = currentScene.text;
+            }
+            
+        } else {
+            // Return to menu logic
+            if (typeof returnToMenu === 'function') {
+                returnToMenu();
+            } else {
+                if (cinematicView) {
+                    cinematicView.classList.add('hidden');
+                    cinematicView.classList.remove('opacity-100');
+                }
+                const mainContentPanel = document.querySelector('#game-container .metal-card');
+                if (mainContentPanel) {
+                    mainContentPanel.classList.remove('hidden');
+                    mainContentPanel.style.opacity = '1';
+                }
+            }
+        }
+    }
+
+
+        function returnToMenu() {
+            if (cinematicView) {
+                cinematicView.classList.remove('opacity-100');
+            }
+            
+            setTimeout(() => {
+                if (cinematicView) {
+                    cinematicView.classList.add('hidden');
+                }
+                
+                const mainContentPanel = document.querySelector('#game-container .metal-card');
+                if (mainContentPanel) {
+                    mainContentPanel.classList.remove('hidden');
+                    mainContentPanel.style.opacity = '1';
+                }
+                
+                // Return to the main game menu (Phase 0) if setPhase exists
+                if (typeof setPhase === 'function') {
+                    setPhase(0, 'Cinematic sequence complete. Back to the Main Menu.');
+                }
+            }, 500);
+        }
+         // NEW: Cinematic Menu Phase 
+        function renderPhase12() {
+            const cinematicMenuContent = createElement('div', 'flex flex-col items-center justify-center h-full p-6');
+            
+            cinematicMenuContent.innerHTML = `
+                <h1 class="text-5xl font-extrabold mb-8 text-electric-cyan title-font text-center">THE SILENT WATCHER</h1>
+                <p class="text-xl text-gray-300 mb-12 max-w-lg text-center">A short, atmospheric cinematic story. Click the button to begin the sequence. You can advance the story by clicking the screen after it starts.</p>
+                <button id="startCinematicBtn" class="metal-button bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50">
+                    START CINEMATIC SEQUENCE
+                </button>
+                <button onclick="setPhase(0, 'Return to Main System Menu')" class="metal-button mt-6 text-sm py-2 px-4 bg-gray-600 hover:bg-gray-700">
+                    BACK TO MENU
+                </button>
+            `;
+            
+            // Attach the click handler after the element is created
+            setTimeout(() => {
+                 const startBtn = document.getElementById('startCinematicBtn');
+                 if (startBtn) {
+                    startBtn.onclick = startCinematic;
+                 }
+            }, 0);
+
+            return cinematicMenuContent;
+        }
+        
+    function renderWinScreen() {
+        const winContent = createElement('div', 'flex flex-col items-center justify-center h-full text-center bg-gray-800 p-10 rounded-xl shadow-2xl');
+        winContent.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-electric-cyan mb-6 speed-icon">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
+            </svg>
+            <h3 class="text-5xl font-extrabold title-font text-electric-cyan">SYSTEM OVERRIDE!</h3>
+            <p class="text-2xl text-gray-300 mt-4">MACHINE DEFEATED. FINAL SCORE: $${game.score}</p>
+        `;
+        const restartButton = createElement('button', 'metal-button w-2/3 py-4 text-xl mt-8 bg-red-600 hover:bg-red-700', 'REBOOT CHALLENGE');
+        restartButton.onclick = () => window.location.reload();
+        winContent.appendChild(restartButton);
+        return winContent;
+    }
+
+
+    /**
+     * Main render function: builds the entire UI based on game state.
+     */
+    function renderGame() {
+        if (game.score >= 20001) {
+            appContainer.innerHTML = '';
+            appContainer.appendChild(renderWinScreen());
+            return;
+        }
+
+        // Game Panels Structure
+        appContainer.innerHTML = `
+            <div class="flex w-full metal-card min-h-[700px]">
+                <!-- LEFT PANEL: Conductor Info -->
+                <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-r-4 border-electric-cyan">
+                    <div class="text-center space-y-3">
+                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">A.I. CONDUCTOR</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-electric-cyan speed-icon">
+                            <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
+                        </svg>
+                        <div class="text-sm font-mono mt-4 p-2 bg-gray-700 rounded-lg border border-electric-cyan/50">
+                            <p>STATUS: ${game.isLoading ? 'LOADING' : 'IDLE'}</p>
+                            <p>PHASE: ${game.phase}</p>
+                        </div>
+                    </div>
+                    <div class="text-center text-xs text-gray-500">
+                        <p>Lux Aeterna!</p>
+                    </div>
+                </div>
+
+                <!-- CENTER PANEL: Game Interaction -->
+                <div id="center-panel" class="flex-1 p-6 flex flex-col justify-between">
+                    <h2 class="text-4xl font-extrabold text-white mb-4 text-center title-font">
+                        ${game.phase > 1 ? 'LIVE CHALLENGE INTERFACE' : (game.phase === 0 ? 'SYSTEM MENU' : 'BOOT SEQUENCE')}
+                    </h2>
+                    
+                    <!-- Game Message Panel -->
+                    <div class="p-4 mb-6 text-center rounded-sm font-semibold shadow-md bg-electric-blue/20 text-electric-cyan border border-electric-blue">
+                        ${game.message}
+                    </div>
+
+                    <!-- Dynamic Phase Content Placeholder -->
+                    <div id="dynamic-content" class="flex-1"></div>
+                </div>
+
+                <!-- RIGHT PANEL: Player Info -->
+                <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-l-4 border-electric-cyan">
+                    <div class="text-center space-y-3">
+                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PLAYER DATA</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-yellow-400 speed-icon">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <div class="mt-4 p-3 bg-gray-700 rounded-lg border border-yellow-400/50 shadow-xl">
+                            <p class="text-sm font-mono text-gray-400">SCORE REGISTER</p>
+                            <p class="text-4xl font-extrabold text-yellow-400 title-font">$${game.score}</p>
+                            <p class="text-xs text-gray-200">TARGET: $1000</p>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-gray-700 w-full">
+                            <p class="text-sm font-mono text-gray-400 mb-2">INVENTORY</p>
+                            <div id="inventory-display" class="grid grid-cols-4 gap-2">
+                                ${game.purchasedItems.length === 0 
+                                    ? '<p class="text-xs text-gray-500 italic col-span-4">No items acquired.</p>'
+                                    : game.purchasedItems.map(item => `
+                                        <div class="p-1 text-center bg-gray-600 rounded-md border border-electric-cyan/70 hover:bg-gray-500" title="${item.name}">
+                                            <span class="text-2xl">${item.icon}</span>
+                                        </div>
+                                    `).join('')
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center text-xs text-gray-500">
+                        <p>Chase that light!</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Render phase-specific content
+        const dynamicContent = document.getElementById('dynamic-content');
+        dynamicContent.innerHTML = '';
+        
+        let contentElement;
+        switch (game.phase) {
+            case 0:
+                contentElement = renderPhase0();  //  Menu
+                break;
+            case 1: contentElement = renderPhase_boot(); break;
+            case 12: contentElement = renderPhase12(); break; // ADD THIS LINE
+            case 11:
+                contentElement = renderPhase11();
+                break;
+            default:
+                contentElement = createElement('div', 'text-center p-8 text-red-500', 'UNKNOWN GAME STATE');
+        }
+        dynamicContent.appendChild(contentElement);
+    }
+
+    // Initialize the game when the window loads
+    window.onload = initializeLLM;
+    </script>
+</body>
+</html>

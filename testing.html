@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habibi's Dream - Debug Version</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #111; color: white; margin: 0; font-family: sans-serif; }
+        #cinematicView {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        /* Forced dimensions for the video */
+        video {
+            width: 100%;
+            height: 100%;
+            background: #222;
+        }
+        .video-box {
+            width: 80%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            border: 2px solid #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex items-center justify-center h-screen">
+        <button onclick="startCinematic()" class="bg-blue-600 px-10 py-5 rounded-xl font-bold text-2xl">
+            LAUNCH MISSION 12
+        </button>
+    </div>
+
+    <div id="cinematicView" onclick="displayNextSentence()">
+        <div class="video-box">
+            <video id="videoDisplay" muted playsinline></video>
+        </div>
+        <div class="p-10 text-center">
+            <p id="cinematicText" class="text-3xl italic mb-4"></p>
+            <p id="debugInfo" class="text-xs text-red-500 font-mono"></p>
+            <p class="text-gray-500 text-sm mt-4">Click anywhere to advance</p>
+        </div>
+    </div>
+
+    <script>
+        const script = [
+            { text: "The moon hung low.", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
+            { text: "The distant hum of the city.", url: "https://vjs.zencdn.net/v/oceans.mp4" }
+        ];
+
+        let index = -1;
+
+        function startCinematic() {
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('cinematicView').style.display = 'flex';
+            displayNextSentence();
+        }
+
+        function displayNextSentence() {
+            index++;
+            const video = document.getElementById('videoDisplay');
+            const text = document.getElementById('cinematicText');
+            const debug = document.getElementById('debugInfo');
+
+            if (index < script.length) {
+                const scene = script[index];
+                text.innerText = scene.text;
+                debug.innerText = "Loading video...";
+
+                // Attach error listener
+                video.onerror = function() {
+                    debug.innerText = "ERROR: Could not load video at " + scene.url;
+                };
+
+                video.src = scene.url;
+                video.load();
+                
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        debug.innerText = "Playing: " + scene.url;
+                    }).catch(err => {
+                        debug.innerText = "PLAYBACK BLOCKED: " + err.message;
+                    });
+                }
+            } else {
+                location.reload(); // Reset game
+            }
+        }
+    </script>
+</body>
+</html>

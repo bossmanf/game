@@ -3,268 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habibi's Dream - Mission 12</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        
+        :root {
+            --electric-cyan: #00f2ff;
+            --electric-blue: #0047ff;
+        }
+
         body {
-            background: url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center 
+            background: #000 url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80') no-repeat center center fixed; 
+            background-size: cover;
             font-family: 'Inter', sans-serif;
             color: #d1d5db;
+            margin: 0;
+            overflow: hidden;
         }
-        
+
+        .title-font { font-family: 'Orbitron', sans-serif; }
+
+        /* The Metal Card Styling */
+        .metal-card {
+            background: rgba(17, 24, 39, 0.9);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(0, 242, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .metal-button {
+            background: linear-gradient(145deg, #1f2937, #111827);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            color: var(--electric-cyan);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .metal-button:hover {
+            border-color: var(--electric-cyan);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Cinematic Overlay: Forced black background and high z-index */
+        #cinematicView {
+            position: fixed;
+            inset: 0;
+            background: black;
+            display: none; /* Controlled via JS */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            cursor: pointer;
+        }
+
+        .video-box {
+            width: 90%;
+            max-width: 900px;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .text-electric-cyan { color: var(--electric-cyan); }
     </style>
 </head>
 <body>
 
     <div id="app" class="min-h-screen p-4 md:p-8 flex flex-col items-center">
-
-        <div id="game-container" class="w-full max-w-4xl">
-            <div className="mx-auto w-11/12 md:w-2/3 mb-10 border-4 border-yellow-500 rounded-lg overflow-hidden shadow-xl">
-                <img 
-                    src="https://media.gettyimages.com/id/1363411424/photo/smiling-young-man-playing-an-acoustic-guitar.jpg?s=2048x2048&w=gi&k=20&c=z8m_ZT1x5gFEstoTfBIulNKpBzp6D-XAbbfA7b7e2B8="
-                    alt="Habibi is the best" 
-                    className="w-full h-auto object-cover"
-                    onError={(e) => 'Error loading'
-                />
-            </div>
-            <!-- Content will be rendered here by JavaScript -->
+        <div id="error-display" class="hidden fixed top-0 left-0 right-0 p-4 bg-red-800 text-white font-bold text-center z-50 shadow-2xl border-b-4 border-red-500">
+            <p id="error-message">System Error Detected.</p>
         </div>
+            
+        <!-- The main game container will be where the dynamic rendering happens -->
+        <div id="game-container" class="flex items-center">
 
+                <div class="metal-card">
+
+                    <div class="mx-auto w-11/12 md:w-2/3 mb-10 border-4 border-yellow-500 rounded-lg overflow-hidden shadow-xl">
+
+                    <img 
+                        id="main-image-display" 
+                        src="https://media.gettyimages.com/id/1363411424/photo/smiling-young-man-playing-an-acoustic-guitar.jpg?s=2048x2048&w=gi&k=20&c=z8m_ZT1x5gFEstoTfBIulNKpBzp6D-XAbbfA7b7e2B8="
+                        alt="Current Landmark View" 
+                        class="w-full h-auto object-cover"
+                        onerror="this.onerror=null;this.src='https://placehold.co/800x400/374151/FFFFFF?text=Image+Load+Error';"
+                    />
+                    </div>
+                </div>
+            </div>
+     </div>
+
+    <div id="cinematicView" class="hidden fixed inset-0 flex flex-col items-center justify-center p-4 opacity-0 cursor-pointer" onclick="displayNextSentence()">
+        <div class="video-box">
+            <video id="videoDisplay" muted playsinline></video>
+        </div>
+        <div class="mt-10 max-w-2xl text-center px-6">
+            <p id="cinematicText" class="text-2xl md:text-3xl italic text-gray-100 font-light leading-relaxed"></p>
+            <p id="debugInfo" class="text-[10px] text-red-500 font-mono mt-2"></p>
+            <p class="mt-8 text-xs uppercase tracking-[0.3em] text-cyan-500 animate-pulse">
+                Click anywhere to continue transmission
+            </p>
+        </div>
     </div>
 
     <script>
-        // Global Game State
+        // Game State
         const game = {
-            phase: 1,             // 1: Welcome, 2: Topic Selection, 3: Question
-            score: 20000,
-            isLLMLoaded: false,
-            isLoading: false,
-            topics: [],
-            currentTopic: '',
-            questionData: null,   // {question, correctAnswer, wrongAnswers[]}
-            selectedAnswer: null, // The answer the player clicked
-            purchasedItems: [
-                 purchasedItems: [
-                { name: "Driver's License ID", icon: '🆔' , desc: 'Necessary for identification'} ,
-                { name: 'Chicken Pho', price: 100, icon: '🍜', desc: 'Restores maximum health.' },
-                 { name: 'Magic Zataar Spices', price: 50, icon: '🌶️', desc: 'Boosts your focus.' }// <-- INITIAL ITEM ADDED HERE
-            ],
-
-            ], // New: Tracks items bought in the shop
-            message: 'Initializing...',
-            error: null
+            phase: 0,
+            message: 'System Initialized',
+            score: 20000
         };
-        const appContainer = document.getElementById('game-container');
-        const errorDisplay = document.getElementById('error-display');
-        const errorMessageElement = document.getElementById('error-message');
-        
-        // --- UI Rendering ---
-        
-        function renderPhase_boot() {
-            const welcomeContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8');
-            
-            
-            if (game.isLoading) {
-                welcomeContent.innerHTML = `
-                    <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
-                    <p class="mt-6 text-xl text-gray-400 title-font">${game.message}</p>
-                `;
-            } else if (game.isLLMLoaded) {
-                // LLM is loaded, show the START button
 
-                const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
-                
-                // FIX: Assign an anonymous function to onclick that calls setPhase(0).
-                // This prevents the function from running immediately upon rendering.
-                startButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
+        // Script Data
+        const cinematicScript = [
+            { text: "The moon hung low, a fractured disc of pale light over the sleeping city.", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
+            { text: "Only the distant hum of the ventilation systems betrayed any sign of life.", url: "https://vjs.zencdn.net/v/oceans.mp4" },
+            { text: "It was the Watcher, a figure of myth and chrome, observing from the heights.", url: "https://www.w3schools.com/html/movie.mp4" }
+        ];
 
-                welcomeContent.append(
-                    createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
-                    startButton
-                );
+        let currentIndex = -1;
+
+        // --- Navigation ---
+
+        function setPhase(p, msg) {
+            game.phase = p;
+            game.message = msg;
+            renderGame();
+        }
+
+        // --- Cinematic Logic ---
+
+        function startCinematic() {
+            // 1. Hide the game UI
+            document.getElementById('app').style.display = 'none';
+            // 2. Show the black cinematic screen
+            const view = document.getElementById('cinematicView');
+            view.style.display = 'flex';
+            // 3. Trigger the first clip immediately (Satisfies browser autoplay rules)
+            displayNextSentence();
+        }
+
+        function displayNextSentence() {
+            currentIndex++;
+            const video = document.getElementById('videoDisplay');
+            const text = document.getElementById('cinematicText');
+            const debug = document.getElementById('debugInfo');
+
+            if (currentIndex < cinematicScript.length) {
+                const scene = cinematicScript[currentIndex];
                 
+                // Set content
+                text.innerText = scene.text;
+                video.src = scene.url;
+                
+                // Force Reload and Play
+                video.load();
+                const playPromise = video.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.catch(err => {
+                        debug.innerText = "BROWSER BLOCKED AUTOPLAY: Click screen to resume.";
+                        console.error(err);
+                    });
+                }
+            } else {
+                exitCinematic();
             }
-            return welcomeContent;
         }
 
-        
-        function renderPhase0() {
-            const menuContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8 space-y-6');
-
-            const title = createElement('h3', 'text-5xl font-extrabold title-font text-neon-pink text-center mb-10', 'MAIN MENU');
-            title.style.textShadow = '0 0 10px #ff00ff';
-            menuContent.appendChild(title);
-            const buttonGrid = createElement('div', 'grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-2xl');
-
-
-            const buttons = [
-                { title: 'MISSION', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), iconEmoji: '🎯', color: 'bg-indigo-600 hover:bg-indigo-700' },
-                { title: 'TRIVIA', phase: 2, action: initiateTrivia, iconEmoji: '💡', color: 'bg-green-600 hover:bg-green-700' },
-                { title: 'WORDLE', phase: 7, action: () => setPhase(7, 'WORDLE not implemented yet. Try Trivia!'), iconEmoji: '📝', color: 'bg-yellow-600 hover:bg-yellow-700' },
-                { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Gear up for the Ultimate Ascent!'), iconEmoji: '🛒', color: 'bg-blue-600 hover:bg-blue-700' },
-                { title: 'CARDS', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconEmoji: '🃏', color: 'bg-gray-500 hover:bg-gray-600' },
-                { title: 'BONUS', phase: 0, action: () => setPhase(0, 'Sector Y is currently locked.'), iconEmoji: '🎁', color: 'bg-gray-500 hover:bg-gray-600' },
-                { title: 'X (LOCKED)', phase: 0, action: () => setPhase(0, 'Sector X is currently locked.'), iconEmoji: '🔒', color: 'bg-gray-500 hover:bg-gray-600' },
-              ];
-
-            buttons.forEach(btn => {
-                // Note: We use btn.iconHtml which contains the full SVG string.
-                const buttonInnerHtml = `<div class="w-full space-y-6">${btn.iconEmoji}</div><span>${btn.title}</span>`;
-                
-                const button = createElement('button', 'metal-button py-6 text-xl flex flex-col items-center justify-center space-y-2 hover:scale-[1.02] transition-transform ' + (btn.title.includes('(LOCKED)') ? 'opacity-50 cursor-not-allowed' : ''), buttonInnerHtml);
-
-                
-                button.onclick = btn.action;
-                buttonGrid.appendChild(button);
-            });
-
-
-            menuContent.appendChild(buttonGrid);
-            return menuContent;
+        function exitCinematic() {
+            currentIndex = -1;
+            document.getElementById('cinematicView').style.display = 'none';
+            document.getElementById('app').style.display = 'flex';
+            setPhase(0, "Mission 12 Transmission Complete.");
         }
 
-       
+        // --- Render UI ---
 
-        function renderPhase11() {
-            
+        function renderGame() {
+            const container = document.getElementById('game-container');
+            container.innerHTML = '';
 
+            // Header bar
+            const header = document.createElement('div');
+            header.className = "p-4 border-b border-cyan-900/50 bg-black/40 flex justify-between items-center";
+            header.innerHTML = `
+                <span class="text-xs font-mono tracking-widest text-cyan-500 uppercase">> ${game.message}</span>
+                <span class="title-font text-yellow-500">$${game.score}</span>
+            `;
+            container.appendChild(header);
 
+            const content = document.createElement('div');
+            content.className = "p-12 flex flex-col items-center justify-center min-h-[400px]";
+
+            if (game.phase === 12) {
+                // MISSION 12 SCREEN
+                content.innerHTML = `
+                    <h1 class="text-5xl font-black title-font mb-4 text-white">MISSION 12</h1>
+                    <p class="text-cyan-400 mb-10 tracking-widest uppercase text-sm">Target: The Silent Watcher</p>
+                    <button onclick="startCinematic()" class="metal-button py-5 px-12 rounded-xl text-xl font-bold">
+                        Initiate Transmission
+                    </button>
+                    <button onclick="setPhase(0, 'Returning to core...')" class="mt-6 text-gray-500 hover:text-white text-xs uppercase tracking-widest">
+                        Back to Menu
+                    </button>
+                `;
+            } else {
+                // MAIN MENU
+                content.innerHTML = `
+                    <h1 class="text-4xl font-bold title-font mb-10 text-white italic">HABIBI'S DREAM</h1>
+                    <div class="grid grid-cols-1 gap-4 w-full max-w-xs">
+                        <button onclick="setPhase(12, 'Mission Selected')" class="metal-button py-4 px-6 rounded-lg text-left flex justify-between items-center">
+                            <span>🎬 MISSION 12</span>
+                            <span class="text-xs opacity-50">→</span>
+                        </button>
+                        <button class="metal-button py-4 px-6 rounded-lg text-left opacity-30 cursor-not-allowed">
+                            <span>🔒 MISSION 13</span>
+                        </button>
+                    </div>
+                `;
+            }
+
+            container.appendChild(content);
         }
 
-
-        
-    function renderWinScreen() {
-        const winContent = createElement('div', 'flex flex-col items-center justify-center h-full text-center bg-gray-800 p-10 rounded-xl shadow-2xl');
-        winContent.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-electric-cyan mb-6 speed-icon">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
-            </svg>
-            <h3 class="text-5xl font-extrabold title-font text-electric-cyan">SYSTEM OVERRIDE!</h3>
-            <p class="text-2xl text-gray-300 mt-4">MACHINE DEFEATED. FINAL SCORE: $${game.score}</p>
-        `;
-        const restartButton = createElement('button', 'metal-button w-2/3 py-4 text-xl mt-8 bg-red-600 hover:bg-red-700', 'REBOOT CHALLENGE');
-        restartButton.onclick = () => window.location.reload();
-        winContent.appendChild(restartButton);
-        return winContent;
-    }
-
-
-    /**
-     * Main render function: builds the entire UI based on game state.
-     */
-    function renderGame() {
-        if (game.score >= 20001) {
-            appContainer.innerHTML = '';
-            appContainer.appendChild(renderWinScreen());
-            return;
-        }
-
-        // Game Panels Structure
-        appContainer.innerHTML = `
-            <div class="flex w-full metal-card min-h-[700px]">
-                <!-- LEFT PANEL: Conductor Info -->
-                <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-r-4 border-electric-cyan">
-                    <div class="text-center space-y-3">
-                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">A.I. CONDUCTOR</h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-electric-cyan speed-icon">
-                            <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
-                        </svg>
-                        <div class="text-sm font-mono mt-4 p-2 bg-gray-700 rounded-lg border border-electric-cyan/50">
-                            <p>STATUS: ${game.isLoading ? 'LOADING' : 'IDLE'}</p>
-                            <p>PHASE: ${game.phase}</p>
-                        </div>
-                    </div>
-                    <div class="text-center text-xs text-gray-500">
-                        <p>Lux Aeterna!</p>
-                    </div>
-                </div>
-
-                <!-- CENTER PANEL: Game Interaction -->
-                <div id="center-panel" class="flex-1 p-6 flex flex-col justify-between">
-                    <h2 class="text-4xl font-extrabold text-white mb-4 text-center title-font">
-                        ${game.phase > 1 ? 'LIVE CHALLENGE INTERFACE' : (game.phase === 0 ? 'SYSTEM MENU' : 'BOOT SEQUENCE')}
-                    </h2>
-                    
-                    <!-- Game Message Panel -->
-                    <div class="p-4 mb-6 text-center rounded-sm font-semibold shadow-md bg-electric-blue/20 text-electric-cyan border border-electric-blue">
-                        ${game.message}
-                    </div>
-
-                    <!-- Dynamic Phase Content Placeholder -->
-                    <div id="dynamic-content" class="flex-1"></div>
-                </div>
-
-                <!-- RIGHT PANEL: Player Info -->
-                <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-l-4 border-electric-cyan">
-                    <div class="text-center space-y-3">
-                        <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PLAYER DATA</h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-yellow-400 speed-icon">
-                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                        </svg>
-                        <div class="mt-4 p-3 bg-gray-700 rounded-lg border border-yellow-400/50 shadow-xl">
-                            <p class="text-sm font-mono text-gray-400">SCORE REGISTER</p>
-                            <p class="text-4xl font-extrabold text-yellow-400 title-font">$${game.score}</p>
-                            <p class="text-xs text-gray-200">TARGET: $1000</p>
-                        </div>
-
-                        <div class="mt-6 pt-4 border-t border-gray-700 w-full">
-                            <p class="text-sm font-mono text-gray-400 mb-2">INVENTORY</p>
-                            <div id="inventory-display" class="grid grid-cols-4 gap-2">
-                                ${game.purchasedItems.length === 0 
-                                    ? '<p class="text-xs text-gray-500 italic col-span-4">No items acquired.</p>'
-                                    : game.purchasedItems.map(item => `
-                                        <div class="p-1 text-center bg-gray-600 rounded-md border border-electric-cyan/70 hover:bg-gray-500" title="${item.name}">
-                                            <span class="text-2xl">${item.icon}</span>
-                                        </div>
-                                    `).join('')
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center text-xs text-gray-500">
-                        <p>Chase that light!</p>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        // Render phase-specific content
-        const dynamicContent = document.getElementById('dynamic-content');
-        dynamicContent.innerHTML = '';
-        
-        let contentElement;
-        switch (game.phase) {
-            case 0:
-                contentElement = renderPhase0();  //  Menu
-                break;
-            case 1:
-                contentElement = renderPhase_boot(); // Original Phase 1
-                break;
-            case 2:
-                contentElement = renderPhase2(); // show 2 topics
-                break;
-            case 3:
-                contentElement = renderPhase3(); // show trivia question
-                break;
-            case 4:
-                contentElement = renderPhase4(); // New Shop Phase
-                break;
-            case 5:
-                contentElement = renderPhase5(); // New Instructions Phase
-                break;
-            case 11:
-                contentElement = renderPhase11();
-                break;
-            default:
-                contentElement = createElement('div', 'text-center p-8 text-red-500', 'UNKNOWN GAME STATE');
-        }
-        dynamicContent.appendChild(contentElement);
-    }
-
-    // Initialize the game when the window loads
-    window.onload = initializeLLM;
+        // Boot
+        window.onload = renderGame;
     </script>
 </body>
 </html>

@@ -60,9 +60,6 @@
             overflow-x: hidden;
         }
 
-        .punk-font { font-family: 'Bangers', cursive; }
-        .marker-font { font-family: 'Permanent Marker', cursive; }
-
         .title-font {
             font-family: 'Orbitron', sans-serif;
         }
@@ -159,13 +156,10 @@
             box-shadow: 0 2px #0080ff, 0 4px 10px rgba(0, 0, 0, 0.7);
         }
         .metal-card {
-            background-color: rgba(17, 24, 39, 0.9);
+            background-color: rgba(17, 24, 39, 0.9); /* Gray-900 with opacity */
             border-radius: 12px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 255, 255, 0.1);
             overflow: hidden;
-            margin-left: auto;
-            margin-right: auto;
-            width: 100%; /* Allows max-w-5xl to control the limit */
         }
         
         .disabled-button {
@@ -972,93 +966,6 @@
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 0.05em;
         }
-        
-        #chapterOneView {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            display: none;
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .punk-card {
-            background: rgba(10, 10, 10, 0.95);
-            border: 4px solid #fff;
-            box-shadow: 15px 15px 0px var(--neon-pink), -10px -10px 0px var(--electric-cyan);
-            padding: 3rem;
-            max-width: 900px;
-            width: 90%;
-            transform: rotate(-1deg);
-            animation: slideIn 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        @keyframes slideIn {
-            0% { transform: scale(0.8) rotate(5deg); opacity: 0; }
-            100% { transform: scale(1) rotate(-1deg); opacity: 1; }
-        }
-
-        .menu-button {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
-
-        .scanlines {
-            position: fixed;
-            inset: 0;
-            /* This creates a repeating pattern of transparent and semi-transparent black stripes */
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(0, 0, 0, 0.3) 51%
-            );
-            background-size: 100% 4px; /* The 4px height sets the density of the lines */
-            pointer-events: none; /* Allows you to click "through" the lines to buttons */
-            z-index: 10; /* Places it on top of everything else */
-        }
-        .btn-start {
-            background: white;
-            color: black;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            padding: 1rem 3rem;
-            border: 2px solid black;
-            box-shadow: 6px 6px 0px var(--signal-yellow);
-            transition: all 0.1s;
-            cursor: pointer;
-        }
-
-        .btn-start:hover {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px var(--signal-yellow);
-            background: var(--electric-cyan);
-        }
-
-        .tag {
-            background: var(--neon-pink);
-            color: white;
-            padding: 0.2rem 1rem;
-            font-size: 0.8rem;
-            font-weight: bold;
-            transform: rotate(2deg);
-            display: inline-block;
-        }
-        .save-load-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.2s;
-        }
-
-        .save-load-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: white;
-            color: white;
-        }
 
 
     </style>
@@ -1071,7 +978,7 @@
         </div>
             
         <!-- The main game container will be where the dynamic rendering happens -->
-        <div id="game-container" class="flex items-center">
+        <div id="game-container">
 
                 <div class="metal-card">
 
@@ -1100,45 +1007,6 @@
         </div>
     </div>
     
-
-    <div id="chapterOneView">
-        <div class="punk-card relative"><div class="scanlines"></div>
-            <div class="flex justify-between items-start mb-6">
-                <div class="tag title-font uppercase tracking-tighter"> </div>
-                <div class="tag text-white title-font text-xs opacity-50 uppercase">STATUS: UNPLUGGED</div>
-            </div>
-
-            <h1 class="title-font text-2xl text-cyan-400 mb-2 uppercase italic tracking-tighter">Episode One</h1>
-            
-            <div class="relative">
-                <h1 class="punk-font text-7xl md:text-9xl text-white leading-none  mb-4">
-                    SIX STRINGS
-                </h1>
-                <h1 class="marker-font text-5xl md:text-7xl text-yellow-400 -mt-6 ml-12 rotate-[-4deg] drop-shadow-lg">
-                    To Discovery
-                </h1>
-            </div>
-
-            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t-2 border-white/20 pt-8">
-                <p class="text-gray-300 text-lg italic leading-tight font-light">
-                    "This guitar isn't just wood and wire; it's the only voice I've ever truly had. Tonight, I stop playing for myself and start playing for the world I know is out there."
-                </p>
-                
-                <div class="flex flex-col items-center md:items-end">
-                    <button onclick="exitChapterOne()" class="btn-start bg-white text-black title-font font-black py-4 px-10 border-2 border-black shadow-[6px_6px_0px_#ffea00] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all uppercase">
-                        Crank It Up
-                    </button>
-                    <span class="text-[10px] title-font text-white/30 mt-4 tracking-[0.3em]">CHASE THE SOUND</span>
-                </div>
-
-            </div>
-
-            <div class="absolute -bottom-4 -left-4 bg-white text-black p-2 font-bold text-[10px] transform -rotate-12 border-2 border-black">
-                DREAM BIG. PLAY LOUD.
-            </div>
-        </div>
-    </div>
-
     <div id="cinematicView" class="hidden fixed inset-0 flex flex-col items-center justify-center p-4 opacity-0 cursor-pointer" onclick="displayNextSentence()">
     <div class="mb-6 flex justify-center w-full max-w-4xl">
         <video id="videoDisplay" class="rounded-xl transition-opacity duration-700 opacity-0 w-full h-auto max-h-[60vh] object-cover shadow-2xl" muted playsinline></video>
@@ -1190,8 +1058,6 @@
             currentTopic: '',
             questionData: null,   // {question, correctAnswer, wrongAnswers[]}
             selectedAnswer: null, // The answer the player clicked
-            artists: ['The Beatles', 'U2', 'Metallica', 'Smashing Pumpkins', 'Prince'],
-            artists_bought: ['U2', 'Metallica'],
             inventory_items: [
                 { name: "Driver's License ID", icon: '🪪', acquired: true, desc: 'Necessary for identification. Looks legitimate.' ,  
                     messages: 
@@ -1471,8 +1337,8 @@
             songCounts: 0,
             // Musician Chop Skills (XP values)
             chops: [
-                { name: "Social Influence", points: 2, level: 0, isUnlocked: false, icon: '📣' },
-                { name: "Instrument Synergy", points: 2, level: 0, isUnlocked: false, icon: '🎸' },
+                { name: "Social Influence", points: 2, level: 0, isUnlocked: true, icon: '📣' },
+                { name: "Instrument Synergy", points: 2, level: 1, isUnlocked: false, icon: '🎸' },
                 { name: "Rhythm Mastery", points: 0, level: 0, isUnlocked: false, icon: '🎼' },
                 { name: "Lyrical Flow", points: 0, level: 0, isUnlocked: false, icon: '🖋️' },
                 { name: "Circuit Navigation", points: 0, level: 0, isUnlocked: false, icon: '🗺️' },
@@ -1772,46 +1638,46 @@
          function crazy_action2() {
         game.currentLocationId = 'Crazy K';
         
-            // 1. Fetch the items from state
-            const itemsToCheck = [
-                { name: 'Metallica Guitar Pick', msg: 'Great! You found the Plectrum of Destiny!' },
-                { name: 'Rock Guitar Tapping Technique', msg: 'Excellent! You found the Sacred Map!' },
-                { name: 'Positive Grid Spark Combo Amp', msg: 'Sensational! You found the Spark Conduit!' },
-                { name: 'Fender Squier Stratocaster', msg: 'Perfect! You found the Six-String Skeleton!' }
-            ];
+        // 1. Fetch the items from state
+        const itemsToCheck = [
+            { name: 'Metallica Guitar Pick', msg: 'Great! You found the Plectrum of Destiny!' },
+            { name: 'Rock Guitar Tapping Technique', msg: 'Excellent! You found the Sacred Map!' },
+            { name: 'Positive Grid Spark Combo Amp', msg: 'Sensational! You found the Spark Conduit!' },
+            { name: 'Fender Squier Stratocaster', msg: 'Perfect! You found the Six-String Skeleton!' }
+        ];
 
-            const output = document.getElementById('status-bar-output');
-            if (output) {
-                output.innerHTML = ''; // Clear previous messages
+        const output = document.getElementById('status-bar-output');
+        if (output) {
+            output.innerHTML = ''; // Clear previous messages
+        }
+
+        let allAcquired = true;
+
+        // 2. Loop through items to check acquisition and update UI
+        itemsToCheck.forEach(itemData => {
+            const item = game.inventory_items.find(i => i.name === itemData.name);
+            
+            if (item && item.acquired) {
+                if (output) {
+                    // Using your established createElement pattern: (tag, classes, innerHTML)
+                    const p = createElement('p', 'italic text-emerald-400 mb-1', itemData.msg);
+                    output.appendChild(p);
+                }
+            } else {
+                allAcquired = false; // If even one is missing, this becomes false
             }
+        });
 
-            let allAcquired = true;
-
-            // 2. Loop through items to check acquisition and update UI
+        // 3. Final Check: If all 4 items are present, trigger the cinematic
+        if (allAcquired) {
+            // Consume the items (set acquired to false)
             itemsToCheck.forEach(itemData => {
                 const item = game.inventory_items.find(i => i.name === itemData.name);
-                
-                if (item && item.acquired) {
-                    if (output) {
-                        // Using your established createElement pattern: (tag, classes, innerHTML)
-                        const p = createElement('p', 'italic text-emerald-400 mb-1', itemData.msg);
-                        output.appendChild(p);
-                    }
-                } else {
-                    allAcquired = false; // If even one is missing, this becomes false
-                }
+                if (item && item.name != 'Fender Squier Stratocaster') item.acquired = false;
             });
-
-            // 3. Final Check: If all 4 items are present, trigger the cinematic
-            if (allAcquired) {
-                // Consume the items (set acquired to false)
-                itemsToCheck.forEach(itemData => {
-                    const item = game.inventory_items.find(i => i.name === itemData.name);
-                    if (item && item.name != 'Fender Squier Stratocaster') item.acquired = false;
-                });
-                game.crazy_buttons.poker = true;
-                playMovie('./videos/crazy-poker.mp4', 'You are ready! Sit down. Deal the cards. Seven of them. That is your total harmonic potential. Now, look at your hands. You have a Left and a Right, but in your head, they’re still married. Divorce them! You aren\'t playing one instrument; you are playing a "High Hand" and a "Low Hand" simultaneously. Your brain has to split its processor right down the middle. One hand is holding the groove (the 5), while the other is dancing on the ceiling (the 2). To win the hand—to achieve the Tone—both hands must beat the house. If only one hand is strong, you Push. You’re just making noise. You aren\'t winning. Try here or at your place. Win One out of 3 to master!');
-            }
+            game.crazy_buttons.poker = true;
+            playMovie('./videos/crazy-poker.mp4', 'You are ready! Sit down. Deal the cards. Seven of them. That is your total harmonic potential. Now, look at your hands. You have a Left and a Right, but in your head, they’re still married. Divorce them! You aren\'t playing one instrument; you are playing a "High Hand" and a "Low Hand" simultaneously. Your brain has to split its processor right down the middle. One hand is holding the groove (the 5), while the other is dancing on the ceiling (the 2). To win the hand—to achieve the Tone—both hands must beat the house. If only one hand is strong, you Push. You’re just making noise. You aren\'t winning. Try here or at your place. Win One out of 3 to master!');
+        }
         }
 
         
@@ -2051,7 +1917,7 @@
 
             game.pendingAcquisition.item = 'Disco Ball';
 
-            landmarkImageRegistry["The 440"] = "./sprites/djrobbie_bar2.jpg";
+
             playMovie('./videos/dj-ball.mp4','Thanks for helping me! This is for you! What did you want to talk about?' );
 
            
@@ -3163,7 +3029,32 @@
             `;
         },
 
-        
+        building: (name, data) => {
+                currentContext = { name, data };
+
+                 return `
+                                <span class="block text-xl title">// COMMERCIAL HUB: ${name.toUpperCase()} //</span>
+                                <span class="block">>> LOCATION ID: ${game.currentLocationId}</span>
+                                <span class="block">>> ECONOMIC STATUS: Active.</span>
+                                <span class="block">>> SUMMARY: ${data.description}</span>
+                                <!-- Status Bar: Now with a unique ID for targeting -->
+                                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
+                                    <p class="italic"> </p>
+                                </div>
+
+                                <div id="main-action-buttons" class="flex flex-col items-center">
+                                <div class="flex justify-center mt-6 w-full">
+                                    <!-- Button to switch to the Question Grid view -->
+                                    <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                                        <span class="text-base font-bold">Question mode with ${game.names.bestie} </span>
+                                    </button>
+                                </div>
+                            `;
+
+
+
+
+        },
       
 
         work: (name, data) => {
@@ -3183,7 +3074,59 @@
         `; 
         },
 
-       
+        // --- Sports Venue ---
+        sports: (name, data) => {
+            currentContext = { name, data };
+
+            return `
+                <span class="block text-xl title">// SPORTS VENUE: ${name.toUpperCase()} //</span>
+                <span class="block">>> PRIMARY TENANT: GSW.</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+                <div class="flex justify-center mt-4">
+                        <button onclick="displayMemory('Yay you win a LOVE memory', 'Love')" class="metal-button px-6 py-2">
+                            <span class="text-sm">Just One!</span>
+                        </button>
+                </div>
+
+            `;
+        },
+
+        // --- Cultural Hubs ---
+        cultural: (name, data) => {
+            currentContext = { name, data };
+             return `
+                <span class="block text-xl title">// CULTURAL ZONE: ${name.toUpperCase()} //</span>
+                <span class="block">>> PRIMARY ACTIVITY: Tourism/Counterculture.</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+
+                <div class="flex justify-center mt-4">
+                        <button onclick="setPhase(4, 'Gear up for the Ultimate Music Challenge!')" class="metal-button px-6 py-2">
+                            <span class="text-sm">Shopping time!</span>
+                        </button>
+                </div>
+                
+            `;
+        },
+        
+        // --- Transit Center ---
+        transit: (name, data) => {
+             currentContext = { name, data };
+             return `
+                <span class="block text-xl title">// TRANSIT HUB: ${name.toUpperCase()} //</span>
+                <span class="block">>> FERRY ROUTES: 4 active.</span>
+                <span class="block">>> SUMMARY: ${data.description}</span>
+            `;
+        },
+        
+        // --- Regional (South Bay) ---
+        regional: (name, data) => {
+            currentContext = { name, data };
+            return `
+                <span class="block text-xl title">// REGIONAL HUB: ${name.toUpperCase()} //</span>
+                <span class="block">>> DISTANCE FROM SF: HIGH.</span>
+                <span class="block">>> STATUS: Silicon Valley Core. ${data.description}</span>
+            `;
+        },
     };
 
         // --- Challenge Data Structure (105 Total Entries) ---
@@ -3967,12 +3910,14 @@
             modalOverlay.id = 'topic-modal';
 
             // 3. Setup the acquisition card (using the new neon CSS class)
-            const topicBox = createElement('div', 'acquisition-card border-neon-pink shadow-[0_0_50px_rgba(255,0,255,0.3)]');
+            const topicBox = createElement('div', 'acquisition-card mx-auto');
 
             // Content
             const headerHtml = `
-                <div class="mb-4">
-                    <h2 class="title-font text-3xl font-black text-white mt-1">New Topic Unlocked</h2>
+                <div class="acquisition-header">
+                    <span class="emoji-icon mr-3 text-5xl">💬</span>
+                    NEW TOPIC ACQUIRED
+                    <span class="emoji-icon ml-3 text-5xl">💡</span>
                 </div>
             `;
             const contentHtml = `
@@ -4422,8 +4367,7 @@
                     isLoading: false 
                 });
                 initializeTone()
-                //setPhase(-1, 'Intro');
-                setPhase(0, 'MainMenu');
+                setPhase(-1, 'MainMenu');
                 renderGame()
 
             } catch (e) {
@@ -4438,47 +4382,41 @@
         }
 
 
-       function renderMainMenu() {
-                
-
-                 // CHANGE 1: Ensure the main container is w-full and h-full
-           const container = createElement('div', 'flex flex-col items-center justify-center w-full py-10 px-8 space-y-10');
-
+        function renderMainMenu() {
+            const container = createElement('div', 'flex flex-col items-center py-12 px-6 space-y-12');
             
             container.innerHTML = `
+                
                 <div class="text-center space-y-4">
-                    <h1 class="text-6xl font-black title-font text-white tracking-tighter italic">
                         Habibi's Dream
-                    </h1>
-                    <p class="text-cyan-400 tracking-[0.5em] uppercase text-sm">A Musical Journey</p>
                 </div>
             `;
 
-            const btnGroup = createElement('div', 'flex flex-col w-full max-w-xs space-y-3');
-                
-                 const buttons = [
-                    { text: 'NEW JOURNEY', icon: '🎸', action: () => { game.phase = 18; renderGame(); } },
-                    { text: 'RESTORE SESSION', icon: '📂', action: loadGame },
-                    { text: 'CHOP GALLERY', icon: '🏆', action: () => alert("Locked until Chapter 1") },
-                    { text: 'OPTIONS', icon: '⚙️', action: () => {} }
-                ];
+            const btnGroup = createElement('div', 'flex flex-col w-full max-w-sm space-y-4');
+            const buttons = [
+                { text: 'NEW JOURNEY', icon: '🎸', action: () => { game.phase = 18; renderGame(); } },
+                { text: 'RESTORE SESSION', icon: '📂', action: loadGame },
+                { text: 'CHOP GALLERY', icon: '🏆', action: () => alert("Locked until Chapter 1") },
+                { text: 'OPTIONS', icon: '⚙️', action: () => {} }
+            ];
 
-                buttons.forEach(b => {
-                    // Centered text, removed arrow, smaller padding
-                    const btn = createElement('button', 'menu-button flex items-center justify-center w-full py-3 rounded-md text-sm font-black title-font transition-all duration-200');
-                    btn.innerHTML = `<span>${b.icon} &nbsp; ${b.text}</span> <span class="opacity-50 text-sm"></span>`;
-                    btn.onclick = b.action; 
-                    btnGroup.appendChild(btn);
-                });
+            buttons.forEach(b => {
+                const btn = createElement('button', 'menu-button flex items-center justify-between px-8 py-5 rounded-xl text-lg font-bold title-font text-white');
+                btn.innerHTML = `<span>${b.icon} &nbsp; ${b.text}</span> <span class="opacity-50 text-sm">→</span>`;
+                btn.onclick = b.action; 
+                btnGroup.appendChild(btn);
+            });
 
-                container.appendChild(btnGroup);
-                container.appendChild(createElement('div', 'text-zinc-600 text-[10px] font-mono pt-4 tracking-widest', 'V1.0.9 // BAY AREA CHAPTER'));
-                
-                return container;
-            }
+            container.appendChild(btnGroup);
+            container.appendChild(createElement('div', 'text-zinc-500 text-xs font-mono pt-8', 'VER 1.0.9 | BAY AREA CHAPTER'));
+            
+            return container;
+        }
 
-         async function saveGame() {
+
+         function saveGame() {
             // 1. Define which keys we want to EXCLUDE from the save file
+            // These are the "live" objects that cause the circular error
             const keysToExclude = ['synth', 'leadSynth', 'musicTransport', 'musicLoop', 'timerInterval'];
 
             // 2. Create a sanitized copy of the game object
@@ -4498,83 +4436,62 @@
                 version: "1.0"
             };
 
-            const savePath = `./saves/guitar_hero_save_${game.names.main}.json`;
-
             try {
-                // To save "automatically" to a folder without a UI picker, 
-                // we send a POST request to a local handler/server.
-                // If running in a standard browser environment, this expects a backend at the relative path.
-                const response = await fetch(savePath, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(saveState, null, 2)
-                });
-
-                if (response.ok) {
-                    showGameMessage("Game Saved Successfully", "success");
-                    console.log("Saved to:", savePath);
-                } else {
-                    // If the path isn't writable via POST (standard browser behavior without a backend),
-                    // we log the error. Silent saving to specific local folders requires an active 
-                    // filesystem handler or a local server.
-                    throw new Error("Local filesystem path not writable via direct POST.");
-                }
-            } catch (err) {
-                console.error("Silent save failed:", err);
-                // Providing a fallback message indicating that automated folder access is blocked
-                showGameMessage("Save Error: Directory './saves/' is not writable.", "error");
-            }
-        }
-        
-        
-
-        async function loadGame() {
-            const savePath = `./saves/guitar_hero_save_${game.names.main}.json`;
-            
-            try {
-                // We use fetch to automatically look for the file in the specified folder
-                const response = await fetch(savePath);
+                const dataStr = JSON.stringify(saveState, null, 2);
+                const blob = new Blob([dataStr], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
                 
-                if (!response.ok) {
-                    // If response is not 200 (e.g. 404), no game has been saved yet
-                    showGameMessage("No game has been saved yet.", "error");
-                    return;
-                }
-
-                const loadedData = await response.json();
-
-                // Restore State Variables
-                if (loadedData.game) Object.assign(game, loadedData.game);
-                if (loadedData.landmarkData) Object.assign(landmarkData, loadedData.landmarkData);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `guitar_hero_save_${game.score}.json`;
+                document.body.appendChild(link);
+                link.click();
                 
-                // Clear and refill notifications array
-                if (loadedData.iphoneNotifications) {
-                    iphoneNotifications.length = 0;
-                    loadedData.iphoneNotifications.forEach(n => iphoneNotifications.push(n));
-                }
-
-                showGameMessage("Game Restored Successfully!", "success");
-                renderGame(); // Refresh the UI with new data
-
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                console.log("Save successful!");
             } catch (err) {
-                // This catch block handles network errors or JSON parsing errors
-                showGameMessage("Error: No saved game found or file is inaccessible.", "error");
-                console.error("Load error:", err);
+                console.error("Save failed:", err);
+                alert("Critical Error: Could not stringify game state. Check console.");
             }
         }
 
-        function showGameMessage(text, type) {
-            const msgBox = createElement('div', 'fixed bottom-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg border-2 z-[2000] title-font font-bold text-sm tracking-widest animate-bounce');
-            if (type === 'error') {
-                msgBox.classList.add('bg-red-900', 'border-red-500', 'text-white');
-            } else {
-                msgBox.classList.add('bg-gray-900', 'border-electric-cyan', 'text-electric-cyan');
-            }
-            msgBox.innerText = text.toUpperCase();
-            document.body.appendChild(msgBox);
-            setTimeout(() => msgBox.remove(), 3000);
+        function loadGame() {
+            // We use a hidden file input to let the user select the save file
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = readerEvent => {
+                    try {
+                        const content = readerEvent.target.result;
+                        const loadedData = JSON.parse(content);
+
+                        // Restore State Variables
+                        // Object.assign keeps the reference while updating values
+                        Object.assign(game, loadedData.game);
+                        Object.assign(landmarkData, loadedData.landmarkData);
+                        
+                        // Clear and refill notifications array
+                        iphoneNotifications.length = 0;
+                        loadedData.iphoneNotifications.forEach(n => iphoneNotifications.push(n));
+
+                        alert("Game Restored Successfully!");
+                        renderGame(); // Refresh the UI with new data
+                    } catch (err) {
+                        alert("Error: Invalid save file.");
+                        console.error(err);
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+
+            input.click();
         }
 
 
@@ -4826,15 +4743,19 @@
                 feedback = 'MAXIMUM EFFORT! +50 Circuit Navigation GAIN.';
                 showSuccessAnimation();
             } else {
-                newScore = Math.max(0, newScore );
+                newScore = Math.max(0, newScore - 10);
                 feedback = 'DEFEAT! -10 SCORE LOSS. Correct Answer Displayed.';
             }
 
             updateState({ score: newScore, message: feedback });
             
-            
-            setTimeout(() => getTopics(), 4000); // 3 second delay before next topic selection
-            
+            // Check win condition or prepare for next round
+            if (newScore >= 20001) {
+                showSuccessAnimation();
+                setTimeout(() => updateState({ message: 'VICTORY ACHIEVED! MACHINE DEFEATED.' }), 2000);
+            } else {
+                setTimeout(() => getTopics(), 4000); // 3 second delay before next topic selection
+            }
         }
 
         // --- UI Rendering ---
@@ -4887,176 +4808,71 @@
             });
             topicContent.appendChild(topicButtons);
 
-            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'MENU');
+            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'RETURN TO MENU');
             backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
             topicContent.appendChild(backButton);
             return topicContent;
         }
 
-        // Game menu
         function renderPhase0() {
-            const progression = getLevelProgression();
-            const chopMax = progression.currentChopMax;
-            const unreadCount = getUnreadNotificationCount();
-             const badgeHtml = unreadCount > 0 
-                ? `<span class="absolute -top-2 -right-2 bg-red-600 text-sm font-bold rounded-full h-8 w-8 flex items-center justify-center border-2 border-white">${unreadCount}</span>` 
-                : '';
-            const menuContent = createElement('div', 'flex flex-col items-center w-full max-w-4xl mx-auto p-4 md:p-8 space-y-6 bg-black/20 rounded-2xl overflow-y-auto max-h-[90vh]');
+            const menuContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8 space-y-6');
+            const title = createElement('h3', 'text-5xl font-extrabold font-title text-neon-pink text-center mb-10', 'SYSTEM MENU');
 
-            // 1. TITLE ROW
-            const titleRow = createElement('div', 'w-full text-center');
-            const title = createElement('h3', 'text-5xl font-extrabold title-font text-neon-pink uppercase tracking-tighter mb-2', 'MAIN MENU');
-            title.style.textShadow = '0 0 20px rgba(255, 0, 255, 0.6)';
-            titleRow.appendChild(title);
 
-            // 2. BIG ICON ROW (Map, Inventory, Phone, Cash)
-            const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-6 pb-6 border-b border-white/10');
-            iconRow.innerHTML = `
-                <button onclick="setPhase(10)" class="p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all text-4xl shadow-xl" title="Map">🗺️</button>
-                <button onclick="setPhase(14)" class="p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all text-4xl shadow-xl" title="Inventory">🎒</button>
-                <div class="relative cursor-pointer p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all text-4xl shadow-xl" title="Notifications" onclick="setPhase(16)">
-                    📱 ${badgeHtml}
-                </div>
-                <div class="relative cursor-pointer p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all text-4xl shadow-xl" title="Menu" onclick="setPhase(0, Game Menu)">
-                    ⚙️ 
-                </div>
-                <div class="px-8 py-5 bg-yellow-500/10 border-4 border-yellow-500 rounded-2xl flex flex-col items-center shadow-[0_0_20px_rgba(234,179,8,0.2)]">
-                    <span class="text-[10px] font-bold text-yellow-500 uppercase tracking-[0.2em] mb-1"> </span>
-                    <span class="text-yellow-400 font-black title-font text-3xl">$${game.score}</span>
+            menuContent.className = "text-center space-y-8 p-12 bg-gray-900 rounded-xl shadow-inner border border-electric-cyan/50";
+            menuContent.innerHTML = `
+                <p class="text-xl mono-font text-white">Select a System Protocol to engage.</p>
+                <div class="space-y-4">
+                    <button class="w-full neon-button py-3 px-6 rounded-lg text-lg" onclick="setPhase(7)">Protocol 7: Wordly Challenge (TEST)</button>
+                    <button class="w-full neon-button py-3 px-6 rounded-lg text-lg" onclick="setPhase(8)">Protocol 8: Music Challenge 🎶 (LIVE)</sbutton>
+                    <button class="w-full neon-button py-3 px-6 rounded-lg text-lg bg-gray-700 text-electric-cyan hover:bg-gray-600" onclick="setPhase(1)">Protocol 1: Boot Sequence</button>
                 </div>
             `;
 
-           const persistenceRow = createElement('div', 'w-full flex justify-center gap-4 py-4 border-t border-b border-white/10 bg-white/5');
-            const saveBtn = createElement('button', 'save-load-btn flex items-center space-x-2 px-6 py-2 rounded-full text-xs font-bold text-gray-300 uppercase tracking-widest', `<span>💾</span> <span>Save Game</span>`);
-            saveBtn.onclick = saveGame;
-            const loadBtn = createElement('button', 'save-load-btn flex items-center space-x-2 px-6 py-2 rounded-full text-xs font-bold text-gray-300 uppercase tracking-widest', `<span>📂</span> <span>Load Game</span>`);
-            loadBtn.onclick = loadGame;
-            persistenceRow.append(saveBtn, loadBtn);
-
-            const assetsContainer = createElement('div', 'w-full flex flex-col space-y-4 px-2 py-2');
-            const acquiredItems = game.inventory_items.filter(item => item.acquired);
-            const acquiredTopics = game.conversation_topics.unlocked.filter(item => item.acquired);
+            const title0 = createElement('h3', 'text-5xl font-extrabold title-font text-neon-pink text-center mb-10', 'MAIN MENU');
+            title.style.textShadow = '0 0 10px #ff00ff';
+            menuContent.appendChild(title);
+            const buttonGrid = createElement('div', 'grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-2xl');
 
 
-           // Row A: Inventory
-            const inventoryRow = createElement('div', 'w-full flex items-center space-x-4');
-            inventoryRow.innerHTML = `
-                <span class="text-[10px] font-mono text-gray-500 uppercase w-28 shrink-0">Active Gear:</span>
-                <div class="flex gap-2">
-                    ${acquiredItems.map(item => `
-                        <div class="w-10 h-10 flex items-center justify-center bg-gray-800/50 rounded-lg border border-white/10 text-xl" title="${item.name}">${item.icon}</div>
-                    `).join('') || '<span class="text-[10px] text-gray-700 uppercase italic">No gear acquired</span>'}
-                </div>
-                <div class="flex-grow border-t border-white/5 ml-4"></div>
-            `;
+            const buttons = [
+                { title: 'MISSION', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), iconEmoji: '🎯', color: 'bg-indigo-600 hover:bg-indigo-700' },
+                { title: 'TRIVIA', phase: 2, action: initiateTrivia, iconEmoji: '💡', color: 'bg-green-600 hover:bg-green-700' },
+                { title: 'WORDLE', phase: 7, action: () => setPhase(7, 'Do you know your words?'), iconEmoji: '📝', color: 'bg-yellow-600 hover:bg-yellow-700' },
+                { title: 'SONGS', phase: 8, action: () => setPhase(8, 'Show your passion knowledge'), iconEmoji: '🎶', color: 'bg-yellow-600 hover:bg-yellow-700' },
+                { title: 'JUST ONE', phase: 9, action: () => setPhase(9, 'Just one'), iconEmoji: '1️', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'FAMILY FEUD', phase: 1, action: () => setPhase(11, 'Family Feud'), iconEmoji: '📊', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Gear up for the Ultimate Ascent!'), iconEmoji: '🛒', color: 'bg-blue-600 hover:bg-blue-700' }, 
+                { title: 'MAP', phase: 10, action: () => setPhase(10, 'Map of Funky town.'), iconEmoji: '🗺️', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'CARDS', phase: 0, action: () => showChopMasteryWindow("Stage Presence"), iconEmoji: '🃏', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'YAY)', phase: 0, action: () => showSuccessAnimation(), iconEmoji: '🤘', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'SETUP', phase: 18, action: () => setPhase(18, 'Name setup') , iconEmoji: '📛', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'CHOPS', phase: 0, action: () => setPhase(17, 'Chops'), iconEmoji: '📜', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'INTRO', phase: 12, action: () => setPhase(12, 'Intro is vital'), iconEmoji: '🎦', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'SONG MIXER', phase: 13, action: () => setPhase(13, 'Intro is vital'), iconEmoji: '🎛️', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'INVENTORY', phase: 3, action: () => setPhase(14, 'Inventory'), iconEmoji: '🛒', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'BONUS (LOCKED)', phase: 0, action: () => setPhase(0, 'Sector X is currently locked.'), iconEmoji: '🔒', color: 'bg-gray-500 hover:bg-gray-600' },
+                { title: 'PHONE', phase: 16, action: () => setPhase(16, 'Phone Notifications'), iconEmoji: '📱', color: 'bg-gray-500 hover:bg-gray-600' },
+                 { title: 'SAVE GAME', phase: 0, action: () => saveGame(), iconEmoji: '💾', color: 'bg-green-600 hover:bg-green-700' },
+                {title: 'LOAD GAME', phase: 0, action: () => loadGame(), iconEmoji: '📂', color: 'bg-blue-600 hover:bg-blue-700' }
 
-            // Row B: Topics
-            const topicsRow = createElement('div', 'w-full flex items-center space-x-4');
-            topicsRow.innerHTML = `
-                <span class="text-[10px] font-mono text-gray-500 uppercase w-28 shrink-0">Active Topics:</span>
-                <div class="flex gap-2">
-                    ${acquiredTopics.map(item => `
-                        <div class="w-10 h-10 flex items-center justify-center bg-gray-800/50 rounded-lg border border-white/10 text-xl" title="${item.name}">${item.icon}</div>
-                    `).join('') || '<span class="text-[10px] text-gray-700 uppercase italic">No topics unlocked</span>'}
-                </div>
-            `;
+              ];
 
-            assetsContainer.append(inventoryRow, topicsRow);
+            buttons.forEach(btn => {
+                const buttonInnerHtml = `<div class="w-full space-y-6">${btn.iconEmoji}</div><span>${btn.title}</span>`;
+                
+                const button = createElement('button', 'metal-button py-6 text-xl flex flex-col items-center justify-center space-y-2 hover:scale-[1.02] transition-transform ' + (btn.title.includes('(LOCKED)') ? 'opacity-50 cursor-not-allowed' : ''), buttonInnerHtml);
 
+                
 
-            // 4. STATS SECTION
-            const statsSection = createElement('div', 'w-full grid grid-cols-1 md:grid-cols-2 gap-6 pt-4');
-            const playerStats = createElement('div', 'space-y-6');
-            const chopsHtml = game.chops.filter(c => c.isUnlocked).map(chop => {
-                const percentage = Math.min(100, Math.max(0, (chop.points / chopMax) * 100));
-                return `
-                    <div class="w-full">
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="text-gray-300">${chop.icon} ${chop.name}</span>
-                            <span class="text-yellow-400 font-bold">${chop.points}/${chopMax}</span>
-                        </div>
-                        <div class="w-full bg-gray-800 h-2 rounded-full border border-gray-600 overflow-hidden">
-                            <div class="bg-indigo-500 h-full transition-all duration-500" style="width: ${percentage}%"></div>
-                        </div>
-                    </div>`;
-            }).join('');
-
-            playerStats.innerHTML = `
-                <div class="p-4 bg-gray-800/50 rounded-xl border border-indigo-500/30">
-                    <p class="text-xs font-mono text-gray-400 mb-1">PLAYER RANK</p>
-                    <div class="flex items-end space-x-3">
-                        <span class="text-4xl font-bold text-indigo-400 leading-none">${progression.level}</span>
-                        <span class="text-lg text-gray-200 uppercase tracking-widest">${progression.rank}</span>
-                    </div>
-                    <div class="mt-4">
-                        <div class="w-full bg-gray-900 h-2 rounded-full border border-indigo-900 overflow-hidden">
-                            <div class="bg-indigo-500 h-full" style="width: ${progression.progressPercentage}%"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <h4 class="text-xs font-bold text-neon-pink uppercase tracking-widest">Skill Chops</h4>
-                    ${chopsHtml}
-                </div>
-            `;
-
-            const socialStats = createElement('div', 'space-y-6');
-            socialStats.innerHTML = `
-                <div class="p-4 bg-fuchsia-900/20 rounded-xl border-2 border-fuchsia-500/50 text-center">
-                    <p class="text-xs font-mono text-fuchsia-400 mb-1 uppercase tracking-widest">Audience Hype</p>
-                    <p class="text-4xl font-black text-fuchsia-400">${game.fans.toLocaleString()}</p>
-                    <p class="text-[10px] text-fuchsia-300 mt-1 uppercase animate-pulse">The crowd is roaring!</p>
-                </div>
-                <div class="p-4 bg-gray-800/50 rounded-xl border border-neon-pink/30">
-                    <p class="text-xs font-mono text-neon-pink mb-3 uppercase tracking-widest">Memories Collected</p>
-                    <div class="grid grid-cols-3 gap-2">
-                        ${Object.entries(game.memories).map(([type, count]) => `
-                            <div class="flex flex-col items-center p-2 bg-gray-900 rounded-lg border border-white/10">
-                                <span class="text-lg">${memoryComponentMatrix[type].emoji}</span>
-                                <span class="text-sm font-bold text-yellow-400">${count}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-            statsSection.append(playerStats, socialStats);
-
-            // 6. BUTTON GRID
-            const buttonGrid = createElement('div', 'grid grid-cols-2 sm:grid-cols-4 gap-4 w-full');
-            const menubuttons = [
-                { title: 'MISSION', phase: 5, action: () => setPhase(5, 'Know your objective, pilot.'), iconEmoji: '🎯' },
-                { title: 'TRIVIA', phase: 2, action: () => initiateTrivia(), iconEmoji: '💡' },
-                { title: 'WORDLE', phase: 7, action: () => setPhase(7), iconEmoji: '📝' },
-                { title: 'SONGS', phase: 8, action: () => setPhase(8), iconEmoji: '🎶' },
-                { title: 'JUST ONE', phase: 9, action: () => setPhase(9), iconEmoji: '1️' },
-                { title: 'FAMILY FEUD', phase: 11, action: () => setPhase(11), iconEmoji: '📊' },
-                { title: 'SHOP', phase: 4, action: () => setPhase(4), iconEmoji: '🛒' }, 
-                { title: 'MAP', phase: 10, action: () => setPhase(10), iconEmoji: '🗺️' },
-                { title: 'CARDS', phase: 0, action: () => showChopMasteryWindow("Stage Presence"), iconEmoji: '🃏' },
-                { title: 'YAY', phase: 0, action: () => showSuccessAnimation(), iconEmoji: '🤘' },
-                { title: 'SETUP', phase: 18, action: () => setPhase(18), iconEmoji: '📛' },
-                { title: 'CHOPS', phase: 17, action: () => setPhase(17), iconEmoji: '📜' },
-                { title: 'INTRO', phase: 12, action: () => setPhase(12), iconEmoji: '🎦' },
-                { title: 'SONG MIXER', phase: 13, action: () => setPhase(13), iconEmoji: '🎛️' },
-                { title: 'INVENTORY', phase: 14, action: () => setPhase(14), iconEmoji: '🎒' },
-                { title: 'PHONE', phase: 16, action: () => setPhase(16), iconEmoji: '📱' },
-                { title: 'SAVE GAME', phase: 0, action: () => saveGame(), iconEmoji: '💾' },
-                { title: 'LOAD GAME', phase: 0, action: () => loadGame(), iconEmoji: '📂' }
-            ];
-
-
-            menubuttons.forEach(btn => {
-                const button = createElement('button', 'metal-button py-5 flex flex-col items-center justify-center space-y-2 hover:scale-105 transition-all', 
-                    `<span class="text-3xl">${btn.iconEmoji}</span><span class="text-[10px] font-bold tracking-tighter uppercase">${btn.title}</span>`);
                 button.onclick = btn.action;
                 buttonGrid.appendChild(button);
             });
 
-            menuContent.append(titleRow, iconRow, persistenceRow, assetsContainer, statsSection, buttonGrid);
+            menuContent.appendChild(title0);
+            menuContent.appendChild(buttonGrid);
             return menuContent;
-        
         }
-
 
          function renderPhase_setup() {
             const container = createElement('div', 'bg-black/80 p-8 glitch-border');
@@ -5095,7 +4911,7 @@
                     renderGame();
                     return;
                 }
-                setPhase(12, "The name of the protagonist will be used to retrieved saved games");
+                setPhase(12, "SYSTEMS READY. WELCOME TO THE UNDERGROUND.");
             };
 
             footer.append(submitBtn);
@@ -5284,7 +5100,7 @@
                 overlay.appendChild(modal);
                 document.body.appendChild(overlay);
             }
-            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600', 'MENU');
+            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600', 'RETURN TO MENU');
             backButton.onclick = () => setPhase(10, 'Back to the streets.');
             shopContent.appendChild(backButton);
 
@@ -5369,7 +5185,7 @@
 
             shopContent.appendChild(grid);
             
-            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'MENU');
+            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'RETURN TO MENU');
             backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
             shopContent.appendChild(backButton);
 
@@ -5409,8 +5225,6 @@
                 if (isDisabled) {
                     if (isCorrect) {
                         classes += ' bg-green-700 border-green-500 shadow-lg shadow-green-700/50'; // Correct
-                        showSuccessAnimation();
-
                     } else if (isSelected) {
                         classes += ' bg-red-800 border-red-600 shadow-lg shadow-red-800/50'; // Wrong selection
                     } else {
@@ -5549,15 +5363,15 @@
                     const scoreIncrease = 100 - (guesses.length * 10); // Better score for fewer guesses
                     let chop = game.chops.find(i => i.name === 'Social Influence');
 
-                    scoreIncrease = updateChopScore('Social Influence', scoreIncrease);
+                    chop.points +=scoreIncrease;
                     showSuccessAnimation();
                     localMessage = `WIN! ${targetWord} was the word. You earned ${scoreIncrease} Social Influence XP points! Returning to menu...`;
                     updateUI(); // Update UI for next gue
                     setTimeout(returnToMainMenu, 3500);
                 } else if (guesses.length >= 6) {
                     gameStatus = 'lose';
-                    localMessage = `DEFEAT! The word was ${targetWord}. Returning to menu...`;
-                    game.chops["Social Influence"] = Math.max(0, game.chops["Social Influence"] );
+                    localMessage = `DEFEAT! The word was ${targetWord}. Losing 10 XP points. Returning to menu...`;
+                    game.chops["Social Influence"] = Math.max(0, game.chops["Social Influence"] - 10);
                     updateUI(); // Update UI for next gue
                     setTimeout(returnToMainMenu, 3500);
                 } else {
@@ -5872,7 +5686,6 @@
                     const finalWin = game.paigow.playerWins >= 1;
                     if (finalWin) {
                         //game.score += 500;
-                        showSuccessAnimation();
                         game.message = "CHALLENGE COMPLETE! +50 XP";
                     } else {
                         game.message = "CHALLENGE FAILED. BEST LUCK NEXT TIME.";
@@ -6046,16 +5859,15 @@
             let resultMessage = '';
 
             if (isTimeout) {
-                game.chops["Rhythm Mastery"] = Math.max(0, game.chops["Rhythm Mastery"] );
-                resultMessage = `TIME OUT! Challenge Failed. Correct Song: ${game.currentSong}.`;
+                game.chops["Rhythm Mastery"] = Math.max(0, game.chops["Rhythm Mastery"] - 10);
+                resultMessage = `TIME OUT! Challenge Failed. Correct: ${game.currentBand}.`;
             } else if (playerGuess === correctBand) {
-                showSuccessAnimation();
                 game.score += 50;
                 game.chops["Rhythm Mastery"] += 50;
-                resultMessage = `CORRECT! +50 Rhythm mastery Points. Band: ${game.currentSong}.`;
+                resultMessage = `CORRECT! +50 Rhythm mastery Points. Band: ${game.currentBand}.`;
             } else {
-                game.chops["Rhythm Mastery"] = Math.max(0, game.chops["Rhythm Mastery"] );
-                resultMessage = `INCORRECT. Correct Song: ${game.currentSong}.`;
+                game.chops["Rhythm Mastery"] = Math.max(0, game.chops["Rhythm Mastery"] - 10);
+                resultMessage = `INCORRECT. Correct Band: ${game.currentBand}.`;
             }
 
             game.message = resultMessage;
@@ -6070,37 +5882,21 @@
             renderGame(); // Immediate update with result message
         }
 
-         function startPhase8Challenge() {
-
-            if (!game.selectedPracticeArtist) return;
-
-            // 1. Normalize the selected artist name to match the file system (lower_case_with_underscores)
-            const normalizedArtist = game.selectedPracticeArtist.toLowerCase().replace(/ /g, '_');
-
-            // 2. Filter game.midis for this specific artist
-            // We check if the path starts with the artist name + /
-            const artistPool = game.midis.filter(midiPath => 
-                midiPath.toLowerCase().startsWith(normalizedArtist + '/')
-            );
-
-            if (artistPool.length === 0) {
-                alert(`No songs found for ${game.selectedPracticeArtist} in the library!`);
-                return;
-            }
-
-            // 3. Pick a random MIDI from the filtered pool
-            const rawMidi = artistPool[Math.floor(Math.random() * artistPool.length)];
-
+        function startPhase8Challenge() {
             game.challengeActive = true;
             
+            // 1. Pick a random MIDI entry and parse X/Y.midi format
+            const rawIndex = Math.floor(Math.random() * game.midis.length);
+            const rawMidi = game.midis[rawIndex]; // e.g., "Iron_Maiden/The_Trooper.midi"
+
             const parts = rawMidi.split('/');
             const bandRaw = parts[0]; // "Iron_Maiden"
-            //const songRaw = parts[1].replace('.midi', ''); // "The_Trooper"
-            const songRaw = parts[1].replace(/\.midi?$/i, ''); // Handles both .mid and .midi
+            const songRaw = parts[1].replace('.midi', ''); // "The_Trooper"
 
-            game.currentBand = bandRaw.replace(/_/g, ' ').toLowerCase();
-            game.currentSong = songRaw.replace(/_/g, ' ').toLowerCase();
+            game.currentBand = bandRaw.replace(/_/g, ' ');
+            game.currentSong = songRaw.replace(/_/g, ' ');
             game.timer = 30; // Reset timer
+
 
             // 2. Play the audio track
             playMusicChallenge('./midis/'+rawMidi);
@@ -6233,6 +6029,7 @@
                     }
                 }, 0);
             }
+
             return div;
         }
 
@@ -6288,7 +6085,6 @@
                 if (normalizedAnswer.includes(normalizedGuess) || normalizedGuess === normalizedAnswer) {
                     game.familyFeud.revealedAnswers[i] = true;
                     game.familyFeud.roundPoints += currentChallenge.a[i].points;
-                    showSuccessAnimation();
                     game.message = `CORRECT! You found answer #${i + 1} for ${currentChallenge.a[i].points} points.`;
                     correct = true;
                     break;
@@ -6330,7 +6126,7 @@
 
                 game.message = `ROUND WON! You scored ${game.familyFeud.roundPoints} Stage Presence points.`;
             } else {
-                game.chops["Stage Presence"] = Math.max(0, game.chops["Stage Presence"] );
+                game.chops["Stage Presence"] = Math.max(0, game.chops["Stage Presence"] - 10);
                 game.message = `THREE STRIKES! You lost score 10 points. Total score remains $${game.chops["Stage Presence"]}.`;
                   // Reveal all answers for feedback
                 game.familyFeud.revealedAnswers = game.familyFeud.currentChallenge.a.map(() => true);
@@ -6465,9 +6261,9 @@
             // This function creates the HTML structure and returns the main container.
             const mapHtml = `
                 <div id="map-container" class="w-full mx-auto p-2 md:p-4">
-                    <!-- h1 class="text-3xl md:text-4xl text-center font-extrabold mb-4 pt-2 font-['Chakra Petch']">
-                        
-                    <!-- /h1>
+                    <h1 class="text-3xl md:text-4xl text-center font-extrabold mb-4 pt-2 font-['Chakra Petch']">
+                        SF MAP
+                    </h1>
 
                     <!-- Map Host (Full width) -->
                     <div id="map-host" class="rounded-lg overflow-hidden">
@@ -6480,10 +6276,14 @@
                     <div id="status-panel" class="mt-6 p-4 rounded-lg shadow-2xl music-panel">
                         <!-- p class="title text-xl mb-1">>>> List of Topics / Items to interact <<<</p> -->
                         <div id="output-message" class="text-lg text-white">
-                            <span class="block">Click any marker to visit that location.</span>
+                            <span class="block">// Status: Awaiting Input. Click any marker to initiate a unique action sequence.</span>
                         </div>
                     </div>
-                   
+                    <div class="flex justify-center mt-4">
+                        <button onclick="setPhase(0, 'Returning to Main Menu.')" class="metal-button px-6 py-2">
+                            <span class="text-sm">Back to the Streets</span>
+                        </button>
+                    </div>
                 </div>
             `;
             const container = createElement('div', 'w-full', mapHtml);
@@ -6536,7 +6336,7 @@
                 let chop = game.chops.find(i => i.name === 'Lyrical Flow');
 
                 chop.points += points;
-                showSuccessAnimation();
+
                 updateFeedback(`🎉 CORRECT! The word was: ${word}. +${points} Lyrical Flow points!`, 'text-green-400 bg-green-900/50 border border-green-700');
                 endGame();
                 //renderGame(); // Update main score display
@@ -6545,7 +6345,7 @@
                 CLUE_GAME_STATE.triesLeft--;
 
                 if (CLUE_GAME_STATE.triesLeft > 0) {
-                    game.chops["Lyrical Flow"] = Math.max(0, game.chops["Lyrical Flow"] );
+                    game.chops["Lyrical Flow"] = Math.max(0, game.chops["Lyrical Flow"] - 10);
                     updateFeedback(`INCORRECT. Try again! You have ${CLUE_GAME_STATE.triesLeft} guesses left.`, 'text-red-400 bg-red-900/50 border border-red-700');
                     clueGameElements.guessInput.value = '';
                 } else {
@@ -6935,28 +6735,13 @@
                 game.currentBuildingName = 'Home';
                 game.startGame = true;
                 game.currentLocationId = 'Home';
-
-                startChapterOne();
-                
+                setPhase(10, 'Start the day');
+                handleClick(game.currentLocationId);
                 //if (typeof setPhase === "function") setPhase(10, "Sequence Complete.");
             }, 800);
 
             
         }
-
-        function startChapterOne() {
-            document.getElementById('app').style.display = 'none';
-            document.getElementById('chapterOneView').style.display = 'flex';
-        }
-
-        function exitChapterOne() {
-            document.getElementById('chapterOneView').style.display = 'none';
-            document.getElementById('app').style.display = 'flex';
-            setPhase(10, 'Start the day');
-            handleClick(game.currentLocationId);
-            
-        }
-
 
         // --- Rendering ---
 
@@ -7244,39 +7029,6 @@
         }
 
 
-         function updateChopScore(chopName, scoreIncrease) {
-            const currentLevelData = LEVEL_CONFIG[window.game.currentLevel];
-            const chop = window.game.chops.find(c => c.name === chopName);
-            
-            if (!chop) return;
-
-            // 1. Limit points so they don't exceed current rank's max
-            const maxPoints = currentLevelData.chopMaxScale;
-            const previousPoints = chop.points;
-            chop.points = Math.min(maxPoints, chop.points + scoreIncrease);
-            
-            const actualIncrease = chop.points - previousPoints;
-
-            // 2. Check if ALL chops have reached the current max level
-            const allAtMax = window.game.chops.every(c => c.points >= maxPoints);
-
-            // 3. Update Rank Level if all at max and next level exists
-            if (allAtMax && window.game.currentLevel < LEVEL_CONFIG.length - 1) {
-                window.game.currentLevel++;
-                
-                // NEW: Reset all scores to 0 for the new rank tier
-                window.game.chops.forEach(c => {
-                    c.points = 0;
-                });
-                
-                const nextRank = LEVEL_CONFIG[window.game.currentLevel].rank;
-                showGameMessage(`RANK UP! You are now a ${nextRank}! Scores reset for new tier.`, 'success');
-            }
-
-            return actualIncrease;
-        };
-
-
         function renderInventory() {
             const inventoryContent = createElement('div', 'flex flex-col items-center h-full p-8 space-y-8');
             
@@ -7311,7 +7063,7 @@
 
             inventoryContent.appendChild(grid);
 
-            const backButton = createElement('button', 'metal-button px-8 py-3 text-xl mt-8 bg-indigo-600 hover:bg-indigo-700', 'MENU');
+            const backButton = createElement('button', 'metal-button px-8 py-3 text-xl mt-8 bg-indigo-600 hover:bg-indigo-700', 'RETURN TO MENU (0)');
             backButton.onclick = () => setPhase(0, 'Returning to Main Menu.');
             inventoryContent.appendChild(backButton);
 
@@ -7492,7 +7244,7 @@
             const currentLocationId = game.currentLocationId;
             
             // 1. Return to the previous game phase
-            setPhase(prevPhase, ''); 
+            setPhase(prevPhase, 'Exited cinematic sequence.'); 
 
             // 2. If the previous phase was the Map (Phase 10), re-trigger the location click.
             // This is crucial to ensure the location's action content is displayed immediately,
@@ -7558,7 +7310,7 @@
             // Reset iPhone state on exit
             game.iphoneState.view = 'notifications';
             game.iphoneState.selectedMessageIndex = null;
-            setPhase(0, 'Check your messages later!');
+            setPhase(0, 'Returning to System Menu. Check your messages later!');
         }
 
 
@@ -7805,40 +7557,20 @@
             
         }
 
-
-    function checkChopUnlockStatus() {
-            const allUnlocked = window.game.chops.every(chop => chop.isUnlocked === true);
-            if (allUnlocked) {
-                setPhase(100); // Phase 100 = Chapter Complete
-            }
-        };
-
-    function renderChapterComplete() {
-            const container = createElement('div', 'p-12 text-center flex flex-col items-center justify-center space-y-8 animate-in fade-in zoom-in duration-700');
-            container.innerHTML = `
-                <div class="space-y-2">
-                    <h1 class="text-6xl font-black title-font text-white glitch-text tracking-tighter" data-text="CHAPTER 1">CHAPTER 1</h1>
-                    <h2 class="marker-font text-5xl text-yellow-400 rotate-[-2deg]">COMPLETE</h2>
-                </div>
-                
-                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 max-w-md">
-                    <p class="text-xl text-cyan-300 title-font uppercase mb-4">The Resonance is Achieved</p>
-                    <p class="text-gray-400 leading-relaxed italic">
-                        All Six Chops have been mastered. Habibi's voice is no longer a whisper—it's a roar that the Bay Area cannot ignore.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-3 gap-4 w-full opacity-70">
-                    ${window.game.chops.map(c => `<div class="text-2xl">${c.icon}</div>`).join('')}
-                </div>
-
-                <button onclick="setPhase(0)" class="metal-button py-4 px-12 rounded-xl text-lg font-bold">
-                    Continue the Journey
-                </button>
-            `;
-            return container;
-        };
-
+    function renderWinScreen() {
+        const winContent = createElement('div', 'flex flex-col items-center justify-center h-full text-center bg-gray-800 p-10 rounded-xl shadow-2xl');
+        winContent.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-electric-cyan mb-6 speed-icon">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
+            </svg>
+            <h3 class="text-5xl font-extrabold title-font text-electric-cyan">SYSTEM OVERRIDE!</h3>
+            <p class="text-2xl text-gray-300 mt-4">MACHINE DEFEATED. FINAL SCORE: $${game.score}</p>
+        `;
+        const restartButton = createElement('button', 'metal-button w-2/3 py-4 text-xl mt-8 bg-red-600 hover:bg-red-700', 'REBOOT CHALLENGE');
+        restartButton.onclick = () => window.location.reload();
+        winContent.appendChild(restartButton);
+        return winContent;
+    }
 
         
 
@@ -7846,7 +7578,11 @@
      * Main render function: builds the entire UI based on game state.
      */
     window.renderGame = function() {
-        
+        if (game.score >= 20001) {
+            appContainer.innerHTML = '';
+            appContainer.appendChild(renderWinScreen());
+            return;
+        }
 
         // --- 1. Calculate Progression ---
         const progression = getLevelProgression();
@@ -7894,32 +7630,171 @@
 
         // Game Panels Structure
         let mainContent = `
-            <div class="w-full max-w-5xl mx-auto metal-card min-h-[700px] flex flex-col">
-                
-                <div id="center-panel" class="w-full p-6 md:p-10 flex flex-col items-center flex-1">
-                    
-                    <h2 class="text-4xl font-extrabold text-white mb-6 text-center font-title w-full">
-                        ${game.phase > 1 ? '' : (game.phase === 0 ? '' : '')}
-                    </h2>
-                    
-                    <div class="p-4 mb-8 text-center rounded-sm font-semibold shadow-md bg-electric-blue/20 text-electric-cyan border border-electric-blue w-full max-w-2xl mx-auto">
-                        ${game.message}
-                    </div>
+                <div class="flex w-full metal-card min-h-[700px]">
+                    <!-- LEFT PANEL: Conductor Info -->
+                    <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-between border-r-4 border-electric-cyan">
+                        <div class="text-center space-y-3">
+                            <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 font-title text-electric-cyan">A.I. CONDUCTOR</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-electric-cyan speed-icon">
+                                <path d="M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
+                            </svg>
+                            <div class="text-sm font-mono mt-4 p-2 bg-gray-700 rounded-lg border border-electric-cyan/50">
+                                <p>STATUS: ${game.isLoading ? 'LOADING' : 'IDLE'}</p>
+                                <p>PHASE: ${game.phase}</p>
+                            </div>
+                        </div>
 
-                    <div id="dynamic-content" class="w-full flex-1 flex flex-col items-center justify-center space-y-6">
+                    <!-- SCORE REGISTER -->
+                        <div class="mt-4 p-3 bg-gray-700 rounded-lg border border-yellow-400/50 shadow-xl">
+                            <p class="text-sm font-mono text-gray-400">MONEY</p>
+                            <p class="text-4xl font-extrabold text-yellow-400 title-font">$${game.score}</p>
+                            <!-- p class="text-xs text-gray-200">TOTAL XP: ${game.totalXP}</p> -->
+                        </div>
 
+                    <!-- PHONE -->
+                    <div class="mt-8 pt-4 border-t border-gray-700 w-full text-center">
+                            <h3 class="text-lg font-bold title-font text-neon-pink mb-2"> Phone</h3>
+                            <div 
+                                id="iphone-icon-container" 
+                                class="relative inline-block cursor-pointer p-2 transition-transform duration-200 hover:scale-110"
+                                onclick="handlePhoneClick()"
+                            >
+                                ${generatePhoneIcon()}
+                                ${generateNotificationBadge()}
+                            </div>
+                        </div>
 
+                    <!-- INVENTORY -->
+                        <div class="mt-6 pt-4 border-t border-gray-700 w-full">
+                            <p class="text-sm font-mono text-gray-400 mb-2">INVENTORY</p>
+                            <div id="inventory-display" class="grid grid-cols-4 gap-2">
+                                ${game.inventory_items.length === 0 
+                                    ? '<p class="text-xs text-gray-500 italic col-span-4">No items acquired.</p>'
+                                    : game.inventory_items.filter(item => item.acquired).map(item => `
+                                        <div class="p-1 text-center bg-gray-600 rounded-md border border-electric-cyan/70 hover:bg-gray-500" title="${item.name}">
+                                            <span class="text-2xl">${item.icon}</span>
+                                        </div>
+                                    `).join('')
+                                }
+                            </div>
                         </div>
 
 
+                         <!-- NEW: FAN ENTHUSIASM PANEL -->
+                        ${game.isFanPanelVisible ? `
+                    <div id="fan-enthusiasm-panel" class="w-full mt-6 p-4 text-center rounded-lg border-2 border-fuchsia-500 shadow-neon-red bg-fuchsia-900/40 fan-panel-glow transition-all duration-300 ease-in-out">
+                        <h3 class="text-xl font-extrabold title-font text-fuchsia-400 mb-2 border-b border-fuchsia-500/50 pb-1">AUDIENCE HYPE</h3>
+                        <!-- Microphone/Vocal SVG Icon for Music Theme -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-fuchsia-500 animate-pulse">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
+                        </svg>
+                        <p class="text-sm font-mono text-gray-300 mt-2">CURRENT FANS</p>
+                        <p class="text-3xl font-extrabold title-font text-fuchsia-400">${game.fans.toLocaleString()}</p>
+                        <p class="text-xs text-fuchsia-300 mt-1">THE CROWD ROARS!</p>
+                    </div>
+                    ` : '<div class="w-full mt-6 p-4 text-center text-xs text-gray-600 italic border border-gray-700 rounded-lg">Fan data minimized.</div>'}
+                    <!-- END NEW FAN ENTHUSIASM PANEL -->
+
+                    <!-- SONGS CREATED COUNT (NEW VIBRANT SECTION) -->
+                                <div class="mt-4 p-3 bg-gray-800 rounded-lg border-2 border-neon-pink/70 shadow-neon-pink shadow-lg w-full text-center">
+                                    <p class="text-sm font-mono text-neon-pink mb-1">SONGS CREATED</p>
+                                    <p class="text-5xl font-extrabold text-neon-pink title-font">${game.songCounts}</p>
+                                </div>
+
+
+                             <!--  Memory Counter Display -->
+                    <div class="mt-6 pt-4 border-t border-gray-700 w-full">
+                        <p class="text-sm font-mono text-gray-400 mb-2">MEMORIES COLLECTED</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            ${Object.entries(game.memories)
+                                .filter(([type, count]) => count > 0) 
+                                .map(([type, count]) => `
+                                <div class="flex items-center space-x-2 p-1 px-2 rounded-md bg-gray-700 shadow-inner hover:bg-gray-600 transition-colors" 
+                                     title="${memoryComponentMatrix[type].description}">
+                                    
+                                    <!-- Memory Ball Icon -->
+                                    <div class="w-5 h-5 rounded-full flex items-center justify-center text-xs shadow-md border-2 border-white/50 ${memoryComponentMatrix[type].tailwind}" style="font-size: 0.75rem;">
+                                        ${memoryComponentMatrix[type].emoji}
+                                    </div>
+                                    
+                                    <span class="font-bold text-yellow-400 text-lg">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
 
 
 
+                       
 
 
+                        <div class="text-center text-xs text-gray-500">
+                            <p>Lux Aeterna!</p>
+                        </div>
+                    </div>
+
+                    <!-- CENTER PANEL: Game Interaction -->
+                    <div id="center-panel" class="flex-1 p-6 flex flex-col justify-between">
+                        <h2 class="text-4xl font-extrabold text-white mb-4 text-center font-title">
+                            ${game.phase > 1 ? 'LIVE CHALLENGE INTERFACE' : (game.phase === 0 ? 'SYSTEM MENU' : 'BOOT SEQUENCE')}
+                        </h2>
+                        
+                        <!-- Game Message Panel -->
+                        <div class="p-4 mb-6 text-center rounded-sm font-semibold shadow-md bg-electric-blue/20 text-electric-cyan border border-electric-blue">
+                            ${game.message}
+                        </div>
+
+                        <!-- Dynamic Phase Content Placeholder -->
+                        <div id="dynamic-content" class="flex-1"></div>
+                    </div>
+
+                     <!-- RIGHT PANEL: Player Info -->
+                    <div class="w-1/5 bg-gray-900 text-white p-4 hidden md:flex flex-col items-center justify-start border-l-4 border-electric-cyan overflow-y-auto">
+                        <div class="text-center space-y-3 w-full">
+                            <h3 class="text-xl font-bold border-b pb-2 border-gray-700 mb-4 title-font text-electric-cyan">PLAYER DATA</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-yellow-400 speed-icon">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            
+                            <!-- LEVEL AND RANK DISPLAY -->
+                            <div class="p-3 bg-gray-700 rounded-lg border border-indigo-400/50 shadow-xl mt-4">
+                                <p class="text-sm font-mono text-gray-400">PLAYER LEVEL / RANK</p>
+                                <p class="text-4xl font-extrabold text-indigo-400 title-font">${progression.level}</p>
+                                <p class="text-lg text-gray-200">${progression.rank.toUpperCase()}</p>
+                            </div>
+
+                           
+                            
+                           <!-- Overall Level Progress Bar -->
+                            <div class="mt-4 pt-4 border-t border-gray-700 w-full">
+                                <p class="text-sm font-mono text-gray-400 mb-2 font-bold tracking-wider">LEVEL UP PROGRESS</p>
+                                <div class="flex justify-between items-center text-xs text-gray-400 mb-1">
+                                    <span>LVL ${progression.level}</span>
+                                    <span class="text-green-400">${progression.xpToNextLevel === 'MAX' ? 'MAX RANK ACHIEVED' : `${progression.xpToNextLevel} XP to LVL ${progression.level + 1}`}</span>
+                                </div>
+                                <div class="w-full bg-gray-800 rounded-full h-3 shadow-inner border border-green-700">
+                                    <div class="h-3 rounded-full bg-green-500 transition-all duration-500" style="width: ${progression.progressPercentage}%;"></div>
+                                </div>
+                            </div>
+                            <!-- End Level Progress -->
+
+                            <!-- CHOPS SECTION (Dynamic Max: ${chopMax}) -->
+                            <div class="mt-6 pt-4 border-t border-gray-700 w-full">
+                                <h4 class="text-lg font-extrabold text-neon-pink mb-3 title-font text-center tracking-wider" style="text-shadow: 0 0 5px #ff00ff;">CHOPS</h4>
+                                <div id="chops-display" class="space-y-3">
+                                    ${chopsHtml}
+                                </div>
+                            </div>
+                            <!-- END CHOP SKILLS SECTION -->
+
+                            
+                        </div>
+                        <div class="text-center text-xs text-gray-500 mt-auto pt-4 border-t border-gray-700 w-full">
+                            <p>Chase that light!</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
         
         appContainer.innerHTML = mainContent;
 
@@ -7997,11 +7872,9 @@
             case 99: // NEW: Cinematic Phase
                 contentElement = renderCinematic();
                 break;
-            case 100:
-                contentElement = renderChapterComplete(); break;
             default:
                 const topicContent = createElement('div', 'flex flex-col items-center justify-center h-full space-y-8 p-8', 'UNKNOWN GAME STATE');
-                const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'MENU');
+                const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'RETURN TO MENU');
                 backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
                 topicContent.appendChild(backButton);
                 return topicContent;
@@ -8014,28 +7887,6 @@
                 game.startGame = false;
             }
             else{
-                const unreadCount = getUnreadNotificationCount();
-                const badgeHtml = unreadCount > 0 
-                ? `<span class="absolute -top-2 -right-2 bg-red-600 text-sm font-bold rounded-full h-8 w-8 flex items-center justify-center border-2 border-white">${unreadCount}</span>` 
-                : '';
-
-                 const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-6 pb-6 border-b border-white/10');
-            iconRow.innerHTML = `
-                <button onclick="setPhase(10)" class="p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all text-4xl shadow-xl" title="Map">🗺️</button>
-                <button onclick="setPhase(14)" class="p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all text-4xl shadow-xl" title="Inventory">🎒</button>
-                <div class="relative cursor-pointer p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all text-4xl shadow-xl" title="Notifications" onclick="setPhase(16)">
-                    📱 ${badgeHtml}
-                </div>
-                <div class="relative cursor-pointer p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all text-4xl shadow-xl" title="Menu" onclick="setPhase(0)">
-                    ⚙️ 
-                </div>
-
-                <div class="px-8 py-5 bg-yellow-500/10 border-4 border-yellow-500 rounded-2xl flex flex-col items-center shadow-[0_0_20px_rgba(234,179,8,0.2)]">
-                    <span class="text-[10px] font-bold text-yellow-500 uppercase tracking-[0.2em] mb-1"> </span>
-                    <span class="text-yellow-400 font-black title-font text-3xl">$${game.score}</span>
-                </div>
-            `;
-                dynamicContent.appendChild(iconRow);
                 // Wait a moment to ensure the browser has fully rendered the SVG element
                 setTimeout(renderLandmarks, 0); 
             }
@@ -8103,7 +7954,6 @@
     window.reloadCurrentLocation = reloadCurrentLocation;
     window.handleClick = handleClick;
     window.exitCinematic = exitCinematic;
-    window.exitChapterOne = exitChapterOne;
 
 
 

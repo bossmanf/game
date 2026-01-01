@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUNK PAI GOW</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --punk-pink: #ff00ff;
+            --punk-yellow: #faff00;
+            --punk-cyan: #00ffff;
+            --bg-dark: #0a0a0a;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Space Mono', monospace;
+            overflow: hidden;
+        }
+        .title-font { font-family: 'Permanent Marker', cursive; }
+        .punk-border {
+            border: 4px solid white;
+            box-shadow: 6px 6px 0px var(--punk-pink);
+        }
+        .card {
+            width: 70px;
+            height: 100px;
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-10px); }
+        .card.selected {
+            border: 3px solid var(--punk-yellow);
+            box-shadow: 0 0 15px var(--punk-yellow);
+            transform: translateY(-15px);
+        }
+        .card-inner {
+            background: white;
+            color: black;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 5px;
+            font-weight: bold;
+            height: 100%;
+            border: 2px solid #333;
+        }
+        .suit-red { color: #ff0055; }
+        .suit-black { color: #222; }
+        .music-pulse { animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 255, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 0, 255, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 255, 0); }
+        }
+        .backstage-texture {
+            background-image: radial-gradient(#222 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="backstage-texture min-h-screen flex flex-col items-center p-4">
+
+    <!-- Header -->
+    <div class="w-full max-w-4xl flex justify-between items-center mb-6 px-4">
+        <div class="punk-border bg-black p-2">
+            <h1 class="title-font text-3xl text-pink-500 italic tracking-tighter">PUNK PAI GOW</h1>
+        </div>
+        <div class="flex gap-4">
+            <div class="bg-black border-2 border-cyan-400 p-2 text-center w-24">
+                <p class="text-[10px] uppercase">Series</p>
+                <p id="series-score" class="text-xl font-bold text-cyan-400">0 - 0</p>
+            </div>
+            <div class="bg-black border-2 border-pink-500 p-2 text-center w-24">
+                <p class="text-[10px] uppercase">Game</p>
+                <p id="game-count" class="text-xl font-bold text-pink-500">1 / 3</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dealer Area -->
+    <div id="dealer-area" class="w-full max-w-4xl bg-white/5 border-2 border-dashed border-white/20 p-6 rounded-3xl mb-8 relative">
+        <span class="absolute -top-3 left-10 bg-white text-black px-3 text-xs font-bold uppercase">The House (Dealer)</span>
+        <div id="dealer-cards" class="flex justify-center gap-3 opacity-30">
+            <!-- Dealer cards hidden until showdown -->
+            <div class="card bg-gray-800 rounded-lg border-2 border-white/20"></div>
+            <div class="card bg-gray-800 rounded-lg border-2 border-white/20"></div>
+            <div class="card bg-gray-800 rounded-lg border-2 border-white/20"></div>
+            <div class="card bg-gray-800 rounded-lg border-2 border-white/20"></div>
+            <div class="card bg-gray-800 rounded-lg border-2 border-white/20"></div>
+            <div class="card bg-gray-800 rounded-lg border-2 border-white/20"></div>
+            <div class="card bg-gray-800 rounded-lg border-2 border-white/20"></div>
+        </div>
+        <div id="dealer-reveal" class="hidden mt-4 flex flex-col items-center gap-2">
+            <div class="flex gap-10">
+                <div id="dealer-low-hand" class="flex gap-2"></div>
+                <div id="dealer-high-hand" class="flex gap-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Area -->
+    <div id="player-area" class="w-full max-w-4xl bg-pink-600/10 border-4 border-pink-500 p-8 rounded-3xl relative shadow-[0_0_50px_rgba(255,0,255,0.1)]">
+        <span class="absolute -top-4 left-10 bg-pink-500 text-black px-4 py-1 text-sm font-black uppercase italic">Your Hand: Split to Win</span>
+        
+        <div id="player-hand-display" class="flex justify-center gap-3 mb-10 min-h-[110px]">
+            <!-- Cards injected here -->
+        </div>
+
+        <div class="grid grid-cols-2 gap-8">
+            <div class="bg-black/60 p-4 rounded-xl border-2 border-cyan-400">
+                <p class="text-cyan-400 text-xs font-bold mb-2 uppercase tracking-widest">Low Hand (2 Cards)</p>
+                <div id="low-hand-slot" class="flex justify-center gap-2 min-h-[100px] border border-cyan-400/30 rounded-lg p-2 bg-black/40"></div>
+            </div>
+            <div class="bg-black/60 p-4 rounded-xl border-2 border-yellow-400">
+                <p class="text-yellow-400 text-xs font-bold mb-2 uppercase tracking-widest">High Hand (5 Cards)</p>
+                <div id="high-hand-slot" class="flex justify-center gap-2 min-h-[100px] border border-yellow-400/30 rounded-lg p-2 bg-black/40"></div>
+            </div>
+        </div>
+
+        <div class="flex justify-center mt-8 gap-4">
+            <button id="reset-btn" class="bg-white text-black font-bold px-6 py-2 hover:bg-gray-200 uppercase text-sm">Clear Hands</button>
+            <button id="submit-btn" class="bg-pink-500 text-black title-font text-2xl px-12 py-3 hover:bg-pink-400 transition-all disabled:opacity-30 disabled:cursor-not-allowed" disabled>PLAY HAND</button>
+        </div>
+    </div>
+
+    <!-- Modal for results -->
+    <div id="modal" class="fixed inset-0 bg-black/95 z-[2000] hidden flex-col items-center justify-center p-6">
+        <h2 id="modal-title" class="title-font text-6xl text-pink-500 mb-4 text-center">GAME OVER</h2>
+        <p id="modal-desc" class="text-xl text-center max-w-md mb-8">You beat the house. Fretboard Control mastery increased.</p>
+        <button id="modal-action" class="bg-cyan-400 text-black title-font text-3xl px-10 py-4 hover:scale-110 transition-transform">NEXT ROUND</button>
+    </div>
+
+    <script>
+        const suits = ['♠', '♣', '♥', '♦'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        const valueMap = { '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14 };
+
+        let gameState = {
+            playerWins: 0,
+            dealerWins: 0,
+            currentGame: 1,
+            maxGames: 3,
+            deck: [],
+            playerHand: [],
+            dealerHand: [],
+            selectedLow: [],
+            selectedHigh: []
+        };
+
+        function createDeck() {
+            let deck = [];
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push({ suit, value, score: valueMap[value] });
+                }
+            }
+            return deck.sort(() => Math.random() - 0.5);
+        }
+
+        function getHandRank(hand) {
+            const counts = {};
+            hand.forEach(c => counts[c.value] = (counts[c.value] || 0) + 1);
+            const countArray = Object.values(counts).sort((a, b) => b - a);
+            const highCard = Math.max(...hand.map(c => c.score));
+
+            if (countArray[0] === 4) return { rank: 8, power: highCard, label: "4 of a Kind" };
+            if (countArray[0] === 3 && countArray[1] === 2) return { rank: 7, power: highCard, label: "Full House" };
+            
+            // Simplified Flush check
+            const isFlush = hand.length >= 5 && new Set(hand.map(c => c.suit)).size === 1;
+            if (isFlush) return { rank: 6, power: highCard, label: "Flush" };
+
+            // Straight check (Simplified)
+            const sorted = [...hand].sort((a, b) => a.score - b.score);
+            let isStraight = true;
+            for(let i=0; i<sorted.length-1; i++) {
+                if (sorted[i+1].score !== sorted[i].score + 1) isStraight = false;
+            }
+            if (isStraight && hand.length >= 5) return { rank: 5, power: highCard, label: "Straight" };
+
+            if (countArray[0] === 3) return { rank: 4, power: highCard, label: "3 of a Kind" };
+            if (countArray[0] === 2 && countArray[1] === 2) return { rank: 3, power: highCard, label: "Two Pair" };
+            if (countArray[0] === 2) return { rank: 2, power: highCard, label: "One Pair" };
+            
+            return { rank: 1, power: highCard, label: "High Card" };
+        }
+
+        function renderCard(card, onClick = null) {
+            const div = document.createElement('div');
+            div.className = 'card';
+            const colorClass = (card.suit === '♥' || card.suit === '♦') ? 'suit-red' : 'suit-black';
+            div.innerHTML = `
+                <div class="card-inner ${colorClass}">
+                    <div class="text-left leading-none">
+                        <div>${card.value}</div>
+                        <div class="text-sm">${card.suit}</div>
+                    </div>
+                    <div class="text-center text-3xl">${card.suit}</div>
+                    <div class="text-right rotate-180 leading-none">
+                        <div>${card.value}</div>
+                        <div class="text-sm">${card.suit}</div>
+                    </div>
+                </div>
+            `;
+            if (onClick) div.onclick = onClick;
+            return div;
+        }
+
+        function initGame() {
+            gameState.deck = createDeck();
+            gameState.playerHand = gameState.deck.splice(0, 7);
+            gameState.dealerHand = gameState.deck.splice(0, 7);
+            gameState.selectedLow = [];
+            gameState.selectedHigh = [];
+            
+            document.getElementById('series-score').innerText = `${gameState.playerWins} - ${gameState.dealerWins}`;
+            document.getElementById('game-count').innerText = `${gameState.currentGame} / ${gameState.maxGames}`;
+            document.getElementById('dealer-reveal').classList.add('hidden');
+            document.getElementById('dealer-cards').classList.remove('hidden');
+            document.getElementById('submit-btn').disabled = true;
+            
+            renderPlayerOptions();
+        }
+
+        function renderPlayerOptions() {
+            const container = document.getElementById('player-hand-display');
+            const lowSlot = document.getElementById('low-hand-slot');
+            const highSlot = document.getElementById('high-hand-slot');
+            
+            container.innerHTML = '';
+            lowSlot.innerHTML = '';
+            highSlot.innerHTML = '';
+
+            // Render available cards
+            gameState.playerHand.forEach((card, index) => {
+                const cardEl = renderCard(card, () => selectCard(index));
+                container.appendChild(cardEl);
+            });
+
+            // Render selected cards
+            gameState.selectedLow.forEach(card => lowSlot.appendChild(renderCard(card)));
+            gameState.selectedHigh.forEach(card => highSlot.appendChild(renderCard(card)));
+
+            document.getElementById('submit-btn').disabled = (gameState.selectedLow.length !== 2 || gameState.selectedHigh.length !== 5);
+        }
+
+        function selectCard(index) {
+            const card = gameState.playerHand[index];
+            if (gameState.selectedLow.length < 2) {
+                gameState.selectedLow.push(card);
+            } else if (gameState.selectedHigh.length < 5) {
+                gameState.selectedHigh.push(card);
+            }
+            gameState.playerHand.splice(index, 1);
+            renderPlayerOptions();
+        }
+
+        document.getElementById('reset-btn').onclick = () => {
+            gameState.playerHand = [...gameState.playerHand, ...gameState.selectedLow, ...gameState.selectedHigh];
+            gameState.selectedLow = [];
+            gameState.selectedHigh = [];
+            renderPlayerOptions();
+        };
+
+        document.getElementById('submit-btn').onclick = showdown;
+
+        function showdown() {
+            // Dealer "House Way" (Simplified AI)
+            // Sort dealer hand and pick top 2 for Low if they form a pair, else lowest high cards
+            const sortedDealer = [...gameState.dealerHand].sort((a,b) => b.score - a.score);
+            const dealerLow = sortedDealer.splice(0, 2);
+            const dealerHigh = sortedDealer;
+
+            const playerLowScore = getHandRank(gameState.selectedLow);
+            const playerHighScore = getHandRank(gameState.selectedHigh);
+            const dealerLowScore = getHandRank(dealerLow);
+            const dealerHighScore = getHandRank(dealerHigh);
+
+            // Validation Rule: High Hand MUST be stronger than Low Hand
+            if (playerHighScore.rank < playerLowScore.rank || (playerHighScore.rank === playerLowScore.rank && playerHighScore.power < playerLowScore.power)) {
+                showModal("FOUL!", "Your High Hand must be stronger than your Low Hand. Try again.", "RETRY", () => {
+                    document.getElementById('modal').classList.add('hidden');
+                });
+                return;
+            }
+
+            // Reveal Dealer
+            document.getElementById('dealer-cards').classList.add('hidden');
+            const reveal = document.getElementById('dealer-reveal');
+            reveal.classList.remove('hidden');
+            
+            const dLowCont = document.getElementById('dealer-low-hand');
+            const dHighCont = document.getElementById('dealer-high-hand');
+            dLowCont.innerHTML = `<p class="text-[10px] text-pink-500 uppercase">Low</p>`;
+            dHighCont.innerHTML = `<p class="text-[10px] text-pink-500 uppercase">High</p>`;
+            
+            dealerLow.forEach(c => dLowCont.appendChild(renderCard(c)));
+            dealerHigh.forEach(c => dHighCont.appendChild(renderCard(c)));
+
+            // Score Logic
+            let pPoints = 0;
+            if (playerLowScore.rank > dealerLowScore.rank || (playerLowScore.rank === dealerLowScore.rank && playerLowScore.power > dealerLowScore.power)) pPoints++;
+            if (playerHighScore.rank > dealerHighScore.rank || (playerHighScore.rank === dealerHighScore.rank && playerHighScore.power > dealerHighScore.power)) pPoints++;
+
+            setTimeout(() => {
+                if (pPoints === 2) {
+                    gameState.playerWins++;
+                    showModal("YOU WON!", "You dominated the House. +1 Match Point.", "NEXT ROUND", nextStep);
+                } else if (pPoints === 1) {
+                    showModal("PUSH", "A draw. No one wins this round.", "NEXT ROUND", nextStep);
+                } else {
+                    gameState.dealerWins++;
+                    showModal("HOUSE WINS", "The Dealer outplayed you.", "NEXT ROUND", nextStep);
+                }
+            }, 800);
+        }
+
+        function showModal(title, desc, btnText, action) {
+            const modal = document.getElementById('modal');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            const btn = document.getElementById('modal-action');
+            btn.innerText = btnText;
+            btn.onclick = action;
+            modal.classList.remove('hidden');
+        }
+
+        function nextStep() {
+            document.getElementById('modal').classList.add('hidden');
+            if (gameState.currentGame >= 3) {
+                const finalWinner = gameState.playerWins >= 1 ? "SERIES VICTORY" : "SERIES LOST";
+                const msg = gameState.playerWins >= 1 ? "You beat the dealer in the series! Fretboard Control unlocked." : "The house always wins. Practice more.";
+                showModal(finalWinner, msg, "FINISH", () => location.reload());
+            } else {
+                gameState.currentGame++;
+                initGame();
+            }
+        }
+
+        window.onload = initGame;
+    </script>
+</body>
+</html>
