@@ -4914,7 +4914,6 @@
                 const levelSpan = requiredXPForNext - requiredXPForCurrent;
 
                 xpToNextLevel = requiredXPForNext - totalXP;
-                console.log(xpToNextLevel, requiredXPForNext, totalXP);
                 progressPercentage = (xpInCurrentSegment / levelSpan) * 100;
                 progressPercentage = Math.min(100, Math.max(0, progressPercentage));
             } else {
@@ -5122,7 +5121,7 @@
                 });
 
                 container.appendChild(btnGroup);
-                container.appendChild(createElement('div', 'text-zinc-600 text-[10px] font-mono pt-4 tracking-widest', 'V1.0.9 // BAY AREA CHAPTER'));
+                container.appendChild(createElement('div', 'text-zinc-600 text-[10px] font-mono pt-4 tracking-widest', 'V1.0.9'));
                 
                 return container;
             }
@@ -5253,12 +5252,11 @@
 
                 const topics = [arr[index1], arr[index2]];
             
-                //console.log('Topics:', topics)
                 if (topics.length >= 2) {
 
                     updateState({ 
                         topics: topics.slice(0, 2),
-                        message: 'TWO TARGETS IDENTIFIED.',
+                        message: 'TWO CATEGORIES IDENTIFIED.',
                         isLoading: false
                     });
                 } else {
@@ -5313,7 +5311,6 @@
                 const response = await fetchWithRetry(fetcher);
                 const result = await response.json();
                 const candidate = result.candidates?.[0];
-                //console.log('Prompt:', prompt)
                 if (candidate && candidate.content?.parts?.[0]?.text) {
                     const text = candidate.content.parts[0].text;
                     let sources = [];
@@ -5327,8 +5324,6 @@
                             }))
                             .filter(source => source.uri && source.title); 
                     }
-                    //console.log('this is the text', text)
-
 
                       let jsonString = (text || "").trim();
 
@@ -5349,7 +5344,6 @@
                       while (/[.\n\r\s]$/.test(jsonString)) jsonString = jsonString.slice(0, -1);
 
                       let parsed;
-                      //console.log('This is the jsonString:', jsonString)
 
                       try {
                         parsed = JSON.parse(jsonString);
@@ -5362,7 +5356,6 @@
                           throw new Error("Failed to parse LLM output. Raw: " + fullResponseText);
                         }
                       }
-                      //console.log('And this is parsed:', parsed)
                       return parsed
 
                 } else if (result.error) {
@@ -5393,53 +5386,9 @@
                 message: `GENERATING QUESTION on: ${topic.toUpperCase()}...` 
             });
 
-            const responseSchema = {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "properties": {
-                    "question": { "type": "string", "minLength": 5, "description": "The main trivia question text." },
-                    "wrongAnswers": {
-                      "type": "array",
-                      "description": "An array containing exactly three plausible, incorrect answers.",
-                      "items": { "type": "string", "minLength": 1 },
-                      "minItems": 3,
-                      "maxItems": 3,
-                      "uniqueItems": true
-                    },
-                    "correctAnswer": { "type": "string", "minLength": 1, "description": "The single, correct answer to the question." }
-                  },
-                  "required": ["question", "wrongAnswers", "correctAnswer"]
-                }
-            const example = {
-                question: "Which gas is most responsible for the greenhouse effect on Earth?",
-                wrongAnswers: ["Oxygen", "Hydrogen", "Ozone"],
-                correctAnswer: "Carbon dioxide"
-              };
-            const responseSchemaStr= JSON.stringify(responseSchema, null, 2);
-
-            const userRequestPrompt = `
-            Task: Create one multiple-choice trivia question about the topic ${topic}
-            Constraints:
-            The question and answers must be based on real-world facts.
-            The resulting output must have:
-            Exactly ONE question.
-            Exactly ONE correct answer (This is not an array)
-            Exactly THREE plausible but incorrect answers (wrongAnswers array size must be 3). Do not repeat answers.
-            Concise answers.
-            GENERATE THE FINAL JSON OBJECT ONLY
-            The output MUST NOT contain any markdown fences, surrounding text, explanations, or commentary.
-            The output must strictly adhere to this JSON schema provided: ${responseSchemaStr}  
-            `.trim();
-
-
-            const startTime = performance.now();
-
             try {
-                const parsed = await runLLM_API_Call(userRequestPrompt);
+                const parsed = loadTriviaQuestion(topic)
 
-                const endTime = performance.now();
-                const duration = endTime - startTime;
-                //console.log('Duration:', duration, ' -- This is what I am getting:', output)
 
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
@@ -5526,7 +5475,7 @@
             
             const topicContent = createElement('div', 'flex flex-col items-center justify-center h-full space-y-8 p-8');
             
-            const topicHeader = createElement('h3', 'text-3xl font-bold title-font text-electric-cyan text-center', 'SELECT NEXT TARGET');
+            const topicHeader = createElement('h3', 'text-3xl font-bold title-font text-electric-cyan text-center', 'CHOOSE ONE CATEGORY');
             topicContent.appendChild(topicHeader);
 
             const topicButtons = createElement('div', 'w-full space-y-6');
@@ -5544,18 +5493,18 @@
         }
 
         // Game menu
-        function renderPhase0() {
+       function renderPhase0() {
             const progression = getLevelProgression();
             const chopMax = progression.currentChopMax;
             const unreadCount = getUnreadNotificationCount();
              const badgeHtml = unreadCount > 0 
                 ? `<span class="absolute -top-2 -right-2 bg-red-600 text-sm font-bold rounded-full h-8 w-8 flex items-center justify-center border-2 border-white">${unreadCount}</span>` 
                 : '';
-            const menuContent = createElement('div', 'flex flex-col items-center w-full max-w-4xl mx-auto p-4 md:p-8 space-y-6 bg-black/20 rounded-2xl overflow-y-auto max-h-full pb-24');
+            const menuContent = createElement('div', 'flex flex-col items-center w-full max-w-full mx-auto p-3 space-y-4 bg-black/20 rounded-2xl overflow-y-auto max-h-screen pb-32');
 
             // 1. TITLE ROW
-            const titleRow = createElement('div', 'w-full text-center');
-            const title = createElement('h3', 'text-5xl font-extrabold title-font text-neon-pink uppercase tracking-tighter mb-2', 'MAIN MENU');
+            const titleRow = createElement('div', 'w-full text-center mt-2');            
+            const title = createElement('h3', 'text-3xl font-extrabold title-font text-neon-pink uppercase tracking-tighter mb-1', 'MAIN MENU');
             title.style.textShadow = '0 0 20px rgba(255, 0, 255, 0.6)';
             titleRow.appendChild(title);
 
@@ -5563,25 +5512,38 @@
             const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-3 md:gap-6 pb-6 border-b border-white/10');
 
             iconRow.innerHTML = `
-                <button onclick="setPhase(10,'San Francisco Map')" class="p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" title="Map">🗺️</button>
-                <button onclick="setPhase(14,'')" class="p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" title="Inventory">🎒</button>
-                <div class="relative cursor-pointer p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" title="Notifications" onclick="setPhase(16)">
+                <button onclick="setPhase(10,'San Francisco Map')" class="aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl">🗺️</button>
+                
+                <button onclick="setPhase(14,'')" class="aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl">🎒</button>
+                
+                <div class="relative aspect-square cursor-pointer p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" onclick="setPhase(16)">
                     📱 ${badgeHtml}
                 </div>
-                <div class="relative cursor-pointer p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" title="Menu" onclick="setPhase(0, 'Game Menu')">
+
+                <div class="relative aspect-square cursor-pointer p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" onclick="setPhase(0, 'Game Menu')">
                     ⚙️ 
                 </div>
-                <div class="px-8 py-3 bg-yellow-500/10 border-4 border-yellow-500 rounded-2xl flex flex-col items-center shadow-[0_0_20px_rgba(234,179,8,0.2)]">
-                    <span class="text-[10px] font-bold text-yellow-500 uppercase tracking-[0.2em] mb-1"> </span>
-                    <span class="text-yellow-400 font-black title-font text-2xl">$${game.score}</span>
+
+                <div class="aspect-square flex flex-col items-center justify-center p-3 bg-gray-800 rounded-2xl border-2 border-white/10 shadow-xl">
+                    <span class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-tighter mb-0.5">Cash</span>
+                    <span class="text-sm md:text-lg font-black text-yellow-400 tracking-tighter">$${game.score.toLocaleString()}</span>
                 </div>
             `;
 
-           const persistenceRow = createElement('div', 'w-full flex justify-center gap-4 py-4 border-t border-b border-white/10 bg-white/5');
-            const saveBtn = createElement('button', 'save-load-btn flex items-center space-x-2 px-6 py-2 rounded-full text-xs font-bold text-gray-300 uppercase tracking-widest', `<span>💾</span> <span>Save Game</span>`);
+            const persistenceRow = createElement('div', 'w-full flex justify-center gap-6 py-4 border-t border-b border-white/10 bg-white/5');
+
+            const saveBtn = createElement('button', 
+                'aspect-square w-20 flex flex-col items-center justify-center bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-amber-500 hover:scale-105 transition-all shadow-xl', 
+                `<span class="text-xl mb-1">💾</span><span class="text-[8px] font-black text-gray-300 uppercase">Save</span>`
+            );
             saveBtn.onclick = saveGame;
-            const loadBtn = createElement('button', 'save-load-btn flex items-center space-x-2 px-6 py-2 rounded-full text-xs font-bold text-gray-300 uppercase tracking-widest', `<span>📂</span> <span>Load Game</span>`);
+
+            const loadBtn = createElement('button', 
+                'aspect-square w-20 flex flex-col items-center justify-center bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-amber-500 hover:scale-105 transition-all shadow-xl', 
+                `<span class="text-xl mb-1">📂</span><span class="text-[8px] font-black text-gray-300 uppercase">Load</span>`
+            );
             loadBtn.onclick = loadGame;
+
             persistenceRow.append(saveBtn, loadBtn);
 
             const assetsContainer = createElement('div', 'w-full flex flex-col space-y-4 px-2 py-2');
@@ -5589,37 +5551,22 @@
             const acquiredTopics = game.conversation_topics.unlocked.filter(item => item.acquired);
 
 
-           // Row A: Inventory
-
-            const inventoryRow = createElement('div', 'w-full flex flex-col md:flex-row md:items-center gap-2 md:space-x-4');
-
-            inventoryRow.innerHTML = `
-                <span class="text-[10px] font-mono text-gray-500 uppercase">Active Inventory:</span>
-                <div class="flex gap-2">
-                    ${acquiredItems.map(item => `
-                        <div class="w-10 h-10 flex items-center justify-center bg-gray-800/50 rounded-lg border border-white/10 text-xl" title="${item.name}">${item.icon}</div>
-                    `).join('') || '<span class="text-[10px] text-gray-700 uppercase italic">No gear acquired</span>'}
+               const renderAssetRow = (label, items) => `
+            <div class="w-full">
+                <span class="text-[9px] font-mono text-gray-500 uppercase block mb-1">${label}</span>
+                <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                    ${items.map(item => `
+                        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-gray-800/50 rounded-lg border border-white/10 text-xl">${item.icon}</div>
+                    `).join('') || '<span class="text-[10px] text-gray-700 uppercase italic">Empty</span>'}
                 </div>
-                <div class="flex-grow border-t border-white/5 ml-4"></div>
-            `;
+            </div>
+        `;
 
-            // Row B: Topics
-            const topicsRow = createElement('div', 'w-full flex flex-col md:flex-row md:items-center gap-2 md:space-x-4');
-            topicsRow.innerHTML = `
-               <span class="text-[10px] font-mono text-gray-500 uppercase">Active Topics:</span>
-                <div class="flex gap-2">
-                    ${acquiredTopics.map(item => `
-                        <div class="w-10 h-10 flex items-center justify-center bg-gray-800/50 rounded-lg border border-white/10 text-xl" title="${item.name}">${item.icon}</div>
-                    `).join('') || '<span class="text-[10px] text-gray-700 uppercase italic">No topics unlocked</span>'}
-                </div>
-            `;
-
-            assetsContainer.append(inventoryRow, topicsRow);
+            assetsContainer.innerHTML = renderAssetRow('Active Inventory', acquiredItems) + renderAssetRow('Active Topics', acquiredTopics);
 
 
             // 4. STATS SECTION
-            const statsSection = createElement('div', 'w-full grid grid-cols-1 md:grid-cols-2 gap-6 pt-4');
-            const playerStats = createElement('div', 'space-y-6');
+            const statsSection = createElement('div', 'w-full space-y-6 pt-2');
             const chopsHtml = game.chops.filter(c => c.isUnlocked).map(chop => {
                 const percentage = Math.min(100, Math.max(0, (chop.points / chopMax) * 100));
                 return `
@@ -5634,47 +5581,49 @@
                     </div>`;
             }).join('');
 
+              // 1. PLAYER STATS (Rank & Artistic Caliber)
+            const playerStats = createElement('div', 'w-full max-w-xs mx-auto space-y-4');
             playerStats.innerHTML = `
-                <div class="p-4 bg-gray-800/50 rounded-xl border border-indigo-500/30">
-                    <p class="text-xs font-mono text-gray-400 mb-1">PLAYER RANK</p>
-                    <div class="flex items-end space-x-3">
-                        <span class="text-4xl font-bold text-indigo-400 leading-none">${game.level}</span>
-                        <span class="text-lg text-gray-200 uppercase tracking-widest">${game.rank}</span>
+                <div class="p-3 bg-gray-800/50 rounded-2xl border border-indigo-500/30 flex flex-col items-center">
+                    <p class="text-[10px] font-mono text-gray-400 mb-1 tracking-widest uppercase">Rank</p>
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl font-bold text-indigo-400 leading-none">${game.level}</span>
+                        <span class="text-sm text-gray-200 uppercase tracking-tighter">${game.rank}</span>
                     </div>
-                    <div class="mt-4">
-                        <div class="w-full bg-gray-900 h-2 rounded-full border border-indigo-900 overflow-hidden">
-                            <div class="bg-indigo-500 h-full" style="width: ${progression.progressPercentage}%"></div>
-                        </div>
+                    <div class="w-full mt-3 bg-gray-900 h-1.5 rounded-full border border-indigo-900 overflow-hidden">
+                        <div class="bg-indigo-500 h-full" style="width: ${progression.progressPercentage}%"></div>
                     </div>
                 </div>
-                <div class="space-y-3">
-                    <h4 class="text-xs font-bold text-neon-pink uppercase tracking-widest">Artistic Caliber</h4>
+
+                <div class="p-3 space-y-2">
+                    <h4 class="text-[10px] font-bold text-neon-pink uppercase tracking-widest text-center">Artistic Caliber</h4>
                     ${chopsHtml}
                 </div>
             `;
 
-            const socialStats = createElement('div', 'space-y-6');
+            // 2. SOCIAL STATS (Fans & Memories)
+            const socialStats = createElement('div', 'w-full max-w-xs mx-auto space-y-4');
             socialStats.innerHTML = `
-                <div class="p-4 bg-fuchsia-900/20 rounded-xl border-2 border-fuchsia-500/50 text-center">
-                    <p class="text-xs font-mono text-fuchsia-400 mb-1 uppercase tracking-widest">Audience Hype</p>
-                    <p class="text-4xl font-black text-fuchsia-400">${game.fans.toLocaleString()}</p>
-                    <p class="text-[10px] text-fuchsia-300 mt-1 uppercase animate-pulse">No fans 🤷‍♂️ </p>
+                <div class="p-3 bg-fuchsia-900/20 rounded-2xl border-2 border-fuchsia-500/50 flex flex-col items-center">
+                    <p class="text-[10px] font-mono text-fuchsia-400 mb-1 uppercase tracking-widest">Audience Hype</p>
+                    <p class="text-3xl font-black text-fuchsia-400">${game.fans.toLocaleString()}</p>
                 </div>
                 
-                <div class="p-4 bg-gray-800/50 rounded-xl border border-neon-pink/30">
-                    <p class="text-xs font-mono text-neon-pink mb-3 uppercase tracking-widest">Memories Collected</p>
-                    <div class="grid grid-cols-3 xs:grid-cols-6 gap-2">
+                <div class="p-3 bg-gray-800/50 rounded-2xl border border-neon-pink/30">
+                    <p class="text-[10px] font-mono text-neon-pink mb-2 uppercase tracking-widest text-center">Memories</p>
+                    <div class="flex flex-wrap justify-center gap-2">
                         ${Object.entries(game.memories)
-                            .filter(([type, count]) => count > 0) // Only show memories with count > 0
+                            .filter(([type, count]) => count > 0)
                             .map(([type, count]) => `
-                            <div class="flex flex-col items-center p-2 bg-gray-900 rounded-lg border border-white/10">
+                            <div class="flex flex-col items-center p-2 bg-gray-900 rounded-xl border border-white/10 w-12 aspect-square">
                                 <span class="text-lg">${memoryComponentMatrix[type]?.emoji || '❓'}</span>
-                                <span class="text-sm font-bold text-yellow-400">${count}</span>
+                                <span class="text-[10px] font-bold text-yellow-400">${count}</span>
                             </div>
                         `).join('')}
                     </div>
                 </div>
             `;
+
             statsSection.append(playerStats, socialStats);
 
             // 6. BUTTON GRID
@@ -5708,6 +5657,7 @@
             return menuContent;
         
         }
+
 
 
          function renderPhase_setup() {
@@ -6154,7 +6104,6 @@
 
                         //Dictionary Check ---
                 if (!game.words.includes(guess)) {
-                    //console.log('Guess:', guess)
                     localMessage = `ERROR: "${guess}" is not in the dictionary.`;
                     currentGuess = ''; // Clear guess to force re-entry
                     updateUI();
@@ -6554,8 +6503,6 @@
                 return;
             }
             
-            //console.log("Initializing Tone.js components...");
-
             // 1. Create Effects Chain
             const reverb = new Tone.Reverb({
                 decay: 1.5, // Slightly shorter reverb
@@ -6581,7 +6528,6 @@
             // 3. Set up Tone.Transport
             game.musicTransport = Tone.Transport;
             game.musicTransport.bpm.value = 120; // Fast tempo
-           // console.log("Tone.js PolySynth and Transport Initialized.");
         }
 
 
@@ -6607,7 +6553,6 @@
 
             const PUBLIC_MIDI_URL = rawMidiPath
             try {
-               // console.log(`Attempting to load MIDI from: ${PUBLIC_MIDI_URL}`);
                 updateState({ message: `Loading and parsing track: ${game.currentSong}...`, isLoading: true });
 
                 // 2. Fetch the MIDI file as an ArrayBuffer
@@ -6666,7 +6611,6 @@
                 // 6. Start the Transport
                 game.musicTransport.start();
 
-               // console.log(`Successfully loaded and scheduled ${partData.length} notes from MIDI.`);
                 updateState({ message: `Streaming LIVE: ${game.currentSong}. GUESS THE BAND!`, isLoading: false });
 
             } catch (e) {
@@ -6996,12 +6940,9 @@
             game.familyFeud.isRoundActive = false;
             
             if (wonRound) {
-                console.log(game.familyFeud.roundPoints);
                 game.familyFeud.totalPointsScored += game.familyFeud.roundPoints;
-                console.log(game.familyFeud.totalPointsScored);
                 let chop = game.chops.find(i => i.name === 'Stage Presence');
                 chop.points += updateChopScore('Stage Presence',game.familyFeud.totalPointsScored); 
-                console.log(chop.points);
                 game.message = `ROUND WON! You scored ${game.familyFeud.roundPoints} Stage Presence points.`;
             } else {
                 game.chops["Stage Presence"] = Math.max(0, game.chops["Stage Presence"] );
@@ -7081,7 +7022,7 @@
                     <button id="next-q-button" onclick="loadNextFeudQuestion()" class="metal-button w-full py-3 text-xl bg-indigo-600 hover:bg-indigo-700 ${ff.isRoundActive ? 'hidden' : 'block'}">
                         CONTINUE TO NEXT CHALLENGE
                     </button>
-                    <button onclick="setPhase(0, '.')" class="metal-button w-full py-3 text-xl bg-gray-600 hover:bg-gray-700 mt-2">
+                    <button onclick="setPhase(0, '')" class="metal-button w-full py-3 text-xl bg-gray-600 hover:bg-gray-700 mt-2">
                         EXIT TO MENU
                     </button>
                 </div>
@@ -7354,7 +7295,6 @@
         game.previousPhase = 10;
         game.currentLocationId = name;
         game.currentBuildingName = name;
-        console.log(data)
         game.currentCharacter = data.character;
         game.currentBuildingData = data;
         console.log('Entering ', game.currentLocationId, game.currentBuildingName, game.currentCharacter, game.currentBuildingData, ' maphost:', mapHost, ' URL', newImageUrl);
@@ -8013,12 +7953,10 @@
             chop.points = Math.min(maxPoints, chop.points + scoreIncrease);
             
             const actualIncrease = chop.points - previousPoints;
-            console.log('max:', currentLevelData.chopMaxScale, ' ActualInc:', actualIncrease );
 
             // 2. Check if ALL chops have reached the current max level
             const allAtMax = game.chops.every(c => c.points >= maxPoints);
 
-            console.log(allAtMax, game.currentLevel, LEVEL_CONFIG.length - 1);
             // 3. Update Rank Level if all at max and next level exists
             if (allAtMax && game.level < LEVEL_CONFIG.length - 1) {
                 game.level++;
@@ -8105,7 +8043,7 @@
             inventoryContent.appendChild(grid);
             // --- BACK BUTTON ---
             const backButton = createElement('button', 'metal-button px-8 py-3 text-xl mt-8 bg-indigo-600 hover:bg-indigo-700', 'MENU');
-            backButton.onclick = () => setPhase(0, '.');
+            backButton.onclick = () => setPhase(0, '');
             inventoryContent.appendChild(backButton);
 
             return inventoryContent;
@@ -8237,7 +8175,6 @@
             game.previousPhase = 16;
 
             if (!notification ) {
-              //  console.log(`Notification at index ${index} is already read or does not exist.`);
                 return;
             }
 
