@@ -1354,7 +1354,8 @@
             fans: 0,
             isFanPanelVisible: true, // NEW: Control fan panel visibility
             currentTopic: '',
-            questionData: null,   // {question, correctAnswer, wrongAnswers[]}
+            questionData: null,
+            questionsData: [],   // {question, correctAnswer, wrongAnswers[]}
             selectedAnswer: null, // The answer the player clicked
             artists: ['ABBA',
                     'Backstreet Boys',
@@ -3779,151 +3780,151 @@
         // --- Challenge Data Structure (105 Total Entries) ---
         const JUST_ONE_CHALLENGES = [
                 // Original 5 Challenges
-        { word: "OAK", clues: ["MIGHTY", "WOOD", "ACORN", "TREE"], points: 50 },
-        { word: "PINE", clues: ["NEEDLE", "CHRISTMAS", "CONE", "SAP"], points: 45 },
-        { word: "STREAM", clues: ["FLOWING", "BROOK", "CANOE", "FISH"], points: 60 },
-        { word: "CABIN", clues: ["WOOD", "RENTAL", "LAKE", "COZY"], points: 70 },
-        { word: "DEER", clues: ["BUCK", "VENISON", "FOREST", "ANTLER"], points: 55 },
-        // 100 New Challenges (Mixed Topics, Points divided by 10)
-        { word: "NETWORK", clues: ["MESH", "ROUTER", "CONNECT", "DATA"], points: 70 },
-        { word: "FIREWALL", clues: ["SECURITY", "BLOCK", "PERIMETER", "GUARD"], points: 65 },
-        { word: "ALGORITHM", clues: ["PROCEDURE", "SORT", "CODE", "FORMULA"], points: 75 },
-        { word: "HACKER", clues: ["CODE", "BREACH", "ANONYMOUS", "CYBER"], points: 60 },
-        { word: "PIXEL", clues: ["SCREEN", "DOT", "RESOLUTION", "IMAGE"], points: 50 },
-        { word: "TERMINAL", clues: ["SHELL", "TEXT", "CONSOLE", "INPUT"], points: 55 },
-        { word: "ENCRYPT", clues: ["SCRAMBLE", "SECRET", "KEY", "DECODE"], points: 65 },
-        { word: "DATABASE", clues: ["SQL", "STORE", "TABLES", "QUERY"], points: 70 },
-        { word: "WIDGET", clues: ["APP", "GADGET", "GUI", "TOOL"], points: 45 },
-        { word: "VIRTUAL", clues: ["FAKE", "REALITY", "SIMULATE", "ONLINE"], points: 50 },
-        { word: "DESERT", clues: ["SAND", "DRY", "CACTUS", "OASIS"], points: 40 },
-        { word: "MOUNTAIN", clues: ["PEAK", "HIKE", "SUMMIT", "RANGE"], points: 45 },
-        { word: "OCEAN", clues: ["BLUE", "TIDE", "WAVES", "DEEP"], points: 40 },
-        { word: "VOLCANO", clues: ["LAVA", "ASH", "CRATER", "DORMANT"], points: 60 },
-        { word: "FOREST", clues: ["TREES", "DENSE", "CANOPY", "WILD"], points: 45 },
-        { word: "GLACIER", clues: ["ICE", "SLOW", "MELT", "ARCTIC"], points: 65 },
-        { word: "CANYON", clues: ["GORGE", "RIVER", "WALL", "ECHO"], points: 55 },
-        { word: "TROPIC", clues: ["HOT", "HUMID", "EQUATOR", "ISLAND"], points: 50 },
-        { word: "MEADOW", clues: ["GRASS", "FLOWER", "OPEN", "FIELD"], points: 40 },
-        { word: "RAINBOW", clues: ["ARC", "COLORS", "WATER", "LUCKY"], points: 40 },
-        { word: "SPAGHETTI", clues: ["PASTA", "SAUCE", "ITALY", "NOODLE"], points: 55 },
-        { word: "OVEN", clues: ["BAKE", "HOT", "KITCHEN", "COOK"], points: 40 },
-        { word: "CHEESE", clues: ["MILK", "SWISS", "GRATE", "DAIRY"], points: 45 },
-        { word: "GARLIC", clues: ["VAMPIRE", "STINK", "BULB", "CLOVE"], points: 50 },
-        { word: "CHILI", clues: ["PEPPER", "HOT", "BEANS", "TEXAS"], points: 50 },
-        { word: "PIZZA", clues: ["SLICES", "ITALIAN", "DELIVERY", "CHEESE"], points: 40 },
-        { word: "DOUGH", clues: ["BAKERY", "YEAST", "KNEAD", "BREAD"], points: 45 },
-        { word: "FRUIT", clues: ["SEED", "SWEET", "VITAMIN", "APPLE"], points: 40 },
-        { word: "CURRY", clues: ["SPICE", "INDIA", "POWDER", "SAUCE"], points: 60 },
-        { word: "TOAST", clues: ["BREAD", "JAM", "BREAKFAST", "BURN"], points: 40 },
-        { word: "HAMMER", clues: ["NAIL", "TOOL", "CLAW", "WOOD"], points: 45 },
-        { word: "TELEPHONE", clues: ["RING", "CALL", "CORD", "DIAL"], points: 50 },
-        { word: "SPOON", clues: ["FORK", "SOUP", "EAT", "SILVER"], points: 40 },
-        { word: "MIRROR", clues: ["GLASS", "REFLECTION", "LOOK", "SHARP"], points: 50 },
-        { word: "BATTERY", clues: ["POWER", "AA", "CHARGE", "ALKALINE"], points: 50 },
-        { word: "WINDOW", clues: ["GLASS", "VIEW", "FRAME", "SILL"], points: 40 },
-        { word: "SCISSORS", clues: ["CUT", "BLADE", "PAPER", "PAIR"], points: 55 },
-        { word: "MAGNET", clues: ["PULL", "METAL", "NORTH", "FIELD"], points: 55 },
-        { word: "CLOCK", clues: ["TIME", "HANDS", "CHIME", "TICK"], points: 40 },
-        { word: "UMBRELLA", clues: ["RAIN", "FOLD", "CANOPY", "SHADE"], points: 50 },
-        { word: "JUSTICE", clues: ["BLIND", "BALANCE", "COURT", "FAIR"], points: 65 },
-        { word: "FREEDOM", clues: ["LIBERTY", "BIRD", "CHOICE", "RIGHTS"], points: 60 },
-        { word: "SILENCE", clues: ["QUIET", "MUTE", "SOUND", "SECRET"], points: 50 },
-        { word: "GENIUS", clues: ["SMART", "MIND", "IQ", "TALENT"], points: 55 },
-        { word: "MYSTERY", clues: ["PUZZLE", "SOLVE", "DETECTIVE", "CLUE"], points: 45 },
-        { word: "ANGER", clues: ["RAGE", "RED", "EMOTION", "FURY"], points: 40 },
-        { word: "LOGIC", clues: ["REASON", "TRUE", "SYSTEM", "DEDUCTION"], points: 70 },
-        { word: "CHAOS", clues: ["ORDER", "MESS", "DISARRAY", "ANARCHY"], points: 65 },
-        { word: "FUTURE", clues: ["TOMORROW", "TIME", "PREDICT", "AHEAD"], points: 45 },
-        { word: "DREAM", clues: ["SLEEP", "WISH", "NIGHT", "ASLEEP"], points: 40 },
-        { word: "ELEPHANT", clues: ["TRUNK", "IVORY", "GREY", "HUGE"], points: 50 },
-        { word: "SHARK", clues: ["JAWS", "FIN", "OCEAN", "DANGER"], points: 45 },
-        { word: "PENGUIN", clues: ["ICE", "BLACK", "WADDLE", "ANTARCTIC"], points: 55 },
-        { word: "SNAKE", clues: ["HISS", "VENOM", "SLITHER", "REPTILE"], points: 40 },
-        { word: "WOLF", clues: ["PACK", "HOWL", "HUNTER", "CANINE"], points: 45 },
-        { word: "OWL", clues: ["NIGHT", "HOOT", "WISE", "BIRD"], points: 40 },
-        { word: "DRAGON", clues: ["MYTH", "FIRE", "SCALES", "WING"], points: 70 },
-        { word: "MONKEY", clues: ["SWING", "BANANA", "TREE", "CHIMP"], points: 45 },
-        { word: "KANGAROO", clues: ["POUCH", "JUMP", "AUSSIE", "BOXER"], points: 50 },
-        { word: "FROG", clues: ["GREEN", "JUMP", "POND", "AMPHIBIAN"], points: 40 },
-        { word: "SOCCER", clues: ["KICK", "GOAL", "PITCH", "WORLD"], points: 45 },
-        { word: "CHESS", clues: ["BOARD", "QUEEN", "MATE", "ROOK"], points: 60 },
-        { word: "BASKET", clues: ["HOOP", "DRIBBLE", "NET", "COURT"], points: 40 },
-        { word: "TENNIS", clues: ["RACQUET", "VOLLEY", "LOVE", "DEUCE"], points: 50 },
-        { word: "GOLF", clues: ["CLUB", "TEE", "PUTT", "GREEN"], points: 45 },
-        { word: "DICE", clues: ["SIX", "ROLL", "GAMBLE", "CUBE"], points: 40 },
-        { word: "HOCKEY", clues: ["PUCK", "ICE", "STICK", "GOALIE"], points: 55 },
-        { word: "SAIL", clues: ["BOAT", "WIND", "WATER", "MAST"], points: 50 },
-        { word: "MARATHON", clues: ["RUN", "LONG", "26", "RACE"], points: 65 },
-        { word: "POOL", clues: ["CUE", "BALLS", "EIGHT", "BREAK"], points: 40 },
-        { word: "PYRAMID", clues: ["EGYPT", "TRIANGLE", "TOMB", "PHARAOH"], points: 55 },
-        { word: "ROMAN", clues: ["EMPIRE", "LATIN", "COLOSSEUM", "SENATE"], points: 60 },
-        { word: "ATOM", clues: ["PROTON", "NUCLEUS", "TINY", "ELEMENT"], points: 70 },
-        { word: "COMET", clues: ["TAIL", "SPACE", "ICE", "ORBIT"], points: 65 },
-        { word: "VACCINE", clues: ["SHOT", "IMMUNITY", "VIRUS", "PREVENT"], points: 75 },
-        { word: "DINOSAUR", clues: ["FOSSIL", "REX", "EXTINCT", "GIANT"], points: 50 },
-        { word: "MONARCHY", clues: ["KING", "CROWN", "QUEEN", "RULE"], points: 60 },
-        { word: "SCULPTURE", clues: ["STATUE", "CLAY", "CHISEL", "ART"], points: 55 },
-        { word: "GRAVITY", clues: ["PULL", "FALL", "NEWTON", "FORCE"], points: 65 },
-        { word: "REVOLUTION", clues: ["WAR", "CHANGE", "UPRISE", "CYCLE"], points: 70 },
-        { word: "GUITAR", clues: ["STRINGS", "FRETS", "PICK", "ACOUSTIC"], points: 40 },
-        { word: "MELODY", clues: ["TUNE", "NOTE", "SONG", "PITCH"], points: 50 },
-        { word: "RHYTHM", clues: ["BEAT", "DRUM", "TEMPO", "GROOVE"], points: 45 },
-        { word: "NOVEL", clues: ["BOOK", "FICTION", "CHAPTER", "AUTHOR"], points: 40 },
-        { word: "PAINTING", clues: ["CANVAS", "BRUSH", "EASEL", "OIL"], points: 45 },
-        { word: "POETRY", clues: ["VERSE", "RHYME", "STORY", "SONNET"], points: 55 },
-        { word: "OPERA", clues: ["SINGING", "STAGE", "COSTUME", "ARIA"], points: 65 },
-        { word: "THEATER", clues: ["PLAY", "CURTAIN", "ACTOR", "STAGE"], points: 50 },
-        { word: "JAZZ", clues: ["SAX", "IMPROV", "NEW", "ORLEANS"], points: 60 },
-        { word: "SKETCH", clues: ["DRAW", "PENCIL", "ROUGH", "DRAFT"], points: 40 },
-        { word: "VACUUM", clues: ["CLEAN", "SUCK", "DUST", "APPLIANCE"], points: 50 },
-        { word: "DIAMOND", clues: ["HARD", "RING", "CARBON", "BRILLIANT"], points: 55 },
-        { word: "FOG", clues: ["MIST", "DENSE", "THICK", "CLOUD"], points: 40 },
-        { word: "CUSHION", clues: ["SOFA", "SOFT", "SEAT", "PILLOW"], points: 45 },
-        { word: "CHIMNEY", clues: ["SMOKE", "ROOF", "SANTA", "BRICK"], points: 50 },
-        { word: "SHADOW", clues: ["DARK", "LIGHT", "FOLLOW", "SHAPE"], points: 45 },
-        { word: "ECHO", clues: ["SOUND", "REPEAT", "CAVE", "RETURN"], points: 40 },
-        { word: "LADDER", clues: ["CLIMB", "STEPS", "HEIGHT", "WOOD"], points: 45 },
-        { word: "WHISPER", clues: ["QUIET", "SPEAK", "SECRET", "LOW"], points: 40 },
-        { word: "PUZZLE", clues: ["JIGSAW", "SOLVE", "PIECES", "RIDDLE"], points: 45 },
-        { word: "CALENDAR", clues: ["MONTH", "DATE", "YEAR", "SCHEDULE"], points: 40 },
-        { word: "KEYBOARD", clues: ["TYPE", "LETTER", "QWERTY", "INPUT"], points: 50 },
-        { word: "AIRPLANE", clues: ["FLY", "WINGS", "JET", "PILOT"], points: 45 },
-        { word: "COMPASS", clues: ["NORTH", "MAGNETIC", "DIRECTIONS", "GUIDE"], points: 55 },
-        { word: "BINOCULAR", clues: ["ZOOM", "FAR", "GLASS", "LENS"], points: 60 },
-        { word: "TICKET", clues: ["ENTRY", "SHOW", "PASS", "PURCHASE"], points: 40 },
-        { word: "HELIX", clues: ["SPIRAL", "DNA", "SHAPE", "DOUBLE"], points: 70 },
-        { word: "PARADE", clues: ["MARCH", "FLOAT", "BAND", "STREET"], points: 45 },
-        { word: "WHALE", clues: ["BLUE", "MARINE", "SPIKE", "MAMMAL"], points: 45 },
-        { word: "TIGER", clues: ["STRIPES", "CAT", "JUNGLE", "ROAR"], points: 40 },
-        { word: "MARBLE", clues: ["STONE", "GAME", "ROUND", "ROLL"], points: 40 },
-        { word: "SATELLITE", clues: ["ORBIT", "SPACE", "COMMUNICATE", "DISH"], points: 75 },
-        { word: "ECLIPSE", clues: ["SUN", "MOON", "DARK", "SHADOW"], points: 65 },
-        { word: "ZEBRA", clues: ["STRIPES", "HORSE", "SAFARI", "BLACK"], points: 40 },
-        { word: "BREEZE", clues: ["WIND", "SOFT", "COOL", "GENTLE"], points: 40 },
-        { word: "FENCE", clues: ["WOOD", "BOUNDARY", "YARD", "GATE"], points: 40 },
-        { word: "CRICKET", clues: ["INSECT", "JUMP", "SING", "BAT"], points: 45 },
-        { word: "CAPSULE", clues: ["PILL", "SPACE", "CONTAINER", "MEDICINE"], points: 55 },
-        { word: "TORCH", clues: ["FLAME", "LIGHT", "CARRY", "FIRE"], points: 40 },
-        { word: "WHISTLE", clues: ["SOUND", "BLOW", "REFEREE", "LOUD"], points: 40 },
-        { word: "CANDLE", clues: ["WAX", "LIGHT", "WICK", "FLAME"], points: 40 },
-        { word: "DESK", clues: ["TABLE", "WORK", "DRAWER", "OFFICE"], points: 40 },
-        { word: "SAUCER", clues: ["CUP", "FLYING", "PLATE", "EDGE"], points: 45 },
-        { word: "GIRAFFE", clues: ["NECK", "SPOT", "TALL", "AFRICA"], points: 50 },
-        { word: "FLUTE", clues: ["WIND", "WOOD", "PIPE", "MUSIC"], points: 55 },
-        { word: "SHIELD", clues: ["DEFEND", "KNIGHT", "BLOCK", "PROTECT"], points: 50 },
-        { word: "PUFFER", clues: ["FISH", "SPIKE", "BLOW", "POISON"], points: 60 },
-        { word: "CHALK", clues: ["BOARD", "WHITE", "DUST", "DRAW"], points: 40 },
-        { word: "RAINCOAT", clues: ["WET", "WEAR", "HOOD", "PONCHO"], points: 45 },
-        { word: "LENS", clues: ["GLASS", "EYE", "CAMERA", "FOCUS"], points: 50 },
-        { word: "COMPUTE", clues: ["CALCULATE", "MATH", "PROCESS", "CHIP"], points: 65 },
-        { word: "VELOCITY", clues: ["SPEED", "RATE", "MOTION", "VECTOR"], points: 70 },
-        { word: "INFECT", clues: ["VIRUS", "SICK", "GERM", "SPREAD"], points: 55 },
-        { word: "GLITCH", clues: ["ERROR", "BUG", "SCREEN", "FLICKER"], points: 45 },
-        { word: "PORTAL", clues: ["GATE", "DOOR", "DIMENSION", "JUMP"], points: 60 },
-        { word: "PHANTOM", clues: ["GHOST", "SHADE", "INVISIBLE", "SPOOK"], points: 55 },
-        { word: "TRAFFIC", clues: ["CARS", "JAM", "LIGHT", "FLOW"], points: 40 },
-        { word: "SODA", clues: ["FIZZ", "SWEET", "BUBBLE", "DRINK"], points: 40 },
-        { word: "WINTER", clues: ["SNOW", "COLD", "ICE", "SEASON"], points: 40 },
+                   { word: "OAK", clues: ["MIGHTY", "WOOD", "ACORN", "TREE"], points: 35 },
+            { word: "PINE", clues: ["NEEDLE", "CHRISTMAS", "CONE", "SAP"], points: 30 },
+            { word: "STREAM", clues: ["FLOWING", "BROOK", "CANOE", "FISH"], points: 45 },
+            { word: "CABIN", clues: ["WOOD", "RENTAL", "LAKE", "COZY"], points: 55 },
+            { word: "DEER", clues: ["BUCK", "VENISON", "FOREST", "ANTLER"], points: 40 },
+            { word: "NETWORK", clues: ["MESH", "ROUTER", "CONNECT", "DATA"], points: 55 },
+            { word: "FIREWALL", clues: ["SECURITY", "BLOCK", "PERIMETER", "GUARD"], points: 50 },
+            { word: "ALGORITHM", clues: ["PROCEDURE", "SORT", "CODE", "FORMULA"], points: 60 },
+            { word: "HACKER", clues: ["CODE", "BREACH", "ANONYMOUS", "CYBER"], points: 45 },
+            { word: "PIXEL", clues: ["SCREEN", "DOT", "RESOLUTION", "IMAGE"], points: 35 },
+            { word: "TERMINAL", clues: ["SHELL", "TEXT", "CONSOLE", "INPUT"], points: 40 },
+            { word: "ENCRYPT", clues: ["SCRAMBLE", "SECRET", "KEY", "DECODE"], points: 50 },
+            { word: "DATABASE", clues: ["SQL", "STORE", "TABLES", "QUERY"], points: 55 },
+            { word: "WIDGET", clues: ["APP", "GADGET", "GUI", "TOOL"], points: 30 },
+            { word: "VIRTUAL", clues: ["FAKE", "REALITY", "SIMULATE", "ONLINE"], points: 35 },
+            { word: "DESERT", clues: ["SAND", "DRY", "CACTUS", "OASIS"], points: 25 },
+            { word: "MOUNTAIN", clues: ["PEAK", "HIKE", "SUMMIT", "RANGE"], points: 30 },
+            { word: "OCEAN", clues: ["BLUE", "TIDE", "WAVES", "DEEP"], points: 25 },
+            { word: "VOLCANO", clues: ["LAVA", "ASH", "CRATER", "DORMANT"], points: 45 },
+            { word: "FOREST", clues: ["TREES", "DENSE", "CANOPY", "WILD"], points: 30 },
+            { word: "GLACIER", clues: ["ICE", "SLOW", "MELT", "ARCTIC"], points: 50 },
+            { word: "CANYON", clues: ["GORGE", "RIVER", "WALL", "ECHO"], points: 40 },
+            { word: "TROPIC", clues: ["HOT", "HUMID", "EQUATOR", "ISLAND"], points: 35 },
+            { word: "MEADOW", clues: ["GRASS", "FLOWER", "OPEN", "FIELD"], points: 25 },
+            { word: "RAINBOW", clues: ["ARC", "COLORS", "WATER", "LUCKY"], points: 25 },
+            { word: "SPAGHETTI", clues: ["PASTA", "SAUCE", "ITALY", "NOODLE"], points: 40 },
+            { word: "OVEN", clues: ["BAKE", "HOT", "KITCHEN", "COOK"], points: 25 },
+            { word: "CHEESE", clues: ["MILK", "SWISS", "GRATE", "DAIRY"], points: 30 },
+            { word: "GARLIC", clues: ["VAMPIRE", "STINK", "BULB", "CLOVE"], points: 35 },
+            { word: "CHILI", clues: ["PEPPER", "HOT", "BEANS", "TEXAS"], points: 35 },
+            { word: "PIZZA", clues: ["SLICES", "ITALIAN", "DELIVERY", "CHEESE"], points: 25 },
+            { word: "DOUGH", clues: ["BAKERY", "YEAST", "KNEAD", "BREAD"], points: 30 },
+            { word: "FRUIT", clues: ["SEED", "SWEET", "VITAMIN", "APPLE"], points: 25 },
+            { word: "CURRY", clues: ["SPICE", "INDIA", "POWDER", "SAUCE"], points: 45 },
+            { word: "TOAST", clues: ["BREAD", "JAM", "BREAKFAST", "BURN"], points: 25 },
+            { word: "HAMMER", clues: ["NAIL", "TOOL", "CLAW", "WOOD"], points: 30 },
+            { word: "TELEPHONE", clues: ["RING", "CALL", "CORD", "DIAL"], points: 35 },
+            { word: "SPOON", clues: ["FORK", "SOUP", "EAT", "SILVER"], points: 25 },
+            { word: "MIRROR", clues: ["GLASS", "REFLECTION", "LOOK", "SHARP"], points: 35 },
+            { word: "BATTERY", clues: ["POWER", "AA", "CHARGE", "ALKALINE"], points: 35 },
+            { word: "WINDOW", clues: ["GLASS", "VIEW", "FRAME", "SILL"], points: 25 },
+            { word: "SCISSORS", clues: ["CUT", "BLADE", "PAPER", "PAIR"], points: 40 },
+            { word: "MAGNET", clues: ["PULL", "METAL", "NORTH", "FIELD"], points: 40 },
+            { word: "CLOCK", clues: ["TIME", "HANDS", "CHIME", "TICK"], points: 25 },
+            { word: "UMBRELLA", clues: ["RAIN", "FOLD", "CANOPY", "SHADE"], points: 35 },
+            { word: "JUSTICE", clues: ["BLIND", "BALANCE", "COURT", "FAIR"], points: 50 },
+            { word: "FREEDOM", clues: ["LIBERTY", "BIRD", "CHOICE", "RIGHTS"], points: 45 },
+            { word: "SILENCE", clues: ["QUIET", "MUTE", "SOUND", "SECRET"], points: 35 },
+            { word: "GENIUS", clues: ["SMART", "MIND", "IQ", "TALENT"], points: 40 },
+            { word: "MYSTERY", clues: ["PUZZLE", "SOLVE", "DETECTIVE", "CLUE"], points: 30 },
+            { word: "ANGER", clues: ["RAGE", "RED", "EMOTION", "FURY"], points: 25 },
+            { word: "LOGIC", clues: ["REASON", "TRUE", "SYSTEM", "DEDUCTION"], points: 55 },
+            { word: "CHAOS", clues: ["ORDER", "MESS", "DISARRAY", "ANARCHY"], points: 50 },
+            { word: "FUTURE", clues: ["TOMORROW", "TIME", "PREDICT", "AHEAD"], points: 30 },
+            { word: "DREAM", clues: ["SLEEP", "WISH", "NIGHT", "ASLEEP"], points: 25 },
+            { word: "ELEPHANT", clues: ["TRUNK", "IVORY", "GREY", "HUGE"], points: 35 },
+            { word: "SHARK", clues: ["JAWS", "FIN", "OCEAN", "DANGER"], points: 30 },
+            { word: "PENGUIN", clues: ["ICE", "BLACK", "WADDLE", "ANTARCTIC"], points: 40 },
+            { word: "SNAKE", clues: ["HISS", "VENOM", "SLITHER", "REPTILE"], points: 25 },
+            { word: "WOLF", clues: ["PACK", "HOWL", "HUNTER", "CANINE"], points: 30 },
+            { word: "OWL", clues: ["NIGHT", "HOOT", "WISE", "BIRD"], points: 25 },
+            { word: "DRAGON", clues: ["MYTH", "FIRE", "SCALES", "WING"], points: 55 },
+            { word: "MONKEY", clues: ["SWING", "BANANA", "TREE", "CHIMP"], points: 30 },
+            { word: "KANGAROO", clues: ["POUCH", "JUMP", "AUSSIE", "BOXER"], points: 35 },
+            { word: "FROG", clues: ["GREEN", "JUMP", "POND", "AMPHIBIAN"], points: 25 },
+            { word: "SOCCER", clues: ["KICK", "GOAL", "PITCH", "WORLD"], points: 30 },
+            { word: "CHESS", clues: ["BOARD", "QUEEN", "MATE", "ROOK"], points: 45 },
+            { word: "BASKET", clues: ["HOOP", "DRIBBLE", "NET", "COURT"], points: 25 },
+            { word: "TENNIS", clues: ["RACQUET", "VOLLEY", "LOVE", "DEUCE"], points: 35 },
+            { word: "GOLF", clues: ["CLUB", "TEE", "PUTT", "GREEN"], points: 30 },
+            { word: "DICE", clues: ["SIX", "ROLL", "GAMBLE", "CUBE"], points: 25 },
+            { word: "HOCKEY", clues: ["PUCK", "ICE", "STICK", "GOALIE"], points: 40 },
+            { word: "SAIL", clues: ["BOAT", "WIND", "WATER", "MAST"], points: 35 },
+            { word: "MARATHON", clues: ["RUN", "LONG", "26", "RACE"], points: 50 },
+            { word: "POOL", clues: ["CUE", "BALLS", "EIGHT", "BREAK"], points: 25 },
+            { word: "PYRAMID", clues: ["EGYPT", "TRIANGLE", "TOMB", "PHARAOH"], points: 40 },
+            { word: "ROMAN", clues: ["EMPIRE", "LATIN", "COLOSSEUM", "SENATE"], points: 45 },
+            { word: "ATOM", clues: ["PROTON", "NUCLEUS", "TINY", "ELEMENT"], points: 55 },
+            { word: "COMET", clues: ["TAIL", "SPACE", "ICE", "ORBIT"], points: 50 },
+            { word: "VACCINE", clues: ["SHOT", "IMMUNITY", "VIRUS", "PREVENT"], points: 60 },
+            { word: "DINOSAUR", clues: ["FOSSIL", "REX", "EXTINCT", "GIANT"], points: 35 },
+            { word: "MONARCHY", clues: ["KING", "CROWN", "QUEEN", "RULE"], points: 45 },
+            { word: "SCULPTURE", clues: ["STATUE", "CLAY", "CHISEL", "ART"], points: 40 },
+            { word: "GRAVITY", clues: ["PULL", "FALL", "NEWTON", "FORCE"], points: 50 },
+            { word: "REVOLUTION", clues: ["WAR", "CHANGE", "UPRISE", "CYCLE"], points: 55 },
+            { word: "GUITAR", clues: ["STRINGS", "FRETS", "PICK", "ACOUSTIC"], points: 25 },
+            { word: "MELODY", clues: ["TUNE", "NOTE", "SONG", "PITCH"], points: 35 },
+            { word: "RHYTHM", clues: ["BEAT", "DRUM", "TEMPO", "GROOVE"], points: 30 },
+            { word: "NOVEL", clues: ["BOOK", "FICTION", "CHAPTER", "AUTHOR"], points: 25 },
+            { word: "PAINTING", clues: ["CANVAS", "BRUSH", "EASEL", "OIL"], points: 30 },
+            { word: "POETRY", clues: ["VERSE", "RHYME", "STORY", "SONNET"], points: 40 },
+            { word: "OPERA", clues: ["SINGING", "STAGE", "COSTUME", "ARIA"], points: 50 },
+            { word: "THEATER", clues: ["PLAY", "CURTAIN", "ACTOR", "STAGE"], points: 35 },
+            { word: "JAZZ", clues: ["SAX", "IMPROV", "NEW", "ORLEANS"], points: 45 },
+            { word: "SKETCH", clues: ["DRAW", "PENCIL", "ROUGH", "DRAFT"], points: 25 },
+            { word: "VACUUM", clues: ["CLEAN", "SUCK", "DUST", "APPLIANCE"], points: 35 },
+            { word: "DIAMOND", clues: ["HARD", "RING", "CARBON", "BRILLIANT"], points: 40 },
+            { word: "FOG", clues: ["MIST", "DENSE", "THICK", "CLOUD"], points: 25 },
+            { word: "CUSHION", clues: ["SOFA", "SOFT", "SEAT", "PILLOW"], points: 30 },
+            { word: "CHIMNEY", clues: ["SMOKE", "ROOF", "SANTA", "BRICK"], points: 35 },
+            { word: "SHADOW", clues: ["DARK", "LIGHT", "FOLLOW", "SHAPE"], points: 30 },
+            { word: "ECHO", clues: ["SOUND", "REPEAT", "CAVE", "RETURN"], points: 25 },
+            { word: "LADDER", clues: ["CLIMB", "STEPS", "HEIGHT", "WOOD"], points: 30 },
+            { word: "WHISPER", clues: ["QUIET", "SPEAK", "SECRET", "LOW"], points: 25 },
+            { word: "PUZZLE", clues: ["JIGSAW", "SOLVE", "PIECES", "RIDDLE"], points: 30 },
+            { word: "CALENDAR", clues: ["MONTH", "DATE", "YEAR", "SCHEDULE"], points: 25 },
+            { word: "KEYBOARD", clues: ["TYPE", "LETTER", "QWERTY", "INPUT"], points: 35 },
+            { word: "AIRPLANE", clues: ["FLY", "WINGS", "JET", "PILOT"], points: 30 },
+            { word: "COMPASS", clues: ["NORTH", "MAGNETIC", "DIRECTIONS", "GUIDE"], points: 40 },
+            { word: "BINOCULAR", clues: ["ZOOM", "FAR", "GLASS", "LENS"], points: 45 },
+            { word: "TICKET", clues: ["ENTRY", "SHOW", "PASS", "PURCHASE"], points: 25 },
+            { word: "HELIX", clues: ["SPIRAL", "DNA", "SHAPE", "DOUBLE"], points: 55 },
+            { word: "PARADE", clues: ["MARCH", "FLOAT", "BAND", "STREET"], points: 30 },
+            { word: "WHALE", clues: ["BLUE", "MARINE", "SPIKE", "MAMMAL"], points: 30 },
+            { word: "TIGER", clues: ["STRIPES", "CAT", "JUNGLE", "ROAR"], points: 25 },
+            { word: "MARBLE", clues: ["STONE", "GAME", "ROUND", "ROLL"], points: 25 },
+            { word: "SATELLITE", clues: ["ORBIT", "SPACE", "COMMUNICATE", "DISH"], points: 60 },
+            { word: "ECLIPSE", clues: ["SUN", "MOON", "DARK", "SHADOW"], points: 50 },
+            { word: "ZEBRA", clues: ["STRIPES", "HORSE", "SAFARI", "BLACK"], points: 25 },
+            { word: "BREEZE", clues: ["WIND", "SOFT", "COOL", "GENTLE"], points: 25 },
+            { word: "FENCE", clues: ["WOOD", "BOUNDARY", "YARD", "GATE"], points: 25 },
+            { word: "CRICKET", clues: ["INSECT", "JUMP", "SING", "BAT"], points: 30 },
+            { word: "CAPSULE", clues: ["PILL", "SPACE", "CONTAINER", "MEDICINE"], points: 40 },
+            { word: "TORCH", clues: ["FLAME", "LIGHT", "CARRY", "FIRE"], points: 25 },
+            { word: "WHISTLE", clues: ["SOUND", "BLOW", "REFEREE", "LOUD"], points: 25 },
+            { word: "CANDLE", clues: ["WAX", "LIGHT", "WICK", "FLAME"], points: 25 },
+            { word: "DESK", clues: ["TABLE", "WORK", "DRAWER", "OFFICE"], points: 25 },
+            { word: "SAUCER", clues: ["CUP", "FLYING", "PLATE", "EDGE"], points: 30 },
+            { word: "GIRAFFE", clues: ["NECK", "SPOT", "TALL", "AFRICA"], points: 35 },
+            { word: "FLUTE", clues: ["WIND", "WOOD", "PIPE", "MUSIC"], points: 40 },
+            { word: "SHIELD", clues: ["DEFEND", "KNIGHT", "BLOCK", "PROTECT"], points: 35 },
+            { word: "PUFFER", clues: ["FISH", "SPIKE", "BLOW", "POISON"], points: 45 },
+            { word: "CHALK", clues: ["BOARD", "WHITE", "DUST", "DRAW"], points: 25 },
+            { word: "RAINCOAT", clues: ["WET", "WEAR", "HOOD", "PONCHO"], points: 30 },
+            { word: "LENS", clues: ["GLASS", "EYE", "CAMERA", "FOCUS"], points: 35 },
+            { word: "COMPUTE", clues: ["CALCULATE", "MATH", "PROCESS", "CHIP"], points: 50 },
+            { word: "VELOCITY", clues: ["SPEED", "RATE", "MOTION", "VECTOR"], points: 55 },
+            { word: "INFECT", clues: ["VIRUS", "SICK", "GERM", "SPREAD"], points: 40 },
+            { word: "GLITCH", clues: ["ERROR", "BUG", "SCREEN", "FLICKER"], points: 30 },
+            { word: "PORTAL", clues: ["GATE", "DOOR", "DIMENSION", "JUMP"], points: 45 },
+            { word: "PHANTOM", clues: ["GHOST", "SHADE", "INVISIBLE", "SPOOK"], points: 40 },
+            { word: "TRAFFIC", clues: ["CARS", "JAM", "LIGHT", "FLOW"], points: 25 },
+            { word: "SODA", clues: ["FIZZ", "SWEET", "BUBBLE", "DRINK"], points: 25 },
+            { word: "WINTER", clues: ["SNOW", "COLD", "ICE", "SEASON"], points: 25 },
+
     ];
         // Current Game State for Phase 9
         const CLUE_GAME_STATE = {
@@ -5021,6 +5022,9 @@
                 const read_wordle = await fetch('./wordle.txt');
                 if (!read_wordle.ok) throw new Error(`HTTP error! status: ${read_wordle.status}`);
 
+                const response = await fetch('./trivia-questions.txt');
+                game.questionsData = await response.json();
+
                 game.score = 50; // Reset score for initial display
                 // Set initial chops values for display test (sum is 371)
                
@@ -5372,6 +5376,20 @@
 
 
         
+        function loadTriviaQuestion(topic) {
+           
+
+            const filteredQuestions = game.questionsData.filter(q => q.topic === topic);
+
+            if (filteredQuestions.length === 0) {
+                return null;
+            }
+
+            const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
+
+            return filteredQuestions[randomIndex];
+        }
+
 
 
         /**
@@ -5387,13 +5405,13 @@
             });
 
             try {
-                const parsed = loadTriviaQuestion(topic)
+                const parsed = loadTriviaQuestion(topic);
 
-
+                console.log(parsed);
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
                         questionData: parsed,
-                        message: 'COMMENCE ENGAGEMENT.',
+                        message: '',
                         isLoading: false
                     });
                     return parsed
@@ -5421,15 +5439,16 @@
             updateState({ selectedAnswer: answer });
 
             if (answer === game.questionData.correctAnswer) {
-                newScore += 50;
-                feedback = 'MAXIMUM EFFORT! +50 Backstage Blueprint GAIN.';
+                newScore += updateChopScore('Backstage Blueprint', 20);
+                feedback = 'Bravo! +20 Backstage Blueprint XP.';
                 showSuccessAnimation();
+
             } else {
                 newScore = Math.max(0, newScore );
-                feedback = 'DEFEAT! -10 SCORE LOSS. Correct Answer Displayed.';
+                feedback = 'DEFEAT! Correct Answer Displayed.';
             }
 
-            updateState({ score: newScore, message: feedback });
+            updateState({ message: feedback });
             
             
             setTimeout(() => getTopics(), 4000); // 3 second delay before next topic selection
@@ -5509,7 +5528,7 @@
             titleRow.appendChild(title);
 
             // 2. BIG ICON ROW (Map, Inventory, Phone, Cash)
-            const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-3 md:gap-6 pb-6 border-b border-white/10');
+            const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-3 md:gap-6 pb-6  border-white/10');
 
             iconRow.innerHTML = `
                 <button onclick="setPhase(10,'San Francisco Map')" class="aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl">🗺️</button>
@@ -5530,7 +5549,7 @@
                 </div>
             `;
 
-            const persistenceRow = createElement('div', 'w-full flex justify-center gap-6 py-4 border-t border-b border-white/10 bg-white/5');
+            const persistenceRow = createElement('div', 'w-full flex justify-center gap-6 py-4 border-t border-white/10  ');
 
             const saveBtn = createElement('button', 
                 'aspect-square w-20 flex flex-col items-center justify-center bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-amber-500 hover:scale-105 transition-all shadow-xl', 
@@ -5546,27 +5565,49 @@
 
             persistenceRow.append(saveBtn, loadBtn);
 
-            const assetsContainer = createElement('div', 'w-full flex flex-col space-y-4 px-2 py-2');
+          const assetsContainer = createElement('div', 'w-full flex flex-col space-y-6 px-4 py-4 bg-[#2a2a3e] rounded-xl border-4 border-[#1a1a2e]');
+
             const acquiredItems = game.inventory_items.filter(item => item.acquired);
             const acquiredTopics = game.conversation_topics.unlocked.filter(item => item.acquired);
 
+            const renderAssetRow = (label, items) => `
+                <div class="w-full">
+                    <!-- Stylized Label: Classic Adventure Font Vibe -->
+                    <span class="text-[11px] font-bold text-[#94a3b8] uppercase block mb-3 px-1 tracking-[0.15em] drop-shadow-sm">
+                        ${label}
+                    </span>
+                    
+                    <!-- The Inventory Grid: Thick Borders and Inset Shadows -->
+                    <div class="grid grid-cols-4 gap-1 p-1 bg-[#1a1a2e] border-2 border-[#475569] shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
+                        ${items.map(item => `
+                            <div class="aspect-square flex items-center justify-center 
+                                        bg-[#334155] border-2 border-[#1e293b] 
+                                        shadow-[inset_2px_2px_0px_rgba(255,255,255,0.05),_inset_-2px_-2px_0px_rgba(0,0,0,0.3)]
+                                        hover:bg-[#475569] active:translate-y-0.5 transition-all cursor-pointer group relative">
+                                
+                                <!-- Item Icon with classic drop shadow -->
+                                <div class="text-3xl filter drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transform group-hover:scale-110 transition-transform">
+                                    ${item.icon}
+                                </div>
 
-               const renderAssetRow = (label, items) => `
-            <div class="w-full">
-                <span class="text-[9px] font-mono text-gray-500 uppercase block mb-1">${label}</span>
-                <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-                    ${items.map(item => `
-                        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-gray-800/50 rounded-lg border border-white/10 text-xl">${item.icon}</div>
-                    `).join('') || '<span class="text-[10px] text-gray-700 uppercase italic">Empty</span>'}
+                                <!-- Decorative Corner Brackets (Classic UI Feel) -->
+                                <div class="absolute top-0 left-0 w-1 h-1 border-t border-l border-white/10"></div>
+                                <div class="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-black/20"></div>
+                            </div>
+                        `).join('') || `
+                            <!-- Empty State Slots -->
+                            ${Array(4).fill(0).map(() => `
+                                <div class="aspect-square bg-[#1e293b]/50 border-2 border-[#0f172a] shadow-inner opacity-40"></div>
+                            `).join('')}
+                        `}
+                    </div>
                 </div>
-            </div>
-        `;
-
+            `;
             assetsContainer.innerHTML = renderAssetRow('Active Inventory', acquiredItems) + renderAssetRow('Active Topics', acquiredTopics);
 
 
             // 4. STATS SECTION
-            const statsSection = createElement('div', 'w-full space-y-6 pt-2');
+            const statsSection = createElement('div', 'w-full space-y-6 pt-2 border-t border-white/10');
             const chopsHtml = game.chops.filter(c => c.isUnlocked).map(chop => {
                 const percentage = Math.min(100, Math.max(0, (chop.points / chopMax) * 100));
                 return `
@@ -5581,33 +5622,39 @@
                     </div>`;
             }).join('');
 
-              // 1. PLAYER STATS (Rank & Artistic Caliber)
-            const playerStats = createElement('div', 'w-full max-w-xs mx-auto space-y-4');
+          const playerStats = createElement('div', 'w-full max-w-xs mx-auto space-y-4');
             playerStats.innerHTML = `
-                <div class="p-3 bg-gray-800/50 rounded-2xl border border-indigo-500/30 flex flex-col items-center">
-                    <p class="text-[10px] font-mono text-gray-400 mb-1 tracking-widest uppercase">Rank</p>
-                    <div class="flex items-center gap-3">
-                        <span class="text-3xl font-bold text-indigo-400 leading-none">${game.level}</span>
-                        <span class="text-sm text-gray-200 uppercase tracking-tighter">${game.rank}</span>
+                <!-- Top Row: Rank and Audience Hype -->
+                <div class="flex gap-3 w-full">
+                    <!-- Rank Section -->
+                    <div class="flex-1 p-3 bg-gray-800/50 rounded-2xl border border-indigo-500/30 flex flex-col items-center justify-center">
+                        <p class="text-[9px] font-mono text-gray-400 mb-1 tracking-widest uppercase">Rank</p>
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl font-bold text-indigo-400 leading-none">${game.level}</span>
+                            <span class="text-[10px] text-gray-200 uppercase tracking-tighter leading-tight">${game.rank}</span>
+                        </div>
+                        <div class="w-full mt-3 bg-gray-900 h-1.5 rounded-full border border-indigo-900 overflow-hidden">
+                            <div class="bg-indigo-500 h-full transition-all duration-500" style="width: ${progression.progressPercentage}%"></div>
+                        </div>
                     </div>
-                    <div class="w-full mt-3 bg-gray-900 h-1.5 rounded-full border border-indigo-900 overflow-hidden">
-                        <div class="bg-indigo-500 h-full" style="width: ${progression.progressPercentage}%"></div>
+
+                    <!-- Audience Hype Section -->
+                    <div class="flex-1 p-3 bg-fuchsia-900/20 rounded-2xl border-2 border-fuchsia-500/50 flex flex-col items-center justify-center">
+                        <p class="text-[9px] font-mono text-fuchsia-400 mb-1 uppercase tracking-widest text-center">Audience Hype</p>
+                        <p class="text-2xl font-black text-fuchsia-400">${game.fans.toLocaleString()}</p>
                     </div>
                 </div>
-
-                <div class="p-3 space-y-2">
+                
+                <!-- Artistic Caliber Section -->
+                <div class="p-3 space-y-2 bg-white/5 rounded-2xl border border-white/5">
                     <h4 class="text-[10px] font-bold text-neon-pink uppercase tracking-widest text-center">Artistic Caliber</h4>
                     ${chopsHtml}
                 </div>
             `;
 
             // 2. SOCIAL STATS (Fans & Memories)
-            const socialStats = createElement('div', 'w-full max-w-xs mx-auto space-y-4');
-            socialStats.innerHTML = `
-                <div class="p-3 bg-fuchsia-900/20 rounded-2xl border-2 border-fuchsia-500/50 flex flex-col items-center">
-                    <p class="text-[10px] font-mono text-fuchsia-400 mb-1 uppercase tracking-widest">Audience Hype</p>
-                    <p class="text-3xl font-black text-fuchsia-400">${game.fans.toLocaleString()}</p>
-                </div>
+            const memoryStats = createElement('div', 'w-full flex justify-center gap-6 py-4 border-t border-b border-white/10  ');
+            memoryStats.innerHTML = `
                 
                 <div class="p-3 bg-gray-800/50 rounded-2xl border border-neon-pink/30">
                     <p class="text-[10px] font-mono text-neon-pink mb-2 uppercase tracking-widest text-center">Memories</p>
@@ -5624,36 +5671,47 @@
                 </div>
             `;
 
-            statsSection.append(playerStats, socialStats);
+            statsSection.append(playerStats, memoryStats);
+          const buttonmenu = createElement('div', 'p-4 bg-gray-950/90 border-t border-white/5 rounded-2xl mt-4 shadow-inner', `
+            <div class="flex flex-col items-center gap-1">
+            <p class="text-[10px] font-mono text-gray-500 uppercase tracking-[0.3em] font-bold">
+            System Debug Matrix
+            </p>
+            <div class="w-12 h-[1px] bg-blue-500/30 rounded-full"></div>
+            </div>
+            `);
 
-            // 6. BUTTON GRID
-            const buttonmenu = createElement('div', 'p-4 bg-gray-800/50 rounded-xl border border-neon-pink/30',
-                    `<p class="text-xs font-mono text-fuchsia-400 mb-1 uppercase tracking-widest">Debugging Buttons</p>`);
-            const buttonGrid = createElement('div', 'grid grid-cols-2 sm:grid-cols-4 gap-4 w-full');
+            // Force exactly 4 columns to create the requested grouping
+            const buttonGrid = createElement('div', 'grid grid-cols-4 gap-4 w-full max-w-md mx-auto');
+
             const menubuttons = [
                 { title: 'TRIVIA', phase: 2, action: () => initiateTrivia(), iconEmoji: '💡' },
                 { title: 'WORDLE', phase: 7, action: () => setPhase(7,'Wordle'), iconEmoji: '📝' },
                 { title: 'SONGS', phase: 8, action: () => setPhase(8,'Songs'), iconEmoji: '🎶' },
                 { title: 'JUST ONE', phase: 9, action: () => setPhase(9,'Just One'), iconEmoji: '1️' },
-                { title: 'CARDS', phase: 0, action: () => setPhase(20, 'Poker'), iconEmoji: '🃏' },
-                { title: 'FAMILY FEUD', phase: 11, action: () => setPhase(11, 'Family Feud'), iconEmoji: '📊' },
+                { title: 'CARDS', phase: 20, action: () => setPhase(20, 'Poker'), iconEmoji: '🃏' },
+                { title: 'FEUD', phase: 11, action: () => setPhase(11, 'Family Feud'), iconEmoji: '📊' },
                 { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Shop'), iconEmoji: '🛒' }, 
                 { title: 'YAY', phase: 0, action: () => showSuccessAnimation(), iconEmoji: '🤘' },
                 { title: 'SETUP', phase: 18, action: () => setPhase(18,'Name setup'), iconEmoji: '📛' },
                 { title: 'CHOPS', phase: 17, action: () => setPhase(17, 'Chops'), iconEmoji: '📋' },
                 { title: 'INTRO', phase: 12, action: () => setPhase(12,'Intro'), iconEmoji: '🎦' },
-                { title: 'SONG MIXER (chapter 2)', phase: 13, action: () => setPhase(13,'Mixer'), iconEmoji: '🎛️' },
+                { title: 'MIXER', phase: 13, action: () => setPhase(13,'Mixer'), iconEmoji: '🎛️' },
             ];
 
-
             menubuttons.forEach(btn => {
-                const button = createElement('button', 'metal-button py-3 flex flex-col items-center justify-center space-y-2 hover:scale-105 transition-all', 
-                    `<span class="text-3xl">${btn.iconEmoji}</span><span class="text-[10px] font-bold tracking-tighter uppercase">${btn.title}</span>`);
+                // Exact classes from your provided button snippet
+                const button = createElement('button', 
+                    'aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-105 transition-all text-2xl md:text-4xl shadow-xl flex items-center justify-center group relative', 
+                    `<span>${btn.iconEmoji}</span>
+                     <span class="absolute bottom-1 text-[7px] font-bold opacity-0 group-hover:opacity-60 transition-opacity text-white pointer-events-none uppercase tracking-tighter">${btn.title}</span>`
+                );
+                
                 button.onclick = btn.action;
                 buttonGrid.appendChild(button);
             });
 
-            menuContent.append(titleRow, iconRow, persistenceRow, assetsContainer, statsSection, buttonmenu, buttonGrid);
+            menuContent.append(titleRow, iconRow, persistenceRow, statsSection, buttonmenu, buttonGrid);
             return menuContent;
         
         }
@@ -6011,7 +6069,7 @@
                 if (isDisabled) {
                     if (isCorrect) {
                         classes += ' bg-green-700 border-green-500 shadow-lg shadow-green-700/50'; // Correct
-                        showSuccessAnimation();
+                        
 
                     } else if (isSelected) {
                         classes += ' bg-red-800 border-red-600 shadow-lg shadow-red-800/50'; // Wrong selection
@@ -6147,7 +6205,7 @@
 
                 if (guess === targetWord) {
                     gameStatus = 'win';
-                    let scoreIncrease = 100 - (guesses.length * 10); // Better score for fewer guesses
+                    let scoreIncrease = 50 - (guesses.length * 10); // Better score for fewer guesses
                     let chop = game.chops.find(i => i.name === 'Social Influence');
 
                     chop.points += updateChopScore('Social Influence', scoreIncrease);
@@ -6483,7 +6541,7 @@
                         showSuccessAnimation();
                         game.message = "CHALLENGE COMPLETE! +50 XP";
                         let chop = game.chops.find(i => i.name === 'Instrument Synergy');
-                        chop.points += updateChopScore('Instrument Synergy',50);
+                        chop.points += updateChopScore('Instrument Synergy',40);
 
                     } else {
                         game.message = "CHALLENGE FAILED. BEST LUCK NEXT TIME.";
@@ -6659,7 +6717,7 @@
             if (isTimeout) {
                 resultMessage = `TIME OUT! Challenge Failed. Correct Song: ${game.currentSong}.`;
             } else if (playerGuess === correctSong) {
-                chop.points += updateChopScore('Rhythm Mastery',50);
+                chop.points += updateChopScore('Rhythm Mastery',40);
 
                 resultMessage = `CORRECT! +50 Rhythm mastery Points. Song: ${game.currentSong}.`;
                 showSuccessAnimation();
@@ -7151,7 +7209,7 @@
 
                 chop.points += updateChopScore('Lyrical Flow',points);
                 showSuccessAnimation();
-                updateFeedback(`🎉 CORRECT! The word was: ${word}. +${points} Lyrical Flow points!`, 'text-green-400 bg-green-900/50 border border-green-700');
+                updateFeedback(`🎉 CORRECT! The word was: ${word}. +${points} Lyrical Flow XP!`, 'text-green-400 bg-green-900/50 border border-green-700');
                 endGame();
                 //renderGame(); // Update main score display
 
@@ -7978,71 +8036,88 @@
 
 
         function renderInventory() {
-            const inventoryContent = createElement('div', 'flex flex-col items-center h-full p-8 space-y-8');
-            
-            const title = createElement('h3', 'text-4xl font-extrabold title-font text-neon-pink text-center mb-6', 'INVENTORY');
-            title.style.textShadow = '0 0 8px #ff00ff';
-            
+            // Main container with the classic dark palette background
+            const inventoryContent = createElement('div', 'flex flex-col items-center h-full p-8 space-y-12 bg-[#1a1a2e]');
+
+            // Stylized Header
+            const title = createElement('h3', 'text-5xl font-black italic text-[#94a3b8] tracking-widest uppercase mb-4', 'INVENTORY');
+            title.style.textShadow = '4px 4px 0px rgba(0,0,0,0.5)';
+            inventoryContent.appendChild(title);
+
+             const hint = createElement('div', 'text-[10px] text-indigo-400/80 font-mono tracking-[0.2em] uppercase animate-pulse mb-4 flex items-center');
+            hint.innerHTML = `<span class="mr-2">▶</span> Select an icon for details <span class="ml-2">◀</span>`;
+            inventoryContent.appendChild(hint);
+
+            /**
+             * Helper to create the Adventure-style grid
+             * @param {string} label - Category title
+             * @param {Array} items - List of item objects
+             * @param {Function} onClickAction - Function to run on click
+             */
+            const createClassicGrid = (label, items, onClickAction) => {
+                const wrapper = createElement('div', 'w-full max-w-2xl flex flex-col');
+                
+                // Category Label
+                const labelEl = createElement('span', 'text-xs font-bold text-[#64748b] uppercase mb-3 px-1 tracking-[0.2em]', label);
+                wrapper.appendChild(labelEl);
+
+                // The Grid Container
+                const gridContainer = createElement('div', 'grid grid-cols-4 md:grid-cols-6 gap-1 p-1 bg-[#0f172a] border-4 border-[#334155] shadow-[inset_0_4px_12px_rgba(0,0,0,0.8)]');
+
+                // Render acquired items or empty slots
+                if (items.length > 0) {
+                    items.forEach(item => {
+                        const slot = createElement('div', 'aspect-square flex items-center justify-center bg-[#334155] border-2 border-[#1e293b] shadow-[inset_2px_2px_0px_rgba(255,255,255,0.05),_inset_-2px_-2px_0px_rgba(0,0,0,0.3)] hover:bg-[#475569] active:translate-y-0.5 transition-all cursor-pointer group relative');
+                        
+                        slot.onclick = () => onClickAction(item);
+                        
+                        // Icon with classic drop shadow
+                        slot.innerHTML = `
+                            <div class="text-4xl filter drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transform group-hover:scale-110 transition-transform">
+                                ${item.icon || (label.includes('TOPIC') ? '💬' : '📦')}
+                            </div>
+                            <!-- Decorative Corner Brackets -->
+                            <div class="absolute top-0 left-0 w-1 h-1 border-t border-l border-white/10"></div>
+                            <div class="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-black/20"></div>
+                        `;
+                        gridContainer.appendChild(slot);
+                    });
+
+                    // Fill remaining space to make a full row of 4/6 (Optional aesthetic choice)
+                    const remaining = items.length % 4 === 0 ? 0 : 4 - (items.length % 4);
+                    for(let i = 0; i < remaining; i++) {
+                        const empty = createElement('div', 'aspect-square bg-[#1e293b]/30 border-2 border-[#0f172a] shadow-inner opacity-20');
+                        gridContainer.appendChild(empty);
+                    }
+                } else {
+                    // Full empty state
+                    for(let i = 0; i < 4; i++) {
+                        const empty = createElement('div', 'aspect-square bg-[#1e293b]/30 border-2 border-[#0f172a] shadow-inner opacity-20');
+                        gridContainer.appendChild(empty);
+                    }
+                }
+
+                wrapper.appendChild(gridContainer);
+                return wrapper;
+            };
 
             // --- SECTION 1: PHYSICAL ITEMS ---
-            const grid = createElement('div', 'grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full max-w-4xl');
             const acquiredItems = game.inventory_items.filter(item => item.acquired);
-
-            // FIX: Check acquiredItems length instead of total inventory length
-            if (acquiredItems.length === 0) {
-                grid.innerHTML = '<p class="text-xl text-gray-500 col-span-full text-center">Your inventory is empty. Go shopping!</p>';
-            } else {
-                acquiredItems.forEach(item => {
-                    const card = createElement('div', 'item-card p-4 rounded-lg flex flex-col items-center text-center bg-gray-800 border-2 border-electric-blue/50 hover:border-electric-cyan cursor-pointer transition transform hover:scale-[1.02] shadow-xl');
-                    
-                    card.onclick = () => {
-                        const nextPhase = (item.name === 'Chops list') ? 17 : 15;
-                        setPhase(nextPhase, `Inspecting ${item.name}...`, item);
-                    };
-
-                    // FIX: Added optional chaining/existence check for item.desc to prevent .split() errors
-                    card.innerHTML = `
-                        <span class="text-5xl mb-2">${item.icon || '📦'}</span>
-                        <p class="font-bold text-lg text-white title-font">${item.name}</p>
-                        <p class="text-xs text-gray-400 mt-2 mono-font">${item.desc ? item.desc.split('.')[0] : ''}</p>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-            
+            const itemGrid = createClassicGrid('Physical Assets', acquiredItems, (item) => {
+                const nextPhase = (item.name === 'Chops list') ? 17 : 15;
+                setPhase(nextPhase, `Inspecting ${item.name}...`, item);
+            });
+            inventoryContent.appendChild(itemGrid);
 
             // --- SECTION 2: CONVERSATION TOPICS ---
             const acquiredTopics = game.conversation_topics.unlocked.filter(item => item.acquired);
-            if (acquiredTopics.length > 0) {
+            const topicGrid = createClassicGrid('Knowledge & Topics', acquiredTopics, (topic) => {
+                setPhase(15, `Thinking of ${topic.name}...`, topic);
+            });
+            inventoryContent.appendChild(topicGrid);
 
-                const topicHeading = createElement('h3', 'text-4xl font-extrabold title-font text-neon-pink text-center mb-6', 'KNOWLEDGE & TOPICS');
-                topicHeading.style.textShadow = '0 0 8px #ff00ff';
-                inventoryContent.appendChild(topicHeading);
-
-                const grid_topic = createElement('div', 'grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full max-w-4xl');
-
-                acquiredTopics.forEach(topic => {
-                    const card_topic = createElement('div', 'item-card p-4 rounded-lg flex flex-col items-center text-center bg-gray-800 border-2 border-electric-blue/50 hover:border-electric-cyan cursor-pointer transition transform hover:scale-[1.02] shadow-xl');
-                    
-                    card_topic.onclick = () => {
-                        const nextPhase = 15; // Topic Viewer
-                        setPhase(nextPhase, `Thinking of ${topic.name}...`, topic);
-                    };
-
-                    // FIX: Ensure topic.desc exists before splitting
-                    card_topic.innerHTML = `
-                        <span class="text-5xl mb-2">${topic.icon || '💬'}</span>
-                        <p class="font-bold text-lg text-white title-font">${topic.name}</p>
-                        <p class="text-xs text-gray-400 mt-2 mono-font">${topic.desc ? topic.desc.split('.')[0] : 'Topic acquired.'}</p>
-                    `;
-                    grid_topic.appendChild(card_topic);
-                });
-                inventoryContent.appendChild(grid_topic);
-            }
-            inventoryContent.appendChild(title);
-            inventoryContent.appendChild(grid);
             // --- BACK BUTTON ---
-            const backButton = createElement('button', 'metal-button px-8 py-3 text-xl mt-8 bg-indigo-600 hover:bg-indigo-700', 'MENU');
+            const backButton = createElement('button', 'px-10 py-3 text-lg font-bold bg-[#475569] text-white border-b-4 border-[#1e293b] hover:bg-[#64748b] active:border-b-0 active:translate-y-1 transition-all uppercase tracking-widest mt-12', 'CLOSE');
             backButton.onclick = () => setPhase(0, '');
             inventoryContent.appendChild(backButton);
 

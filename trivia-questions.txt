@@ -1,0 +1,3848 @@
+[
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which artist released the best-selling album of the 1980s, 'Thriller'?",
+"wrongAnswers": ["Prince", "Madonna", "George Michael"],
+"correctAnswer": "Michael Jackson"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which band's hit 'Take On Me' is famous for its pencil-sketch animation music video?",
+"wrongAnswers": ["Duran Duran", "The Cure", "Depeche Mode"],
+"correctAnswer": "A-ha"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "In 1984, which artist declared 'Girls Just Want to Have Fun'?",
+"wrongAnswers": ["Pat Benatar", "Debbie Harry", "Tiffany"],
+"correctAnswer": "Cyndi Lauper"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which synth-pop duo released the 1981 hit 'Sweet Dreams (Are Made of This)'?",
+"wrongAnswers": ["Soft Cell", "Yazoo", "Erasure"],
+"correctAnswer": "Eurythmics"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "What was the name of Prince’s backing band during the 'Purple Rain' era?",
+"wrongAnswers": ["The Wailers", "The Heartbreakers", "The Silver Bullet Band"],
+"correctAnswer": "The Revolution"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which song by Survivor served as the theme for the movie 'Rocky III'?",
+"wrongAnswers": ["Final Countdown", "Burning Heart", "The Warrior"],
+"correctAnswer": "Eye of the Tiger"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which English band recorded the 1983 hit 'Every Breath You Take'?",
+"wrongAnswers": ["Genesis", "Dire Straits", "The Smiths"],
+"correctAnswer": "The Police"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Who released the hit single 'Like a Virgin' in 1984?",
+"wrongAnswers": ["Janet Jackson", "Whitney Houston", "Paula Abdul"],
+"correctAnswer": "Madonna"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which band had a massive 1987 hit with 'With or Without You'?",
+"wrongAnswers": ["The Clash", "R.E.M.", "New Order"],
+"correctAnswer": "U2"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "What 1985 charity single was written by Michael Jackson and Lionel Richie?",
+"wrongAnswers": ["Do They Know It's Christmas?", "Tears Are Not Enough", "Sun City"],
+"correctAnswer": "We Are the World"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which 80s rock icon's real name is William Bruce Rose Jr.?",
+"wrongAnswers": ["Jon Bon Jovi", "Alice Cooper", "Steven Tyler"],
+"correctAnswer": "Axl Rose"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which song contains the lyric 'Never gonna give you up, never gonna let you down'?",
+"wrongAnswers": ["Together Forever", "Whenever You Need Somebody", "She Wants to Dance with Me"],
+"correctAnswer": "Never Gonna Give You Up"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "What was the first music video played on MTV in 1981?",
+"wrongAnswers": ["Physical", "Money for Nothing", "You Better Run"],
+"correctAnswer": "Video Killed the Radio Star"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which artist starred in the movie 'Purple Rain'?",
+"wrongAnswers": ["Rick James", "Morris Day", "Lionel Richie"],
+"correctAnswer": "Prince"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which band is responsible for the hit 'Don't You (Forget About Me)'?",
+"wrongAnswers": ["Tears for Fears", "The Psychedelic Furs", "Talking Heads"],
+"correctAnswer": "Simple Minds"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Who sang the power ballad 'Total Eclipse of the Heart'?",
+"wrongAnswers": ["Celine Dion", "Cher", "Stevie Nicks"],
+"correctAnswer": "Bonnie Tyler"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which band's name was inspired by a character in the film 'Barbarella'?",
+"wrongAnswers": ["Spandau Ballet", "Culture Club", "Pet Shop Boys"],
+"correctAnswer": "Duran Duran"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Which 1986 Bon Jovi song features a talk box guitar effect?",
+"wrongAnswers": ["You Give Love a Bad Name", "Wanted Dead or Alive", "Bad Medicine"],
+"correctAnswer": "Livin' on a Prayer"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "What color was the 'Rain' in Prince's iconic 1984 title track?",
+"wrongAnswers": ["Red", "Black", "Blue"],
+"correctAnswer": "Purple"
+},
+{
+"topic": "Totally Awesome 80s Jams!",
+"question": "Who released the dance-pop hit 'I Wanna Dance with Somebody' in 1987?",
+"wrongAnswers": ["Donna Summer", "Tina Turner", "Chaka Khan"],
+"correctAnswer": "Whitney Houston"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which Seattle band released the grunge anthem 'Smells Like Teen Spirit' in 1991?",
+"wrongAnswers": ["Pearl Jam", "Soundgarden", "Alice in Chains"],
+"correctAnswer": "Nirvana"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "What was the debut single of the Spice Girls, released in 1996?",
+"wrongAnswers": ["Say You'll Be There", "2 Become 1", "Spice Up Your Life"],
+"correctAnswer": "Wannabe"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which artist sang '...Baby One More Time' in a high school music video?",
+"wrongAnswers": ["Christina Aguilera", "Jessica Simpson", "Mandy Moore"],
+"correctAnswer": "Britney Spears"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Who released the hip-hop classic 'California Love' featuring Dr. Dre?",
+"wrongAnswers": ["Notorious B.I.G.", "Snoop Dogg", "Ice Cube"],
+"correctAnswer": "2Pac"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which band's 1994 album 'Dookie' helped bring punk rock to the mainstream?",
+"wrongAnswers": ["The Offspring", "Blink-182", "Bad Religion"],
+"correctAnswer": "Green Day"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which Canadian artist released the massive 'Jagged Little Pill' album in 1995?",
+"wrongAnswers": ["Shania Twain", "Avril Lavigne", "Sarah McLachlan"],
+"correctAnswer": "Alanis Morissette"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "What 1997 James Cameron film featured Celine Dion's 'My Heart Will Go On'?",
+"wrongAnswers": ["Avatar", "The Abyss", "True Lies"],
+"correctAnswer": "Titanic"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which rap group told us to 'Protect Ya Neck' in 1993?",
+"wrongAnswers": ["A Tribe Called Quest", "N.W.A.", "Public Enemy"],
+"correctAnswer": "Wu-Tang Clan"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Who sang the 1990 hit 'U Can't Touch This'?",
+"wrongAnswers": ["Vanilla Ice", "Bobby Brown", "Coolio"],
+"correctAnswer": "MC Hammer"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which band had a 1995 hit with the song 'Wonderwall'?",
+"wrongAnswers": ["Blur", "Pulp", "Radiohead"],
+"correctAnswer": "Oasis"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which boy band had the hits 'I Want It That Way' and 'Quit Playing Games'?",
+"wrongAnswers": ["*NSYNC", "98 Degrees", "New Kids on the Block"],
+"correctAnswer": "Backstreet Boys"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "What was the name of the Notorious B.I.G.'s debut studio album?",
+"wrongAnswers": ["Life After Death", "Born Again", "Ready to Die"],
+"correctAnswer": "Ready to Die"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which female group asked 'Don't Go Chasing Waterfalls' in 1995?",
+"wrongAnswers": ["Destiny's Child", "En Vogue", "SWV"],
+"correctAnswer": "TLC"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which 1992 hit by Sir Mix-a-Lot became an anthem for body positivity?",
+"wrongAnswers": ["Jump Around", "Hip Hop Hooray", "Rump Shaker"],
+"correctAnswer": "Baby Got Back"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which band released the surreal 'Black Hole Sun' in 1994?",
+"wrongAnswers": ["Silverchair", "Bush", "Mudhoney"],
+"correctAnswer": "Soundgarden"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Who was the lead singer of No Doubt during their 'Tragic Kingdom' success?",
+"wrongAnswers": ["Shirley Manson", "Fiona Apple", "Courtney Love"],
+"correctAnswer": "Gwen Stefani"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which song by R.E.M. features a mandolin and reached the top 10 in 1991?",
+"wrongAnswers": ["Shiny Happy People", "Man on the Moon", "Everybody Hurts"],
+"correctAnswer": "Losing My Religion"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which artist sang 'Ice Ice Baby', the first hip-hop single to top the Billboard Hot 100?",
+"wrongAnswers": ["Snow", "Marky Mark", "Young MC"],
+"correctAnswer": "Vanilla Ice"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which band had a 1997 hit with 'Tubthumping'?",
+"wrongAnswers": ["The Verve", "Semisonic", "Third Eye Blind"],
+"correctAnswer": "Chumbawamba"
+},
+{
+"topic": "Sweet 90s Throwbacks!",
+"question": "Which singer's real name is Robyn Fenty?",
+"wrongAnswers": ["Pink", "Sia", "Adele"],
+"correctAnswer": "Rihanna"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which band is often credited with releasing the first heavy metal album in 1970?",
+"wrongAnswers": ["Led Zeppelin", "Deep Purple", "Blue Cheer"],
+"correctAnswer": "Black Sabbath"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Who is the lead singer of the heavy metal band Iron Maiden?",
+"wrongAnswers": ["Rob Halford", "Ozzy Osbourne", "Ronnie James Dio"],
+"correctAnswer": "Bruce Dickinson"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which band is known as one of the 'Big Four' of thrash metal alongside Metallica and Slayer?",
+"wrongAnswers": ["Pantera", "Testament", "Exodus"],
+"correctAnswer": "Megadeth"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "What is the name of Iron Maiden’s skeletal mascot?",
+"wrongAnswers": ["Vic Rattlehead", "Snaggletooth", "Murray"],
+"correctAnswer": "Eddie"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which metal subgenre is characterized by blast beats and tremolo picking?",
+"wrongAnswers": ["Doom Metal", "Power Metal", "Glam Metal"],
+"correctAnswer": "Black Metal"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which band released the iconic 1980 album 'British Steel'?",
+"wrongAnswers": ["Saxon", "Motorhead", "Def Leppard"],
+"correctAnswer": "Judas Priest"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Who was the legendary bassist for Metallica who died in a bus accident in 1986?",
+"wrongAnswers": ["Jason Newsted", "Robert Trujillo", "Geezer Butler"],
+"correctAnswer": "Cliff Burton"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which band’s lead singer is the 'Prince of Darkness'?",
+"wrongAnswers": ["Alice Cooper", "Marilyn Manson", "King Diamond"],
+"correctAnswer": "Ozzy Osbourne"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which American band is famous for the hit 'Cowboys from Hell'?",
+"wrongAnswers": ["Sepultura", "Machine Head", "Anthrax"],
+"correctAnswer": "Pantera"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "What instrument is 'Dimebag' Darrell Abbott famous for playing?",
+"wrongAnswers": ["Drums", "Bass", "Vocals"],
+"correctAnswer": "Guitar"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which band's drummer, Rick Allen, continued playing after losing an arm?",
+"wrongAnswers": ["Quiet Riot", "Scorpions", "Whitesnake"],
+"correctAnswer": "Def Leppard"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which country is the primary origin of the 'Second Wave' of Black Metal?",
+"wrongAnswers": ["Sweden", "Finland", "Germany"],
+"correctAnswer": "Norway"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Who replaced Ozzy Osbourne as the singer of Black Sabbath in 1979?",
+"wrongAnswers": ["Ian Gillan", "Glenn Hughes", "Tony Martin"],
+"correctAnswer": "Ronnie James Dio"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which band is famous for the 1982 album 'The Number of the Beast'?",
+"wrongAnswers": ["Venom", "Mercyful Fate", "W.A.S.P."],
+"correctAnswer": "Iron Maiden"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "What is the name of the metal subgenre that combines metal with hardcore punk?",
+"wrongAnswers": ["Industrial Metal", "Nu Metal", "Gothic Metal"],
+"correctAnswer": "Metalcore"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which band is known for members wearing matching jumpsuits and masks?",
+"wrongAnswers": ["Ghost", "GWAR", "Mushroomhead"],
+"correctAnswer": "Slipknot"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which legendary metal singer popularized the 'devil horns' hand gesture?",
+"wrongAnswers": ["Lemmy Kilmister", "James Hetfield", "Tom Araya"],
+"correctAnswer": "Ronnie James Dio"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which band released the controversial 'Reign in Blood' in 1986?",
+"wrongAnswers": ["Kreator", "Overkill", "Celtic Frost"],
+"correctAnswer": "Slayer"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "What was the name of the 1980s movement 'NWOBHM'?",
+"wrongAnswers": ["North West Old British Heavy Metal", "New Wave of Boston Heavy Metal", "National Wave of British Heavy Metal"],
+"correctAnswer": "New Wave of British Heavy Metal"
+},
+{
+"topic": "Heavy Metal Madness",
+"question": "Which band is led by singer and bassist Lemmy Kilmister?",
+"wrongAnswers": ["Hawkwind", "Thin Lizzy", "UFO"],
+"correctAnswer": "Motorhead"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which New York band is often called the first true punk rock group?",
+"wrongAnswers": ["The Stooges", "MC5", "New York Dolls"],
+"correctAnswer": "Ramones"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Who was the bassist for the Sex Pistols, famous for his chaotic image?",
+"wrongAnswers": ["Johnny Rotten", "Steve Jones", "Paul Cook"],
+"correctAnswer": "Sid Vicious"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which band released the 1979 album 'London Calling'?",
+"wrongAnswers": ["The Jam", "The Damned", "Buzzcocks"],
+"correctAnswer": "The Clash"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "What is the name of the iconic London punk boutique run by Malcolm McLaren?",
+"wrongAnswers": ["Biba", "Granny Takes a Trip", "The Apple Boutique"],
+"correctAnswer": "SEX"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which California band is led by singer Jello Biafra?",
+"wrongAnswers": ["Black Flag", "Circle Jerks", "Minor Threat"],
+"correctAnswer": "Dead Kennedys"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which 1990s band hit it big with the album 'Smash'?",
+"wrongAnswers": ["Pennywise", "NOFX", "Rancid"],
+"correctAnswer": "The Offspring"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Who is the lead singer of the Henry Rollins-fronted band Black Flag?",
+"wrongAnswers": ["Keith Morris", "Ron Reyes", "Dez Cadena"],
+"correctAnswer": "Henry Rollins"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which band is known for the 1977 single 'God Save the Queen'?",
+"wrongAnswers": ["Stranglers", "Generation X", "The Adicts"],
+"correctAnswer": "Sex Pistols"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "What city is the home of the famous punk club CBGB?",
+"wrongAnswers": ["London", "Los Angeles", "Chicago"],
+"correctAnswer": "New York City"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which band's logo is a skull known as the 'Crimson Ghost'?",
+"wrongAnswers": ["Social Distortion", "Descendents", "AFI"],
+"correctAnswer": "Misfits"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which Washington D.C. band pioneered the 'Straight Edge' movement?",
+"wrongAnswers": ["Fugazi", "Bad Brains", "Government Issue"],
+"correctAnswer": "Minor Threat"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Who is the lead singer and guitarist for Green Day?",
+"wrongAnswers": ["Mike Dirnt", "Tré Cool", "Jason White"],
+"correctAnswer": "Billie Joe Armstrong"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which band had a hit with the punk cover of 'I'm a Believer'?",
+"wrongAnswers": ["Sum 41", "Good Charlotte", "Simple Plan"],
+"correctAnswer": "The Monkees"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which female-fronted band released the album 'Parallel Lines'?",
+"wrongAnswers": ["X-Ray Spex", "The Slits", "The Raincoats"],
+"correctAnswer": "Blondie"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "What is the name of the genre that mixes punk rock with reggae?",
+"wrongAnswers": ["Psychobilly", "Skate Punk", "Anarcho-punk"],
+"correctAnswer": "Ska-punk"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which band features bassist Flea and singer Anthony Kiedis?",
+"wrongAnswers": ["Jane's Addiction", "Faith No More", "Incubus"],
+"correctAnswer": "Red Hot Chili Peppers"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which punk band’s members all adopted the same surname?",
+"wrongAnswers": ["The Cramps", "The Stooges", "The Germs"],
+"correctAnswer": "Ramones"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which band is responsible for the song 'Holiday in Cambodia'?",
+"wrongAnswers": ["Fear", "Agent Orange", "TSOL"],
+"correctAnswer": "Dead Kennedys"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "What does the 'P' stand for in the band name 'PIL'?",
+"wrongAnswers": ["Punk", "People", "Power"],
+"correctAnswer": "Public"
+},
+{
+"topic": "Punchy Punk Rock",
+"question": "Which punk rock drummer joined Blink-182 in 1998?",
+"wrongAnswers": ["Scott Raynor", "Josh Freese", "Brooks Wackerman"],
+"correctAnswer": "Travis Barker"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which female artist has the most Grammy Awards of all time?",
+"wrongAnswers": ["Taylor Swift", "Adele", "Aretha Franklin"],
+"correctAnswer": "Beyoncé"
+},
+{
+"topic": "Top Pop Hits",
+"question": "What is the name of Taylor Swift's massive 2023-2024 world tour?",
+"wrongAnswers": ["Reputation Stadium Tour", "The Red Tour", "The 1989 World Tour"],
+"correctAnswer": "The Eras Tour"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which song by Luis Fonsi and Daddy Yankee held the record for most YouTube views?",
+"wrongAnswers": ["Gangnam Style", "Shape of You", "Uptown Funk"],
+"correctAnswer": "Despacito"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Who sang the 2019 hit 'Bad Guy'?",
+"wrongAnswers": ["Lorde", "Dua Lipa", "Halsey"],
+"correctAnswer": "Billie Eilish"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which male artist released the hit song 'As It Was' in 2022?",
+"wrongAnswers": ["Justin Bieber", "Ed Sheeran", "Shawn Mendes"],
+"correctAnswer": "Harry Styles"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which K-pop group became the first to reach #1 on the Billboard 200?",
+"wrongAnswers": ["EXO", "Blackpink", "Big Bang"],
+"correctAnswer": "BTS"
+},
+{
+"topic": "Top Pop Hits",
+"question": "What was Katy Perry's first #1 hit on the Billboard Hot 100?",
+"wrongAnswers": ["California Gurls", "Firework", "Roar"],
+"correctAnswer": "I Kissed a Girl"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which artist's fans are known as 'Little Monsters'?",
+"wrongAnswers": ["Selena Gomez", "Ariana Grande", "Demi Lovato"],
+"correctAnswer": "Lady Gaga"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which 2014 Mark Ronson song featured Bruno Mars?",
+"wrongAnswers": ["Locked Out of Heaven", "Treasure", "24K Magic"],
+"correctAnswer": "Uptown Funk"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Who released the record-breaking album '21' in 2011?",
+"wrongAnswers": ["Amy Winehouse", "Duffy", "Leona Lewis"],
+"correctAnswer": "Adele"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which Canadian singer is known for the hit 'Blinding Lights'?",
+"wrongAnswers": ["Drake", "The Weeknd", "Justin Bieber"],
+"correctAnswer": "The Weeknd"
+},
+{
+"topic": "Top Pop Hits",
+"question": "What is the title of Miley Cyrus's 2023 smash hit about self-love?",
+"wrongAnswers": ["Wrecking Ball", "Party in the U.S.A.", "Midnight Sky"],
+"correctAnswer": "Flowers"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which former One Direction member released the single 'Pillowtalk'?",
+"wrongAnswers": ["Niall Horan", "Liam Payne", "Louis Tomlinson"],
+"correctAnswer": "Zayn Malik"
+},
+{
+"topic": "Top Pop Hits",
+"question": "What was the name of the girl group that launched Camila Cabello's career?",
+"wrongAnswers": ["Little Mix", "The Pussycat Dolls", "Destiny's Child"],
+"correctAnswer": "Fifth Harmony"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which artist won the Album of the Year at the 2024 Grammys for 'Midnights'?",
+"wrongAnswers": ["SZA", "Olivia Rodrigo", "Lana Del Rey"],
+"correctAnswer": "Taylor Swift"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Who is known as the 'King of Pop'?",
+"wrongAnswers": ["Elvis Presley", "Prince", "Justin Timberlake"],
+"correctAnswer": "Michael Jackson"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which song by Pharrell Williams was featured in 'Despicable Me 2'?",
+"wrongAnswers": ["Get Lucky", "Blurred Lines", "Freedom"],
+"correctAnswer": "Happy"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which artist starred in 'A Star is Born' alongside Bradley Cooper?",
+"wrongAnswers": ["Sia", "Rihanna", "P!nk"],
+"correctAnswer": "Lady Gaga"
+},
+{
+"topic": "Top Pop Hits",
+"question": "Which 2021 Olivia Rodrigo song went viral on TikTok and topped the charts?",
+"wrongAnswers": ["Good 4 U", "Traitor", "Deja Vu"],
+"correctAnswer": "Drivers License"
+},
+{
+"topic": "Top Pop Hits",
+"question": "What is the name of Rihanna's beauty and fashion brand?",
+"wrongAnswers": ["Rare Beauty", "Haus Labs", "Kylie Cosmetics"],
+"correctAnswer": "Fenty"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which instrument has 88 keys?",
+"wrongAnswers": ["Harp", "Accordion", "Organ"],
+"correctAnswer": "Piano"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Who is known as the 'March King' for his American military marches?",
+"wrongAnswers": ["Aaron Copland", "George Gershwin", "Charles Ives"],
+"correctAnswer": "John Philip Sousa"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which composer wrote the 'Four Seasons' violin concertos?",
+"wrongAnswers": ["Bach", "Beethoven", "Mozart"],
+"correctAnswer": "Vivaldi"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "What is the term for music played without any instruments, using only voices?",
+"wrongAnswers": ["Adagio", "Staccato", "Falsetto"],
+"correctAnswer": "A cappella"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which legendary jazz trumpeter was nicknamed 'Satchmo'?",
+"wrongAnswers": ["Miles Davis", "Dizzy Gillespie", "Chet Baker"],
+"correctAnswer": "Louis Armstrong"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "What is the name of the woodwind instrument with a double reed?",
+"wrongAnswers": ["Flute", "Clarinet", "Saxophone"],
+"correctAnswer": "Oboe"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which legendary guitarist played the Star-Spangled Banner at Woodstock?",
+"wrongAnswers": ["Eric Clapton", "Jimmy Page", "Keith Richards"],
+"correctAnswer": "Jimi Hendrix"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which famous opera features the character Carmen?",
+"wrongAnswers": ["La Boheme", "The Magic Flute", "Rigoletto"],
+"correctAnswer": "Carmen"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "What does the musical term 'Piano' mean?",
+"wrongAnswers": ["Loud", "Fast", "Slow"],
+"correctAnswer": "Soft"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which member of the Beatles was the last to join the band?",
+"wrongAnswers": ["John Lennon", "Paul McCartney", "George Harrison"],
+"correctAnswer": "Ringo Starr"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which country is the birthplace of the reggae genre?",
+"wrongAnswers": ["Bahamas", "Barbados", "Trinidad"],
+"correctAnswer": "Jamaica"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "What is the lowest-pitched string instrument in a standard orchestra?",
+"wrongAnswers": ["Cello", "Viola", "Violin"],
+"correctAnswer": "Double Bass"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Who wrote the 'Moonlight Sonata'?",
+"wrongAnswers": ["Schubert", "Chopin", "Liszt"],
+"correctAnswer": "Beethoven"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which genre of music originated in the African-American communities of New Orleans?",
+"wrongAnswers": ["Country", "Grunge", "Disco"],
+"correctAnswer": "Jazz"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which artist is known as the 'Queen of Soul'?",
+"wrongAnswers": ["Diana Ross", "Gladys Knight", "Etta James"],
+"correctAnswer": "Aretha Franklin"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "What is the standard tuning of a guitar's highest string?",
+"wrongAnswers": ["A", "D", "G"],
+"correctAnswer": "E"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which pop group's members are Björn, Benny, Agnetha, and Anni-Frid?",
+"wrongAnswers": ["Ace of Base", "Roxette", "The Cardigans"],
+"correctAnswer": "ABBA"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which musical features the song 'Defying Gravity'?",
+"wrongAnswers": ["Hamilton", "Rent", "Chicago"],
+"correctAnswer": "Wicked"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "What is the name for a group of four musicians?",
+"wrongAnswers": ["Trio", "Quintet", "Sextet"],
+"correctAnswer": "Quartet"
+},
+{
+"topic": "Music: Literally Anything Goes!",
+"question": "Which city is considered the 'Music City' of the United States?",
+"wrongAnswers": ["Austin", "Seattle", "Memphis"],
+"correctAnswer": "Nashville"
+},
+{
+"topic": "Yummy International Foods",
+"question": "Which country is the origin of the sushi dish?",
+"wrongAnswers": ["China", "Thailand", "Vietnam"],
+"correctAnswer": "Japan"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What is the main ingredient in the Middle Eastern dish Hummus?",
+"wrongAnswers": ["Lentils", "Black beans", "Fava beans"],
+"correctAnswer": "Chickpeas"
+},
+{
+"topic": "Yummy International Foods",
+"question": "Which Italian pasta's name means 'little worms'?",
+"wrongAnswers": ["Spaghetti", "Fusilli", "Penne"],
+"correctAnswer": "Vermicelli"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What is the national dish of Vietnam consisting of broth, noodles, and herbs?",
+"wrongAnswers": ["Ramen", "Pad Thai", "Laksa"],
+"correctAnswer": "Pho"
+},
+{
+"topic": "Yummy International Foods",
+"question": "Which Mexican dish consists of a folded tortilla filled with cheese and other ingredients?",
+"wrongAnswers": ["Enchilada", "Burrito", "Tamale"],
+"correctAnswer": "Quesadilla"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What type of pastry is used to make a traditional French Croissant?",
+"wrongAnswers": ["Shortcrust", "Filo", "Choux"],
+"correctAnswer": "Puff pastry"
+},
+{
+"topic": "Yummy International Foods",
+"question": "In which country did the pizza originate?",
+"wrongAnswers": ["Greece", "USA", "France"],
+"correctAnswer": "Italy"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What is the name of the spicy fermented cabbage dish from Korea?",
+"wrongAnswers": ["Bibimbap", "Bulgogi", "Kimbap"],
+"correctAnswer": "Kimchi"
+},
+{
+"topic": "Yummy International Foods",
+"question": "Which Indian bread is traditionally baked in a tandoor oven?",
+"wrongAnswers": ["Roti", "Puri", "Paratha"],
+"correctAnswer": "Naan"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What is the primary ingredient of the Spanish dish Paella?",
+"wrongAnswers": ["Potatoes", "Pasta", "Bread"],
+"correctAnswer": "Rice"
+},
+{
+"topic": "Yummy International Foods",
+"question": "Which Greek sauce is made from yogurt, cucumber, and garlic?",
+"wrongAnswers": ["Tahini", "Baba Ghanoush", "Pesto"],
+"correctAnswer": "Tzatziki"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What is the name of the Thai soup known for its hot and sour flavors?",
+"wrongAnswers": ["Miso soup", "Wonton soup", "Gazpacho"],
+"correctAnswer": "Tom Yum"
+},
+{
+"topic": "Yummy International Foods",
+"question": "Which country is famous for the Poutine (fries, gravy, and cheese curds)?",
+"wrongAnswers": ["Belgium", "France", "USA"],
+"correctAnswer": "Canada"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What is the name of the traditional British dish made of sausages and mashed potatoes?",
+"wrongAnswers": ["Fish and Chips", "Shepherd's Pie", "Full English"],
+"correctAnswer": "Bangers and Mash"
+},
+{
+"topic": "Yummy International Foods",
+"question": "Which cheese is traditionally used on a classic Margherita pizza?",
+"wrongAnswers": ["Cheddar", "Parmesan", "Brie"],
+"correctAnswer": "Mozzarella"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What is the name of the Peruvian dish made from raw fish cured in citrus juices?",
+"wrongAnswers": ["Poke", "Sashimi", "Carpaccio"],
+"correctAnswer": "Ceviche"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What is the main flavoring of the Hungarian soup Goulash?",
+"wrongAnswers": ["Cumin", "Turmeric", "Saffron"],
+"correctAnswer": "Paprika"
+},
+{
+"topic": "Yummy International Foods",
+"question": "Which Swiss dish involves melted cheese served with bread or potatoes?",
+"wrongAnswers": ["Raclette", "Rosti", "Quiche"],
+"correctAnswer": "Fondue"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What is the name of the Brazilian steakhouse style of serving meat?",
+"wrongAnswers": ["Tapas", "Meze", "Dim Sum"],
+"correctAnswer": "Churrasco"
+},
+{
+"topic": "Yummy International Foods",
+"question": "What fruit is used to make the base of traditional Guacamole?",
+"wrongAnswers": ["Mango", "Tomato", "Papaya"],
+"correctAnswer": "Avocado"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which country is home to the ancient city of Petra?",
+"wrongAnswers": ["Egypt", "Israel", "Turkey"],
+"correctAnswer": "Jordan"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "What is the largest island in the world?",
+"wrongAnswers": ["Australia", "New Guinea", "Borneo"],
+"correctAnswer": "Greenland"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "In which city can you find the famous Eiffel Tower?",
+"wrongAnswers": ["London", "Rome", "Berlin"],
+"correctAnswer": "Paris"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which South American country contains most of the Amazon Rainforest?",
+"wrongAnswers": ["Colombia", "Peru", "Argentina"],
+"correctAnswer": "Brazil"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "What is the name of the world's highest mountain above sea level?",
+"wrongAnswers": ["K2", "Kilimanjaro", "Matterhorn"],
+"correctAnswer": "Mount Everest"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which city is known as the 'Eternal City'?",
+"wrongAnswers": ["Athens", "Istanbul", "Venice"],
+"correctAnswer": "Rome"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "What is the currency used in Japan?",
+"wrongAnswers": ["Won", "Yuan", "Baht"],
+"correctAnswer": "Yen"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which African country is home to the Great Pyramids of Giza?",
+"wrongAnswers": ["Morocco", "South Africa", "Nigeria"],
+"correctAnswer": "Egypt"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which ocean is the largest on Earth?",
+"wrongAnswers": ["Atlantic", "Indian", "Arctic"],
+"correctAnswer": "Pacific"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "In which country is the Taj Mahal located?",
+"wrongAnswers": ["Pakistan", "Bangladesh", "Nepal"],
+"correctAnswer": "India"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "What is the smallest country in the world by both area and population?",
+"wrongAnswers": ["Monaco", "San Marino", "Liechtenstein"],
+"correctAnswer": "Vatican City"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which city is built on more than 100 small islands in a lagoon in the Adriatic Sea?",
+"wrongAnswers": ["Amsterdam", "Stockholm", "Bangkok"],
+"correctAnswer": "Venice"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "What is the name of the famous clock tower at the north end of the Palace of Westminster in London?",
+"wrongAnswers": ["The Shard", "Westminster Tower", "The Gherkin"],
+"correctAnswer": "Big Ben"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which country is shaped like a boot?",
+"wrongAnswers": ["Greece", "Portugal", "Spain"],
+"correctAnswer": "Italy"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which desert is the largest hot desert in the world?",
+"wrongAnswers": ["Gobi", "Kalahari", "Mojave"],
+"correctAnswer": "Sahara"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "What is the name of the reef that is the world's largest coral reef system?",
+"wrongAnswers": ["Belize Barrier Reef", "Mesoamerican Reef", "Apo Reef"],
+"correctAnswer": "Great Barrier Reef"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which city is famously known as the 'City of Light'?",
+"wrongAnswers": ["Las Vegas", "New York", "Tokyo"],
+"correctAnswer": "Paris"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "In which country can you find the Great Wall?",
+"wrongAnswers": ["Japan", "Vietnam", "Mongolia"],
+"correctAnswer": "China"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "What is the official language of Brazil?",
+"wrongAnswers": ["Spanish", "French", "English"],
+"correctAnswer": "Portuguese"
+},
+{
+"topic": "Let's Go Traveling!",
+"question": "Which island country is known for its volcanoes, geysers, and hot springs, and has the capital Reykjavik?",
+"wrongAnswers": ["Ireland", "New Zealand", "Japan"],
+"correctAnswer": "Iceland"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of France?",
+"wrongAnswers": ["Lyon", "Marseille", "Nice"],
+"correctAnswer": "Paris"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city is the capital of Japan?",
+"wrongAnswers": ["Osaka", "Kyoto", "Nagoya"],
+"correctAnswer": "Tokyo"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of Australia?",
+"wrongAnswers": ["Sydney", "Melbourne", "Brisbane"],
+"correctAnswer": "Canberra"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city serves as the capital of Canada?",
+"wrongAnswers": ["Toronto", "Montreal", "Vancouver"],
+"correctAnswer": "Ottawa"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of Italy?",
+"wrongAnswers": ["Milan", "Florence", "Naples"],
+"correctAnswer": "Rome"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city is the capital of the United Kingdom?",
+"wrongAnswers": ["Edinburgh", "Manchester", "Birmingham"],
+"correctAnswer": "London"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of Germany?",
+"wrongAnswers": ["Munich", "Frankfurt", "Hamburg"],
+"correctAnswer": "Berlin"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city is the capital of Brazil?",
+"wrongAnswers": ["Rio de Janeiro", "Sao Paulo", "Salvador"],
+"correctAnswer": "Brasilia"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of South Korea?",
+"wrongAnswers": ["Busan", "Incheon", "Daegu"],
+"correctAnswer": "Seoul"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city is the capital of Russia?",
+"wrongAnswers": ["Saint Petersburg", "Novosibirsk", "Ekaterinburg"],
+"correctAnswer": "Moscow"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of Egypt?",
+"wrongAnswers": ["Alexandria", "Giza", "Luxor"],
+"correctAnswer": "Cairo"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city serves as the capital of Mexico?",
+"wrongAnswers": ["Guadalajara", "Monterrey", "Cancun"],
+"correctAnswer": "Mexico City"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of Greece?",
+"wrongAnswers": ["Thessaloniki", "Patras", "Heraklion"],
+"correctAnswer": "Athens"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city is the capital of Thailand?",
+"wrongAnswers": ["Phuket", "Chiang Mai", "Pattaya"],
+"correctAnswer": "Bangkok"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of Argentina?",
+"wrongAnswers": ["Cordoba", "Rosario", "Mendoza"],
+"correctAnswer": "Buenos Aires"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city is the capital of Portugal?",
+"wrongAnswers": ["Porto", "Coimbra", "Braga"],
+"correctAnswer": "Lisbon"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of the Netherlands?",
+"wrongAnswers": ["Rotterdam", "The Hague", "Utrecht"],
+"correctAnswer": "Amsterdam"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city is the capital of Sweden?",
+"wrongAnswers": ["Gothenburg", "Malmo", "Uppsala"],
+"correctAnswer": "Stockholm"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "What is the capital of Norway?",
+"wrongAnswers": ["Bergen", "Trondheim", "Stavanger"],
+"correctAnswer": "Oslo"
+},
+{
+"topic": "World's Coolest Capitals",
+"question": "Which city is the capital of Spain?",
+"wrongAnswers": ["Barcelona", "Valencia", "Seville"],
+"correctAnswer": "Madrid"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which NFL team plays its home games at Levi's Stadium?",
+"wrongAnswers": ["Oakland Raiders", "Los Angeles Rams", "San Diego Chargers"],
+"correctAnswer": "San Francisco 49ers"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "In which city is the home arena for the Golden State Warriors located?",
+"wrongAnswers": ["Oakland", "San Jose", "Sacramento"],
+"correctAnswer": "San Francisco"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "What is the name of the San Francisco Giants' home ballpark?",
+"wrongAnswers": ["Candlestick Park", "Dodger Stadium", "Petco Park"],
+"correctAnswer": "Oracle Park"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which NHL team is based in San Jose?",
+"wrongAnswers": ["San Francisco Seals", "California Golden Seals", "Bay Area Blades"],
+"correctAnswer": "San Jose Sharks"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Who is the legendary 49ers quarterback famous for 'The Catch'?",
+"wrongAnswers": ["Steve Young", "Colin Kaepernick", "Brock Purdy"],
+"correctAnswer": "Joe Montana"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which MLB team moved from New York to San Francisco in 1958?",
+"wrongAnswers": ["Dodgers", "Yankees", "Mets"],
+"correctAnswer": "Giants"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "How many World Series titles did the SF Giants win between 2010 and 2014?",
+"wrongAnswers": ["1", "2", "4"],
+"correctAnswer": "3"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "What is the name of the Golden State Warriors' home arena?",
+"wrongAnswers": ["Oracle Arena", "SAP Center", "Cow Palace"],
+"correctAnswer": "Chase Center"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which player holds the record for most career home runs and played for the SF Giants?",
+"wrongAnswers": ["Willie Mays", "Willie McCovey", "Buster Posey"],
+"correctAnswer": "Barry Bonds"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Who was the star 49ers wide receiver known for his route-running and longevity?",
+"wrongAnswers": ["Terrell Owens", "Dwight Clark", "Deebo Samuel"],
+"correctAnswer": "Jerry Rice"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which NBA player is famously known as 'Chef Curry' and plays for Golden State?",
+"wrongAnswers": ["Klay Thompson", "Draymond Green", "Kevin Durant"],
+"correctAnswer": "Stephen Curry"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "What was the name of the 49ers' stadium before they moved to Santa Clara?",
+"wrongAnswers": ["Kezar Stadium", "Monster Park", "3Com Park"],
+"correctAnswer": "Candlestick Park"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "In which sport do the San Jose Earthquakes compete?",
+"wrongAnswers": ["Baseball", "Basketball", "Hockey"],
+"correctAnswer": "Soccer"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Who was the legendary Giants center fielder nicknamed 'The Say Hey Kid'?",
+"wrongAnswers": ["Mel Ott", "Juan Marichal", "Gaylord Perry"],
+"correctAnswer": "Willie Mays"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which 49ers coach pioneered the 'West Coast Offense'?",
+"wrongAnswers": ["George Seifert", "Jim Harbaugh", "Kyle Shanahan"],
+"correctAnswer": "Bill Walsh"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which Warriors player is known as the 'Splash Brother' alongside Steph Curry?",
+"wrongAnswers": ["Andrew Wiggins", "Jordan Poole", "Harrison Barnes"],
+"correctAnswer": "Klay Thompson"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "What color are the primary home jerseys of the San Francisco Giants?",
+"wrongAnswers": ["White", "Grey", "Orange"],
+"correctAnswer": "Cream"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which SF Giants catcher won three World Series and was the 2012 NL MVP?",
+"wrongAnswers": ["Bengie Molina", "Brian Johnson", "Joey Bart"],
+"correctAnswer": "Buster Posey"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which mascot represents the San Francisco 49ers?",
+"wrongAnswers": ["Lou Seal", "Stomper", "Sharkie"],
+"correctAnswer": "Sourdough Sam"
+},
+{
+"topic": "SF Sports Fanatics",
+"question": "Which college football rivalry game is known as 'The Big Game' in the Bay Area?",
+"wrongAnswers": ["USC vs UCLA", "Harvard vs Yale", "Army vs Navy"],
+"correctAnswer": "Stanford vs Cal"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which U2 album features the hits 'With or Without You' and 'Where the Streets Have No Name'?",
+"wrongAnswers": ["War", "Achtung Baby", "Rattle and Hum"],
+"correctAnswer": "The Joshua Tree"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "What is the real name of U2's lead singer, Bono?",
+"wrongAnswers": ["David Evans", "Adam Clayton", "Larry Mullen Jr."],
+"correctAnswer": "Paul Hewson"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "In the song 'Sunday Bloody Sunday', which historical event is being referenced?",
+"wrongAnswers": ["The Easter Rising", "The Great Famine", "The Battle of the Boyne"],
+"correctAnswer": "The Bogside Massacre"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which 1991 album marked a significant shift in U2's sound toward alternative rock and electronic dance music?",
+"wrongAnswers": ["Zooropa", "Pop", "Boy"],
+"correctAnswer": "Achtung Baby"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "The song 'Pride (In the Name of Love)' is a tribute to which historical figure?",
+"wrongAnswers": ["Nelson Mandela", "John Lennon", "Malcolm X"],
+"correctAnswer": "Martin Luther King Jr."
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which U2 guitarist is famous for his signature use of delay and echo effects?",
+"wrongAnswers": ["Slash", "The Wall", "The Bridge"],
+"correctAnswer": "The Edge"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "U2's 2004 hit 'Vertigo' was famously used in commercials for which tech product?",
+"wrongAnswers": ["Microsoft Zune", "Sony Walkman", "BlackBerry"],
+"correctAnswer": "Apple iPod"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "What was the name of U2's debut studio album released in 1980?",
+"wrongAnswers": ["October", "War", "The Unforgettable Fire"],
+"correctAnswer": "Boy"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which song contains the lyric: 'I have climbed highest mountains / I have run through the fields'?",
+"wrongAnswers": ["One", "Bad", "Beautiful Day"],
+"correctAnswer": "I Still Haven't Found What I'm Looking For"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which city was the band U2 formed in during 1976?",
+"wrongAnswers": ["London", "Belfast", "Cork"],
+"correctAnswer": "Dublin"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "The 360° Tour featured a massive 165-ton stage structure nicknamed what?",
+"wrongAnswers": ["The Scorpion", "The Octopus", "The Alien"],
+"correctAnswer": "The Claw"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which track from 'Achtung Baby' was written during a period of tension within the band and saved them from breaking up?",
+"wrongAnswers": ["Mysterious Ways", "The Fly", "Even Better Than the Real Thing"],
+"correctAnswer": "One"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "How many Grammy Awards has U2 won as of 2024?",
+"wrongAnswers": ["12", "15", "30"],
+"correctAnswer": "22"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which U2 song was the lead single for the 'All That You Can't Leave Behind' album?",
+"wrongAnswers": ["Elevation", "Walk On", "Stuck in a Moment"],
+"correctAnswer": "Beautiful Day"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "What is the name of the band's drummer?",
+"wrongAnswers": ["Dave Grohl", "Phil Collins", "Stewart Copeland"],
+"correctAnswer": "Larry Mullen Jr."
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which 1988 project combined live recordings, studio tracks, and a documentary film?",
+"wrongAnswers": ["Under a Blood Red Sky", "Wide Awake in America", "Zoo TV"],
+"correctAnswer": "Rattle and Hum"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "In 2014, U2 released which album for free to over 500 million iTunes users?",
+"wrongAnswers": ["Songs of Experience", "Songs of Surrender", "No Line on the Horizon"],
+"correctAnswer": "Songs of Innocence"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Who produced 'The Joshua Tree' alongside Daniel Lanois?",
+"wrongAnswers": ["George Martin", "Quincy Jones", "Rick Rubin"],
+"correctAnswer": "Brian Eno"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which song was written about the lead singer's mother, who passed away when he was 14?",
+"wrongAnswers": ["Stay", "Sweetest Thing", "Mother"],
+"correctAnswer": "Iris (Hold Me Close)"
+},
+{
+"topic": "U2's Greatest Hits",
+"question": "Which U2 song was featured on the soundtrack of the film 'Batman Forever'?",
+"wrongAnswers": ["Discothèque", "Last Night on Earth", "The Ground Beneath Her Feet"],
+"correctAnswer": "Hold Me, Thrill Me, Kiss Me, Kill Me"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which pop icon is known as the 'Goddess of Pop' and has had a #1 hit in six consecutive decades?",
+"wrongAnswers": ["Madonna", "Cyndi Lauper", "Tina Turner"],
+"correctAnswer": "Cher"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which 2011 Lady Gaga anthem became a global rally cry for the LGBTQ+ community?",
+"wrongAnswers": ["Poker Face", "Bad Romance", "Alejandro"],
+"correctAnswer": "Born This Way"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Who was the first openly gay man to perform at the Oscars?",
+"wrongAnswers": ["Elton John", "George Michael", "Ricky Martin"],
+"correctAnswer": "Adam Lambert"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which British singer-songwriter had a 1980s hit with 'I'm Coming Out' (performed by Diana Ross)?",
+"wrongAnswers": ["Boy George", "Jimmy Somerville", "Marc Almond"],
+"correctAnswer": "Nile Rodgers"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "RuPaul is the most famous figure in which performance art form?",
+"wrongAnswers": ["Vogueing", "Burlesque", "Operetta"],
+"correctAnswer": "Drag"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which artist came out as gay in 1998 following an incident in a Beverly Hills park?",
+"wrongAnswers": ["Freddie Mercury", "Barry Manilow", "Frank Ocean"],
+"correctAnswer": "George Michael"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which legendary 'Queen' frontman was a queer icon despite never formally 'coming out' to the public in a modern sense?",
+"wrongAnswers": ["David Bowie", "Mick Jagger", "Robert Plant"],
+"correctAnswer": "Freddie Mercury"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "What is the name of the historic 1969 uprising in New York that launched the modern LGBTQ+ rights movement?",
+"wrongAnswers": ["The Village Riot", "The Castro Protest", "The Harvey Milk March"],
+"correctAnswer": "Stonewall Inn Riots"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which 'Girls Just Want to Have Fun' singer has been a lifelong advocate for LGBTQ+ rights and founded the True Colors United charity?",
+"wrongAnswers": ["Debbie Harry", "Annie Lennox", "Pat Benatar"],
+"correctAnswer": "Cyndi Lauper"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Lil Nas X made history with which song that became the longest-running #1 in Billboard history?",
+"wrongAnswers": ["Montero", "Industry Baby", "Holiday"],
+"correctAnswer": "Old Town Road"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which pop star’s 2024 'Hit Me Hard and Soft' album explores themes of queer identity and female attraction?",
+"wrongAnswers": ["Taylor Swift", "Dua Lipa", "Olivia Rodrigo"],
+"correctAnswer": "Billie Eilish"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "The TV show 'Pose' focuses on which underground LGBTQ+ subculture from the 1980s?",
+"wrongAnswers": ["The Disco Scene", "The Punk Movement", "The Grunge Wave"],
+"correctAnswer": "Ballroom Culture"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which icon played the character 'The Thin White Duke' and challenged gender norms throughout the 70s?",
+"wrongAnswers": ["Iggy Pop", "Lou Reed", "Alice Cooper"],
+"correctAnswer": "David Bowie"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which artist’s 'Renaissance' album was a love letter to Black queer ballroom and house music history?",
+"wrongAnswers": ["Rihanna", "Janelle Monáe", "Lizzo"],
+"correctAnswer": "Beyoncé"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Who is the 'Princess of Pop' whose conservatorship battle was championed by the #FreeBritney movement?",
+"wrongAnswers": ["Christina Aguilera", "Katy Perry", "Miley Cyrus"],
+"correctAnswer": "Britney Spears"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which Australian artist had a massive queer hit with 'Padam Padam' in 2023?",
+"wrongAnswers": ["Sia", "Troye Sivan", "Iggy Azalea"],
+"correctAnswer": "Kylie Minogue"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "The 'Rainbow Flag' was originally designed by which artist in San Francisco in 1978?",
+"wrongAnswers": ["Harvey Milk", "Cleve Jones", "RuPaul"],
+"correctAnswer": "Gilbert Baker"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which artist is known for the 2024 'Midwest Princess' persona and hits like 'Pink Pony Club'?",
+"wrongAnswers": ["Sabrina Carpenter", "Reneé Rapp", "Ethel Cain"],
+"correctAnswer": "Chappell Roan"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "Which member of One Direction has become a fashion icon for wearing dresses and gender-fluid clothing?",
+"wrongAnswers": ["Zayn Malik", "Niall Horan", "Liam Payne"],
+"correctAnswer": "Harry Styles"
+},
+{
+"topic": "Gay Pop Icons & Culture",
+"question": "The song 'True Colors' became a gay anthem after being released by whom in 1986?",
+"wrongAnswers": ["Madonna", "Whitney Houston", "Janet Jackson"],
+"correctAnswer": "Cyndi Lauper"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Which 1991 self-titled Metallica album is commonly known as what due to its cover art?",
+"wrongAnswers": ["The Snake Album", "The Metal Album", "The Dark Album"],
+"correctAnswer": "The Black Album"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "In the Netflix show 'Stranger Things', which character plays 'Master of Puppets' on a rooftop in the Upside Down?",
+"wrongAnswers": ["Steve Harrington", "Dustin Henderson", "Jim Hopper"],
+"correctAnswer": "Eddie Munson"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Metallica famously sued which file-sharing service in 2000 over copyright infringement?",
+"wrongAnswers": ["Limewire", "Kazaa", "Frostwire"],
+"correctAnswer": "Napster"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Which Metallica song was inspired by the Ernest Hemingway novel of the same name?",
+"wrongAnswers": ["One", "Enter Sandman", "The Unforgiven"],
+"correctAnswer": "For Whom the Bell Tolls"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "What is the name of the 2004 documentary that chronicles the band's internal conflicts and therapy sessions?",
+"wrongAnswers": ["Through the Never", "A Year and a Half", "Live Shit"],
+"correctAnswer": "Some Kind of Monster"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Which member of the band Megadeth was originally the lead guitarist for Metallica?",
+"wrongAnswers": ["Marty Friedman", "Kirk Hammett", "Chris Poland"],
+"correctAnswer": "Dave Mustaine"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Metallica performed a historic concert in 2013 on which continent, making them the first band to play all seven?",
+"wrongAnswers": ["Africa", "Australia", "South America"],
+"correctAnswer": "Antarctica"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "What is the name of Metallica's mascot often seen on early merchandise and album art?",
+"wrongAnswers": ["Vic Rattlehead", "Eddie", "The Reaper"],
+"correctAnswer": "Scary Guy"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "The song 'One' is based on the novel and film 'Johnny Got His Gun' by which author?",
+"wrongAnswers": ["Stephen King", "H.P. Lovecraft", "George Orwell"],
+"correctAnswer": "Dalton Trumbo"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Which song usually opens Metallica's live shows and is a cover of an Ennio Morricone piece?",
+"wrongAnswers": ["The Call of Ktulu", "Orion", "To Live is to Die"],
+"correctAnswer": "The Ecstasy of Gold"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "What was the title of the band's 1983 debut album?",
+"wrongAnswers": ["Ride the Lightning", "Master of Puppets", "Metal Up Your Ass"],
+"correctAnswer": "Kill 'Em All"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Which Metallica album was criticized for its 'tinny' snare drum sound and lack of guitar solos?",
+"wrongAnswers": ["Death Magnetic", "Load", "Hardwired"],
+"correctAnswer": "St. Anger"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "What is the name of James Hetfield's signature guitar brand and model?",
+"wrongAnswers": ["Gibson Flying V", "Fender Stratocaster", "Ibanez RG"],
+"correctAnswer": "ESP Iron Cross"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Which Metallica song was written by James Hetfield as a personal letter to his girlfriend while on tour?",
+"wrongAnswers": ["Fade to Black", "Hero of the Day", "The Memory Remains"],
+"correctAnswer": "Nothing Else Matters"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "In 1999, Metallica recorded a live album with the San Francisco Symphony titled what?",
+"wrongAnswers": ["Live at the Symphony", "Metal Symphony", "Classical Metallica"],
+"correctAnswer": "S&M"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "The song 'Enter Sandman' was used as the entrance music for which legendary MLB closer?",
+"wrongAnswers": ["Trevor Hoffman", "Lee Smith", "Kenley Jansen"],
+"correctAnswer": "Mariano Rivera"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Who has been the bassist for Metallica since 2003?",
+"wrongAnswers": ["Cliff Burton", "Jason Newsted", "Lemmy Kilmister"],
+"correctAnswer": "Robert Trujillo"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "Which 1986 album is often cited by critics as the greatest thrash metal album of all time?",
+"wrongAnswers": ["Reign in Blood", "Among the Living", "Peace Sells"],
+"correctAnswer": "Master of Puppets"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "The title track of the album 'Ride the Lightning' is written from the perspective of a person in what situation?",
+"wrongAnswers": ["On a battlefield", "Lost at sea", "In a insane asylum"],
+"correctAnswer": "On death row"
+},
+{
+"topic": "Metallica Pop Culture",
+"question": "What is the name of the whiskey brand launched by Metallica?",
+"wrongAnswers": ["Fuel", "Sandman", "The Unforgiven"],
+"correctAnswer": "Blackened"
+},
+{
+"topic": "Movie Night Fun",
+"question": "What was the first feature-length animated movie ever released?",
+"wrongAnswers": ["Pinocchio", "Dumbo", "Bambi"],
+"correctAnswer": "Snow White and the Seven Dwarfs"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Which 1994 film features the quote: 'Life is like a box of chocolates'?",
+"wrongAnswers": ["The Shawshank Redemption", "Pulp Fiction", "Goodfellas"],
+"correctAnswer": "Forrest Gump"
+},
+{
+"topic": "Movie Night Fun",
+"question": "In 'The Matrix', what color pill does Neo take to see the truth?",
+"wrongAnswers": ["Blue", "Green", "Yellow"],
+"correctAnswer": "Red"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Who played the character of Jack Sparrow in the 'Pirates of the Caribbean' franchise?",
+"wrongAnswers": ["Orlando Bloom", "Geoffrey Rush", "Javier Bardem"],
+"correctAnswer": "Johnny Depp"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Which movie holds the record for the highest-grossing film of all time (unadjusted for inflation)?",
+"wrongAnswers": ["Avengers: Endgame", "Titanic", "Star Wars: The Force Awakens"],
+"correctAnswer": "Avatar"
+},
+{
+"topic": "Movie Night Fun",
+"question": "What is the name of the kingdom where 'Frozen' takes place?",
+"wrongAnswers": ["Genovia", "Corona", "Atlantica"],
+"correctAnswer": "Arendelle"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Which actor played the Joker in the 2008 film 'The Dark Knight'?",
+"wrongAnswers": ["Jack Nicholson", "Joaquin Phoenix", "Jared Leto"],
+"correctAnswer": "Heath Ledger"
+},
+{
+"topic": "Movie Night Fun",
+"question": "How many Oscars did the movie 'Titanic' win?",
+"wrongAnswers": ["8", "14", "10"],
+"correctAnswer": "11"
+},
+{
+"topic": "Movie Night Fun",
+"question": "In 'The Wizard of Oz', what are the slippers' color in the original book?",
+"wrongAnswers": ["Ruby", "Gold", "Diamond"],
+"correctAnswer": "Silver"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Which director is known for the films 'Inception', 'Interstellar', and 'Oppenheimer'?",
+"wrongAnswers": ["Steven Spielberg", "Quentin Tarantino", "Martin Scorsese"],
+"correctAnswer": "Christopher Nolan"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Which 1975 film is considered the first 'summer blockbuster'?",
+"wrongAnswers": ["Star Wars", "Raiders of the Lost Ark", "Alien"],
+"correctAnswer": "Jaws"
+},
+{
+"topic": "Movie Night Fun",
+"question": "What is the name of the hobbit played by Elijah Wood in 'The Lord of the Rings'?",
+"wrongAnswers": ["Samwise Gamgee", "Peregrin Took", "Meriadoc Brandybuck"],
+"correctAnswer": "Frodo Baggins"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Which movie studio features a logo with a mountain surrounded by stars?",
+"wrongAnswers": ["Universal", "Warner Bros.", "Columbia"],
+"correctAnswer": "Paramount"
+},
+{
+"topic": "Movie Night Fun",
+"question": "In 'Back to the Future', what speed must the DeLorean reach to travel through time?",
+"wrongAnswers": ["55 mph", "100 mph", "120 mph"],
+"correctAnswer": "88 mph"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Who voiced the character of Genie in the 1992 animated film 'Aladdin'?",
+"wrongAnswers": ["Tom Hanks", "Eddie Murphy", "Billy Crystal"],
+"correctAnswer": "Robin Williams"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Which 1990s thriller features the character Hannibal Lecter?",
+"wrongAnswers": ["Se7en", "The Usual Suspects", "Cape Fear"],
+"correctAnswer": "The Silence of the Lambs"
+},
+{
+"topic": "Movie Night Fun",
+"question": "What is the name of the fictional African country in 'Black Panther'?",
+"wrongAnswers": ["Zamunda", "Genosha", "Latveria"],
+"correctAnswer": "Wakanda"
+},
+{
+"topic": "Movie Night Fun",
+"question": "Which actress played 'Katniss Everdeen' in 'The Hunger Games'?",
+"wrongAnswers": ["Emma Watson", "Scarlett Johansson", "Shailene Woodley"],
+"correctAnswer": "Jennifer Lawrence"
+},
+{
+"topic": "Movie Night Fun",
+"question": "What is the highest-grossing R-rated movie of all time?",
+"wrongAnswers": ["Joker", "Oppenheimer", "Deadpool"],
+"correctAnswer": "Deadpool & Wolverine"
+},
+{
+"topic": "Movie Night Fun",
+"question": "In the film 'Toy Story', who is Buzz Lightyear's sworn enemy?",
+"wrongAnswers": ["Lotso", "Sid", "Al McWhiggin"],
+"correctAnswer": "Emperor Zurg"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What does the 'CTR' acronym stand for in email analytics?",
+"wrongAnswers": ["Click Through Rate", "Contact Total Reach", "Customer Track Record"],
+"correctAnswer": "Click-Through Rate"
+},
+{
+"topic": "E-mail Marketing",
+"question": "Which of these is a common practice to avoid being marked as spam?",
+"wrongAnswers": ["Buying email lists", "Using all caps in subjects", "Hiding the unsubscribe link"],
+"correctAnswer": "Using double opt-in"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is the term for a single email sent to a large group of people at once?",
+"wrongAnswers": ["Drip campaign", "Triggered email", "Segmented mail"],
+"correctAnswer": "Broadcast"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is 'A/B testing' in the context of email marketing?",
+"wrongAnswers": ["Testing two different ESPs", "Checking for typos", "Sending to two different countries"],
+"correctAnswer": "Comparing two versions of an email"
+},
+{
+"topic": "E-mail Marketing",
+"question": "The percentage of emails that do not reach the recipient's inbox is known as what?",
+"wrongAnswers": ["Churn rate", "Open rate", "Spam score"],
+"correctAnswer": "Bounce rate"
+},
+{
+"topic": "E-mail Marketing",
+"question": "Which law, passed in 2003, set the first national standards for the sending of commercial email in the US?",
+"wrongAnswers": ["GDPR", "CCPA", "CASL"],
+"correctAnswer": "CAN-SPAM Act"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is the 'Preheader' in an email?",
+"wrongAnswers": ["The company logo", "The 'To' field", "The sender's name"],
+"correctAnswer": "The short summary text after the subject line"
+},
+{
+"topic": "E-mail Marketing",
+"question": "Which of these is considered a 'Hard Bounce'?",
+"wrongAnswers": ["Full inbox", "Server timeout", "Temporary technical error"],
+"correctAnswer": "Invalid email address"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is 'Segmentation'?",
+"wrongAnswers": ["Splitting an email into parts", "Sending emails at different times", "Designing for mobile"],
+"correctAnswer": "Dividing a list into targeted groups"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What does 'CTA' stand for?",
+"wrongAnswers": ["Click To Access", "Contact Target Audience", "Customer Transaction Area"],
+"correctAnswer": "Call to Action"
+},
+{
+"topic": "E-mail Marketing",
+"question": "Which metric tells you how many recipients clicked a link relative to the number of emails delivered?",
+"wrongAnswers": ["Open rate", "Conversion rate", "CTOR"],
+"correctAnswer": "Click rate"
+},
+{
+"topic": "E-mail Marketing",
+"question": "A 'Drip Campaign' is also known as what?",
+"wrongAnswers": ["Spamming", "Cold emailing", "Newsletter"],
+"correctAnswer": "Automated email sequence"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is a 'Spam Trap'?",
+"wrongAnswers": ["A folder for junk mail", "An email filter", "A captcha on a form"],
+"correctAnswer": "An email address used to find spammers"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is the ideal maximum character count for an email subject line to ensure it's visible on mobile devices?",
+"wrongAnswers": ["20 characters", "100 characters", "150 characters"],
+"correctAnswer": "60 characters"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is 'Personalization' in email marketing?",
+"wrongAnswers": ["Writing in cursive", "Attaching a photo", "Using a funny tone"],
+"correctAnswer": "Using subscriber data to tailor content"
+},
+{
+"topic": "E-mail Marketing",
+"question": "Which technical protocol helps verify that an email was actually sent by the domain it claims to be from?",
+"wrongAnswers": ["HTTP", "SSL", "FTP"],
+"correctAnswer": "DKIM"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is the 'Open Rate'?",
+"wrongAnswers": ["Emails delivered / Opens", "Emails sent / Opens", "Clicks / Opens"],
+"correctAnswer": "Emails opened / Emails delivered"
+},
+{
+"topic": "E-mail Marketing",
+"question": "Which of these is a major Email Service Provider (ESP)?",
+"wrongAnswers": ["Slack", "Trello", "Shopify"],
+"correctAnswer": "Mailchimp"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is a 'Clean List'?",
+"wrongAnswers": ["A list of celebrities", "A list of new subscribers", "A list with no images"],
+"correctAnswer": "A list with inactive or invalid emails removed"
+},
+{
+"topic": "E-mail Marketing",
+"question": "What is 'Lead Nurturing'?",
+"wrongAnswers": ["Cold calling", "Hard selling", "Buying ads"],
+"correctAnswer": "Building relationships with prospects via email"
+},
+{
+"topic": "All About Wrestling",
+"question": "Who is known as 'The Immortal' and was the face of the 1980s wrestling boom?",
+"wrongAnswers": ["Ric Flair", "The Rock", "John Cena"],
+"correctAnswer": "Hulk Hogan"
+},
+{
+"topic": "All About Wrestling",
+"question": "Which wrestling event is known as 'The Grandest Stage of Them All'?",
+"wrongAnswers": ["SummerSlam", "Royal Rumble", "Survivor Series"],
+"correctAnswer": "WrestleMania"
+},
+{
+"topic": "All About Wrestling",
+"question": "Who ended The Undertaker's legendary undefeated streak at WrestleMania?",
+"wrongAnswers": ["Roman Reigns", "Triple H", "Shawn Michaels"],
+"correctAnswer": "Brock Lesnar"
+},
+{
+"topic": "All About Wrestling",
+"question": "What is the real name of the wrestler known as 'The Rock'?",
+"wrongAnswers": ["Steve Austin", "John Cena", "Dave Bautista"],
+"correctAnswer": "Dwayne Johnson"
+},
+{
+"topic": "All About Wrestling",
+"question": "Which wrestler is famous for the catchphrase 'Woo!' and his elaborate robes?",
+"wrongAnswers": ["Randy Savage", "Dusty Rhodes", "Bret Hart"],
+"correctAnswer": "Ric Flair"
+},
+{
+"topic": "All About Wrestling",
+"question": "Which wrestling promotion was the primary rival to WWE during the 'Monday Night Wars'?",
+"wrongAnswers": ["TNA", "ECW", "ROH"],
+"correctAnswer": "WCW"
+},
+{
+"topic": "All About Wrestling",
+"question": "Who is the 'Texas Rattlesnake' known for his rivalry with Vince McMahon?",
+"wrongAnswers": ["The Undertaker", "Kane", "Mankind"],
+"correctAnswer": "Stone Cold Steve Austin"
+},
+{
+"topic": "All About Wrestling",
+"question": "What is the name of the finishing move used by John Cena?",
+"wrongAnswers": ["The Stunner", "The Pedigree", "The Chokeslam"],
+"correctAnswer": "Attitude Adjustment"
+},
+{
+"topic": "All About Wrestling",
+"question": "Which wrestler made his debut at Survivor Series 1990 and stayed with WWE for 30 years?",
+"wrongAnswers": ["Triple H", "Shawn Michaels", "Chris Jericho"],
+"correctAnswer": "The Undertaker"
+},
+{
+"topic": "All About Wrestling",
+"question": "Which female wrestler is known as 'The Man'?",
+"wrongAnswers": ["Charlotte Flair", "Sasha Banks", "Bayley"],
+"correctAnswer": "Becky Lynch"
+},
+{
+"topic": "All About Wrestling",
+"question": "What does the term 'Kayfabe' refer to in professional wrestling?",
+"wrongAnswers": ["The ring floor", "A type of submission", "The script itself"],
+"correctAnswer": "The portrayal of staged events as real"
+},
+{
+"topic": "All About Wrestling",
+"question": "Who was the leader of the 'nWo' (New World Order) alongside Kevin Nash and Scott Hall?",
+"wrongAnswers": ["Sting", "Randy Savage", "Lex Luger"],
+"correctAnswer": "Hollywood Hogan"
+},
+{
+"topic": "All About Wrestling",
+"question": "Which wrestler is known as 'The Heartbreak Kid'?",
+"wrongAnswers": ["Bret Hart", "Edge", "Christian"],
+"correctAnswer": "Shawn Michaels"
+},
+{
+"topic": "All About Wrestling",
+"question": "What is the name of the yearly match where 30 wrestlers compete to be the last one in the ring?",
+"wrongAnswers": ["Elimination Chamber", "Hell in a Cell", "Money in the Bank"],
+"correctAnswer": "Royal Rumble"
+},
+{
+"topic": "All About Wrestling",
+"question": "Which wrestler uses the 'RKO' as a finishing move?",
+"wrongAnswers": ["Seth Rollins", "AJ Styles", "Cody Rhodes"],
+"correctAnswer": "Randy Orton"
+},
+{
+"topic": "All About Wrestling",
+"question": "Who is the current 'Tribal Chief' and long-reigning champion in WWE (as of early 2024)?",
+"wrongAnswers": ["Brock Lesnar", "The Rock", "Logan Paul"],
+"correctAnswer": "Roman Reigns"
+},
+{
+"topic": "All About Wrestling",
+"question": "Which wrestling legend was known as 'The Macho Man'?",
+"wrongAnswers": ["Hulk Hogan", "Jake Roberts", "Roddy Piper"],
+"correctAnswer": "Randy Savage"
+},
+{
+"topic": "All About Wrestling",
+"question": "What is the name of the AEW (All Elite Wrestling) show that airs on Wednesday nights?",
+"wrongAnswers": ["Rampage", "Collision", "Impact"],
+"correctAnswer": "Dynamite"
+},
+{
+"topic": "All About Wrestling",
+"question": "Which wrestler is known for 'The 619' and his Lucha Libre style?",
+"wrongAnswers": ["Eddie Guerrero", "Kalisto", "Sin Cara"],
+"correctAnswer": "Rey Mysterio"
+},
+{
+"topic": "All About Wrestling",
+"question": "Who is 'The Game' and 'The Cerebral Assassin'?",
+"wrongAnswers": ["The Undertaker", "The Rock", "Stone Cold"],
+"correctAnswer": "Triple H"
+},
+{
+"topic": "Geography Fun",
+"question": "What is the smallest country in the world by land area?",
+"wrongAnswers": ["Monaco", "San Marino", "Liechtenstein"],
+"correctAnswer": "Vatican City"
+},
+{
+"topic": "Geography Fun",
+"question": "Which river is generally considered the longest in the world?",
+"wrongAnswers": ["Amazon", "Yangtze", "Mississippi"],
+"correctAnswer": "Nile"
+},
+{
+"topic": "Geography Fun",
+"question": "Mount Kilimanjaro is the highest point on which continent?",
+"wrongAnswers": ["Asia", "South America", "Europe"],
+"correctAnswer": "Africa"
+},
+{
+"topic": "Geography Fun",
+"question": "Which city is located on two continents?",
+"wrongAnswers": ["Cairo", "Moscow", "Panama City"],
+"correctAnswer": "Istanbul"
+},
+{
+"topic": "Geography Fun",
+"question": "What is the capital city of Australia?",
+"wrongAnswers": ["Sydney", "Melbourne", "Perth"],
+"correctAnswer": "Canberra"
+},
+{
+"topic": "Geography Fun",
+"question": "Which of these countries does NOT have a coastline on the Mediterranean Sea?",
+"wrongAnswers": ["Egypt", "Turkey", "Italy"],
+"correctAnswer": "Portugal"
+},
+{
+"topic": "Geography Fun",
+"question": "The Gobi Desert is primarily located in which two countries?",
+"wrongAnswers": ["India and Pakistan", "Saudi Arabia and Iraq", "Egypt and Sudan"],
+"correctAnswer": "China and Mongolia"
+},
+{
+"topic": "Geography Fun",
+"question": "Which US state is the largest by land area?",
+"wrongAnswers": ["Texas", "California", "Montana"],
+"correctAnswer": "Alaska"
+},
+{
+"topic": "Geography Fun",
+"question": "In which country would you find the ancient city of Machu Picchu?",
+"wrongAnswers": ["Chile", "Bolivia", "Ecuador"],
+"correctAnswer": "Peru"
+},
+{
+"topic": "Geography Fun",
+"question": "What is the deepest point in the world's oceans?",
+"wrongAnswers": ["Tonga Trench", "Java Trench", "Puerto Rico Trench"],
+"correctAnswer": "Mariana Trench"
+},
+{
+"topic": "Geography Fun",
+"question": "Which country has the most natural lakes in the world?",
+"wrongAnswers": ["USA", "Russia", "Brazil"],
+"correctAnswer": "Canada"
+},
+{
+"topic": "Geography Fun",
+"question": "Which mountain range separates Europe from Asia?",
+"wrongAnswers": ["Alps", "Himalayas", "Andes"],
+"correctAnswer": "Ural Mountains"
+},
+{
+"topic": "Geography Fun",
+"question": "What is the most populous country in the world as of 2024?",
+"wrongAnswers": ["China", "USA", "Indonesia"],
+"correctAnswer": "India"
+},
+{
+"topic": "Geography Fun",
+"question": "Which African country was formerly known as Abyssinia?",
+"wrongAnswers": ["Ghana", "Nigeria", "Kenya"],
+"correctAnswer": "Ethiopia"
+},
+{
+"topic": "Geography Fun",
+"question": "What is the official language of Brazil?",
+"wrongAnswers": ["Spanish", "French", "English"],
+"correctAnswer": "Portuguese"
+},
+{
+"topic": "Geography Fun",
+"question": "Which European country is divided into 'Cantons'?",
+"wrongAnswers": ["Austria", "Belgium", "Luxembourg"],
+"correctAnswer": "Switzerland"
+},
+{
+"topic": "Geography Fun",
+"question": "The 'Ring of Fire' is a major area in the basin of which ocean?",
+"wrongAnswers": ["Atlantic", "Indian", "Arctic"],
+"correctAnswer": "Pacific"
+},
+{
+"topic": "Geography Fun",
+"question": "Which city is the capital of Japan?",
+"wrongAnswers": ["Osaka", "Kyoto", "Nagoya"],
+"correctAnswer": "Tokyo"
+},
+{
+"topic": "Geography Fun",
+"question": "The Dead Sea is located between which two countries?",
+"wrongAnswers": ["Egypt and Sudan", "Iraq and Iran", "Syria and Lebanon"],
+"correctAnswer": "Jordan and Israel"
+},
+{
+"topic": "Geography Fun",
+"question": "Which country is the largest in South America?",
+"wrongAnswers": ["Argentina", "Colombia", "Peru"],
+"correctAnswer": "Brazil"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the most abundant gas in Earth's atmosphere?",
+"wrongAnswers": ["Oxygen", "Carbon Dioxide", "Argon"],
+"correctAnswer": "Nitrogen"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "Which planet in our solar system is known as the 'Red Planet'?",
+"wrongAnswers": ["Venus", "Jupiter", "Saturn"],
+"correctAnswer": "Mars"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the center of an atom called?",
+"wrongAnswers": ["Electron", "Proton", "Neutron"],
+"correctAnswer": "Nucleus"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "Which scientist proposed the theory of general relativity?",
+"wrongAnswers": ["Isaac Newton", "Galileo Galilei", "Nikola Tesla"],
+"correctAnswer": "Albert Einstein"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the hardest natural substance on Earth?",
+"wrongAnswers": ["Gold", "Iron", "Quartz"],
+"correctAnswer": "Diamond"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "How many bones are in the adult human body?",
+"wrongAnswers": ["150", "300", "250"],
+"correctAnswer": "206"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the speed of light in a vacuum approximately?",
+"wrongAnswers": ["150,000 km/s", "500,000 km/s", "1,000,000 km/s"],
+"correctAnswer": "300,000 km/s"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "Which element has the chemical symbol 'O'?",
+"wrongAnswers": ["Gold", "Osmium", "Iron"],
+"correctAnswer": "Oxygen"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the study of mushrooms called?",
+"wrongAnswers": ["Botany", "Zoology", "Entomology"],
+"correctAnswer": "Mycology"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "Which organ in the human body produces insulin?",
+"wrongAnswers": ["Liver", "Heart", "Kidney"],
+"correctAnswer": "Pancreas"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What force pulls objects toward the center of the Earth?",
+"wrongAnswers": ["Magnetism", "Friction", "Inertia"],
+"correctAnswer": "Gravity"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the boiling point of water in Celsius at sea level?",
+"wrongAnswers": ["50°C", "150°C", "212°C"],
+"correctAnswer": "100°C"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "Which planet is the largest in our solar system?",
+"wrongAnswers": ["Saturn", "Neptune", "Earth"],
+"correctAnswer": "Jupiter"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the process by which plants make their own food?",
+"wrongAnswers": ["Respiration", "Digestion", "Transpiration"],
+"correctAnswer": "Photosynthesis"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "Which blood type is known as the universal donor?",
+"wrongAnswers": ["A+", "AB-", "B+"],
+"correctAnswer": "O-"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the name for a skyscraper-sized wave caused by an underwater earthquake?",
+"wrongAnswers": ["Cyclone", "Typhoon", "Hurricane"],
+"correctAnswer": "Tsunami"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "Which part of the brain is primarily responsible for balance and coordination?",
+"wrongAnswers": ["Cerebrum", "Brainstem", "Thalamus"],
+"correctAnswer": "Cerebellum"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the chemical formula for table salt?",
+"wrongAnswers": ["H2O", "CO2", "KCl"],
+"correctAnswer": "NaCl"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "Which animal is the largest mammal in the world?",
+"wrongAnswers": ["African Elephant", "Giraffe", "Colossal Squid"],
+"correctAnswer": "Blue Whale"
+},
+{
+"topic": "Cool Science Stuff",
+"question": "What is the primary source of energy for the Earth?",
+"wrongAnswers": ["Moon", "Wind", "Nuclear Fission"],
+"correctAnswer": "Sun"
+},
+{
+"topic": "Spain fun facts",
+"question": "What is the capital city of Spain?",
+"wrongAnswers": ["Barcelona", "Seville", "Valencia"],
+"correctAnswer": "Madrid"
+},
+{
+"topic": "Spain fun facts",
+"question": "Which Spanish festival involves a massive tomato fight in the town of Buñol?",
+"wrongAnswers": ["Running of the Bulls", "Fallas", "Feria de Abril"],
+"correctAnswer": "La Tomatina"
+},
+{
+"topic": "Spain fun facts",
+"question": "What is the name of the traditional Spanish rice dish often flavored with saffron?",
+"wrongAnswers": ["Gazpacho", "Tortilla", "Tapas"],
+"correctAnswer": "Paella"
+},
+{
+"topic": "Spain fun facts",
+"question": "Which famous architect designed the Sagrada Família in Barcelona?",
+"wrongAnswers": ["Pablo Picasso", "Salvador Dalí", "Diego Velázquez"],
+"correctAnswer": "Antoni Gaudí"
+},
+{
+"topic": "Spain fun facts",
+"question": "Spain is the world's leading producer of which agricultural product?",
+"wrongAnswers": ["Wheat", "Coffee", "Tea"],
+"correctAnswer": "Olive Oil"
+},
+{
+"topic": "Spain fun facts",
+"question": "Which dance and musical style originated in the Andalusia region of Spain?",
+"wrongAnswers": ["Salsa", "Tango", "Samba"],
+"correctAnswer": "Flamenco"
+},
+{
+"topic": "Spain fun facts",
+"question": "What is the currency used in Spain?",
+"wrongAnswers": ["Peseta", "Pound", "Franc"],
+"correctAnswer": "Euro"
+},
+{
+"topic": "Spain fun facts",
+"question": "How many official languages does Spain have (including co-official ones)?",
+"wrongAnswers": ["1", "3", "7"],
+"correctAnswer": "5"
+},
+{
+"topic": "Spain fun facts",
+"question": "Which Spanish artist is famous for co-founding the Cubist movement?",
+"wrongAnswers": ["Salvador Dalí", "Francisco Goya", "Joan Miró"],
+"correctAnswer": "Pablo Picasso"
+},
+{
+"topic": "Spain fun facts",
+"question": "In which city does the 'Running of the Bulls' (San Fermín) take place?",
+"wrongAnswers": ["Madrid", "Bilbao", "Granada"],
+"correctAnswer": "Pamplona"
+},
+{
+"topic": "Spain fun facts",
+"question": "What is the most popular sport in Spain?",
+"wrongAnswers": ["Tennis", "Basketball", "Bullfighting"],
+"correctAnswer": "Football"
+},
+{
+"topic": "Spain fun facts",
+"question": "Which mountain range separates Spain from France?",
+"wrongAnswers": ["Alps", "Appalachians", "Sierra Nevada"],
+"correctAnswer": "Pyrenees"
+},
+{
+"topic": "Spain fun facts",
+"question": "What is a 'Siesta'?",
+"wrongAnswers": ["A type of wine", "A dance", "A snack"],
+"correctAnswer": "An afternoon nap"
+},
+{
+"topic": "Spain fun facts",
+"question": "Which Spanish island group is located in the Atlantic Ocean off the coast of Africa?",
+"wrongAnswers": ["Balearic Islands", "Cyclades", "Azores"],
+"correctAnswer": "Canary Islands"
+},
+{
+"topic": "Spain fun facts",
+"question": "What is the name of the Spanish cold tomato soup?",
+"wrongAnswers": ["Minestrone", "Borscht", "Chowder"],
+"correctAnswer": "Gazpacho"
+},
+{
+"topic": "Spain fun facts",
+"question": "Spain shares the Iberian Peninsula with which other country?",
+"wrongAnswers": ["Italy", "France", "Morocco"],
+"correctAnswer": "Portugal"
+},
+{
+"topic": "Spain fun facts",
+"question": "What is the royal family's official residence in Madrid?",
+"wrongAnswers": ["The Prado", "El Escorial", "The Alhambra"],
+"correctAnswer": "Palacio Real"
+},
+{
+"topic": "Spain fun facts",
+"question": "Which Spanish city hosted the Summer Olympics in 1992?",
+"wrongAnswers": ["Madrid", "Seville", "Valencia"],
+"correctAnswer": "Barcelona"
+},
+{
+"topic": "Spain fun facts",
+"question": "What is the national flower of Spain?",
+"wrongAnswers": ["Rose", "Lily", "Sunflower"],
+"correctAnswer": "Red Carnation"
+},
+{
+"topic": "Spain fun facts",
+"question": "Don Quixote was written by which famous Spanish author?",
+"wrongAnswers": ["Federico García Lorca", "Carlos Ruiz Zafón", "Gabriel García Márquez"],
+"correctAnswer": "Miguel de Cervantes"
+},
+{
+"topic": "Granada Getaway",
+"question": "What is the name of the massive Moorish palace and fortress complex in Granada?",
+"wrongAnswers": ["The Alcazar", "The Giralda", "The Mezquita"],
+"correctAnswer": "The Alhambra"
+},
+{
+"topic": "Granada Getaway",
+"question": "Granada is located at the foot of which mountain range?",
+"wrongAnswers": ["The Pyrenees", "The Alps", "The Andes"],
+"correctAnswer": "Sierra Nevada"
+},
+{
+"topic": "Granada Getaway",
+"question": "Which historic district of Granada is famous for its narrow winding streets and Moorish architecture?",
+"wrongAnswers": ["Realejo", "Chana", "Zaidin"],
+"correctAnswer": "Albaicín"
+},
+{
+"topic": "Granada Getaway",
+"question": "The neighborhood of Sacromonte is famous for its traditional dwellings called what?",
+"wrongAnswers": ["Cabins", "Tents", "Igloos"],
+"correctAnswer": "Caves"
+},
+{
+"topic": "Granada Getaway",
+"question": "In Granada, what is unique about the tradition of serving Tapas?",
+"wrongAnswers": ["They are only served at breakfast", "They must contain fish", "They are very expensive"],
+"correctAnswer": "They are often served free with a drink"
+},
+{
+"topic": "Granada Getaway",
+"question": "Who are the 'Catholic Monarchs' buried in Granada's Royal Chapel?",
+"wrongAnswers": ["Charles V and Philip II", "Juan Carlos and Sofia", "Alfonso and Victoria"],
+"correctAnswer": "Isabella and Ferdinand"
+},
+{
+"topic": "Granada Getaway",
+"question": "What does the name 'Granada' mean in Spanish?",
+"wrongAnswers": ["Great", "Grain", "Green"],
+"correctAnswer": "Pomegranate"
+},
+{
+"topic": "Granada Getaway",
+"question": "Which famous palace garden in the Alhambra complex means 'Architect's Garden'?",
+"wrongAnswers": ["The Court of Lions", "The Hall of Ambassadors", "The Partal"],
+"correctAnswer": "Generalife"
+},
+{
+"topic": "Granada Getaway",
+"question": "Granada was the last stronghold of which empire in the Iberian Peninsula until 1492?",
+"wrongAnswers": ["Roman", "Visigoth", "Byzantine"],
+"correctAnswer": "Moorish"
+},
+{
+"topic": "Granada Getaway",
+"question": "What is the name of the Renaissance cathedral in the center of the city?",
+"wrongAnswers": ["Sagrada Familia", "Notre Dame", "St. Paul's"],
+"correctAnswer": "Granada Cathedral"
+},
+{
+"topic": "Granada Getaway",
+"question": "The 'Mirador de San Nicolás' offers the most famous view of what?",
+"wrongAnswers": ["The Mediterranean Sea", "The Royal Palace", "The Cathedral"],
+"correctAnswer": "The Alhambra"
+},
+{
+"topic": "Granada Getaway",
+"question": "Which style of dance is the Sacromonte district particularly famous for?",
+"wrongAnswers": ["Salsa", "Zumba", "Ballet"],
+"correctAnswer": "Zambra"
+},
+{
+"topic": "Granada Getaway",
+"question": "What is the name of the river that flows through the city of Granada?",
+"wrongAnswers": ["Ebro", "Tagus", "Guadalquivir"],
+"correctAnswer": "Darro"
+},
+{
+"topic": "Granada Getaway",
+"question": "Which famous 20th-century Spanish poet and playwright was born in the province of Granada?",
+"wrongAnswers": ["Pablo Neruda", "Jorge Luis Borges", "Octavio Paz"],
+"correctAnswer": "Federico García Lorca"
+},
+{
+"topic": "Granada Getaway",
+"question": "The Alhambra's 'Court of the Lions' is famous for its fountain held up by how many stone lions?",
+"wrongAnswers": ["4", "8", "10"],
+"correctAnswer": "12"
+},
+{
+"topic": "Granada Getaway",
+"question": "In which autonomous community of Spain is Granada located?",
+"wrongAnswers": ["Catalonia", "Madrid", "Galicia"],
+"correctAnswer": "Andalusia"
+},
+{
+"topic": "Granada Getaway",
+"question": "Which square is considered the heart of the city's modern center?",
+"wrongAnswers": ["Plaza Mayor", "Plaza del Sol", "Plaza de España"],
+"correctAnswer": "Plaza Nueva"
+},
+{
+"topic": "Granada Getaway",
+"question": "What is the name of the narrow street famous for tea houses (teterías) in the Moorish style?",
+"wrongAnswers": ["Calle Mayor", "Gran Via", "Calle Real"],
+"correctAnswer": "Calle Calderería Nueva"
+},
+{
+"topic": "Granada Getaway",
+"question": "The Alcaicería was originally a market for what luxury good?",
+"wrongAnswers": ["Gold", "Spices", "Wine"],
+"correctAnswer": "Silk"
+},
+{
+"topic": "Granada Getaway",
+"question": "Which treaty marked the end of the Granada War and the surrender of the city?",
+"wrongAnswers": ["Treaty of Tordesillas", "Treaty of Versailles", "Treaty of Madrid"],
+"correctAnswer": "Treaty of Granada"
+}
+,
+
+{
+"topic": "Liverpool FC Forever!",
+"question": "What is the name of Liverpool FC's home stadium?",
+"wrongAnswers": ["Old Trafford", "Goodison Park", "Etihad Stadium"],
+"correctAnswer": "Anfield"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Which anthem is sung by fans before every home game?",
+"wrongAnswers": ["Blue Moon", "Glory Glory", "Forever Blowing Bubbles"],
+"correctAnswer": "You'll Never Walk Alone"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Who was the manager when Liverpool won the Champions League in 2019?",
+"wrongAnswers": ["Rafael Benítez", "Brendan Rodgers", "Kenny Dalglish"],
+"correctAnswer": "Jürgen Klopp"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Which player holds the record for the most goals scored for Liverpool?",
+"wrongAnswers": ["Steven Gerrard", "Mohamed Salah", "Robbie Fowler"],
+"correctAnswer": "Ian Rush"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "In which city was Liverpool FC founded in 1892?",
+"wrongAnswers": ["Manchester", "London", "Birmingham"],
+"correctAnswer": "Liverpool"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "What is the nickname of the famous stand behind the goal at Anfield?",
+"wrongAnswers": ["The Stretford End", "The Shelf", "The North Stand"],
+"correctAnswer": "The Spion Kop"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Which bird is featured on the Liverpool FC club crest?",
+"wrongAnswers": ["Eagle", "Phoenix", "Robin"],
+"correctAnswer": "Liver Bird"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Who was the captain during the 2005 'Miracle of Istanbul'?",
+"wrongAnswers": ["Jamie Carragher", "Xabi Alonso", "Sami Hyypiä"],
+"correctAnswer": "Steven Gerrard"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "How many European Cup/Champions League titles had Liverpool won as of 2024?",
+"wrongAnswers": ["3", "4", "5"],
+"correctAnswer": "6"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Who was the legendary manager credited with the 'Boot Room' and modernizing the club?",
+"wrongAnswers": ["Bob Paisley", "Joe Fagan", "Gerard Houllier"],
+"correctAnswer": "Bill Shankly"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Which club is Liverpool's opponent in the 'Merseyside Derby'?",
+"wrongAnswers": ["Manchester United", "Chelsea", "Arsenal"],
+"correctAnswer": "Everton"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "What is the primary color of Liverpool's home kit?",
+"wrongAnswers": ["Blue", "Yellow", "White"],
+"correctAnswer": "Red"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Which Egyptian forward joined Liverpool in 2017 and broke the 38-game season goal record?",
+"wrongAnswers": ["Sadio Mané", "Roberto Firmino", "Luis Díaz"],
+"correctAnswer": "Mohamed Salah"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Who holds the record for most appearances for Liverpool FC?",
+"wrongAnswers": ["Steven Gerrard", "Jamie Carragher", "Phil Neal"],
+"correctAnswer": "Ian Callaghan"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "In 1990, Liverpool won their 18th league title; how many years did they wait for their 19th?",
+"wrongAnswers": ["10 years", "20 years", "25 years"],
+"correctAnswer": "30 years"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Which manager won three European Cups in nine seasons with Liverpool?",
+"wrongAnswers": ["Bill Shankly", "Kenny Dalglish", "Jürgen Klopp"],
+"correctAnswer": "Bob Paisley"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "What is the name of the stadium where Liverpool won the 2005 Champions League final?",
+"wrongAnswers": ["Wembley", "Camp Nou", "Stade de France"],
+"correctAnswer": "Atatürk Olympic Stadium"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Which striker was famously nicknamed 'God' by the Liverpool fans?",
+"wrongAnswers": ["Michael Owen", "Fernando Torres", "Luis Suárez"],
+"correctAnswer": "Robbie Fowler"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "What is the name of Liverpool's modern training facility opened in 2020?",
+"wrongAnswers": ["Melwood", "Carrington", "Cobham"],
+"correctAnswer": "AXA Training Centre"
+},
+{
+"topic": "Liverpool FC Forever!",
+"question": "Which Brazilian goalkeeper signed with Liverpool in 2018 for a then-record fee?",
+"wrongAnswers": ["Ederson", "Neto", "Dida"],
+"correctAnswer": "Alisson Becker"
+},
+{
+"topic": "Big Bear, CA",
+"question": "In which California mountain range is Big Bear Lake located?",
+"wrongAnswers": ["Sierra Nevada", "Santa Cruz Mountains", "Cascade Range"],
+"correctAnswer": "San Bernardino Mountains"
+},
+{
+"topic": "Big Bear, CA",
+"question": "What is the approximate elevation of the city of Big Bear Lake?",
+"wrongAnswers": ["4,750 feet", "10,000 feet", "2,500 feet"],
+"correctAnswer": "6,750 feet"
+},
+{
+"topic": "Big Bear, CA",
+"question": "Which ski resort is located on the south side of Big Bear Lake?",
+"wrongAnswers": ["Mammoth Mountain", "Mount Waterman", "Heavenly"],
+"correctAnswer": "Snow Summit"
+},
+{
+"topic": "Big Bear, CA",
+"question": "Big Bear Lake is what type of lake?",
+"wrongAnswers": ["Glacial", "Volcanic", "Endorheic"],
+"correctAnswer": "Man-made"
+},
+{
+"topic": "Big Bear, CA",
+"question": "Which celestial observatory is located on the north shore of Big Bear Lake?",
+"wrongAnswers": ["Palomar", "Griffith", "Lick"],
+"correctAnswer": "Big Bear Solar Observatory"
+},
+{
+"topic": "Big Bear, CA",
+"question": "What is the main highway used to reach Big Bear from the San Bernardino valley?",
+"wrongAnswers": ["Highway 1", "Highway 101", "Highway 395"],
+"correctAnswer": "Highway 18"
+},
+{
+"topic": "Big Bear, CA",
+"question": "In which county is Big Bear Lake situated?",
+"wrongAnswers": ["Riverside", "Los Angeles", "Orange"],
+"correctAnswer": "San Bernardino"
+},
+{
+"topic": "Big Bear, CA",
+"question": "What is the name of the sister ski resort to Snow Summit in Big Bear?",
+"wrongAnswers": ["Bear Hollow", "Ice Peak", "Alpine Slide"],
+"correctAnswer": "Bear Mountain"
+},
+{
+"topic": "Big Bear, CA",
+"question": "Which large dam creates Big Bear Lake?",
+"wrongAnswers": ["Hoover Dam", "Shasta Dam", "Oroville Dam"],
+"correctAnswer": "Bear Valley Dam"
+},
+{
+"topic": "Big Bear, CA",
+"question": "What is the name of the commercial shopping and dining district in Big Bear Lake?",
+"wrongAnswers": ["The Plaza", "Old Town", "The Boardwalk"],
+"correctAnswer": "The Village"
+},
+{
+"topic": "Big Bear, CA",
+"question": "During which decade was the first dam built to create a reservoir in Big Bear Valley?",
+"wrongAnswers": ["1840s", "1920s", "1950s"],
+"correctAnswer": "1880s"
+},
+{
+"topic": "Big Bear, CA",
+"question": "Which recreational activity is the Stanfield Marsh area known for?",
+"wrongAnswers": ["Downhill skiing", "Jet skiing", "Rock climbing"],
+"correctAnswer": "Bird watching"
+},
+{
+"topic": "Big Bear, CA",
+"question": "What is the name of the zoo in Big Bear that rehabilitates injured alpine wildlife?",
+"wrongAnswers": ["San Diego Zoo", "Los Angeles Zoo", "Santa Barbara Zoo"],
+"correctAnswer": "Big Bear Alpine Zoo"
+},
+{
+"topic": "Big Bear, CA",
+"question": "Which peak is the highest in the San Bernardino Mountains near Big Bear?",
+"wrongAnswers": ["Mount Whitney", "Mount Baldy", "Mount Shasta"],
+"correctAnswer": "San Gorgonio Wilderness"
+},
+{
+"topic": "Big Bear, CA",
+"question": "What is the name of the popular hiking trail that offers views of the lake from the south?",
+"wrongAnswers": ["The High Line", "Mist Trail", "Skyline Trail"],
+"correctAnswer": "Castle Rock Trail"
+},
+{
+"topic": "Big Bear, CA",
+"question": "Which gold rush brought miners to the Big Bear area in the 1860s?",
+"wrongAnswers": ["Sutter's Mill", "Klondike", "Bodine"],
+"correctAnswer": "Holcomb Valley"
+},
+{
+"topic": "Big Bear, CA",
+"question": "How many miles long is Big Bear Lake approximately?",
+"wrongAnswers": ["2 miles", "20 miles", "50 miles"],
+"correctAnswer": "7 miles"
+},
+{
+"topic": "Big Bear, CA",
+"question": "What kind of trees are most prevalent in the Big Bear forest?",
+"wrongAnswers": ["Redwood", "Palm", "Maple"],
+"correctAnswer": "Pine"
+},
+{
+"topic": "Big Bear, CA",
+"question": "Which annual event in Big Bear is one of the largest of its kind in Southern California?",
+"wrongAnswers": ["Coachella", "Comic-Con", "Stagecoach"],
+"correctAnswer": "Oktoberfest"
+},
+{
+"topic": "Big Bear, CA",
+"question": "What is the name of the valley located just east of Big Bear Lake?",
+"wrongAnswers": ["Death Valley", "Simi Valley", "Napa Valley"],
+"correctAnswer": "Baldwin Lake"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which borough is home to the Empire State Building?",
+"wrongAnswers": ["Brooklyn", "Queens", "The Bronx"],
+"correctAnswer": "Manhattan"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "What is the largest park in Manhattan?",
+"wrongAnswers": ["Prospect Park", "Flushing Meadows", "Battery Park"],
+"correctAnswer": "Central Park"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "How many boroughs make up New York City?",
+"wrongAnswers": ["3", "4", "6"],
+"correctAnswer": "5"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which bridge connects Manhattan and Brooklyn?",
+"wrongAnswers": ["Golden Gate", "George Washington", "Verrazzano"],
+"correctAnswer": "Brooklyn Bridge"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "What is the theater district in Manhattan commonly called?",
+"wrongAnswers": ["West End", "The Strip", "Hollywood"],
+"correctAnswer": "Broadway"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which island is the Statue of Liberty located on?",
+"wrongAnswers": ["Ellis Island", "Governor's Island", "Roosevelt Island"],
+"correctAnswer": "Liberty Island"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "What was New York City called before 1664?",
+"wrongAnswers": ["New London", "New Paris", "New York Town"],
+"correctAnswer": "New Amsterdam"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which NYC building was the world's tallest until 1931?",
+"wrongAnswers": ["Flatiron Building", "One World Trade", "Seagram Building"],
+"correctAnswer": "Chrysler Building"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Where is the intersection of Broadway and Seventh Avenue located?",
+"wrongAnswers": ["Union Square", "Herald Square", "Columbus Circle"],
+"correctAnswer": "Times Square"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which borough is the most populous?",
+"wrongAnswers": ["Manhattan", "Queens", "Staten Island"],
+"correctAnswer": "Brooklyn"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "What is the nickname for the subway system?",
+"wrongAnswers": ["The Tube", "The Metro", "The T"],
+"correctAnswer": "The Train"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which street is famous for being the heart of the American financial industry?",
+"wrongAnswers": ["Madison Avenue", "Fifth Avenue", "Park Avenue"],
+"correctAnswer": "Wall Street"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "What is the name of the iconic train station located at 42nd Street and Park Avenue?",
+"wrongAnswers": ["Penn Station", "Victoria Station", "Union Station"],
+"correctAnswer": "Grand Central Terminal"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which park was built on an elevated former railroad spur?",
+"wrongAnswers": ["Bryant Park", "Washington Square", "Riverside Park"],
+"correctAnswer": "The High Line"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which borough is the only one located on the mainland?",
+"wrongAnswers": ["Brooklyn", "Queens", "Manhattan"],
+"correctAnswer": "The Bronx"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "What is the primary color of iconic NYC taxis?",
+"wrongAnswers": ["Red", "White", "Black"],
+"correctAnswer": "Yellow"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which museum is located on the edge of Central Park and is one of the world's largest art museums?",
+"wrongAnswers": ["MoMA", "The Guggenheim", "The Whitney"],
+"correctAnswer": "The Met"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Where do thousands gather every New Year's Eve to watch the ball drop?",
+"wrongAnswers": ["Rockefeller Center", "Madison Square Garden", "St. Patrick's Cathedral"],
+"correctAnswer": "Times Square"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which island served as the main immigration station for the US from 1892 to 1954?",
+"wrongAnswers": ["Liberty Island", "Staten Island", "City Island"],
+"correctAnswer": "Ellis Island"
+},
+{
+"topic": "NYC - The Big Apple!",
+"question": "Which NYC landmark is known for its Christmas tree and ice skating rink?",
+"wrongAnswers": ["Radio City", "The Plaza Hotel", "Lincoln Center"],
+"correctAnswer": "Rockefeller Center"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which bridge connects San Francisco to Marin County?",
+"wrongAnswers": ["Bay Bridge", "Richmond Bridge", "San Mateo Bridge"],
+"correctAnswer": "Golden Gate Bridge"
+},
+{
+"topic": "Bay Area Living",
+"question": "What is the regional rapid transit system serving the San Francisco Bay Area?",
+"wrongAnswers": ["Muni", "Caltrain", "VTA"],
+"correctAnswer": "BART"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which city is known as the 'Capital of Silicon Valley'?",
+"wrongAnswers": ["Palo Alto", "Mountain View", "Cupertino"],
+"correctAnswer": "San Jose"
+},
+{
+"topic": "Bay Area Living",
+"question": "What is the name of the famous crooked street in San Francisco?",
+"wrongAnswers": ["Market Street", "Mission Street", "Geary Street"],
+"correctAnswer": "Lombard Street"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which university is located in the East Bay city of Berkeley?",
+"wrongAnswers": ["Stanford", "USF", "Santa Clara University"],
+"correctAnswer": "UC Berkeley"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which island in the Bay was formerly a federal prison?",
+"wrongAnswers": ["Angel Island", "Treasure Island", "Yerba Buena"],
+"correctAnswer": "Alcatraz"
+},
+{
+"topic": "Bay Area Living",
+"question": "What is the name of the large park in the western part of San Francisco?",
+"wrongAnswers": ["Dolores Park", "Presidio", "Glen Canyon"],
+"correctAnswer": "Golden Gate Park"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which neighborhood in San Francisco is the historic center of the LGBTQ+ community?",
+"wrongAnswers": ["Haight-Ashbury", "North Beach", "The Mission"],
+"correctAnswer": "The Castro"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which Bay Area city is home to the headquarters of Facebook (Meta)?",
+"wrongAnswers": ["Palo Alto", "Mountain View", "San Francisco"],
+"correctAnswer": "Menlo Park"
+},
+{
+"topic": "Bay Area Living",
+"question": "What is the local term for the thick fog that rolls into the Bay?",
+"wrongAnswers": ["Mist", "The Haze", "Cloud Cover"],
+"correctAnswer": "Karl"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which professional baseball team plays in Oakland (as of early 2024)?",
+"wrongAnswers": ["Giants", "Dodgers", "Padres"],
+"correctAnswer": "Athletics"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which county is located directly north of San Francisco?",
+"wrongAnswers": ["Alameda", "Contra Costa", "San Mateo"],
+"correctAnswer": "Marin"
+},
+{
+"topic": "Bay Area Living",
+"question": "What is the name of the tower on top of Telegraph Hill in San Francisco?",
+"wrongAnswers": ["Salesforce Tower", "Transamerica Pyramid", "Sutro Tower"],
+"correctAnswer": "Coit Tower"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which high-tech region is located primarily in Santa Clara County?",
+"wrongAnswers": ["Research Triangle", "Silicon Alley", "Route 128"],
+"correctAnswer": "Silicon Valley"
+},
+{
+"topic": "Bay Area Living",
+"question": "What is the name of the historic ferry terminal at the foot of Market Street?",
+"wrongAnswers": ["Pier 39", "Ghirardelli Square", "Fisherman's Wharf"],
+"correctAnswer": "Ferry Building"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which city is the county seat of Alameda County?",
+"wrongAnswers": ["Berkeley", "Fremont", "Hayward"],
+"correctAnswer": "Oakland"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which bridge features a western and eastern span connected by a tunnel through Yerba Buena Island?",
+"wrongAnswers": ["Golden Gate", "Richmond-San Rafael", "Dumbarton"],
+"correctAnswer": "Bay Bridge"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which red-tinted skyscrapers are a symbol of Victorian architecture in SF?",
+"wrongAnswers": ["The Painted Ladies", "The Pink Palaces", "The Rainbow Rows"],
+"correctAnswer": "The Painted Ladies"
+},
+{
+"topic": "Bay Area Living",
+"question": "What is the name of the redwood forest located just north of the Golden Gate Bridge?",
+"wrongAnswers": ["Big Basin", "Yosemite", "Arquoia"],
+"correctAnswer": "Muir Woods"
+},
+{
+"topic": "Bay Area Living",
+"question": "Which San Francisco neighborhood is known for its Italian heritage and Beat Generation history?",
+"wrongAnswers": ["The Richmond", "The Sunset", "Dogpatch"],
+"correctAnswer": "North Beach"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which city is widely considered the LGBTQ+ capital of the world?",
+"wrongAnswers": ["New York City", "Berlin", "London"],
+"correctAnswer": "San Francisco"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "What is the name of the annual event celebrating LGBTQ+ pride in June?",
+"wrongAnswers": ["Gay Gala", "Rainbow Fest", "Unity Parade"],
+"correctAnswer": "Pride"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which rainbow flag color represents 'Life'?",
+"wrongAnswers": ["Orange", "Yellow", "Green"],
+"correctAnswer": "Red"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Who was the first openly gay person to be elected to public office in California?",
+"wrongAnswers": ["Cleve Jones", "Gilbert Baker", "RuPaul"],
+"correctAnswer": "Harvey Milk"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which New York City bar was the site of the 1969 riots that sparked the modern gay rights movement?",
+"wrongAnswers": ["The Abbey", "The Eagle", "Julius'"],
+"correctAnswer": "Stonewall Inn"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "What does the 'Q' usually stand for in LGBTQ+?",
+"wrongAnswers": ["Quantity", "Quiet", "Question"],
+"correctAnswer": "Queer"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which flag features pink, white, and blue stripes?",
+"wrongAnswers": ["Bisexual Flag", "Pansexual Flag", "Non-binary Flag"],
+"correctAnswer": "Transgender Flag"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "In which decade did the first 'Gay Pride' marches take place to commemorate Stonewall?",
+"wrongAnswers": ["1950s", "1960s", "1980s"],
+"correctAnswer": "1970s"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which artist is often called the 'Mother of Pride' for organizing the first Pride march?",
+"wrongAnswers": ["Marsha P. Johnson", "Sylvia Rivera", "Edie Windsor"],
+"correctAnswer": "Brenda Howard"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "What is the name of the neighborhood in London known for its vibrant LGBTQ+ scene?",
+"wrongAnswers": ["Chelsea", "Camden", "Greenwich"],
+"correctAnswer": "Soho"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which European city hosts the massive 'Christopher Street Day' pride event?",
+"wrongAnswers": ["Paris", "Madrid", "Amsterdam"],
+"correctAnswer": "Berlin"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "What is the name of the method of secret communication (cant slang) used by gay men in the UK in the early 20th century?",
+"wrongAnswers": ["Morse", "Esperanto", "Cockney"],
+"correctAnswer": "Polari"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which US president officially designated June as Pride Month for the first time?",
+"wrongAnswers": ["Barack Obama", "George W. Bush", "Ronald Reagan"],
+"correctAnswer": "Bill Clinton"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "What is the term for a person whose gender identity matches the sex they were assigned at birth?",
+"wrongAnswers": ["Transgender", "Genderfluid", "Non-binary"],
+"correctAnswer": "Cisgender"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which triangle-shaped symbol was reclaimed by the LGBTQ+ community from its dark history in WWII?",
+"wrongAnswers": ["Yellow Triangle", "Blue Triangle", "Green Triangle"],
+"correctAnswer": "Pink Triangle"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "What is the name of the largest LGBTQ+ advocacy group and political lobbying organization in the US?",
+"wrongAnswers": ["GLAAD", "The Trevor Project", "PFLAG"],
+"correctAnswer": "Human Rights Campaign"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which city is home to the world's first LGBTQ+ museum, the Schwules Museum?",
+"wrongAnswers": ["San Francisco", "New York", "Stockholm"],
+"correctAnswer": "Berlin"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "What year did the US Supreme Court legalize same-sex marriage nationwide?",
+"wrongAnswers": ["2010", "2012", "2018"],
+"correctAnswer": "2015"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "Which color was added to the Progress Pride flag to represent those living with HIV/AIDS and those who have been lost?",
+"wrongAnswers": ["White", "Brown", "Blue"],
+"correctAnswer": "Black"
+},
+{
+"topic": "The Gay Life Vibe",
+"question": "What is the title of the RuPaul song that became an anthem for self-love and drag culture?",
+"wrongAnswers": ["Glamazon", "Sissy That Walk", "Cover Girl"],
+"correctAnswer": "Supermodel"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which wrestler was known as 'The Eighth Wonder of the World'?",
+"wrongAnswers": ["Hulk Hogan", "The Big Show", "The Undertaker"],
+"correctAnswer": "Andre the Giant"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who is the 'Nature Boy' famous for his 'Woo!' catchphrase?",
+"wrongAnswers": ["Dusty Rhodes", "Randy Savage", "Buddy Rogers"],
+"correctAnswer": "Ric Flair"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which legend holds the record for the most world championship reigns in WWE history (tied with Ric Flair)?",
+"wrongAnswers": ["The Rock", "Stone Cold", "Triple H"],
+"correctAnswer": "John Cena"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who was 'The Macho Man' known for his colorful outfits and gravelly voice?",
+"wrongAnswers": ["Hulk Hogan", "Ultimate Warrior", "Jake Roberts"],
+"correctAnswer": "Randy Savage"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which wrestler is known for the 173-0 undefeated streak in WCW?",
+"wrongAnswers": ["Sting", "Bret Hart", "Kevin Nash"],
+"correctAnswer": "Goldberg"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who is the 'Texas Rattlesnake' who defined the Attitude Era?",
+"wrongAnswers": ["The Undertaker", "Kane", "Shawn Michaels"],
+"correctAnswer": "Stone Cold Steve Austin"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which tag team was known as 'The Legion of Doom'?",
+"wrongAnswers": ["The Hardy Boyz", "The Dudley Boyz", "Edge & Christian"],
+"correctAnswer": "The Road Warriors"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who is the 'Excellence of Execution' from the famous Hart family?",
+"wrongAnswers": ["Owen Hart", "Jim Neidhart", "British Bulldog"],
+"correctAnswer": "Bret Hart"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which wrestler was the first-ever Undisputed Champion by defeating The Rock and Stone Cold in the same night?",
+"wrongAnswers": ["Kurt Angle", "Triple H", "The Undertaker"],
+"correctAnswer": "Chris Jericho"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who is known as 'The Icon' and was the face of WCW?",
+"wrongAnswers": ["Hollywood Hogan", "Lex Luger", "Big Van Vader"],
+"correctAnswer": "Sting"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which wrestler had a 'Million Dollar Man' persona?",
+"wrongAnswers": ["Irwin R. Schyster", "Virgil", "Rowdy Roddy Piper"],
+"correctAnswer": "Ted DiBiase"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who was the 'Rowdy' Scottish wrestler known for his kilt and 'Piper's Pit' segments?",
+"wrongAnswers": ["Drew McIntyre", "Sheamus", "Finlay"],
+"correctAnswer": "Roddy Piper"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which wrestler is known as the 'Hardcore Legend' and used the personas Mankind and Cactus Jack?",
+"wrongAnswers": ["Terry Funk", "Sabu", "Raven"],
+"correctAnswer": "Mick Foley"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who is the Olympic Gold Medalist who 'won with a broken freakin' neck'?",
+"wrongAnswers": ["Brock Lesnar", "Shelton Benjamin", "Chad Gable"],
+"correctAnswer": "Kurt Angle"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which female legend is often credited with starting the 'Women's Evolution' in WWE?",
+"wrongAnswers": ["Chyna", "Lita", "Michelle McCool"],
+"correctAnswer": "Trish Stratus"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who was the 'American Dream' famous for the 'Hard Times' promo?",
+"wrongAnswers": ["Cody Rhodes", "Goldust", "Rick Rude"],
+"correctAnswer": "Dusty Rhodes"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which wrestler's real name is Mark Calaway?",
+"wrongAnswers": ["Kane", "Triple H", "The Big Show"],
+"correctAnswer": "The Undertaker"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who was the 'Heartbreak Kid' and 'Mr. WrestleMania'?",
+"wrongAnswers": ["John Cena", "Randy Orton", "Seth Rollins"],
+"correctAnswer": "Shawn Michaels"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Which legendary manager was known as 'The Brain'?",
+"wrongAnswers": ["Paul Heyman", "Jimmy Hart", "Paul Bearer"],
+"correctAnswer": "Bobby Heenan"
+},
+{
+"topic": "Wrestling Legends",
+"question": "Who is the 'Great One' and 'The People's Champion'?",
+"wrongAnswers": ["The Miz", "Roman Reigns", "Batista"],
+"correctAnswer": "The Rock"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "In which city does the Hardly Strictly Bluegrass festival take place?",
+"wrongAnswers": ["Nashville", "Austin", "Seattle"],
+"correctAnswer": "San Francisco"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "Who was the venture capitalist who founded and funded the festival?",
+"wrongAnswers": ["Steve Jobs", "Bill Gates", "Mark Zuckerberg"],
+"correctAnswer": "Warren Hellman"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "In which park is the festival held every year?",
+"wrongAnswers": ["Central Park", "Dolores Park", "The Presidio"],
+"correctAnswer": "Golden Gate Park"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "What is the cost of admission for the Hardly Strictly Bluegrass festival?",
+"wrongAnswers": ["$50", "$100", "Pay what you can"],
+"correctAnswer": "Free"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "During which month does the festival typically occur?",
+"wrongAnswers": ["April", "July", "December"],
+"correctAnswer": "October"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "What was the festival's original name before 'Hardly' was added in 2004?",
+"wrongAnswers": ["Bluegrass Jam", "S.F. Folk Fest", "Hellman's Holiday"],
+"correctAnswer": "Strictly Bluegrass"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "Which of these legendary artists was a frequent performer at the festival until her passing in 2011?",
+"wrongAnswers": ["Dolly Parton", "Loretta Lynn", "Patsy Cline"],
+"correctAnswer": "Hazel Dickens"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "How many days does the festival usually last?",
+"wrongAnswers": ["1 day", "2 days", "5 days"],
+"correctAnswer": "3 days"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "Which of these stages is a major part of the festival grounds?",
+"wrongAnswers": ["The Pyramid Stage", "The Sahara Tent", "The Main Event"],
+"correctAnswer": "Banjo Stage"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "Which of these is a prohibited item at the festival in recent years for safety?",
+"wrongAnswers": ["Sunscreen", "Water bottles", "Hats"],
+"correctAnswer": "Coolers"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "The festival is non-commercial, meaning it does not have what?",
+"wrongAnswers": ["Music", "Food", "Portable toilets"],
+"correctAnswer": "Corporate sponsors"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "Which artist is known for performing the 'Sunday Morning' slot at the Banjo Stage most years?",
+"wrongAnswers": ["Willie Nelson", "Bob Dylan", "Neil Young"],
+"correctAnswer": "Emmylou Harris"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "About how many people attend the festival over the course of the weekend?",
+"wrongAnswers": ["10,000", "50,000", "1,000,000"],
+"correctAnswer": "750,000"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "What kind of music was the festival's original focus?",
+"wrongAnswers": ["Jazz", "Hip Hop", "Classical"],
+"correctAnswer": "Bluegrass"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "Which famous SF musician and Grateful Dead member has performed at the festival?",
+"wrongAnswers": ["Jerry Garcia", "Phil Lesh", "Mickey Hart"],
+"correctAnswer": "Bob Weir"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "The festival is a legacy gift to the city of San Francisco from whose estate?",
+"wrongAnswers": ["Bill Graham", "Jerry Garcia", "Harvey Milk"],
+"correctAnswer": "Warren Hellman"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "Which stage is named after the founder's own band?",
+"wrongAnswers": ["Bluegrass Stage", "Venture Stage", "San Francisco Stage"],
+"correctAnswer": "Wronglers Stage"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "In which specific area of Golden Gate Park is the festival centered?",
+"wrongAnswers": ["Kezar Stadium", "The Conservatory", "The Panhandle"],
+"correctAnswer": "Hellman Hollow"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "What is the typical start time for music on festival days?",
+"wrongAnswers": ["8:00 AM", "1:00 PM", "5:00 PM"],
+"correctAnswer": "11:00 AM"
+},
+{
+"topic": "Hardly Strictly Bluegrass Festival",
+"question": "Which of these is a common way for attendees to get to the festival to avoid traffic?",
+"wrongAnswers": ["Helicopter", "Limousine", "Subway"],
+"correctAnswer": "Bicycle"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which legendary venue was run by Bill Graham and was the heart of the 60s psychedelic scene?",
+"wrongAnswers": ["The Warfield", "The Regency", "The Independent"],
+"correctAnswer": "The Fillmore"
+},
+{
+"topic": "SF's Music Venues",
+"question": "What is the name of the historic auditorium on Van Ness Avenue that hosts the SF Symphony?",
+"wrongAnswers": ["The Fox", "The Orpheum", "The Paramount"],
+"correctAnswer": "Davies Symphony Hall"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which venue is famous for giving out free apples and custom posters to concertgoers?",
+"wrongAnswers": ["The Chapel", "Slim's", "Bottom of the Hill"],
+"correctAnswer": "The Fillmore"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which SF venue is located in a former mortuary in the Mission District?",
+"wrongAnswers": ["Public Works", "The Midway", "August Hall"],
+"correctAnswer": "The Chapel"
+},
+{
+"topic": "SF's Music Venues",
+"question": "What is the name of the large theater on Market Street known for its ornate interior and rock shows?",
+"wrongAnswers": ["Great American Music Hall", "The Fillmore", "The Independent"],
+"correctAnswer": "The Warfield"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which venue is widely considered one of the best 'dive bar' music spots in the Potrero Hill area?",
+"wrongAnswers": ["The Fillmore", "The Warfield", "Bimbo's 365 Club"],
+"correctAnswer": "Bottom of the Hill"
+},
+{
+"topic": "SF's Music Venues",
+"question": "What is the oldest nightclub in San Francisco, located in the Tenderloin?",
+"wrongAnswers": ["The Midway", "DNA Lounge", "The Independent"],
+"correctAnswer": "Great American Music Hall"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which venue is the home of the San Francisco Opera and Ballet?",
+"wrongAnswers": ["Davies Hall", "The Orpheum", "The Golden Gate Theatre"],
+"correctAnswer": "War Memorial Opera House"
+},
+{
+"topic": "SF's Music Venues",
+"question": "What is the name of the Divisadero Street venue known for indie and alternative acts?",
+"wrongAnswers": ["The Fillmore", "The Warfield", "Slim's"],
+"correctAnswer": "The Independent"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which outdoor music venue in Golden Gate Park is a concrete shell used for free summer concerts?",
+"wrongAnswers": ["The Panhandle", "Hellman Hollow", "Sharon Meadow"],
+"correctAnswer": "Spreckels Temple of Music"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which jazz center on Franklin Street is the first stand-alone building in the US built for jazz?",
+"wrongAnswers": ["Yoshi's", "The Blackhawk", "The Blue Note"],
+"correctAnswer": "SFJAZZ Center"
+},
+{
+"topic": "SF's Music Venues",
+"question": "What is the name of the venue on 11th Street that has been a staple of the dance and industrial scene?",
+"wrongAnswers": ["The Midway", "Public Works", "Audio"],
+"correctAnswer": "DNA Lounge"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which venue was founded by Boz Scaggs and was a SoMa staple for 30 years before closing in 2020?",
+"wrongAnswers": ["The Independent", "The Chapel", "The Warfield"],
+"correctAnswer": "Slim's"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which large-scale venue is located at the Port of San Francisco and hosts music and art events?",
+"wrongAnswers": ["The Fillmore", "The Warfield", "The Regency"],
+"correctAnswer": "The Midway"
+},
+{
+"topic": "SF's Music Venues",
+"question": "What is the name of the retro-themed nightclub and venue in North Beach known for its red velvet decor?",
+"wrongAnswers": ["The Independent", "The Chapel", "The Fillmore"],
+"correctAnswer": "Bimbo's 365 Club"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which venue in the Richmond district is known for its intimate setting and focus on singer-songwriters?",
+"wrongAnswers": ["The Midway", "The Warfield", "DNA Lounge"],
+"correctAnswer": "The Neck of the Woods"
+},
+{
+"topic": "SF's Music Venues",
+"question": "What is the name of the venue located in the basement of a historic Union Square hotel?",
+"wrongAnswers": ["The Fillmore", "The Warfield", "The Regency"],
+"correctAnswer": "August Hall"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which venue is a converted Scottish Rite Masonic Temple on Sutter Street?",
+"wrongAnswers": ["The Fillmore", "The Warfield", "The Independent"],
+"correctAnswer": "The Regency Ballroom"
+},
+{
+"topic": "SF's Music Venues",
+"question": "Which outdoor venue is located on Treasure Island and hosted a namesake festival for years?",
+"wrongAnswers": ["The Fillmore", "The Warfield", "The Independent"],
+"correctAnswer": "The Great Lawn"
+},
+{
+"topic": "SF's Music Venues",
+"question": "What is the name of the amphitheater in the Excelsior district that hosts many community concerts?",
+"wrongAnswers": ["The Fillmore", "The Warfield", "The Independent"],
+"correctAnswer": "Jerry Garcia Amphitheater"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band released the 1971 anthem 'Stairway to Heaven'?",
+"wrongAnswers": ["The Who", "Pink Floyd", "Deep Purple"],
+"correctAnswer": "Led Zeppelin"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "What is the title of the Queen song that features a famous operatic midsection?",
+"wrongAnswers": ["Killer Queen", "Somebody to Love", "Don't Stop Me Now"],
+"correctAnswer": "Bohemian Rhapsody"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band sang 'Dream On' in 1973?",
+"wrongAnswers": ["Guns N' Roses", "Journey", "Bon Jovi"],
+"correctAnswer": "Aerosmith"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which 1976 Eagles hit is about a luxury hotel you can never leave?",
+"wrongAnswers": ["Desperado", "Lyin' Eyes", "Take It Easy"],
+"correctAnswer": "Hotel California"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Who released the hit 'Born to Run' in 1975?",
+"wrongAnswers": ["Bob Seger", "Billy Joel", "Tom Petty"],
+"correctAnswer": "Bruce Springsteen"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band's anthem 'Won't Get Fooled Again' features a famous synthesizer loop and scream?",
+"wrongAnswers": ["The Kinks", "The Rolling Stones", "The Doors"],
+"correctAnswer": "The Who"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "What is the name of the Pink Floyd song that features a children's choir?",
+"wrongAnswers": ["Money", "Time", "Comfortably Numb"],
+"correctAnswer": "Another Brick in the Wall"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band recorded 'Smoke on the Water' based on a real fire at a Swiss casino?",
+"wrongAnswers": ["Black Sabbath", "Led Zeppelin", "Iron Butterfly"],
+"correctAnswer": "Deep Purple"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which Derek and the Dominos song features a long piano coda and Eric Clapton's guitar?",
+"wrongAnswers": ["Cocaine", "Wonderful Tonight", "I Shot the Sheriff"],
+"correctAnswer": "Layla"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band had the 1981 hit 'Don't Stop Believin''?",
+"wrongAnswers": ["Boston", "Foreigner", "REO Speedwagon"],
+"correctAnswer": "Journey"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Who sang 'Like a Rolling Stone', named by Rolling Stone magazine as the greatest song of all time?",
+"wrongAnswers": ["Mick Jagger", "John Lennon", "Neil Young"],
+"correctAnswer": "Bob Dylan"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band's anthem 'Sweet Home Alabama' was written in response to Neil Young's songs?",
+"wrongAnswers": ["The Allman Brothers", "ZZ Top", "The Marshall Tucker Band"],
+"correctAnswer": "Lynyrd Skynyrd"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band released 'Comfortably Numb' on the album 'The Wall'?",
+"wrongAnswers": ["Genesis", "Yes", "King Crimson"],
+"correctAnswer": "Pink Floyd"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "What is the name of the AC/DC song featuring a tolling bell at the beginning?",
+"wrongAnswers": ["Highway to Hell", "Thunderstruck", "You Shook Me All Night Long"],
+"correctAnswer": "Hells Bells"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which artist sang 'Purple Haze'?",
+"wrongAnswers": ["Prince", "David Bowie", "Jim Morrison"],
+"correctAnswer": "Jimi Hendrix"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band released 'Free Bird', famous for its extended guitar solo?",
+"wrongAnswers": ["The Eagles", "The Doobie Brothers", "Kansas"],
+"correctAnswer": "Lynyrd Skynyrd"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "What is the name of the 1977 Fleetwood Mac song written by Stevie Nicks about her breakup with Lindsey Buckingham?",
+"wrongAnswers": ["Go Your Own Way", "The Chain", "Rhiannon"],
+"correctAnswer": "Dreams"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band had the hit 'More Than a Feeling'?",
+"wrongAnswers": ["Journey", "Styx", "Kansas"],
+"correctAnswer": "Boston"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Who released the power ballad 'Every Rose Has Its Thorn'?",
+"wrongAnswers": ["Guns N' Roses", "Mötley Crüe", "Cinderella"],
+"correctAnswer": "Poison"
+},
+{
+"topic": "Classic Rock Anthems",
+"question": "Which band's song 'Start Me Up' was used for the Windows 95 launch?",
+"wrongAnswers": ["The Beatles", "The Who", "The Doors"],
+"correctAnswer": "The Rolling Stones"
+},
+{
+"topic": "World Music Rhythms",
+"question": "In which country did the Reggae genre originate?",
+"wrongAnswers": ["Bahamas", "Trinidad", "Cuba"],
+"correctAnswer": "Jamaica"
+},
+{
+"topic": "World Music Rhythms",
+"question": "What is the name of the West African drum known for its hourglass shape and 'talking' capability?",
+"wrongAnswers": ["Djembe", "Bongo", "Conga"],
+"correctAnswer": "Talking Drum"
+},
+{
+"topic": "World Music Rhythms",
+"question": "Which Brazilian musical style is famous for its associations with Carnival and high-energy drumming?",
+"wrongAnswers": ["Bossa Nova", "Tango", "Salsa"],
+"correctAnswer": "Samba"
+},
+{
+"topic": "World Music Rhythms",
+"question": "What is the name of the Indian classical instrument popularized in the West by Ravi Shankar?",
+"wrongAnswers": ["Tabla", "Sarod", "Vina"],
+"correctAnswer": "Sitar"
+},
+{
+"topic": "World Music Rhythms",
+"question": "In which country would you find the traditional 'Gamelan' ensemble?",
+"wrongAnswers": ["Thailand", "Vietnam", "Japan"],
+"correctAnswer": "Indonesia"
+},
+{
+"topic": "World Music Rhythms",
+"question": "What is the name of the passionate, guitar-based music and dance from Andalusia, Spain?",
+"wrongAnswers": ["Fado", "Mariachi", "Bolero"],
+"correctAnswer": "Flamenco"
+},
+{
+"topic": "World Music Rhythms",
+"question": "Which Afro-Cuban genre is the ancestor of modern Salsa music?",
+"wrongAnswers": ["Reggaeton", "Merengue", "Bachata"],
+"correctAnswer": "Son"
+},
+{
+"topic": "World Music Rhythms",
+"question": "What is the name of the traditional Irish hand drum made of goatskin?",
+"wrongAnswers": ["Darbuka", "Cajon", "Snare"],
+"correctAnswer": "Bodhrán"
+},
+{
+"topic": "World Music Rhythms",
+"question": "Which country is the birthplace of the 'Highlife' musical genre?",
+"wrongAnswers": ["South Africa", "Kenya", "Senegal"],
+"correctAnswer": "Ghana"
+},
+{
+"topic": "World Music Rhythms",
+"question": "The 'Cajón' is a box-shaped percussion instrument that originated in which country?",
+"wrongAnswers": ["Mexico", "Brazil", "Spain"],
+"correctAnswer": "Peru"
+},
+{
+"topic": "World Music Rhythms",
+"question": "Which musical genre from Argentina is known for its dramatic rhythms and the use of the bandoneón?",
+"wrongAnswers": ["Samba", "Rumba", "Cumbia"],
+"correctAnswer": "Tango"
+},
+{
+"topic": "World Music Rhythms",
+"question": "What is the name of the Australian Aboriginal wind instrument made from a hollowed tree branch?",
+"wrongAnswers": ["Pan Flute", "Bagpipe", "Recorder"],
+"correctAnswer": "Didgeridoo"
+},
+{
+"topic": "World Music Rhythms",
+"question": "Which African music icon is known as the 'pioneer of Afrobeat'?",
+"wrongAnswers": ["Miriam Makeba", "King Sunny Ade", "Burna Boy"],
+"correctAnswer": "Fela Kuti"
+},
+{
+"topic": "World Music Rhythms",
+"question": "What is the name of the steel pans used in Caribbean music?",
+"wrongAnswers": ["Marimba", "Xylophone", "Glockenspiel"],
+"correctAnswer": "Steel Drums"
+},
+{
+"topic": "World Music Rhythms",
+"question": "In which country did the 'K-Pop' phenomenon originate?",
+"wrongAnswers": ["Japan", "China", "Vietnam"],
+"correctAnswer": "South Korea"
+},
+{
+"topic": "World Music Rhythms",
+"question": "Which musical style from Portugal is characterized by mournful tunes and lyrics, often about the sea?",
+"wrongAnswers": ["Flamenco", "Tarantella", "Chanson"],
+"correctAnswer": "Fado"
+},
+{
+"topic": "World Music Rhythms",
+"question": "What is the main percussion instrument used in Middle Eastern 'Dabke' music?",
+"wrongAnswers": ["Congas", "Djembes", "Bongos"],
+"correctAnswer": "Darbuka"
+},
+{
+"topic": "World Music Rhythms",
+"question": "The 'Mbira' is a thumb piano that is the national instrument of which African country?",
+"wrongAnswers": ["Nigeria", "Ethiopia", "Egypt"],
+"correctAnswer": "Zimbabwe"
+},
+{
+"topic": "World Music Rhythms",
+"question": "Which island nation is famous for 'Soca' and 'Calypso' music?",
+"wrongAnswers": ["Jamaica", "Puerto Rico", "Haiti"],
+"correctAnswer": "Trinidad and Tobago"
+},
+{
+"topic": "World Music Rhythms",
+"question": "What is the term for the complex rhythmic patterns used in Indian Classical music?",
+"wrongAnswers": ["Raga", "Sitar", "Mantra"],
+"correctAnswer": "Tala"
+},
+{
+"topic": "Alternative Jams",
+"question": "Which Seattle band's 1991 hit 'Smells Like Teen Spirit' is considered the anthem of Gen X?",
+"wrongAnswers": ["Pearl Jam", "Soundgarden", "Alice in Chains"],
+"correctAnswer": "Nirvana"
+},
+{
+"topic": "Alternative Jams",
+"question": "What is the name of the 1997 Radiohead album featuring 'Paranoid Android'?",
+"wrongAnswers": ["The Bends", "Kid A", "Amnesiac"],
+"correctAnswer": "OK Computer"
+},
+{
+"topic": "Alternative Jams",
+"question": "Which band released the 1994 album 'Doolittle'?",
+"wrongAnswers": ["The Cure", "The Smiths", "R.E.M."],
+"correctAnswer": "Pixies"
+},
+{
+"topic": "Alternative Jams",
+"question": "Who sang the 1993 hit 'Loser'?",
+"wrongAnswers": ["Moby", "Pavement", "Weezer"],
+"correctAnswer": "Beck"
+},
+{
+"topic": "Alternative Jams",
+"question": "Which female-fronted band had a hit with 'Just a Girl' in 1995?",
+"wrongAnswers": ["Garbage", "Hole", "The Breeders"],
+"correctAnswer": "No Doubt"
+},
+{
+"topic": "Alternative Jams",
+"question": "What is the name of the band led by Billy Corgan?",
+"wrongAnswers": ["Jane's Addiction", "Faith No More", "The Offspring"],
+"correctAnswer": "The Smashing Pumpkins"
+},
+{
+"topic": "Alternative Jams",
+"question": "Which band released the 2001 hit 'Last Nite'?",
+"wrongAnswers": ["The Killers", "The White Stripes", "Franz Ferdinand"],
+"correctAnswer": "The Strokes"
+},
+{
+"topic": "Alternative Jams",
+"question": "Who sang 'Losing My Religion' in 1991?",
+"wrongAnswers": ["U2", "Depeche Mode", "Oasis"],
+"correctAnswer": "R.E.M."
+},
+{
+"topic": "Alternative Jams",
+"question": "Which band had a 1994 hit with 'Black Hole Sun'?",
+"wrongAnswers": ["Silverchair", "Bush", "Stone Temple Pilots"],
+"correctAnswer": "Soundgarden"
+},
+{
+"topic": "Alternative Jams",
+"question": "What is the name of the Foo Fighters' lead singer and former Nirvana drummer?",
+"wrongAnswers": ["Krist Novoselic", "Pat Smear", "Taylor Hawkins"],
+"correctAnswer": "Dave Grohl"
+},
+{
+"topic": "Alternative Jams",
+"question": "Which band released the 1989 album 'Disintegration'?",
+"wrongAnswers": ["Joy Division", "Echo & the Bunnymen", "Siouxsie and the Banshees"],
+"correctAnswer": "The Cure"
+},
+{
+"topic": "Alternative Jams",
+"question": "Who sang 'Zombie' in 1994?",
+"wrongAnswers": ["Sinead O'Connor", "Björk", "Fiona Apple"],
+"correctAnswer": "The Cranberries"
+},
+{
+"topic": "Alternative Jams",
+"question": "Which band's hit 'Seven Nation Army' is famous for its simple but iconic guitar riff?",
+"wrongAnswers": ["The Black Keys", "Arctic Monkeys", "The Hives"],
+"correctAnswer": "The White Stripes"
+},
+{
+"topic": "Alternative Jams",
+"question": "What is the title of the Green Day album that features 'Basket Case'?",
+"wrongAnswers": ["Insomniac", "Nimrod", "American Idiot"],
+"correctAnswer": "Dookie"
+},
+{
+"topic": "Alternative Jams",
+"question": "Which band released the hit 'Song 2' in 1997?",
+"wrongAnswers": ["Pulp", "Suede", "Gorillaz"],
+"correctAnswer": "Blur"
+},
+{
+"topic": "Alternative Jams",
+"question": "Who sang 'Criminal' in 1996?",
+"wrongAnswers": ["Alanis Morissette", "Sheryl Crow", "Tori Amos"],
+"correctAnswer": "Fiona Apple"
+},
+{
+"topic": "Alternative Jams",
+"question": "Which band had the 1992 hit 'Under the Bridge'?",
+"wrongAnswers": ["Pearl Jam", "Rancid", "The Cult"],
+"correctAnswer": "Red Hot Chili Peppers"
+},
+{
+"topic": "Alternative Jams",
+"question": "What is the name of the Gorillaz song featuring Del the Funky Homosapien?",
+"wrongAnswers": ["Feel Good Inc.", "Dare", "Dirty Harry"],
+"correctAnswer": "Clint Eastwood"
+},
+{
+"topic": "Alternative Jams",
+"question": "Which band released 'The Killing Moon' in 1984?",
+"wrongAnswers": ["The Smiths", "New Order", "Psychedelic Furs"],
+"correctAnswer": "Echo & the Bunnymen"
+},
+{
+"topic": "Alternative Jams",
+"question": "Who sang 'Seven Nation Army'?",
+"wrongAnswers": ["The Black Keys", "The Killers", "The Hives"],
+"correctAnswer": "The White Stripes"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the capital city of California?",
+"wrongAnswers": ["Los Angeles", "San Francisco", "San Diego"],
+"correctAnswer": "Sacramento"
+},
+{
+"topic": "California - The Golden State",
+"question": "Which California national park is home to the El Capitan rock formation?",
+"wrongAnswers": ["Joshua Tree", "Redwood", "Death Valley"],
+"correctAnswer": "Yosemite"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the nickname for the bridge that spans the Golden Gate strait?",
+"wrongAnswers": ["The Red Bridge", "Bay Bridge", "Silver Span"],
+"correctAnswer": "Golden Gate Bridge"
+},
+{
+"topic": "California - The Golden State",
+"question": "Which desert covers much of southeastern California?",
+"wrongAnswers": ["Sonoran", "Sahara", "Gobi"],
+"correctAnswer": "Mojave"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the state flower of California?",
+"wrongAnswers": ["Rose", "Sunflower", "Hibiscus"],
+"correctAnswer": "California Poppy"
+},
+{
+"topic": "California - The Golden State",
+"question": "Which city is the home of Hollywood and the US film industry?",
+"wrongAnswers": ["San Jose", "Long Beach", "Oakland"],
+"correctAnswer": "Los Angeles"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the name of the highest mountain in the contiguous United States, located in California?",
+"wrongAnswers": ["Mount Shasta", "Mount Rainier", "Mount Rushmore"],
+"correctAnswer": "Mount Whitney"
+},
+{
+"topic": "California - The Golden State",
+"question": "Which valley is the heart of California's famous wine-producing region?",
+"wrongAnswers": ["Silicon Valley", "Central Valley", "Death Valley"],
+"correctAnswer": "Napa Valley"
+},
+{
+"topic": "California - The Golden State",
+"question": "In what year did the California Gold Rush begin?",
+"wrongAnswers": ["1776", "1906", "1861"],
+"correctAnswer": "1848"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the official state tree of California?",
+"wrongAnswers": ["Oak", "Pine", "Maple"],
+"correctTree": "California Redwood"
+},
+{
+"topic": "California - The Golden State",
+"question": "Which body of water borders California to the west?",
+"wrongAnswers": ["Atlantic Ocean", "Indian Ocean", "Gulf of Mexico"],
+"correctAnswer": "Pacific Ocean"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the name of the fault line that runs through California and causes many earthquakes?",
+"wrongAnswers": ["New Madrid", "Denali", "Cascadia"],
+"correctAnswer": "San Andreas Fault"
+},
+{
+"topic": "California - The Golden State",
+"question": "Which California city is known for its historic cable cars?",
+"wrongAnswers": ["San Diego", "Los Angeles", "Sacramento"],
+"correctAnswer": "San Francisco"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the name of the large inland sea in the Coachella Valley of Southern California?",
+"wrongAnswers": ["Lake Tahoe", "Mono Lake", "Lake Berryessa"],
+"correctAnswer": "Salton Sea"
+},
+{
+"topic": "California - The Golden State",
+"question": "Which animal is featured on the California state flag?",
+"wrongAnswers": ["Eagle", "Mountain Lion", "Wolf"],
+"correctAnswer": "Grizzly Bear"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the name of the prison located on an island in San Francisco Bay?",
+"wrongAnswers": ["San Quentin", "Folsom", "Pelican Bay"],
+"correctAnswer": "Alcatraz"
+},
+{
+"topic": "California - The Golden State",
+"question": "Which tech hub is located in the southern part of the San Francisco Bay Area?",
+"wrongAnswers": ["Route 128", "Research Triangle", "Silicon Alley"],
+"correctAnswer": "Silicon Valley"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the motto of California?",
+"wrongAnswers": ["Liberty", "Equality", "Progress"],
+"correctAnswer": "Eureka"
+},
+{
+"topic": "California - The Golden State",
+"question": "Which tree is the largest living organism by volume and found in California?",
+"wrongAnswers": ["Coast Redwood", "Douglas Fir", "Banyan"],
+"correctAnswer": "Giant Sequoia"
+},
+{
+"topic": "California - The Golden State",
+"question": "What is the name of the university system that includes campuses at Berkeley and Los Angeles?",
+"wrongAnswers": ["Cal State", "Stanford", "USC"],
+"correctAnswer": "University of California"
+}
+
+
+
+
+]
