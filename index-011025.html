@@ -1636,7 +1636,7 @@
                 },
 
 
-                { name: 'Rock Guitar Tapping Technique', price: 40, acquired: true, icon: '📓',  given: false, desc: 'Mastery book for Instrument Synergy', actions: { 'Crazy K': 'crazy_action2' } , 
+                { name: 'Rock Guitar Tapping Technique', price: 40, acquired: true, icon: '📓',  given: false, desc: 'Mastery book for Fretboard control', actions: { 'Crazy K': 'crazy_action2' } , 
                     messages: {
                         'BITTER END': 'Tapping? Mmm...',
                         'Metallica Pop-up Store': 'Kirk uses some of these patterns in his solos! Great pick.',
@@ -1810,8 +1810,8 @@
                     messages: {
                         'BITTER END': 'Alcoholics Anonymous? No, Bob doesn\'t drink. He\'s addicted to the grind.',
                         'Metallica Pop-up Store': 'Maybe a local band? Never heard of \'em.',
-                        'BESTIE': 'Doesn\'t ring a bell. Doesn\'t any of your other friends know about wrestling?',
-                        'HSB Festival': ' Double A? Like the batteries? I have some somewhere!!',
+                        'BESTIE': 'Double A? Like the batteries? I have some in my drawer!',
+                        'HSB Festival': 'Doesn\'t ring a bell. Is it an acronym for a secret set?',
                         'Crazy K': 'The double-alpha energy. It is a sign of leadership and strength.',
                         'The Fillmore': 'He keeps muttering that name. I think he\'s lost his mind.',
                         'The Fillmore ': 'If you don\'t know who Double A is, you don\'t know wrestling history, kid!',
@@ -1873,17 +1873,16 @@
                 totalPointsScored: 0,
             },
             level: 0,
-            rank : 'Dreamer',
             totalXP: 0,
             songCounts: 0,
             // Musician Chop Skills (XP values)
             chops: [
-                { name: "Social Influence", points: 90, level: 0, isUnlocked: true, icon: '📣' },
-                { name: "Instrument Synergy", points: 100, level: 0, isUnlocked: true, icon: '🎸' },
-                { name: "Rhythm Mastery", points: 100, level: 0, isUnlocked: true, icon: '🎼' },
-                { name: "Lyrical Flow", points: 100, level: 0, isUnlocked: true, icon: '🖋️' },
-                { name: "Backstage Blueprint", points: 100, level: 0, isUnlocked: true, icon: '📜' },
-                { name: "Stage Presence", points: 100, level: 0, isUnlocked: true, icon: '🎤' }
+                { name: "Social Influence", points: 2, level: 0, isUnlocked: true, icon: '📣' },
+                { name: "Instrument Synergy", points: 2, level: 0, isUnlocked: true, icon: '🎸' },
+                { name: "Rhythm Mastery", points: 0, level: 0, isUnlocked: true, icon: '🎼' },
+                { name: "Lyrical Flow", points: 0, level: 0, isUnlocked: true, icon: '🖋️' },
+                { name: "Backstage Blueprint", points: 0, level: 0, isUnlocked: true, icon: '📜' },
+                { name: "Stage Presence", points: 0, level: 0, isUnlocked: true, icon: '🎤' }
             ],
 
             chopsDiscovered : false,
@@ -1973,7 +1972,7 @@
             chop: null,
             },
             currentBuildingName: 'Home',
-            currentLocationId: 'Home',
+            currentLocationId: 'Home', 
             
         };
 
@@ -2929,7 +2928,7 @@
         ];
 
         const crazy_chops_dialogue_data = [
-            { speaker: 'Player', text: "Hey Crazy K, I’m looking to master the neck. I need to unlock 'Instrument Synergy'." },
+            { speaker: 'Player', text: "Hey Crazy K, I’m looking to master the neck. I need to unlock 'Fretboard Control'." },
             { speaker: 'Bestie', text: "The neck is a labyrinth of vibrating wires, {player}. You can't just walk into the maze without the right talismans." },
             { speaker: 'Bestie', text: "To tame the wood and steel, you must bring me the **Trinity of Tone**. Only then will the patterns reveal themselves." },
             { speaker: 'Player', text: "The Trinity? Alright, K... speak in English. What do I need to find?" },
@@ -4881,10 +4880,9 @@
 
         function getLevelProgression() {
             // 1. Calculate Total XP
-            const totalChopPoints = game.chops.reduce((accumulator, chop) => {
-                return accumulator + chop.points;
-            }, 0);
-            let totalXP = totalChopPoints;
+            const totalXP = game.chops.reduce((sum, chop) => sum + chop.level, 0);
+            game.totalXP = totalXP; // Update global state
+            
             // 2. Determine current level and boundaries
             let currentLevelData = LEVEL_CONFIG[0];
             let currentLevelIndex = 0;
@@ -4914,7 +4912,6 @@
                 const levelSpan = requiredXPForNext - requiredXPForCurrent;
 
                 xpToNextLevel = requiredXPForNext - totalXP;
-                console.log(xpToNextLevel, requiredXPForNext, totalXP);
                 progressPercentage = (xpInCurrentSegment / levelSpan) * 100;
                 progressPercentage = Math.min(100, Math.max(0, progressPercentage));
             } else {
@@ -4923,9 +4920,14 @@
                 xpToNextLevel = 'MAX';
             }
 
+            game.level = currentLevelData.level; // Update global state
             
+            const RANK_NAMES = ["Dreamer", "Aspiring Artist", "Opener", "Headliner", "Rock Legend"];
+
 
             return {
+                level: currentLevelData.level,
+                rank: RANK_NAMES[currentLevelData.level] || 'Beyond Legend',
                 xpToNextLevel: xpToNextLevel,
                 progressPercentage: progressPercentage.toFixed(0),
                 currentChopMax: currentLevelData.chopMaxScale // New dynamic scale for individual chops
@@ -5110,7 +5112,7 @@
                     { text: 'RESTORE SESSION', icon: '📂', action: loadGame },
                     { text: 'CHOP GALLERY', icon: '🏆', action: () => showGameMessage("Locked until Chapter 2") },
                     //{ text: 'CHOP GALLERY1', icon: '🏆', action: () => debugUnlockAll()},
-                    { text: 'OPTIONS', icon: '⚙️', action: () => setPhase(0, '') }
+                    { text: 'OPTIONS', icon: '⚙️', action: () => setPhase(0, 'Menu') }
                 ];
 
                 buttons.forEach(b => {
@@ -5505,7 +5507,7 @@
                 
                 // FIX: Assign an anonymous function to onclick that calls setPhase(0).
                 // This prevents the function from running immediately upon rendering.
-                startButton.onclick = () => setPhase(0, '');
+                startButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
 
                 welcomeContent.append(
                     createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
@@ -5538,7 +5540,7 @@
             topicContent.appendChild(topicButtons);
 
             const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'MENU');
-            backButton.onclick = () => setPhase(0, '');
+            backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
             topicContent.appendChild(backButton);
             return topicContent;
         }
@@ -5563,8 +5565,8 @@
             const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-3 md:gap-6 pb-6 border-b border-white/10');
 
             iconRow.innerHTML = `
-                <button onclick="setPhase(10,'San Francisco Map')" class="p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" title="Map">🗺️</button>
-                <button onclick="setPhase(14,'')" class="p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" title="Inventory">🎒</button>
+                <button onclick="setPhase(10)" class="p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" title="Map">🗺️</button>
+                <button onclick="setPhase(14)" class="p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" title="Inventory">🎒</button>
                 <div class="relative cursor-pointer p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" title="Notifications" onclick="setPhase(16)">
                     📱 ${badgeHtml}
                 </div>
@@ -5638,8 +5640,8 @@
                 <div class="p-4 bg-gray-800/50 rounded-xl border border-indigo-500/30">
                     <p class="text-xs font-mono text-gray-400 mb-1">PLAYER RANK</p>
                     <div class="flex items-end space-x-3">
-                        <span class="text-4xl font-bold text-indigo-400 leading-none">${game.level}</span>
-                        <span class="text-lg text-gray-200 uppercase tracking-widest">${game.rank}</span>
+                        <span class="text-4xl font-bold text-indigo-400 leading-none">${progression.level}</span>
+                        <span class="text-lg text-gray-200 uppercase tracking-widest">${progression.rank}</span>
                     </div>
                     <div class="mt-4">
                         <div class="w-full bg-gray-900 h-2 rounded-full border border-indigo-900 overflow-hidden">
@@ -5648,7 +5650,7 @@
                     </div>
                 </div>
                 <div class="space-y-3">
-                    <h4 class="text-xs font-bold text-neon-pink uppercase tracking-widest">Artistic Caliber</h4>
+                    <h4 class="text-xs font-bold text-neon-pink uppercase tracking-widest">Skill Chops</h4>
                     ${chopsHtml}
                 </div>
             `;
@@ -5658,7 +5660,7 @@
                 <div class="p-4 bg-fuchsia-900/20 rounded-xl border-2 border-fuchsia-500/50 text-center">
                     <p class="text-xs font-mono text-fuchsia-400 mb-1 uppercase tracking-widest">Audience Hype</p>
                     <p class="text-4xl font-black text-fuchsia-400">${game.fans.toLocaleString()}</p>
-                    <p class="text-[10px] text-fuchsia-300 mt-1 uppercase animate-pulse">No fans 🤷‍♂️ </p>
+                    <p class="text-[10px] text-fuchsia-300 mt-1 uppercase animate-pulse">The crowd is roaring!</p>
                 </div>
                 
                 <div class="p-4 bg-gray-800/50 rounded-xl border border-neon-pink/30">
@@ -5683,17 +5685,17 @@
             const buttonGrid = createElement('div', 'grid grid-cols-2 sm:grid-cols-4 gap-4 w-full');
             const menubuttons = [
                 { title: 'TRIVIA', phase: 2, action: () => initiateTrivia(), iconEmoji: '💡' },
-                { title: 'WORDLE', phase: 7, action: () => setPhase(7,'Wordle'), iconEmoji: '📝' },
-                { title: 'SONGS', phase: 8, action: () => setPhase(8,'Songs'), iconEmoji: '🎶' },
-                { title: 'JUST ONE', phase: 9, action: () => setPhase(9,'Just One'), iconEmoji: '1️' },
-                { title: 'CARDS', phase: 0, action: () => setPhase(20, 'Poker'), iconEmoji: '🃏' },
-                { title: 'FAMILY FEUD', phase: 11, action: () => setPhase(11, 'Family Feud'), iconEmoji: '📊' },
-                { title: 'SHOP', phase: 4, action: () => setPhase(4, 'Shop'), iconEmoji: '🛒' }, 
+                { title: 'WORDLE', phase: 7, action: () => setPhase(7), iconEmoji: '📝' },
+                { title: 'SONGS', phase: 8, action: () => setPhase(8), iconEmoji: '🎶' },
+                { title: 'JUST ONE', phase: 9, action: () => setPhase(9), iconEmoji: '1️' },
+                { title: 'CARDS', phase: 0, action: () => showChopMasteryWindow("Stage Presence"), iconEmoji: '🃏' },
+                { title: 'FAMILY FEUD', phase: 11, action: () => setPhase(11), iconEmoji: '📊' },
+                { title: 'SHOP', phase: 4, action: () => setPhase(4), iconEmoji: '🛒' }, 
                 { title: 'YAY', phase: 0, action: () => showSuccessAnimation(), iconEmoji: '🤘' },
-                { title: 'SETUP', phase: 18, action: () => setPhase(18,'Name setup'), iconEmoji: '📛' },
-                { title: 'CHOPS', phase: 17, action: () => setPhase(17, 'Chops'), iconEmoji: '📋' },
-                { title: 'INTRO', phase: 12, action: () => setPhase(12,'Intro'), iconEmoji: '🎦' },
-                { title: 'SONG MIXER (chapter 2)', phase: 13, action: () => setPhase(13,'Mixer'), iconEmoji: '🎛️' },
+                { title: 'SETUP', phase: 18, action: () => setPhase(18), iconEmoji: '📛' },
+                { title: 'CHOPS', phase: 17, action: () => setPhase(17), iconEmoji: '📋' },
+                { title: 'INTRO', phase: 12, action: () => setPhase(12), iconEmoji: '🎦' },
+                { title: 'SONG MIXER (chapter 2)', phase: 13, action: () => setPhase(13), iconEmoji: '🎛️' },
             ];
 
 
@@ -5817,11 +5819,11 @@
             ];
             if (game.bob_buttons.guitar){
                 shopData.push(
-                     { name: 'Rock Guitar Tapping Technique', price: 40, icon: '📓', desc: 'Mastery book for Instrument Synergy' }
+                     { name: 'Rock Guitar Tapping Technique', price: 40, icon: '📓', desc: 'Mastery book for Fretboard control' }
                     )
             }
             if (game.kevind_buttons.guitar){
-                shopData.push({ name: 'Positive Grid Spark Combo Amp', price: 300, icon: '📻', desc: 'Necessary for Instrument Synergy chop' });
+                shopData.push({ name: 'Positive Grid Spark Combo Amp', price: 300, icon: '📻', desc: 'Necessary for Fretboard Control chop' });
 
             }
             if (game.dj_buttons.showCD){
@@ -6198,10 +6200,10 @@
 
                 if (guess === targetWord) {
                     gameStatus = 'win';
-                    let scoreIncrease = 100 - (guesses.length * 10); // Better score for fewer guesses
+                    const scoreIncrease = 100 - (guesses.length * 10); // Better score for fewer guesses
                     let chop = game.chops.find(i => i.name === 'Social Influence');
 
-                    chop.points += updateChopScore('Social Influence', scoreIncrease);
+                    scoreIncrease = updateChopScore('Social Influence', scoreIncrease);
                     showSuccessAnimation();
                     localMessage = `WIN! ${targetWord} was the word. You earned ${scoreIncrease} Social Influence XP points! Returning to menu...`;
                     updateUI(); // Update UI for next gue
@@ -6244,7 +6246,7 @@
 
             function returnToMainMenu() {
                 // Return to the main menu (Phase 0) as requested.
-                setPhase(0, `Wordly challenge complete. Target word was: ${targetWord}.`);
+                setPhase(0, `Wordly challenge complete. Target word was: ${targetWord}. Score: $${game.score}.`);
             }
 
             // --- Event Listener Setup ---
@@ -6513,7 +6515,7 @@
 
             if (pPoints === 2) { game.paigow.playerWins++; game.paigow.status = "VICTORY! CIRCUIT SYNCED."; }
             else if (pPoints === 1) { game.paigow.status = "PUSH. SIGNAL IS NEUTRAL."; }
-            else { game.paigow.dealerWins++; game.paigow.status = "DEFEAT"; }
+            else { game.paigow.dealerWins++; game.paigow.status = "DEFEAT. FEEDBACK LOOP DETECTED."; }
 
             renderGame();
 
@@ -6531,16 +6533,14 @@
                 } else {
                     const finalWin = game.paigow.playerWins >= 1;
                     if (finalWin) {
+                        //game.score += 500;
                         showSuccessAnimation();
                         game.message = "CHALLENGE COMPLETE! +50 XP";
-                        let chop = game.chops.find(i => i.name === 'Instrument Synergy');
-                        chop.points += updateChopScore('Instrument Synergy',50);
-
                     } else {
                         game.message = "CHALLENGE FAILED. BEST LUCK NEXT TIME.";
                     }
                     game.paigow = null;
-                    setPhase(0, game.message);
+                    setPhase(1, game.message);
                 }
             }, 5000);
         }
@@ -6643,7 +6643,7 @@
                     throw new Error("MIDI file contained no playable notes/tracks.");
                 }
 
-                const START_OFFSET_SECONDS  = 50;
+                const START_OFFSET_SECONDS  = 40
                 // Set the transport loop based on the MIDI file's total duration
                 // We will loop the music over the total max duration of the longest track.
                 game.musicTransport.loop = true;
@@ -6705,22 +6705,18 @@
             game.challengeActive = false;
             
             const correctBand = game.currentBand.toLowerCase();
-            const correctSong = game.currentSong.toLowerCase();
-
             let resultMessage = '';
-            game.pendingAcquisition.chop = 'Rhythm Mastery';
-            let chop = game.chops.find(i => i.name === 'Rhythm Mastery');
-
 
             if (isTimeout) {
+                game.chops["Rhythm Mastery"] = Math.max(0, game.chops["Rhythm Mastery"] );
                 resultMessage = `TIME OUT! Challenge Failed. Correct Song: ${game.currentSong}.`;
-            } else if (playerGuess === correctSong) {
-                chop.points += updateChopScore('Rhythm Mastery',50);
-
-                resultMessage = `CORRECT! +50 Rhythm mastery Points. Song: ${game.currentSong}.`;
+            } else if (playerGuess === correctBand) {
                 showSuccessAnimation();
-
+                game.score += 50;
+                game.chops["Rhythm Mastery"] += 50;
+                resultMessage = `CORRECT! +50 Rhythm mastery Points. Band: ${game.currentSong}.`;
             } else {
+                game.chops["Rhythm Mastery"] = Math.max(0, game.chops["Rhythm Mastery"] );
                 resultMessage = `INCORRECT. Correct Song: ${game.currentSong}.`;
             }
 
@@ -6729,7 +6725,7 @@
             // Wait 3 seconds, then move to the menu
             setTimeout(() => {
                 game.phase = 0;
-                game.message = "";
+                game.message = "Challenge complete. Returning to System Menu.";
                 renderGame();
             }, 3000);
 
@@ -6941,13 +6937,6 @@
             if (!game.familyFeud.isRoundActive || game.isLoading) return;
             
             const normalizedGuess = guess.trim().toLowerCase();
-
-            if (normalizedGuess.length <= 2) {
-                game.message = "Guess too short! Try a more specific answer.";
-                renderGame();
-                return;
-            }
-
             const currentChallenge = game.familyFeud.currentChallenge;
             let correct = false;
 
@@ -6996,12 +6985,11 @@
             game.familyFeud.isRoundActive = false;
             
             if (wonRound) {
-                console.log(game.familyFeud.roundPoints);
+                game.score += game.familyFeud.roundPoints;
                 game.familyFeud.totalPointsScored += game.familyFeud.roundPoints;
-                console.log(game.familyFeud.totalPointsScored);
                 let chop = game.chops.find(i => i.name === 'Stage Presence');
-                chop.points += updateChopScore('Stage Presence',game.familyFeud.totalPointsScored); 
-                console.log(chop.points);
+                chop.points +=game.familyFeud.roundPoints;
+
                 game.message = `ROUND WON! You scored ${game.familyFeud.roundPoints} Stage Presence points.`;
             } else {
                 game.chops["Stage Presence"] = Math.max(0, game.chops["Stage Presence"] );
@@ -7011,7 +6999,7 @@
             }
 
             // Move to next question index
-            game.familyFeud.currentChallengeIndex ++;
+            game.familyFeud.currentChallengeIndex++;
 
             renderGame();
         }
@@ -7079,9 +7067,9 @@
 
                 <div class="w-full mt-4">
                     <button id="next-q-button" onclick="loadNextFeudQuestion()" class="metal-button w-full py-3 text-xl bg-indigo-600 hover:bg-indigo-700 ${ff.isRoundActive ? 'hidden' : 'block'}">
-                        CONTINUE TO NEXT CHALLENGE
+                        CONTINUE TO NEXT CHALLENGE (${ff.Challenges.length - ff.currentChallengeIndex} left)
                     </button>
-                    <button onclick="setPhase(0, '.')" class="metal-button w-full py-3 text-xl bg-gray-600 hover:bg-gray-700 mt-2">
+                    <button onclick="setPhase(0, '')" class="metal-button w-full py-3 text-xl bg-gray-600 hover:bg-gray-700 mt-2">
                         EXIT TO MENU
                     </button>
                 </div>
@@ -7206,9 +7194,10 @@
             const normalizedCorrect = word.toUpperCase();
 
             if (normalizedGuess === normalizedCorrect) {
+                //game.score += points; // Use dynamic points
                 let chop = game.chops.find(i => i.name === 'Lyrical Flow');
 
-                chop.points += updateChopScore('Lyrical Flow',points);
+                chop.points += points;
                 showSuccessAnimation();
                 updateFeedback(`🎉 CORRECT! The word was: ${word}. +${points} Lyrical Flow points!`, 'text-green-400 bg-green-900/50 border border-green-700');
                 endGame();
@@ -7218,6 +7207,7 @@
                 CLUE_GAME_STATE.triesLeft--;
 
                 if (CLUE_GAME_STATE.triesLeft > 0) {
+                    game.chops["Lyrical Flow"] = Math.max(0, game.chops["Lyrical Flow"] );
                     updateFeedback(`INCORRECT. Try again! You have ${CLUE_GAME_STATE.triesLeft} guesses left.`, 'text-red-400 bg-red-900/50 border border-red-700');
                     clueGameElements.guessInput.value = '';
                 } else {
@@ -7256,7 +7246,7 @@
                 clueGameElements.cluesList.appendChild(div);
             });
 
-            updateFeedback(`Points: ${CLUE_GAME_STATE.currentChallenge.points}. You have ${CLUE_GAME_STATE.triesLeft} attempts.`, 'text-electric-cyan bg-electric-blue/20 border border-electric-cyan');
+            updateFeedback(`INITIATING CLUE PROTOCOL (Points: ${CLUE_GAME_STATE.currentChallenge.points}). You have ${CLUE_GAME_STATE.triesLeft} attempts.`, 'text-electric-cyan bg-electric-blue/20 border border-electric-cyan');
         }
 
         /**
@@ -7301,7 +7291,7 @@
                 <div class="w-full max-w-lg bg-gray-800 p-6 md:p-10 border-4 border-electric-cyan rounded-xl shadow-2xl shadow-electric-cyan/50">
 
                     <h1 class="text-3xl font-bold title-font text-center text-electric-cyan mb-4">CYBERCLUE SEQUENCE</h1>
-                    <p class="text-center text-sm text-gray-400 mb-8">Find the harmonic thread that ties these together.</p>
+                    <p class="text-center text-sm text-gray-400 mb-8">Decipher the 4 data points to find the keyword.</p>
 
                     <!-- Clues List Container -->
                     <div id="clueGame-cluesList" class="grid grid-cols-2 gap-4 mb-8">
@@ -7326,7 +7316,7 @@
                     <!-- Play Again Button -->
                     <button id="clueGame-playAgain"
                             class="mt-6 w-full px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-150 ease-in-out hidden">
-                        RETURN
+                        Back to the Streets
                     </button>
                 </div>
             `;
@@ -8002,8 +7992,8 @@
 
 
          function updateChopScore(chopName, scoreIncrease) {
-            const currentLevelData = LEVEL_CONFIG[game.level];
-            const chop = game.chops.find(c => c.name === chopName);
+            const currentLevelData = LEVEL_CONFIG[window.game.currentLevel];
+            const chop = window.game.chops.find(c => c.name === chopName);
             
             if (!chop) return;
 
@@ -8013,26 +8003,21 @@
             chop.points = Math.min(maxPoints, chop.points + scoreIncrease);
             
             const actualIncrease = chop.points - previousPoints;
-            console.log('max:', currentLevelData.chopMaxScale, ' ActualInc:', actualIncrease );
 
             // 2. Check if ALL chops have reached the current max level
-            const allAtMax = game.chops.every(c => c.points >= maxPoints);
+            const allAtMax = window.game.chops.every(c => c.points >= maxPoints);
 
-            console.log(allAtMax, game.currentLevel, LEVEL_CONFIG.length - 1);
             // 3. Update Rank Level if all at max and next level exists
-            if (allAtMax && game.level < LEVEL_CONFIG.length - 1) {
-                game.level++;
-
-
+            if (allAtMax && window.game.currentLevel < LEVEL_CONFIG.length - 1) {
+                window.game.currentLevel++;
+                
                 // NEW: Reset all scores to 0 for the new rank tier
-                game.chops.forEach(c => {
+                window.game.chops.forEach(c => {
                     c.points = 0;
                 });
-                let nextRank = LEVEL_CONFIG[game.level].rank;
-                game.rank = nextRank;
+                
+                const nextRank = LEVEL_CONFIG[window.game.currentLevel].rank;
                 showGameMessage(`RANK UP! You are now a ${nextRank}! Scores reset for new tier.`, 'success');
-
-                return -previousPoints;
             }
 
             return actualIncrease;
@@ -8105,7 +8090,7 @@
             inventoryContent.appendChild(grid);
             // --- BACK BUTTON ---
             const backButton = createElement('button', 'metal-button px-8 py-3 text-xl mt-8 bg-indigo-600 hover:bg-indigo-700', 'MENU');
-            backButton.onclick = () => setPhase(0, '.');
+            backButton.onclick = () => setPhase(0, '');
             inventoryContent.appendChild(backButton);
 
             return inventoryContent;
@@ -8145,7 +8130,7 @@
             viewerContent.appendChild(details);
 
             const backButton = createElement('button', 'metal-button px-8 py-3 text-xl mt-8 bg-green-600 hover:bg-green-700', 'BACK TO INVENTORY');
-            backButton.onclick = () => setPhase(14, '');
+            backButton.onclick = () => setPhase(14, 'Inventory log opened.');
             viewerContent.appendChild(backButton);
 
             return viewerContent;
@@ -8357,7 +8342,7 @@
             // Reset iPhone state on exit
             game.iphoneState.view = 'notifications';
             game.iphoneState.selectedMessageIndex = null;
-            setPhase(0, '');
+            setPhase(0, 'Check your messages later!');
         }
 
 
@@ -8533,9 +8518,9 @@
         /** Toggles between the Main Menu (0) and the Notifications (16) screen. */
         function handlePhoneClick() {
             if (game.phase === 16) {
-                setPhase(0, '');
+                setPhase(0, 'Returning to System Menu.');
             } else {
-                setPhase(16, '');
+                setPhase(16, 'New communications received. Check your Pocket Comp.');
             }
         }
         
@@ -8626,7 +8611,7 @@
 
             // Back button retains the metal style as it's outside the "paper" area
             const backButton = createElement('button', 'metal-button w-full max-w-xs py-3 text-lg mt-12 bg-gray-600 hover:bg-gray-700', 'Back to the Streets');
-            backButton.onclick = () => setPhase(10, '');
+            backButton.onclick = () => setPhase(10, 'Returning to the Map');
             chopContent.appendChild(backButton);
 
             return chopContent;
@@ -8662,7 +8647,7 @@
     function checkChopUnlockStatus() {
             const allUnlocked = window.game.chops.every(chop => chop.isUnlocked === true);
             if (allUnlocked) {
-                setPhase(100,''); // Phase 100 = Chapter Complete
+                setPhase(100); // Phase 100 = Chapter Complete
             }
         };
 
@@ -8832,7 +8817,7 @@
             default:
                 const topicContent = createElement('div', 'flex flex-col items-center justify-center h-full space-y-8 p-8', 'UNKNOWN GAME STATE');
                 const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'MENU');
-                backButton.onclick = () => setPhase(0, '');
+                backButton.onclick = () => setPhase(0, 'Main Menu. Ready for the next challenge.');
                 topicContent.appendChild(backButton);
                 return topicContent;
         }
@@ -8851,12 +8836,12 @@
 
                  const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-6 pb-6 border-b border-white/10');
             iconRow.innerHTML = `
-                <button onclick="setPhase(10,'')" class="p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all text-4xl shadow-xl" title="Map">🗺️</button>
-                <button onclick="setPhase(14,'')" class="p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all text-4xl shadow-xl" title="Inventory">🎒</button>
-                <div class="relative cursor-pointer p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all text-4xl shadow-xl" title="Notifications" onclick="setPhase(16,'')">
+                <button onclick="setPhase(10)" class="p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all text-4xl shadow-xl" title="Map">🗺️</button>
+                <button onclick="setPhase(14)" class="p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-110 transition-all text-4xl shadow-xl" title="Inventory">🎒</button>
+                <div class="relative cursor-pointer p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all text-4xl shadow-xl" title="Notifications" onclick="setPhase(16)">
                     📱 ${badgeHtml}
                 </div>
-                <div class="relative cursor-pointer p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all text-4xl shadow-xl" title="Menu" onclick="setPhase(0,'')">
+                <div class="relative cursor-pointer p-5 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-110 transition-all text-4xl shadow-xl" title="Menu" onclick="setPhase(0)">
                     ⚙️ 
                 </div>
 
