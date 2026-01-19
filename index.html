@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎶</text></svg>">
 
-    <title>Change this title!</title>
+    <title>HABIBI'S DREAM</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
@@ -1317,13 +1317,13 @@
 </head>
 <body>
 
-    <div id="app" class="min-h-screen p-4 md:p-8 flex flex-col items-center">
+    <div id="app" class="min-h-screen w-full overflow-x-hidden p-2 md:p-8 flex flex-col items-center bg-gray-950">
         <div id="error-display" class="hidden fixed top-0 left-0 right-0 p-4 bg-red-800 text-white font-bold text-center z-50 shadow-2xl border-b-4 border-red-500">
             <p id="error-message">System Error Detected.</p>
         </div>
             
         <!-- The main game container will be where the dynamic rendering happens -->
-        <div id="game-container" class="flex items-center">
+        <div id="game-container" class="w-full flex justify-center">
 
                 <div class="metal-card">
 
@@ -1341,7 +1341,7 @@
         </div>
 
          <!-- Global Modal Structure for the Memory Matrix -->
-        <div id="matrix-modal" class="modal" onclick="this.style.display = 'none';">
+        <div id="matrix-modal" class="modal fixed inset-0 z-50 bg-black/80 hidden items-center justify-center" onclick="this.style.display = 'none';">
             <div class="bg-gray-800 p-8 rounded-xl shadow-2xl border-4 border-neon-pink max-w-3xl w-11/12" onclick="event.stopPropagation()">
                 <h4 class="text-3xl title-font text-neon-pink mb-6 text-center">MEMORY COMPONENT MATRIX</h4>
                 <div id="matrix-content">
@@ -7657,14 +7657,12 @@
         function renderMap(){
             // This function creates the HTML structure and returns the main container.
             const mapHtml = `
-                <div id="map-container" class="w-full mx-auto">
-
-                    <div id="map-host" class="game-asset rounded-lg">
+                <div id="map-container" class="w-full max-w-full overflow-hidden">
+                    <div id="map-host" class="game-asset rounded-lg bg-black/20 overflow-hidden">
                         <svg class="sf-map-overlay w-full h-auto" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" id="sf-map">
                         </svg>
                     </div>
                     
-                    <!-- Music Themed Status Panel -->
                     <div id="status-panel" class="mt-6 p-4 rounded-lg shadow-2xl music-panel">
                         <!-- p class="title text-xl mb-1">>>> List of Topics / Items to interact <<<</p> -->
                         <div id="output-message" class="text-lg text-white">
@@ -9262,14 +9260,15 @@
 
         container.innerHTML = '';
         
-        const unifiedWrapper = createElement('div', 'w-full max-w-6xl mx-auto flex flex-col space-y-6 animate-fade-in');
+        const unifiedWrapper = createElement('div', 'w-full max-w-6xl mx-auto flex flex-col space-y-4 md:space-y-6 animate-fade-in px-1');
 
         if (game.message) {
-            const messageBar = createElement('div', 'p-4 text-center rounded-lg font-semibold shadow-inner bg-black/40 text-electric-cyan border border-electric-cyan/30', game.message);
+            const messageBar = createElement('div', 'p-3 text-sm md:text-base text-center rounded-lg font-semibold shadow-inner bg-black/40 text-electric-cyan border border-electric-cyan/30', game.message);
             unifiedWrapper.appendChild(messageBar);
         }
 
-        const phaseContainer = createElement('div', 'relative min-h-[400px] w-full bg-gray-900/50 rounded-2xl border-2 border-white/5 p-6 shadow-2xl');
+        const phaseContainer = createElement('div', 'relative min-h-[300px] md:min-h-[400px] w-full bg-gray-900/50 rounded-2xl border-2 border-white/5 p-3 md:p-6 shadow-2xl overflow-hidden');
+
 
 
         let contentElement;
@@ -9316,26 +9315,29 @@
                 ? `<span class="absolute -top-2 -right-2 bg-red-600 text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center border border-white animate-pulse">${unreadCount}</span>` 
                 : '';
 
-            const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-3 md:gap-6 pb-6  border-white/10');
+            const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-2 md:gap-6 pb-4');
+
 
             iconRow.innerHTML = `
-                <button onclick="setPhase(10,'')" class="aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl">🗺️</button>
-                
-                <button onclick="setPhase(14,'')" class="aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl">🎒</button>
-                
-                <div class="relative aspect-square cursor-pointer p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" onclick="setPhase(16)">
-                    📱 ${badgeHtml}
-                </div>
+            <button onclick="setPhase(10,'')" class="aspect-square p-2 bg-gray-800 rounded-xl border-2 border-white/10 hover:border-electric-cyan active:scale-95 transition-all md:p-5 text-xl md:text-4xl shadow-xl">🗺️</button>
+            
+            <button onclick="setPhase(14,'')" class="aspect-square p-2 bg-gray-800 rounded-xl border-2 border-white/10 hover:border-electric-cyan active:scale-95 transition-all md:p-5 text-xl md:text-4xl shadow-xl">🎒</button>
+            
+            <div class="relative aspect-square cursor-pointer p-2 bg-gray-800 rounded-xl border-2 border-white/10 hover:border-neon-pink active:scale-95 transition-all md:p-5 text-xl md:text-4xl shadow-xl" onclick="setPhase(16)">
+                📱 ${badgeHtml}
+            </div>
 
-                <div class="relative aspect-square cursor-pointer p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" onclick="setPhase(0, 'Game Menu')">
-                    ⚙️ 
-                </div>
+            <div class="aspect-square cursor-pointer p-2 bg-gray-800 rounded-xl border-2 border-white/10 hover:border-neon-pink active:scale-95 transition-all md:p-5 text-xl md:text-4xl shadow-xl" onclick="setPhase(0, 'Game Menu')">
+                ⚙️ 
+            </div>
 
-                <div class="aspect-square flex flex-col items-center justify-center p-3 bg-gray-800 rounded-2xl border-2 border-white/10 shadow-xl">
-                    <span class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-tighter mb-0.5">Cash</span>
-                    <span class="text-sm md:text-lg font-black text-yellow-400 tracking-tighter">$${game.score.toLocaleString()}</span>
-                </div>
-            `;
+            <!-- CASH DISPLAY: flex-grow allows it to fill remaining space if icons wrap -->
+            <div class="flex-grow md:flex-none flex flex-col items-center justify-center p-2 bg-gray-800 rounded-xl border-2 border-white/10 shadow-xl min-w-[70px]">
+                <span class="text-[8px] md:text-xs font-bold text-gray-500 uppercase tracking-tighter">Cash</span>
+                <span class="text-xs md:text-lg font-black text-yellow-400 tracking-tighter">$${game.score.toLocaleString()}</span>
+            </div>
+        `;
+
 
 
             unifiedWrapper.appendChild(iconRow);
