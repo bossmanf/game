@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>California Connect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            touch-action: none;
+        }
+        .city-node {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .city-node:hover {
+            transform: scale(1.2);
+            filter: brightness(1.5);
+        }
+        .route-path {
+            transition: stroke-width 0.4s, stroke-opacity 0.4s, stroke 0.4s;
+            cursor: pointer;
+        }
+        .route-path:hover:not(.built) {
+            stroke-opacity: 0.6;
+        }
+        .built {
+            stroke-dashoffset: 0;
+            animation: dash 0.5s ease-out forwards;
+        }
+        @keyframes dash {
+            from { stroke-dashoffset: 100; }
+            to { stroke-dashoffset: 0; }
+        }
+        .ui-panel {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+
+    <!-- Header -->
+    <header class="p-4 flex justify-between items-center ui-panel shadow-lg z-10">
+        <div>
+            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">
+                California Connect
+            </h1>
+            <p class="text-xs text-slate-400">Build your rail empire across the Golden State</p>
+        </div>
+        <div class="flex gap-6 text-center">
+            <div>
+                <p class="text-xs uppercase text-slate-500">Routes Built</p>
+                <p id="score" class="text-xl font-mono font-bold text-green-400">0</p>
+            </div>
+            <div>
+                <p class="text-xs uppercase text-slate-500">Resources</p>
+                <p id="resources" class="text-xl font-mono font-bold text-blue-400">100</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 relative overflow-hidden bg-slate-900">
+        <!-- SVG Map Container -->
+        <svg id="game-map" class="w-full h-full" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid meet">
+            <!-- Background Decoration -->
+            <path d="M200 0 Q 150 500 250 1000" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="200" />
+            
+            <g id="routes-layer"></g>
+            <g id="cities-layer"></g>
+        </svg>
+
+        <!-- Tooltip -->
+        <div id="tooltip" class="absolute hidden pointer-events-none bg-black/90 p-2 rounded border border-slate-700 text-sm z-50"></div>
+
+        <!-- Instructions -->
+        <div class="absolute bottom-6 left-6 ui-panel p-4 rounded-xl max-w-xs">
+            <h3 class="font-bold text-orange-400 mb-2">How to Play</h3>
+            <ul class="text-xs space-y-2 text-slate-300">
+                <li>• Click a <span class="text-white font-bold">faint route</span> to build it.</li>
+                <li>• Building costs <span class="text-blue-400">10 Resources</span>.</li>
+                <li>• Vibrant colors indicate completed connections.</li>
+                <li>• Connect the coast to the desert!</li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        const cities = [
+            { id: 'sj', name: 'San Jose', x: 220, y: 150, color: '#f87171' },
+            { id: 'sa', name: 'Salinas', x: 230, y: 240, color: '#fb923c' },
+            { id: 'slo', name: 'San Luis Obispo', x: 300, y: 380, color: '#fbbf24' },
+            { id: 'sm', name: 'Santa Maria', x: 320, y: 440, color: '#facc15' },
+            { id: 'sb', name: 'Santa Barbara', x: 380, y: 520, color: '#a3e635' },
+            { id: 've', name: 'Ventura', x: 440, y: 560, color: '#4ade80' },
+            { id: 'ox', name: 'Oxnard', x: 460, y: 580, color: '#2dd4bf' },
+            { id: 'tr', name: 'Tracy', x: 280, y: 120, color: '#38bdf8' },
+            { id: 'pa', name: 'Patterson', x: 300, y: 160, color: '#60a5fa' },
+            { id: 'mo', name: 'Modesto', x: 340, y: 140, color: '#818cf8' },
+            { id: 'fr', name: 'Fresno', x: 400, y: 250, color: '#a78bfa' },
+            { id: 'ba', name: 'Bakersfield', x: 480, y: 450, color: '#c084fc' },
+            { id: 'la', name: 'Los Angeles', x: 530, y: 620, color: '#e879f9' },
+            { id: 'an', name: 'Anaheim', x: 570, y: 650, color: '#f472b6' },
+            { id: 'st', name: 'Santa Ana', x: 585, y: 670, color: '#fb7185' },
+            { id: 'ir', name: 'Irvine', x: 610, y: 690, color: '#f87171' },
+            { id: 'oc', name: 'Oceanside', x: 650, y: 760, color: '#fb923c' },
+            { id: 'ca', name: 'Carlsbad', x: 665, y: 785, color: '#fbbf24' },
+            { id: 'bb', name: 'Big Bear', x: 680, y: 580, color: '#34d399' },
+            { id: 'ps', name: 'Palm Springs', x: 740, y: 650, color: '#fbbf24' },
+            { id: 'sd', name: 'San Diego', x: 720, y: 880, color: '#60a5fa' }
+        ];
+
+        const connections = [
+            // Coast Route
+            ['sj', 'sa'], ['sa', 'slo'], ['slo', 'sm'], ['sm', 'sb'], ['sb', 've'], ['ve', 'ox'], ['ox', 'la'],
+            // Inland Route
+            ['tr', 'pa'], ['pa', 'mo'], ['mo', 'fr'], ['fr', 'ba'], ['ba', 'la'],
+            // Southern Hub
+            ['la', 'an'], ['an', 'st'], ['st', 'ir'], ['ir', 'oc'], ['oc', 'ca'], ['ca', 'sd'],
+            // Cross-over links
+            ['sj', 'tr'], ['fr', 'slo'], ['ba', 'sb'], ['la', 'bb'], ['bb', 'ps'], ['ps', 'sd'], ['ir', 'ps']
+        ];
+
+        let score = 0;
+        let resources = 100;
+
+        const routesLayer = document.getElementById('routes-layer');
+        const citiesLayer = document.getElementById('cities-layer');
+        const scoreEl = document.getElementById('score');
+        const resourcesEl = document.getElementById('resources');
+        const tooltip = document.getElementById('tooltip');
+
+        function init() {
+            // Draw Connections
+            connections.forEach(([fromId, toId]) => {
+                const from = cities.find(c => c.id === fromId);
+                const to = cities.find(c => c.id === toId);
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', `M ${from.x} ${from.y} L ${to.x} ${to.y}`);
+                path.setAttribute('stroke', to.color);
+                path.setAttribute('stroke-width', '4');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke-opacity', '0.15'); // Weak intensity
+                path.setAttribute('stroke-linecap', 'round');
+                path.classList.add('route-path');
+                
+                path.addEventListener('click', () => buildRoute(path, from, to));
+                path.addEventListener('mouseenter', (e) => showTooltip(e, `Route: ${from.name} to ${to.name}`));
+                path.addEventListener('mouseleave', hideTooltip);
+                
+                routesLayer.appendChild(path);
+            });
+
+            // Draw Cities
+            cities.forEach(city => {
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                group.classList.add('city-node');
+
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', city.x);
+                circle.setAttribute('cy', city.y);
+                circle.setAttribute('r', '8');
+                circle.setAttribute('fill', city.color);
+                circle.setAttribute('stroke', '#fff');
+                circle.setAttribute('stroke-width', '2');
+
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', city.x + 12);
+                label.setAttribute('y', city.y + 4);
+                label.textContent = city.name;
+                label.setAttribute('fill', 'white');
+                label.setAttribute('font-size', '12px');
+                label.setAttribute('font-weight', 'bold');
+                label.style.textShadow = '0 0 5px black';
+
+                group.appendChild(circle);
+                group.appendChild(label);
+                
+                group.addEventListener('mouseenter', (e) => showTooltip(e, city.name));
+                group.addEventListener('mouseleave', hideTooltip);
+                
+                citiesLayer.appendChild(group);
+            });
+        }
+
+        function buildRoute(path, from, to) {
+            if (path.classList.contains('built')) return;
+            
+            if (resources >= 10) {
+                resources -= 10;
+                score += 1;
+                
+                path.classList.add('built');
+                path.setAttribute('stroke-opacity', '1'); // Vibrant
+                path.setAttribute('stroke-width', '8');
+                
+                // Audio feedback (synthetic)
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.2);
+
+                updateUI();
+            } else {
+                showFlashMessage("Not enough resources!");
+            }
+        }
+
+        function updateUI() {
+            scoreEl.textContent = score;
+            resourcesEl.textContent = resources;
+        }
+
+        function showTooltip(e, text) {
+            tooltip.style.display = 'block';
+            tooltip.textContent = text;
+            tooltip.style.left = (e.clientX + 15) + 'px';
+            tooltip.style.top = (e.clientY + 15) + 'px';
+        }
+
+        function hideTooltip() {
+            tooltip.style.display = 'none';
+        }
+
+        function showFlashMessage(msg) {
+            const el = document.createElement('div');
+            el.className = 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-500 px-6 py-3 rounded-full font-bold shadow-2xl z-50 animate-bounce';
+            el.textContent = msg;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 2000);
+        }
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>

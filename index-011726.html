@@ -1353,73 +1353,43 @@
     </div>
     
 
-      <div id="chapterOneView" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gray-900">
-        <!-- Background Image Container - Increased visibility -->
-        <div class="absolute inset-0 z-0">
-            <img src="street-empty.jpg" alt="Background" class="w-full h-full object-cover opacity-80 scale-100" onerror="this.src='./sprites/street-empty.jpg'">
-            <!-- Lighter Overlay to let image show through -->
-            <div class="absolute inset-0 bg-black/30"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-        </div>
-
-        <!-- Main Content Card - More compact constraints -->
-        <div class="relative z-10 w-full max-w-3xl mx-4 p-8 md:p-12 border-l-4 border-yellow-400 bg-black/10 border-t border-white/5 shadow-2xl">
-        <!-- Minimal scanline for texture without blocking view -->
-        <div class="scanlines opacity-30"></div>
-            
-            <!-- Status Bar -->
-            <div class="flex justify-between items-center mb-6">
-                <div class="text-yellow-400 text-[10px] font-bold tracking-[0.3em] uppercase">
-                    SYSTEM_INIT // 01
-                </div>
-                <div class="h-[1px] flex-grow mx-4 bg-white/20"></div>
-                <div class="text-cyan-400 text-[10px] font-bold animate-pulse">
-                    Status: Unplugged
-                </div>
+    <div id="chapterOneView">
+        <div class="punk-card relative"><div class="scanlines"></div>
+            <div class="flex justify-between items-start mb-6">
+                <div class="tag title-font uppercase tracking-tighter"> </div>
+                <div class="tag text-white title-font text-xs opacity-50 uppercase">STATUS: UNPLUGGED</div>
             </div>
 
-            <!-- Chapter Label -->
-            <div class="mb-2">
-                <span class="text-cyan-400 text-xs font-bold tracking-[0.4em] uppercase opacity-80">Chapter One</span>
-            </div>
+            <h1 class="title-font text-2xl text-cyan-400 mb-2 uppercase italic tracking-tighter">Chapter One</h1>
             
-            <!-- Hero Titles - Scaled down and compacted -->
-            <div class="relative mb-10">
-                <h1 class="text-5xl md:text-7xl text-white font-black leading-none tracking-tighter uppercase italic">
+            <div class="relative">
+                <h1 class="punk-font text-7xl md:text-9xl text-white leading-none  mb-4">
                     SIX STRINGS
                 </h1>
-                <div class="flex items-center mt-[-5px]">
-                    <div class="h-1 w-12 bg-yellow-400 mr-3"></div>
-                    <h2 class="text-3xl md:text-5xl text-yellow-400 font-bold italic tracking-tight">
-                        To Discovery
-                    </h2>
-                </div>
+                <h1 class="marker-font text-5xl md:text-7xl text-yellow-400 -mt-6 ml-12 rotate-[-4deg] drop-shadow-lg">
+                    To Discovery
+                </h1>
             </div>
 
-            <!-- Narrative Section -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
-                <div class="md:col-span-7">
-                    <p class="text-gray-200 text-lg md:text-xl italic leading-snug font-medium border-l-2 border-white/30 pl-4">
-                        "This guitar is my only true voice. I will stop playing for myself and start playing for the world."
-                    </p>
-                </div>
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t-2 border-white/20 pt-8">
+                <p class="text-gray-300 text-lg italic leading-tight font-light">
+                    "This guitar isn't just wood and wire; it's the only voice I've ever truly had. Tonight, I stop playing for myself and start playing for the world I know is out there."
+                </p>
                 
-                <div class="md:col-span-5 flex flex-col items-stretch">
-                    <button onclick="exitChapterOne()" class="group relative bg-yellow-400 text-black font-black py-4 px-8 transition-all hover:bg-white active:scale-95 shadow-[4px_4px_0px_#22d3ee]">
-                        <span class="inline-block text-xl uppercase italic">
-                            CRANK IT UP
-                        </span>
+                <div class="flex flex-col items-center md:items-end">
+                    <button onclick="exitChapterOne()" class="btn-start bg-white text-black title-font font-black py-4 px-10 border-2 border-black shadow-[6px_6px_0px_#ffea00] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all uppercase">
+                        Crank It Up
                     </button>
+                    <span class="text-[10px] title-font text-white/30 mt-4 tracking-[0.3em]">CHASE THE SOUND</span>
                 </div>
+
             </div>
 
-            <!-- Bottom Tag -->
-            <div class="mt-8 pt-4 border-t border-white/10 text-[9px] text-white/40 tracking-[0.5em] uppercase text-center">
-                Frequency: 440Hz // Chase that light!
+            <div class="absolute -bottom-4 -left-4 bg-white text-black p-2 font-bold text-[10px] transform -rotate-12 border-2 border-black">
+                DREAM BIG. PLAY LOUD.
             </div>
         </div>
     </div>
-
 
     <div id="cinematicView" class="hidden fixed inset-0 flex flex-col items-center justify-center p-4 opacity-0 cursor-pointer" onclick="displayNextSentence()">
     <div class="mb-6 flex justify-center w-full max-w-4xl">
@@ -1502,7 +1472,6 @@
             dialogueIndex: 0,
             dialogueData: '', 
             activeCharacter: '',
-            iPhoneMessage : false,
             isFanPanelVisible: true, // NEW: Control fan panel visibility
             currentTopic: '',
             questionData: null,
@@ -1643,22 +1612,17 @@
             bob_buttons:
             {
                 showHelpButton:true,
-                guitar: false,
-                amoeba: false
+                guitar: false
             },
             dj_buttons:
             {
                 showHelpButton:true,
-                showCD: false,
-                cliffs: true
+                showCD: false
             },
             bestie2_buttons:{
                 showHelpButton :true,
                 practiceChop : false,
                 arn : false
-            },
-            popup_buttons:{
-                tour:true
             },
             iphoneState: {
                 view: 'notifications', // 'notifications' or 'message'
@@ -1675,7 +1639,7 @@
             conversation_topics: {
             unlocked: [
 
-                    {name:"Musician Career",icon:'🎶',image:'./sprites/career.png', acquired:false,desc:'My big dream of becoming a musician', actions: {
+                    {name:"Musician Career",icon:'🎶',image:'./sprites/career.png', acquired:true,desc:'My big dream of becoming a musician', actions: {
                      'BITTER END': 'kevind_action1', 
                      'BESTIE': 'sid_key_action'
                  },messages: {
@@ -1683,17 +1647,16 @@
                         'Metallica Pop-up Store': 'If you make it big, remember who sold you your first shirt!',
                         'BESTIE': 'I know nothing but maybe ${game.names.bestie3} can help you!',
                         'HSB Festival': 'We\'re always looking for new talent. Keep your eyes on the main stage.',
-                        'Crazy K': 'A musician career? Slow down, superstar. Show me your Chops List first',
-                        'The Fillmore': 'I do not care about your dreams. Get out of here!',
+                        'Crazy K': 'Wonderful! What are your technical skills?',
+                        'The Fillmore ': 'I do not care about your dreams. Get out of here!',
                         'The Fillmore ': 'You need a gimmick. Something that makes the crowd go wild before you even play a note.',
                         'The 440': 'The music business is 90% fashion and 10% talent. How\'s your wardrobe?',
                         'Peets': 'No idea but maybe your music buddy knows about it!',
-                        'Mama⬇️': 'Being a musician is nice, but maybe you keep your day job too? Just for Mama?',
-                        'Wrestling Club' :'I do not know much about music, sorry' 
+                        'Mama⬇️': 'Being a musician is nice, but maybe you keep your day job too? Just for Mama?'
                     }},
                  
 
-                    {name:"Accreditation Required",icon:'🛂',acquired:false,desc:'The Fillmore bouncer won\'t let me access without it', actions:{
+                    {name:"Accreditation",icon:'🛂',acquired:false,desc:'The Fillmore bouncer won\'t let me access without it', actions:{
                     'HSB Festival': 'bridget_action2'
                     },
                     messages: {
@@ -1703,16 +1666,16 @@
                     'HSB Festival': 'You need the official stamp.',
                     'Crazy K': 'The world demands labels, but the music needs none. Still, get the paper.',
                     'The Fillmore': 'Yes - Nobody can access without authorization. Understood?',
+                    'The Fillmore ': 'Like a license to wrestle. You can\'t step into the ring without it.',
                     'The 440': 'If you\'re not on a list, you\'re invisible. Get the accreditation and we\'ll talk.',
                     'Peets': 'A bureaucratic hurdle designed to gatekeep the "unrefined." Pedantic, really.',
-                    'Mama⬇️': 'Is this like a passport? Don\'t lose it, or the police will ask questions!',
-                    'Wrestling Club' : 'Like a license to wrestle. You can\'t step into the ring without it.'
-                    }},
+                    'Mama⬇️': 'Is this like a passport? Don\'t lose it, or the police will ask questions!'}},
+
 
                     {name:"Metallica tour", ruffle: false, icon:'🤘', image: './sprites/metallica-tour.png', desc:'Metallica Tour coming up and I WANT to be there!', acquired:false,actions: { 
                     'BITTER END': 'kevind_action2',
                     'Metallica Pop-up Store': 'popup_action1',
-                    'The 440': 'dj_action3' }, 
+                    'THE 440': 'dj_action3' }, 
                     messages: {
                     'BITTER END': 'They still got it. See \'em before they get too old to move.',
                     'Metallica Pop-up Store': 'The greatest show on earth! We\'re following them city to city.',
@@ -1721,13 +1684,13 @@
                     'Crazy K': 'The heavy metal thunder... it is a modern-day ritual of the masses.',
                     'The Fillmore ': 'The gold standard for stadium shows...',
                     'The Fillmore': 'I could not be less impressed...',
-                    'The 440': 'You will not see me there!',
+                    'THE 440': 'You will not see me there!',
                     'Peets': 'The commercialization of the "Thrash" movement is a fascinating study in capitalism.',
-                    'Mama⬇️': 'Why are they so angry in the posters? I hope they find some peace.',
-                    'Wrestling Club' : 'Are they still alive?' 
-                    }},
+                    'Mama⬇️': 'Why are they so angry in the posters? I hope they find some peace.'}
 
-                    {name:"Ultimate Metallica t-shirt",icon:'👕',image:'/sprites/metallica-tshirt.png', desc:'A rare, vintage shirt for the ultimate fan', acquired:false,actions: {
+                    },
+
+                    {name:"Ultimate Metallica t-shirt",icon:'👕',desc:'A rare, vintage shirt for the ultimate fan', acquired:false,actions: {
                     'HSB Festival' : 'bridget_action1'},
                         messages: {
                             'BITTER END': 'I would be so happy with that t-shirt... it’s a classic.',
@@ -1737,14 +1700,13 @@
                             'Crazy K': 'A uniform for the soul. Wear it with the pride of a warrior.',
                             'The Fillmore': 'That shirt is a badge of honor. People respect the vintage threads.',
                             'The Fillmore ': 'It fits well. You look like you\'re ready for the spotlight.',
-                            'The 440': 'Thanks but NO! I wouldn\'t be caught dead in that.',
+                            'THE 440': 'Thanks but NO! I wouldn\'t be caught dead in that.',
                             'Peets': 'Textile-based signaling of tribal affiliation. Typical, but the cotton quality is high.',
-                            'Mama⬇️': 'It’s very dark. Let me wash it separately so it doesn\'t ruin your nice socks!',
-                            'Wrestling Club' : 'It would be fun to rip it off in a cage match!' 
+                            'Mama⬇️': 'It’s very dark. Let me wash it separately so it doesn\'t ruin your nice socks!'
                         }
                     },
 
-                    {name: 'A.A.?', icon:'🅰️', acquired: false, desc: 'Bob needs motivation from this mysterious name. I think it is related to wrestling... ', actions : {'Peets': 'bestie2_action1', 'BITTER END': 'kevind_action7', 'Wrestling Club': 'rick_action1'},
+                    {name: 'A.A.?', icon:'🅰️', acquired: false, desc: 'Bob needs motivation from this mysterious name. I think it is related to wrestling... ', actions : {'Peets': 'bestie2_action1', 'BITTER END': 'kevind_action7'},
                     messages: {
                         'BITTER END': 'Alcoholics Anonymous? No, Bob doesn\'t drink. He\'s addicted to the grind.',
                         'Metallica Pop-up Store': 'Maybe a local band? Never heard of \'em.',
@@ -1755,8 +1717,8 @@
                         'The Fillmore ': 'If you don\'t know who Double A is, you don\'t know wrestling history, kid!',
                         'The 440': 'Is this a diva I do not know?',
                         'Peets': 'A cryptic identifier. Perhaps a reference to a specific intellectual... or an "Enforcer."',
-                        'Mama⬇️': 'A.A.? Maybe his auntie? Everyone loves their Auntie!',
-                    }},
+                        'Mama⬇️': 'A.A.? Maybe his auntie? Everyone loves their Auntie!'}
+                    },
 
                      {name: 'Fretboard List', icon:'📑', acquired: false, desc: 'The list to master Fretboar control: I need the Skeleton, the Plectrum, the Conduit, and the Map', 
                         actions : {'BITTER END': 'kevind_action5', 
@@ -1770,10 +1732,10 @@
                         'HSB Festival': 'If you finish that list, you\'re basically a pro. Come see us then.',
                         'Crazy K': 'Have you found any of the ingredientes?',
                         'The Fillmore': 'I have no time for your stupidity',
+                        'The Fillmore ': 'Training camp is over when this list is finished.',
                         'The 440': 'BORING. Just play the notes that feel good, honey.',
                         'Peets': 'A checklist for technical proficiency. How very... methodical.',
-                        'Mama⬇️': 'A shopping list? Do you need me to go to the store for you, habibi?',
-                        'Wrestling Club' : 'Training camp is over when this list is finished.'
+                        'Mama⬇️': 'A shopping list? Do you need me to go to the store for you, habibi?'
                     }}
 
                 ],
@@ -1790,12 +1752,12 @@
                         'HSB Festival': 'Ugh, I don’t have time to verify birthdays right now. Talk to security.',
                         'Crazy K': 'The government... they put a chip in the plastic, you know. I can hear it humming.',
                         'The Fillmore': 'Keep moving. I don’t care if you’re 21 or 100, you aren’t coming in.',
-                        'The Fillmore ': 'Just a card to prove you\'re stuck in the system. Does it say \'Musician\' on it? No? Figures.',
+                        'The Fillmore ': 'Arn Anderson wouldn’t need one of these. He’d just walk in and Spinebuster the world.',
                         'The 440': 'Does the photo capture your light? Honestly, mine is way more... editorial.',
                         'Peets': 'A document of existence. In the grand screenplay of life, this is just a minor prop.',
-                        'Mama⬇️': 'Oh, honey, please drive slowly. The roads are so big and scary these days.',
-                        'Wrestling Club' : 'Only validation that matters is a three-count on the mat, boy!'
-                    }},
+                        'Mama⬇️': 'Oh, honey, please drive slowly. The roads are so big and scary these days.'} 
+
+                    },
 
                     { name: "Apex Badge", icon: '📛', acquired: true, image: './sprites/apex_badge.jpg', desc: 'Badge necessary to access APEX offices. I forgot to return it...',
                     messages: 
@@ -1808,9 +1770,9 @@
                         'The Fillmore ': 'This stage has seen Hendrix and Joplin. The music history will change if we do not stop Apex...',
                         'The 440': 'Is that an Apex badge or are you just happy to see me? Just kidding. Seriously though, don\'t leave that on the bar. The beer might dissolve the corporate ego right out of it',
                         'Peets': 'We see a thousand of these a day. Usually attached to a guy who\'s too busy on a \'Sync-call\' to say please. You look like you\'re actually awake, though. Coffee’s on me if you trash it.',
-                        'Mama⬇️': 'Oh, habibi... why are you still carrying that heavy thing? It\'s not a key, it\'s a shackle. Put it in a drawer and forget who they told you to be',
-                        'Wrestling Club' : 'They have something to do with AI, right?'
-                    }},
+                        'Mama⬇️': 'Oh, habibi... why are you still carrying that heavy thing? It\'s not a key, it\'s a shackle. Put it in a drawer and forget who they told you to be'} 
+
+                    },
 
 
                     { name: "Cash", icon: '💵', acquired: true, desc: 'Money, money! Essential for street purchases, bribes, and late-night eats!' ,  actions: {'Metallica Pop-up Store': 'handleRaffleEntry'},
@@ -1824,23 +1786,9 @@
                         'Crazy K': 'Paper represents the illusion of value. I prefer trading in rare crystals and radio waves.',
                         'Peets': 'Money is just a metaphor for time spent doing things we hate. Keep your metaphors.',
                         'Mama⬇️': 'Oh, buy yourself a nice sweater, dear. It gets so chilly in the city.',
-                        'The Fillmore ': 'Enough for a coffee and a pack of strings. Don\'t let the label see you have it.',
-                        'Wrestling Club' : 'Dusty Rhodes used to say cash is king, but the belt is God. Keep the green stuff.'
-                    }},
+                        'The Fillmore_ ': 'Dusty Rhodes used to say cash is king, but the belt is God. Keep the green stuff.'} 
 
-                     { name: 'Fender Squier Stratocaster', acquired: true, icon: '🎸', desc: 'My first guitar! Humble beginnings with a classic sound.' ,actions: { 'Crazy K': 'crazy_action2', 'The Fillmore ':'bob_action4' , 'BITTER END': 'kevind_action6'} ,
-                    messages: {
-                    'BITTER END': 'A Squier? Better than nothing. At least it stays in tune... mostly.',
-                    'Metallica Pop-up Store': 'Standard gear. You gotta start somewhere before you get the ESP, right?',
-                    'BESTIE': 'It’s so shiny! Can I hold it? I promise I won\'t drop it!',
-                    'HSB Festival': 'The classic Strat sound. Perfect for the afternoon sets.',
-                    'Crazy K': 'The white wood... the silver strings... it is a talisman of the modern bard.',
-                    'The Fillmore': 'Are you telling me that you know how to use it?',
-                    'The 440': 'It’s cute. Needs some stickers or something to give it some "vibe."',
-                    'Peets': 'The industrial design of the 1950s—perfection in utility, if a bit cliché.',
-                    'Mama⬇️': 'Such a beautiful violin! Why is it made of metal and plastic?',
-                    'Wrestling Club' : 'A beginner\'s tool. Everyone starts with a Squier; everyone starts as a jobber.'
-                    }},
+                    },
 
                     { name: "Accreditation", icon: '🛂', acquired: false, image: './sprites/hsb_badge.jpg', desc: 'High-level HSB credentials needed to access VIP areas and backstage zones' ,  
                         actions: {'The Fillmore': 'bouncer_action1'},
@@ -1854,9 +1802,7 @@
                         'The Fillmore ': 'I remember my first tour pass. It felt like armor. Now it just feels like... paper.',
                         'The 440': 'So fancy!',
                         'Peets': 'Validation from an institution that won\'t exist in fifty years. Interesting choice.',
-                        'Mama⬇️': 'Does this mean you’re a professional? I hope they don’t make you work too hard, dear.',
-                        'Wrestling Club' : 'Unless that\'s a permit to suplex, I don\'t care who you \'accredit\' yourself with'
-                    } 
+                        'Mama⬇️': 'Does this mean you’re a professional? I hope they don’t make you work too hard, dear.'} 
 
                     },
 
@@ -1874,8 +1820,7 @@
                             'Crazy K': 'Wait... if I look at the photo, does the photo look back at me? I need to go hide.',
                             'Peets': 'A frozen moment in a liquid world. You look... remarkably static.',
                             'Mama⬇️': 'What a handsome face! You have your father\'s eyes, you know.',
-                            'Wrestling Club' : 'You look like a young Ric Flair, but with less glitter and more confusion.'
-                        } 
+                            'The Fillmore ': 'You look like a young Ric Flair, but with less glitter and more confusion.'} 
 
                     },
 
@@ -1902,14 +1847,13 @@
                             'BESTIE': 'Look at all those goals! I\'m exhausted just reading them.',
                             'BITTER END': 'Lists are for people who don\'t trust their own hands. But fine, I\'ll look.',
                             'Mama⬇️': 'A "Chops" list? Are you learning to cook, honey? I have a great recipe for brisket!',
-                            'The Fillmore': 'Do not wait my time with a stupid list',
-                            'Wrestling Club' : 'In the ring, your only list is: Pin, Hold, Win. But music... music is more complex.'
+                            'The Fillmore_': 'In the ring, your only list is: Punch, Kick, Win. But music... music is more complex.'
 
                         } 
                     },
 
 
-                { name: "Metallica t-shirt", icon: '👕',  image: './sprites/metallica-tshirt.png', price: 100, acquired: false, desc: 'Ultimate Metallica Anniversary T-shirt!' ,
+                { name: "Metallica t-shirt", icon: '👕',  price: 100, acquired: false, desc: 'Ultimate Metallica Anniversary T-shirt!' ,
                     actions: {'BITTER END': 'kevind_action3'},
                     messages: 
                         { 'BESTIE': 'Ugh... Really?',
@@ -1920,10 +1864,9 @@
                         'Crazy K': 'The logo is too sharp. It\'s piercing the atmospheric pressure of my workshop.',
                         'Peets': 'The fabric of the corporate machine. It looks comfortable, in a soul-crushing way.',
                         'Mama⬇️': 'It looks a bit loud, doesn\'t it? Does it come in a nice pastel blue?',
-                        'The Fillmore ': 'Classic. Loud. Aggressive. Reminds me of the 80s, when everything felt dangerous.',
-                        'BITTER END': 'Hey, I remember that tour! Or... I remember waking up in a dumpster after it.',
-                        'Wrestling Club' : 'Black and yellow? Looks like something a tag-team heel would wear to get heat.' 
-                    }},
+                        'The Fillmore ': 'Black shirts are for the NWO. You look like you\'re ready to take a bump.',
+                        'BITTER END': 'Hey, I remember that tour! Or... I remember waking up in a dumpster after it.' } 
+                    },
 
 
                 {name: 'Galactic Silver glitter', price: 25, icon:'✨', acquired: false, given: false, desc: 'Used to customize any gear or face for high-glam. DJ Robbie seems to like this brand', actions : {'The 440': 'dj_action1'},
@@ -1936,10 +1879,9 @@
                         'Crazy K': 'Tiny fragments of stars... or microplastics? Either way, they taste like purple.',
                         'Peets': 'Even the brightest glitter cannot hide the existential void beneath.',
                         'Mama⬇️': 'Oh, how sparkly! You always did like shiny things when you were little.',
-                        'The Fillmore ': 'Gold is for champions. Silver is for the runner-up. But at least it catches the light.',
-                        'BITTER END': 'I haven\'t seen that much glitter since the 80s hair metal revival. My eyes hurt.',
-                        'Wrestling Club' : 'Glitter? You think this is the 70s? We’re here to sweat, not sparkle!' 
-                    }},
+                        'The Fillmore_': 'Gold is for champions. Silver is for the runner-up. But at least it catches the light.',
+                        'BITTER END': 'I haven\'t seen that much glitter since the 80s hair metal revival. My eyes hurt.'} 
+                    },
 
                   {name: 'Disco Ball', price: 2, icon:'🪩', acquired: false, given: false, desc: ' They can "light up" a dull venue. I LOVE these guys!', actions : {'BESTIE': 'sid_action1'},
                     messages:
@@ -1952,9 +1894,7 @@
                             'Crazy K': 'Too many facets. It fragments the aura. I need a single, unified sphere of light.',
                             'Peets': 'A revolving monument to the superficiality of the Studio 54 era.',
                             'Mama⬇️': 'It reminds me of the light on the water in the old country. Very festive!',
-                            'The Fillmore ': 'Too bright. It hurts my eyes. Give me a dim basement and a humming amp',
-                            'Wrestling Club' : 'The only thing spinning in this gym should be a dizzy opponent!'
-                        }
+                            'The Fillmore ': 'Dusty Rhodes wouldn\'t have stood for this. The only thing that should shine is the gold around your waist.'}
                     },
 
                  { name: 'Arn Anderson VHS', acquired: false, given: false, price: 50, icon: '📼', desc: 'Footage of this legendary wrestler' , actions : {'The Fillmore ': 'bob_action1'},
@@ -1963,15 +1903,13 @@
                             'HSB Festival': 'Ugh...',
                             'The 440': 'Woof!',
                             'Peets': 'Yes! That will help!',
+                            'The Fillmore ': 'Is that... The Enforcer? Double A? THE SPINEBUSTER?! My mojo is tingling!',
                             'BESTIE': 'Do people still have machines that play these? It looks like a brick.',
                             'BITTER END': 'The Horsemen... those guys knew how to party. And how to break a leg.',
                             'Crazy K': 'Magnetic tape stores the screams of the past. I can hear the static of 1986.',
                             'Mama⬇️': 'Is this a movie about a nice man named Arn? He looks very stern.',
-                            'The Fillmore': 'Wait, give that here! I need to study the positioning of the left elbow!',
-                            'Wrestling Club' : 'The Enforcer! THE SPINEBUSTER! Great memories!'
-                        } 
+                            'The Fillmore': 'Wait, give that here! I need to study the positioning of the left elbow!'} 
                 },
-
                { name: 'Don Quixote', acquired: false, price: 15, icon: '📕', desc: 'A book symbolizing the "impossible dream (or something like that)"' , 
                 actions: {'Peets': 'bestie2_action3'},
                 messages:
@@ -1980,13 +1918,11 @@
                     'The 440': 'Wait, what"',
                     'Peets': 'Mmm... Thanks, but I already read it',
                     'Crazy K': 'I do not want it. How about the street library?',
-                    'BESTIE': 'I tried reading this. Way too many windmills, not enough fashion.',
+                    'BESTIE': 'I tried reading this. Way too many windmills, not enough romance.',
                     'BITTER END': 'Fighting windmills? Sounds like the worst hangover',
                     'Mama⬇️': 'A classic! Such a sad story about a man who just wanted to be a hero.',
-                    'The Fillmore ': 'Fighting windmills? Sounds like every tour I\'ve ever been on',
-                    'The Fillmore': 'We have a "no weapons" policy. Even imaginary ones.',
-                    'Wrestling Club' : 'The man was a jobber who thought he was a main-eventer. Classic heel move.'
-                } 
+                    'The Fillmore ': 'The man was a jobber who thought he was a main-eventer. Classic heel move.',
+                    'The Fillmore': 'We have a "no weapons" policy. Even imaginary ones.'} 
                 },
                 
                 { name: 'On The Road by Kerouac', acquired: false, given: false, price: 35, icon: '📘', desc: 'The ultimate SF "beatnik" bible!' ,
@@ -2001,9 +1937,7 @@
                         'BITTER END': 'I lived this book. Except with less prose and more engine trouble.',
                         'Mama⬇️': 'He should call his mother more often. It\'s dangerous to be "on the road" so much.',
                         'The Fillmore ': 'Traveling from town to town, night after night... sounds like the old territories.',
-                        'The Fillmore': 'If you\'re looking for the road, it\'s outside. Keep moving.',
-                        'Wrestling Club' : 'Traveling? If you ain\'t traveling for a title shot, you\'re just a tourist!'
-                    } 
+                        'The Fillmore': 'If you\'re looking for the road, it\'s outside. Keep moving.'} 
                     },
 
                         
@@ -2018,9 +1952,8 @@
                         'BESTIE': 'It smells amazing, but will it ruin my lipstick?',
                         'BITTER END': 'Finally, something that isn\'t liquid or deep-fried. Can I get a spoon?',
                         'Mama⬇️': 'Oh! You found the good stuff! Did you remember to add the extra lemon?',
-                        'The Fillmore ': 'The smell... it takes me back. Real food for a real soul. Beats tour-bus pizza.',
-                        'The Fillmore': 'No outside food or drink. Unless you brought enough for the whole staff.',
-                        'Wrestling Club' : 'Hearty. This is the kind of fuel you need before a 60-minute Iron Man match.' 
+                        'The Fillmore ': 'Hearty. This is the kind of fuel you need before a 60-minute Iron Man match.',
+                        'The Fillmore': 'No outside food or drink. Unless you brought enough for the whole staff.'
                     }
                 },
 
@@ -2035,9 +1968,8 @@
                         'BITTER END': 'Does the theater serve beer? That\'s my only criteria.',
                         'Peets': 'Cinema is the highest form of cultural exchange. Or a great way to hide in the dark.',
                         'Crazy K': 'The flickering light of the projector is a form of hypnotism. Be careful!',
-                        'The Fillmore ': 'Culture is the only thing the industry can\'t fully digitize. Keep that.',
+                        'The Fillmore ': 'Is it a documentary about the Sheikh? No? Then I\'ll pass.',
                         'The Fillmore': 'This isn\'t valid for entry here. Read the fine print.',
-                        'Wrestling Club': 'Is it a documentary about the Sheikh? No? Then I\'ll pass.' 
                     }
                 },
 
@@ -2054,9 +1986,8 @@
                     'BESTIE': 'It\'s too small. I\'d lose it in five seconds.',
                     'BITTER END': 'I usually just use a quarter. Or my teeth.',
                     'Mama⬇️': 'It\'s so small! Don\'t let the cat swallow it!',
-                    'The Fillmore ': 'Small, but it holds all my power. If I lose this... I’m just a guy with a box.',
-                    'The Fillmore': 'Don\'t throw that at the band. I\'m watching you.',
-                    'Wrestling Club' : 'Looks like a thumb-tack for a deathmatch. A bit small for my taste.'
+                    'The Fillmore_': 'I prefer a foreign object hidden in my trunks, but a pick is... legal, I guess.',
+                    'The Fillmore': 'Don\'t throw that at the band. I\'m watching you.'
                  }
                 },
 
@@ -2072,8 +2003,7 @@
                         'The Fillmore ': 'Mastering the fretboard is like mastering the ring—you have to know every corner.',
                         'The 440': 'Ugh, too many notes. Can\'t you just play something people can dance to?',
                         'Peets': 'A manual for digital dexterity. It lacks the soul of a blues scale, but the logic is sound.',
-                        'Mama⬇️': 'So many pages! Don\'t hurt your fingers, habibi. Your hands are for eating, not just hitting strings!',
-                        'Wrestling Club' : 'Tapping out? You NEVER tap out! Oh... guitar tapping. Carry on.'
+                        'Mama⬇️': 'So many pages! Don\'t hurt your fingers, habibi. Your hands are for eating, not just hitting strings!'
                     }
                   },
 
@@ -2089,12 +2019,24 @@
                     'The Fillmore ': 'Compact and powerful. Reminds me of a cruiserweight champion.',
                     'The 440': 'If it doesn\'t have a XLR input for my mic, I don\'t care.',
                     'Peets': 'The digitalization of tone is a double-edged sword, though the Bluetooth integration is... acceptable.',
-                    'Mama⬇️': 'It is so small! Does it make enough noise for the neighbors to complain?',
-                    'Wrestling Club' : 'Electronic noise! The only \'combo\' I care about is a jab-hook-clothesline!'
+                    'Mama⬇️': 'It is so small! Does it make enough noise for the neighbors to complain?'
 
                     }
                 },
-                 
+                  { name: 'Fender Squier Stratocaster', acquired: true, icon: '🎸', desc: 'My first guitar! Humble beginnings with a classic sound.' ,actions: { 'Crazy K': 'crazy_action2', 'The Fillmore ':'bob_action4' , 'BITTER END': 'kevind_action6'} ,
+                    messages: {
+                    'BITTER END': 'A Squier? Better than nothing. At least it stays in tune... mostly.',
+                    'Metallica Pop-up Store': 'Standard gear. You gotta start somewhere before you get the ESP, right?',
+                    'BESTIE': 'It’s so shiny! Can I hold it? I promise I won\'t drop it!',
+                    'HSB Festival': 'The classic Strat sound. Perfect for the afternoon sets.',
+                    'Crazy K': 'The white wood... the silver strings... it is a talisman of the modern bard.',
+                    'The Fillmore': 'Are you telling me that you know how to use it?',
+                    'The Fillmore ': 'The classic gear. Like a wrestler who never misses a training day.',
+                    'The 440': 'It’s cute. Needs some stickers or something to give it some "vibe."',
+                    'Peets': 'The industrial design of the 1950s—perfection in utility, if a bit cliché.',
+                    'Mama⬇️': 'Such a beautiful violin! Why is it made of metal and plastic?'
+                    }
+                },
                 { name: 'Metallica Guitar Pick', price: 'Priceless', acquired: false, icon: '🔽', desc: 'A rare collectible obtained in the Metallica concert!', actions: { 'Crazy K': 'crazy_action2' },
                     messages:{
                     'BITTER END': 'Is that James\'s? Don\'t lose that. Those things are like gold to the right people.',
@@ -2103,15 +2045,14 @@
                     'HSB Festival': 'Whoa! How did you get that? I heard they were only giving those out to the front row.',
                     'Crazy K': 'Yes - There is so much soul in that guitar pick!',
                     'The Fillmore': 'A token of power. Now scram!',
-                    'The Fillmore ': 'Heavy. You can feel the stadium energy just holding it. It’s a relic.',
+                    'The Fillmore ': 'This is like owning a piece of the ring canvas from a legendary match.',
                     'The 440': 'It\'s just a triangle. My hair clips are more interesting than that.',
                     'Peets': 'A relic of mass-marketed subculture. The monetary value is purely sentimental.',
-                    'Mama⬇️': 'I am happy you enjoyed that concert, habibi ',
-                    'Wrestling Club' : 'This is like owning a piece of the ring canvas from a legendary match.'
-                    }
+                    'Mama⬇️': 'I am happy you enjoyed that concert, habibi '}
+
                 },
 
-                {name: 'Artist CD', price: 10, icon: '💿', desc: 'Physical media to master my rhythm chops', acquired: false, 
+                {name: 'Artist CD', price: 15, icon: '💿', desc: 'Physical media to master my rhythm chops', acquired: false, 
                     actions: { 'The 440': 'dj_chops', 'Mama':'mama_action2'},
                     messages: {
                         'BITTER END': 'CDs? I still have crates of vinyl that sound better. But sure, pop it in.',
@@ -2120,49 +2061,48 @@
                         'HSB Festival': 'Good for studying the local scene. Everyone wants to be on this disc.',
                         'Crazy K': 'The rhythm is the heartbeat of the universe captured in a polycarbonate disc.',
                         'The Fillmore': 'No. I do not want your stupic CD...',
-                        'The Fillmore ': 'Any CDs with my name?',
+                        'The Fillmore ': 'Every champion needs a theme song. Maybe yours is on here.',
                         'The 440': 'I can sample this for my next set. Some of these beats are actually fire.',
                         'Peets': 'Digital storage for auditory waves. A pity the fidelity is capped at 44.1kHz.',
-                        'Mama⬇️': 'So shiny! Don\'t use it as a coaster, habibi. It looks expensive.',
-                        'Wrestling Club' : 'Every champion needs a theme song. Maybe yours is on here.'
+                        'Mama⬇️': 'So shiny! Don\'t use it as a coaster, habibi. It looks expensive.'
                     }
                 },
                 { name: 'Black Magic Gummies', acquired: false, price: 20, icon: '🍬', desc: 'A Haight-Ashbury specialty that helps "see" the world',
                     actions : { 'BESTIE': 'sid_action2', 'The Fillmore ': 'bob_action3'},
                     messages: {
-                    'BITTER END': 'Black Magic? I prefer to stick with my beers, buddy ',
-                    'Metallica Pop-up Store': 'Are those the "Fade to Black" edition? Keep them away from the merch, they look sticky.',
-                    'BESTIE': 'Ooh, candy! Wait, why is the bag glowing? Is it sour? I love sour!',
-                    'HSB Festival': 'We have a strict policy about outside food but I didn\'t see anything.',
-                    'Crazy K': 'The dark sweetness aligns the chakras. Eat one and feel the void fill with creative fire.',
-                    'The Fillmore': 'Are you trying to drug me, boy? SCRAM!',
-                    'The 440': 'Ugh, sweets? That’s so many calories. But if it keeps me awake for my 2 AM set, I\'ll take two.',
-                    'Peets': 'A synthetic delivery system for glucose and questionable herbal extracts. Placebo or not, the "magic" is likely just a sugar rush.',
-                    'Mama⬇️': 'What is this "Black Magic"? Don\'t get a cavity, habibi! Just eat a date, it’s much healthier!',
-                    'Wrestling Club' : 'Is this legal? It looks like something a heel would use to cheat in a Triple Threat match.'
-                    }
-                },
+                'BITTER END': 'Black Magic? I prefer to stick with my beers, buddy ',
+                'Metallica Pop-up Store': 'Are those the "Fade to Black" edition? Keep them away from the merch, they look sticky.',
+                'BESTIE': 'Ooh, candy! Wait, why is the bag glowing? Is it sour? I love sour!',
+                'HSB Festival': 'We have a strict policy about outside food but I didn\'t see anything.',
+                'Crazy K': 'The dark sweetness aligns the chakras. Eat one and feel the void fill with creative fire.',
+                'The Fillmore': 'Are you trying to drug me, boy? SCRAM!',
+                'The Fillmore ': 'Is this legal? It looks like something a heel would use to cheat in a Triple Threat match.',
+                'The 440': 'Ugh, sweets? That’s so many calories. But if it keeps me awake for my 2 AM set, I\'ll take two.',
+                'Peets': 'A synthetic delivery system for glucose and questionable herbal extracts. Placebo or not, the "magic" is likely just a sugar rush.',
+                'Mama⬇️': 'What is this "Black Magic"? Don\'t get a cavity, habibi! Just eat a date, it’s much healthier!'}
+                 },
 
 
-                { name: 'Gaffer Tape', icon: '🩹', acquired: false, desc: 'Ideal to fix gear, ring tears', price: 20 },
                 { name: 'Chicken Pho', icon: '🍜', acquired: false, desc: 'Restores maximum health and focus.', price: 100 },
                 { name: 'Magic Zataar Spices', icon: '🌶️', acquired: false,desc: 'Boosts your focus and gives charisma.', price: 50 },
     
                  {name: 'Luxury Copper Cookware Set', price: 2000, icon:'🍳',  acquired: false, desc: 'Best set for a culinary quest'},
                 { name: 'Funk Black Beenie', acquired: false, price: 80, icon: '🧢', desc: '+10 Stage Presence'},
                    
-                { name: 'Morello\'s Guitar', acquired: false, price: 1800, icon: '🎸', desc: 'Ultimate Rock Power-Up.' }
+                    { name: 'Morello\'s Guitar', acquired: false, price: 1800, icon: '🎸', desc: 'Ultimate Rock Power-Up.' }
             ]
             
         };
 
 
         let iphoneNotifications = [
-            { id: 1, app: game.names.bestie3, emoji: '💬', summary: 'New message', fullContent: "Hey buddy! Come meet me at the Bitter End for a couple of beers!", unread: true , location: 'BITTER END', topic: null},
+            { id: 1, app: game.names.bestie, emoji: '💬', summary: 'New message', fullContent: "Hey boboo! Let's meet at my place. It's been a while! ", unread: true , location: 'BESTIE', topic: null},
+
             { id: 2, app: 'SF Weather', emoji: '☀️', summary: 'Karl’s Vacation', fullContent: "Karl the Fog has officially packed his bags! Expect a rare streak of clear blue skies for the next few weeks. Sunglasses: Required. 😎", unread: true, location: null},
-            { id: 5, app: 'News', emoji: '📰', summary: 'Breaking News', fullContent: "Bay Area legends METALLICA have officially confirmed they will be taking over San Francisco’s Oracle Park for a massive stadium performance later this month! 🤘", unread: true, location: null , topic: 'Metallica tour'},
-            { id: 3, app: game.names.bestie, emoji: '💬', summary: 'New message', fullContent: "Hey boboo! Let's meet at my place. It's been a while! ", unread: true , location: 'BESTIE', topic: null}
+
             
+            { id: 6, app: game.names.bestie3, emoji: '💬', summary: 'New message', fullContent: "Hey buddy! Come meet me at the Bitter End for a couple of beers!", unread: true , location: 'BITTER END', topic: null},
+            { id: 5, app: 'News', emoji: '📰', summary: 'Breaking News', fullContent: "JUST IN: Heavy metal icons and Bay Area legends METALLICA have officially confirmed they will be taking over San Francisco’s Oracle Park for a massive stadium performance later this month! 🤘", unread: true, location: null , topic: 'Metallica tour'}
            
             // max is 6
 
@@ -2192,6 +2132,9 @@
             { level: 4, rank: "Rock Legend",requiredXP: 1500, chopMaxScale: 250 }, // Max
 
         ];
+
+        
+
 
 
         window.setPhase = (newPhase, msg = "", item = null) => {
@@ -2241,7 +2184,8 @@
 
              "APEX Office": { X: 640, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "work", description: "A towering monolith of glass and surveillance overlooking the Bay. Inside, the air is filtered, the lighting is 'optimized' for maximum productivity, and the silence is heavy. This isn't a workplace; it’s a high-frequency hive where human creativity is harvested by the Omni-Sync algorithm. Every cubicle is a cage, and every badge-swipe is a data point. To the world, it’s the pinnacle of tech success; to you, it’s the place where music goes to die.", hidden: true , character: 'APEX'},
 
-             "Wrestling Club": { X: 520, Y: 390, W: 40, H: 30, category: "wrestling_club", emoji: "🤼", actionKey: "wrestling_club", description: "The Grappling Club smells of wintergreen liniment, old canvas, and pure adrenaline. The walls are plastered with faded posters of Lucha Libre legends and local indie wrestling flyers, their edges curling from the humidity of twenty people training at once.", hidden: true , character: 'Rick'},
+
+
 
             "Chase Center": { X: 690, Y: 440, W: 40, H: 30, category: "Sports/Venue", emoji: "🏀", actionKey: "sports", description: "Modern home of the Golden State Warriors.", hidden: true, character: 'Character X' },
             // Commercial / Transit
@@ -2275,9 +2219,14 @@
       function toggleLandmarkVisibilityByName(name, isHidden) {
             if (landmarkData[name]) {
                 landmarkData[name].hidden = isHidden;
-              
+                // Re-render the map to apply the change instantly
+                //renderLandmarks(); 
+                
+                //setPhase(0, `// Toggled visibility of ${name}. Hidden: ${isHidden}`);
             } 
-            
+            //else {
+                //setPhase(0, `// Error: Landmark '${name}' not found.`);
+            //}
         }
 
         // Helper function to update the status bar for custom actions
@@ -2319,8 +2268,9 @@
         function crazy_book(){
             game.currentLocationId = 'Crazy K';
             game.pendingAcquisition.item = 'On The Road by Kerouac';
-            game.crazy_buttons.showLibrary = false;
             playMovie('./videos/habibi-ontheroad.mp4', 'You found the ultimate edition of \'On the Road by Kerouac\'!');
+
+            
         }
 
         function cliffs_action1(){
@@ -2335,9 +2285,9 @@
         function home_action1(){
             game.home_buttons.showHelpButton = false;
 
-            let forced_text = 'Some of my friends might be able to show me the ropes...I can use the map icon below to navigate the city 🗺️, the phone icon to check my notifications 📱, and the backpack icon to check my inventory 🎒. Better get moving!"';
-            game.currentCharacter = game.names.main;
+            let forced_text = 'Some of my friends might be able to show me the ropes... I can use the map icon below to navigate the city 🗺️, the phone icon to check my notifications 📱, and the backpack icon to check my inventory 🎒.Better get moving!';
             askForDetails('Musician Career', 'topic', forced_text);
+            displayNewTopicAcquired('Musician Career');
 
         }
 
@@ -2392,10 +2342,10 @@
             // 3. Final Check: If all 4 items are present, trigger the cinematic
             if (allAcquired) {
                 // Consume the items (set acquired to false)
-                //itemsToCheck.forEach(itemData => {
-                //    const item = game.inventory_items.find(i => i.name === itemData.name);
-                //    if (item && item.name != 'Fender Squier Stratocaster') item.acquired = false;
-                //});
+                itemsToCheck.forEach(itemData => {
+                    const item = game.inventory_items.find(i => i.name === itemData.name);
+                    if (item && item.name != 'Fender Squier Stratocaster') item.acquired = false;
+                });
                 game.crazy_buttons.poker = true;
                 game.pendingAcquisition.chop = 'Instrument Synergy';
                 let chop = game.chops.find(i => i.name === 'Instrument Synergy');
@@ -2418,26 +2368,11 @@
             toggleLandmarkVisibilityByName('Amoeba', false);
             toggleLandmarkVisibilityByName('Mama', false);
             toggleLandmarkVisibilityByName('HSB Festival', false);
-            toggleLandmarkVisibilityByName('BITTER END', false);
-            toggleLandmarkVisibilityByName('The Fillmore', false);
-
-            game.kevind_buttons.practiceChop = true;
-            game.crazy_buttons.poker = true;
-            game.dj_buttons.chops = true;
-            game.bestie2_buttons.practiceChop = true;
-            game.bridget_buttons.trivia = true;
-            game.bob_buttons.practiceChop = true;
-
-     
-            game.chops = game.chops.map(chop => ({
-                ...chop,
-                isUnlocked: true
-            }));
 
             toggleLandmarkVisibilityByName('Metallica Pop-up Store', false);
             game.bridget_buttons.photo = true;           
             let inventoryItem = game.inventory_items.find(i => i.name === 'Photo');
-            inventoryItem.acquired = false;
+            inventoryItem.acquired = true;
             inventoryItem = game.inventory_items.find(i => i.name === 'Accreditation');
             inventoryItem.acquired = true;
             inventoryItem = game.inventory_items.find(i => i.name === 'On The Road by Kerouac');
@@ -2445,14 +2380,14 @@
             game.dj_buttons.showCD = true;
             inventoryItem = game.conversation_topics.unlocked.find(i => i.name === 'Fretboard List');
             inventoryItem.acquired = true;
-            inventoryItem = game.conversation_topics.unlocked.find(i => i.name === 'Accreditation Required');
+            inventoryItem = game.conversation_topics.unlocked.find(i => i.name === 'Accreditation');
             inventoryItem.acquired = true;
 
 
         }
 
         function crazy_action4(){
-          playMovie('./videos/crazy-poker.mp4', 'You are playing a "High Hand" and a "Low Hand" simultaneously. One hand is holding the groove (the 5), while the other is dancing on the ceiling (the 2). To win the hand, both hands must beat the house. If only one hand is strong, you Push. Win One out of 3 to master!');
+          playMovie('./videos/crazy-poker.mp4', 'You are ready! Sit down. Deal the cards. Seven of them. That is your total harmonic potential. Now, look at your hands. You have a Left and a Right, but in your head, they’re still married. Divorce them! You aren\'t playing one instrument; you are playing a "High Hand" and a "Low Hand" simultaneously. Your brain has to split its processor right down the middle. One hand is holding the groove (the 5), while the other is dancing on the ceiling (the 2). To win the hand—to achieve the Tone—both hands must beat the house. If only one hand is strong, you Push. You’re just making noise. You aren\'t winning. Try here or at your place. Win One out of 3 to master!');
         }
 
         
@@ -2486,9 +2421,6 @@
             game.currentLocationId = 'The Fillmore ';
 
             game.bob_buttons.showHelpButton = false;
-            const topic = game.conversation_topics.unlocked.find(i => i.name === 'A.A.?');
-            topic.acquired = false;
-
             let inventoryItem = game.inventory_items.find(i => i.name === 'Arn Anderson VHS');
             if (!inventoryItem) {
                 console.error(`Item not found: ${itemName}`);
@@ -2496,7 +2428,6 @@
             }
             game.bob_buttons.guitar = true;
             inventoryItem.acquired = false;
-            inventoryItem.given = true;
             landmarkImageRegistry["The Fillmore "] = "./sprites/bob2.jpg";
             game.bridget_buttons.showHelpButton = false;
             playMovie('./videos/arn.mp4', 'Thanks! I have recovered my mojo! I will tell Bridget that I can act in HSB. How can I help you?'); 
@@ -2510,15 +2441,14 @@
 
             const newlocation = landmarkData['Amoeba'];
             if (newlocation.hidden === true){
-               // toggleLandmarkVisibilityByName('Amoeba', false);
+                toggleLandmarkVisibilityByName('Amoeba', false);
                 game.pendingAcquisition.location = 'Amoeba';
             }
             game.currentLocationId = 'The Fillmore ';
             game.dialogueData = bob_guitar_dialogue_data;
             game.activeCharacter = 'Bob';
             game.dialogueIndex = 0;
-            game.bob_buttons.amoeba = true;
-            const dialogueHtml = renderDialogue(bob_guitar_dialogue_data, 'Bob Mould');
+            const dialogueHtml = renderDialogue(bob_guitar_dialogue_data, 'Bob');
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
         }
@@ -2567,8 +2497,8 @@
             if (inventoryItem.given===true) {
 
                 // --- HELP / LEARN LOGIC ---
-                game.score += 1000;
-                playMovie('./videos/sid-money.mp4', 'Sid wants to help you in your musician career and gives you $1000');
+                game.score += 1300;
+                playMovie('./videos/sid-money.mp4', 'Sid wants to help you in your musician career');
                 
                 
             } else {
@@ -2587,7 +2517,7 @@
             }
             if (inventoryItem.given === true){
                 game.pendingAcquisition.location = 'Crazy K';
-              //  toggleLandmarkVisibilityByName('Crazy K',false);
+                toggleLandmarkVisibilityByName('Crazy K',false);
 
                 playMovie('./videos/sid-chops.mp4', 'You should check with Crazy K! He knows about this business');
             }
@@ -2601,7 +2531,7 @@
         function go_to_work(){
                 game.pendingAcquisition.memory = 'Freedom';
                 game.pendingAcquisition.memory_text = 'Leaving behing that evil tech'
-              //  toggleLandmarkVisibilityByName('APEX Office', true);
+                toggleLandmarkVisibilityByName('APEX Office', true);
                 let inventoryItem = game.inventory_items.find(i => i.name === 'Apex Badge');
                 inventoryItem.acquired = false;
                 if (game.work_buttons.badge){
@@ -2623,6 +2553,7 @@
         }
 
         function kevind_action2(){
+            toggleLandmarkVisibilityByName('Metallica Pop-up Store', false);
             game.currentLocationId = 'BITTER END';
             const newTopic = game.conversation_topics.unlocked.find(i => i.name === 'Ultimate Metallica t-shirt');
             newTopic.acquired = true;
@@ -2675,7 +2606,7 @@
 
             const newlocation = landmarkData['Amoeba'];
             if (newlocation.hidden === true){
-             //   toggleLandmarkVisibilityByName('Amoeba', false);
+                toggleLandmarkVisibilityByName('Amoeba', false);
                 game.pendingAcquisition.location = 'Amoeba';
             }            
             game.currentLocationId = 'BITTER END';
@@ -2691,7 +2622,6 @@
 
         function kevind_action6(){
             game.secrets +=1;
-            console.log('I am in 6')
             playMovie('./videos/kevind-guitar.mp4','Not bad, buddy! Keep it on! (Eastern Egg found!)' );
         }
 
@@ -2715,7 +2645,6 @@
                 return;
             }
             inventoryItem.acquired = false;
-            iphoneNotifications = iphoneNotifications.slice(1);            
 
             iphoneNotifications = appendNotification(iphoneNotifications,'Mama', 'Habibi!! When are you coming to visit?', '💬', 'Mama⬇️')
 
@@ -2729,6 +2658,7 @@
         }
 
         function dj_action2() {
+            // Simulate giving the player money or a resource
             game.currentLocationId = 'The 440';
             let inventoryItem = game.inventory_items.find(i => i.name === 'Disco Ball');
             if (!inventoryItem) {
@@ -2737,8 +2667,11 @@
             }
 
             if (inventoryItem.acquired===true || inventoryItem.given===true)  {
-              //  toggleLandmarkVisibilityByName('Amoeba', false);
+                toggleLandmarkVisibilityByName('Amoeba', false);
                 game.pendingAcquisition.location = 'Amoeba';
+                game.pendingAcquisition.chop = 'Rhythm Mastery';
+                let chop = game.chops.find(i => i.name === 'Rhythm Mastery');
+                chop.isUnlocked = true;
                 game.dj_buttons.showCD = true;
                 game.dialogueData = dj_cd_dialogue_data;
                 game.activeCharacter = 'DJ Robbie';                
@@ -2761,9 +2694,9 @@
         function dj_chops() {
             game.currentLocationId = 'The 440';
             game.dj_buttons.chops = true;
-            game.pendingAcquisition.chop = 'Rhythm Mastery';
-            let chop = game.chops.find(i => i.name === 'Rhythm Mastery');
-            chop.isUnlocked = true;
+            //game.pendingAcquisition.chop = 'Rhythm Mastery';
+            //let chop = game.chops.find(i => i.name === 'Rhythm Mastery');
+            //chop.isUnlocked = true;
             game.dialogueData = dj_chop_dialogue_data;
             game.activeCharacter = 'DJ Robbie';
             game.dialogueIndex = 0;
@@ -2783,7 +2716,7 @@
                 if (statusBar) {
                     statusBar.innerHTML = `
                         <p class="text-lg font-bold text-blue-400">ℹ️ Already Entered</p>
-                        <p class="text-sm italic mt-1">You have already entered the Metallica raffle.</p>
+                        <p class="text-sm italic mt-1">You have already entered the Metallica raffle. Score: $${game.score}</p>
                     `;
                 }
                 return; // Stop execution if already entered
@@ -2803,8 +2736,6 @@
             // 3. Successful entry (only runs if topic exists, not already entered, and score is sufficient)
             newTopic.ruffle = true;
             game.score = game.score - 5;
-            game.popup_buttons.tour = false;
-
             iphoneNotifications = appendNotification(iphoneNotifications,'Bridget', 'Hey! I can totally use your help at the Hardly Strictly Bluegrass Festival at the Golden Gate Park right now!', '💬', 'HSB Festival')
 
             playMovie('./videos/popup-raffle.mp4','So you want to enter the $5 raffle to gain a ticket for the Metallica concert? Cool! You\'re officially on the list! If you\'re the chosen one, we\’ll blast an email your way faster than a Kirk Hammett solo. 📧⚡. Good luck!' );
@@ -2820,17 +2751,12 @@
         function popup_action1() {
             game.currentLocationId = 'Metallica Pop-up Store';
 
-            game.dialogueIndex = 0;
-            const dialogueHtml = renderDialogue(popup_tour_dialogue_data, "Pop-up Clerk");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);  
+            askForDetails('Metallica tour', 'topic', 'Don’t miss your shot! 🎟️ We’re raffling off tickets to the massive Metallica show this month. Enter now for your chance to win for just $5!');
         }
 
         function popup_photobooth(){
-            game.currentLocationId = 'Metallica Pop-up Store';
             game.bouncer_buttons.showHelpButton = false;
-            game.bridget_buttons.photo = false;
-            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Accreditation Required');
+            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Accreditation');
             topic.acquired = false;
             game.score -=5;
             game.pendingAcquisition.item = 'Photo';
@@ -2854,11 +2780,9 @@
         }
 
         function bridget_action2(){
+            askForDetails('Accreditation', 'topic', 'I see... If you bring me a photo I can create a HSB accreditation for you to use');
 
-            const dialogueHtml = renderDialogue(bridget_accreditation_dialogue, "Bridget");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);  
-
+            const statusBar = document.getElementById('status-bar-output');
             iphoneNotifications = appendNotification(iphoneNotifications,'E-mail URGENT!', 'Subject: Outstanding Asset Recovery - Action Required. Our records indicate that Employee Asset #8821 is still in possession of an active Omni-Sync Badge. This device is proprietary Apex technology. You are hereby ordered to return to the APEX Tower immediately. Compliance is the only rhythm. Return the badge.','📧',  'APEX Office');
             iphoneNotifications = iphoneNotifications.slice(1);            
             game.bridget_buttons.photo = true;
@@ -2867,7 +2791,7 @@
 
         function bridget_action3(){
             game.currentLocationId = 'HSB Festival';
-            const topic = game.conversation_topics.unlocked.find(i => i.name === 'Accreditation Required');
+            const topic = game.conversation_topics.unlocked.find(i => i.name === 'Accreditation');
             topic.acquired =false;
             const item = game.inventory_items.find(i => i.name === 'Photo');
             item.acquired =false;
@@ -2903,9 +2827,8 @@
             'kevind_action2': kevind_action2,
             'kevind_action3': kevind_action3,
             'kevind_action4': kevind_action4,
-            'kevind_action5': kevind_action5,
             'kevind_action6': kevind_action6,
-            'kevind_action7': kevind_action7,
+            'kevind_action6': kevind_action7,
             'popup_action1' : popup_action1,
             'popup_photobooth' : popup_photobooth,
             'handleRaffleEntry' : handleRaffleEntry,
@@ -2968,16 +2891,6 @@
             }
         }
 
-        const popup_tour_dialogue_data = [
-            { speaker: 'Bestie', text: "Welcome to our Metallica Pop-up Store! This tour is going to be legendary—the energy in SF is already peaking." },
-            { speaker: 'Player', text: "It’s insane! I NEED to get a ticket!" },
-            { speaker: 'Bestie', text: "Good news for you! We’re raffling off tickets to the show this month." },
-            { speaker: 'Player', text: "Wait, actual tickets? To the sold-out home show? How do I even get in on that?" },
-            { speaker: 'Bestie', text: "Simple. You can enter now for your chance to win for just $5. It’s the last few seats in the house." },
-            { speaker: 'Player', text: "Only five bucks for a chance to see the masters? I can already hear the opening riffs. This is exactly the break I needed! Let me see if I have any money..." }
-        ];
-
-
         const kevind_tour_dialogue_data = [
         { speaker: 'Bestie', text: "I KNOW!!! You're right—this Metallica tour hype has the whole city feeling different." },
         { speaker: 'Bestie', text: "It's pure electricity! But check this out—the Metallica pop-up store just opened its doors in the Mission and it is absolute carnage." },
@@ -3008,15 +2921,6 @@
             { speaker: 'Player', text: "So, you’re saying I need to be a walking encyclopedia of rock and SF lore to get a gig?" },
             { speaker: 'Bridget', text: "Exactly! Think of it like a **Mental Soundcheck**. If you don't know the history of the room, you'll never own the room. Trivia is the workout that sharpens your 'Circuit' muscles." },
             { speaker: 'Bridget', text: "We can run a round right now and you can also practice at home. Once you've got the facts straight, you'll navigate this city like a pro. Ready to test your brain-power before you test your amp-power?" }
-        ];
-
-        const bridget_accreditation_dialogue = [
-            { speaker: 'BESTIE', text: "The security at this venue is tighter than a drum, {player}. Without an industry pass, you're just another face in the crowd." },
-            { speaker: 'Player', text: "There has to be a way in..." },
-            { speaker: 'BESTIE', text: "I see... Tell you what. If you bring me a photo, I can create a fake HSB accreditation for you to use." },
-            { speaker: 'Player', text: "An HSB badge? Like the ones the headliners get? Bridget, that’s genius. I’d be invisible to the bouncers." },
-            { speaker: 'BESTIE', text: "Exactly. You'll have total access. But I need that photo first—make it look professional, or we’re both getting tossed." },
-            { speaker: 'Player', text: "I’m on it. One professional-ish photo coming up. Thanks, Bridget—you’re a lifesaver!" },
         ];
 
 
@@ -3112,14 +3016,14 @@
             { speaker: 'Bestie', text: "Second, a **Plectrum of Destiny**... a pick that hasn't lost its spirit. It must be sharp enough to cut through the silence. 🖤" },
             { speaker: 'Bestie', text: "Third, the **Positive Spark Conduit**. A box of digital thunder that breathes through a grid of pure energy. It’s small, but it carries the universe inside." },
             { speaker: 'Player', text: "A guitar, a soulful pick, and a Spark amp. Got it. Is that all?" },
-            { speaker: 'Bestie', text: "Almost. You need the sacred Tapping Technique Text - the map to the secret frequencies. It’s written in a language of fingers and fire." },
+            { speaker: 'Bestie', text: "Almost. You need the sacred text: **'Rock Guitar Tapping Technique'**. It’s the map to the secret frequencies. It’s written in a language of fingers and fire." },
             { speaker: 'Bestie', text: "Bring these items back to me, and I will show you how to dominate the fretboard until the strings beg for mercy." },
             { speaker: 'Player', text: "The Skeleton, the Plectrum, the Conduit, and the Map. I'm on it, Crazy K." }   
         ];
 
         const crazy_chop_ready_dialogue_data = [
             
-            { speaker: 'Bestie', text: "You have ALL you need! You are ready! Sit down. Deal the cards. Seven of them. That is your total harmonic potential. Now, look at your hands. You have a Left and a Right, but in your head, they’re still married. Divorce them!" },
+            { speaker: 'Bestie', text: "You are ready! Sit down. Deal the cards. Seven of them. That is your total harmonic potential. Now, look at your hands. You have a Left and a Right, but in your head, they’re still married. Divorce them!" },
             { speaker: 'Player', text: "Hold on! Are you talking about Poker?"},
             { speaker: 'Bestie', text:"You aren\'t playing one instrument; you are playing a \"High Hand\" and a \"Low Hand\" simultaneously. Your brain has to split its processor right down the middle. One hand is holding the groove (the 5), while the other is dancing on the ceiling (the 2). To win the hand—to achieve the Tone—both hands must beat the house. If only one hand is strong, you Push. You’re just making noise. You aren\'t winning. Try here or at your place. Win One out of 3 to master!"},
             { speaker: 'Player', text: "OK. Thanks, Crazy K!" } 
@@ -3152,32 +3056,13 @@
             {speaker: 'DJ Robbie',text: "That’s why you’re the MVP! Bring the shine, and then we’ll talk about your musician dreams. Now MOVE! GO! GO! GO!"}
             ];
 
-
-            const dj_cd_dialogue_data = [
-                { speaker: 'BESTIE', text: "Your timing is stiff, {player}. You're playing notes, but you aren't feeling the pulse. To master Rhythm, you need a producer's ear." },
-                { speaker: 'Player', text: "What am I missing, Robbie?" },
-                { speaker: 'BESTIE', text: "Soul. Go to Amoeba, grab the CDs of the greats, and bring them here." },
-                { speaker: 'Player', text: "Wait, so you're telling me I 'have' to go buy my favorite albums for 'research'?" },
-                { speaker: 'BESTIE', text: "Exactly. Bring some back and will explain more..."},
-                { speaker: 'Player', text: "Awesome. See you in nothing!" }
-            ];
-
-
-             const dj_chop_dialogue_data = [
-                { speaker: 'Player', text: "I got some of my favorite CDs. How does that translate to my six-string?" },
-                { speaker: 'BESTIE', text: "You need to deconstruct their tracks—guess the tunes, find the pocket. If you can't hear the ghost-note, you can't play it. Guess the tune correctly, and your syncopation levels will skyrocket." },
-                { speaker: 'Player', text: "So I just... listen? That sounds too easy."},
-                { speaker: 'BESTIE', text: "It may not be as easy as you think... Ear training is the secret bridge to Rhythm Mastery." },
-                { speaker: 'Player', text: "I’m in! Getting paid in skills just for listening to my favorite records? That's the best homework I've ever had!" }
-            ];
-
         const bob_help_dialogue_data = [
             { speaker: 'Player', text: "Hey Bob, we're all waiting for you over at the HSB. The stage is set and the crowd is ready!" },
             { speaker: 'Bob Mould', text: "I can't do it, {player}. I’ve lost the spark. The mojo is gone, and my hands just feel like lead on the strings." },
             { speaker: 'Player', text: "Lost your mojo? You're a legend! What happened?" },
             { speaker: 'Bob Mould', text: "I need a push... some of that 'spine-busting' intensity. I used to watch A.A. for that raw, technical power. He was the real 'Enforcer' of the four horsemen of my inspiration." },
             { speaker: 'Bob Mould', text: "Until I can find that grit again, I’m just a guy with a silent guitar. I need to clear my head. Don't follow me." },
-            { speaker: 'Player', text: "A.A.? MMmmm... I should know this... I practice wrestling! Hang tight, Bob, I’m going to find something to help you recover that fire." },
+            { speaker: 'Player', text: "A.A.? MMmmm... Hang tight, Bob, I’m going to find something to help you recover that fire." },
         ];
 
         const bob_guitar_dialogue_data = [
@@ -3195,16 +3080,11 @@
         
     const actionRegistry = {
         
-       home: (name, data) => {
+        home: (name, data) => {
             currentContext = { name, data };
 
-            // Helper to get color classes safely
-            const getChopColors = (chopName) => {
-                const colors = chopColorMap[chopName];
-                return colors ? `${colors.bg} ${colors.text}` : 'bg-gray-700 text-yellow-300';
-            };
-
             return `
+
                 <div class="mb-8">
                     <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
                         ${name.toUpperCase()}
@@ -3214,10 +3094,11 @@
                         ${data.description}
                     </p>
                 </div>
-                
                 <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
                     <p class="italic"> Where your dreams start...</p>
                 </div>
+
+                 
 
                 ${game.home_buttons.showHelpButton ? `
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
@@ -3225,68 +3106,72 @@
                         <span class="text-sm font-bold text-yellow-300">START YOUR MUSICIAN CAREER!</span>
                     </button>
                 </div>
-                ` : `
+                ` : ''}
+                 
+                 ${game.home_buttons.showHelpButton ? '' : `
                 <div class="flex justify-center mt-6">
-                    <button onclick="checkChopMastery()" class="career-milestone-button px-10 py-5 rounded-xl border-4">
-                        <div class="flex flex-col items-center">
-                            <span class="text-xs text-yellow-500 opacity-80 mb-1">FINAL STEP</span>
-                            <span class="text-xl font-black text-yellow-300">READY TO BE A MUSICIAN?! ⚡</span>
-                        </div>
-                    </button>
-                </div>
+                        <button onclick="checkChopMastery()" class="career-milestone-button px-10 py-5 rounded-xl border-4">
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs text-yellow-500 opacity-80 mb-1">FINAL STEP</span>
+                                <span class="text-xl font-black text-yellow-300">READY TO BE A MUSICIAN?! ⚡</span>
+                            </div>
+                        </button>
+                    </div>
                 `}
 
-                <!-- Dynamic Chop Practice Buttons -->
-                <div class="space-y-4 mt-4">
-                    ${game.kevind_buttons.practiceChop ? `
-                    <div class="flex justify-center">
-                        <button onclick="setPhase(7, 'Social Influence')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Social Influence')}">
-                            <span class="text-sm font-bold brightness-125">Practice Social Influence 📣</span>
-                        </button>
-                    </div>
-                    ` : ''}
+                  ${game.kevind_buttons.practiceChop  ? `
+                            <div class="flex justify-center mt-4" id="sids-help-button-container">
+                                <button onclick="setPhase(7, 'Social Influence')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                                    <span class="text-sm font-bold text-yellow-300">Practice Social Influence 📣</span>
+                                </button>
+                            </div>
+                            `  : ''}  
 
-                    ${game.crazy_buttons.poker ? `
-                    <div class="flex justify-center">
-                        <button onclick="setPhase(20, 'Poker')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Instrument Synergy')}">
-                            <span class="text-sm font-bold brightness-125">Practice Instrument Synergy 🎸</span>
-                        </button>
-                    </div>
-                    ` : ''}
+               
 
-                    ${game.dj_buttons.chops ? `
-                    <div class="flex justify-center">
-                        <button onclick="setPhase(8, 'Rhythm Mastery')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Rhythm Mastery')}">
-                            <span class="text-sm font-bold brightness-125">Practice Rhythm Mastery 🎼</span>
-                        </button>
-                    </div>
-                    ` : ''}
-
-                    ${game.bestie2_buttons.practiceChop ? `
-                    <div class="flex justify-center">
-                        <button onclick="setPhase(9, 'Lyrical Flow')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Lyrical Flow')}">
-                            <span class="text-sm font-bold brightness-125">Practice Lyrical Flow 🖋️</span>
-                        </button>
-                    </div>
-                    ` : ''}
-
-                    ${game.bridget_buttons.trivia ? `
-                    <div class="flex justify-center">
-                        <button onclick="setPhase(2,'')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Backstage Blueprint')}">
-                            <span class="text-sm font-bold brightness-125">Practice Backstage Blueprint 📜</span>
-                        </button>
-                    </div>
-                    ` : ''}
-
-                    ${game.bob_buttons.practiceChop ? `
-                    <div class="flex justify-center">
-                        <button onclick="setPhase(11, 'Stage Presence')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Stage Presence')}">
-                            <span class="text-sm font-bold brightness-125">Practice Stage Presence 🎤</span>
-                        </button>
-                    </div>
-                    ` : ''}
+                ${game.bridget_buttons.trivia ? `
+                    <div class="flex justify-center mt-4" id="sids-help-button-container">
+                    <button onclick="renderPhase2()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                        <span class="text-sm font-bold text-yellow-300">Practice Backstage Blueprint</span>
+                    </button>
                 </div>
+                ` : ''}
+                ${game.crazy_buttons.poker ? `
+                                <div class="flex justify-center mt-4" id="sids-help-button-container">
+                                    <button onclick="setPhase(20, 'Poker')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                                        <span class="text-sm font-bold text-yellow-300">Practice Instrument Synergy 🎸</span>
+                                    </button>
+                                </div>
+                                ` : ''} 
+                 ${game.bestie2_buttons.practiceChop  ? `
+                            <div class="flex justify-center mt-4" id="sids-help-button-container">
+                                <button onclick="setPhase(9, 'Lyrical Flow')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                                    <span class="text-sm font-bold text-yellow-300">Practice Lyrical Flow 🖋️</span>
+                                </button>
+                            </div>
+                            `  : ''}
+                  ${game.dj_buttons.chops ? `
+                                <div class="flex justify-center mt-4" id="sids-help-button-container">
+                                    <button onclick="setPhase(8, 'Rhythm Mastery')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                                        <span class="text-sm font-bold text-yellow-300">Practice Rhythm Mastery 🎼</span>
+                                    </button>
+                                </div>
+                                ` : ''}
+                    ${game.bob_buttons.practiceChop  ? `
+                            <div class="flex justify-center mt-4" id="sids-help-button-container">
+                                <button onclick="setPhase(11, 'Stage Presence')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                                    <span class="text-sm font-bold text-yellow-300">Practice Stage Presence 🎤</span>
+                                </button>
+                            </div>
+                            `  : ''}
+              
+
+
             `;
+
+            
+
+               
         },
 
         oracle: (name, data) => {
@@ -3318,36 +3203,6 @@
                
         },
 
-        wrestling_club : (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                 <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        WRESTLING CLUB
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-semibold max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">Rick, your old school wrestling buddy, is attending the training session, watching the boys wrestle</p>
-                </div>
-
-            
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-6 w-full">
-                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-base font-bold">Interact with ${data.character}</span>
-                            </button>
-                        </div>
-                </div>
-
-            `;
-               
-        },
 
 
         mama: (name, data) => {
@@ -3406,7 +3261,7 @@
 
                 ${game.bridget_buttons.trivia ? `
                     <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="setPhase(2,'')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                    <button onclick="renderPhase2()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
                         <span class="text-sm font-bold text-yellow-300">Practice Backstage Blueprint</span>
                     </button>
                 </div>
@@ -3461,7 +3316,7 @@
                 ${game.crazy_buttons.poker ? `
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
                     <button onclick="crazy_action4()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Reminder about Instrument Synergy</span>
+                        <span class="text-sm font-bold text-yellow-300">Ask about Instrument Synergy</span>
                     </button>
                 </div>
                 ` : ''} 
@@ -3902,15 +3757,6 @@
                     <p class="italic">Roadies are unboxing limited-edition vinyl while fans swap stories of legendary mosh pits. The clerk looks energetic and punk-friendly.</p>
                 </div>
 
-
-                ${game.popup_buttons.tour? `
-            <div class="flex justify-center mt-4" id="sids-cheer-button-container">
-                <button onclick="popup_action1();" class="metal-button px-6 py-2">
-                    <span class="text-sm">Greed the clerk</span>
-                </button>
-            </div>
-        ` : ''}
-
                 ${game.bridget_buttons.photo? `
             <div class="flex justify-center mt-4" id="sids-cheer-button-container">
                 <button onclick="popup_photobooth();" class="metal-button px-6 py-2">
@@ -4171,20 +4017,8 @@
         window.screen_return = () => {
             game.dialogueIndex= 0;
             exitCinematic();
-          //  setPhase(10, '');
-          //  handleClick(game.currentLocationId);
-        }
-
-        window.closeShowNew = () => {
-            game.dialogueIndex= 0;
-            if (game.iPhoneMessage){
-                game.iPhoneMessage = false;
-                setPhase(16, '');
-            }
-            else{
-                setPhase(10, '');
-                handleClick(game.currentLocationId);
-            }
+            setPhase(10, '');
+            handleClick(game.currentLocationId);
         }
 
         function renderDialogue(dialogueData, characterName) {
@@ -4192,14 +4026,21 @@
             const currentIndex = game.dialogueIndex;
             const line = dialogueData[currentIndex];
             game.dialogueData = dialogueData;
-            game.activeCharacter = characterName;
             console.log('Dialogue:', dialogueData);
             if (!line) {
-                game.dialogueData = null;
-                screen_return();
+                // Dialogue finished
+                container.innerHTML = `
+                    <div class="text-center p-12 dialogue-box rounded-2xl animate-text">
+            
+                        <button onclick="resetDialogue()" class="metal-button px-8 py-3 text-white font-bold rounded-lg uppercase tracking-tighter">
+                            Repeat Conversation
+                        </button>
+                        <button onclick="screen_return()" class="metal-button px-8 py-3 text-white font-bold rounded-lg uppercase tracking-tighter">
+                            End conversation
+                        </button>
+                    </div>
+                `;
                 return;
-
-               
             }
             const locationPortraits = {
                 'BITTER END': './faces/kevind.png',
@@ -4207,15 +4048,11 @@
                 'BESTIE': './faces/sid.png'
             };
 
-            let characterPortraitName;
-
-            if (locationPortraits[game.currentLocationId]) {
-                characterPortraitName = locationPortraits[game.currentLocationId];
-            } else {
-                characterPortraitName = characterPortraits[characterName];
-            }
+            // Logic: Check if the location exists in our map; if not, use the default.
+            let characterPortraitName = locationPortraits[game.currentLocationId] 
+                                    || characterPortraits[characterName];
             
-            console.log('Line:', line)
+
             const isPlayer = line.speaker === 'Player';
             const speakerDisplayName = isPlayer ? game.names.main : characterName;
             const portraitUrl = isPlayer ? characterPortraits['Player'] : characterPortraitName;
@@ -4271,10 +4108,8 @@
 
        
        window.nextStep = () => {
-            if (game.dialogueData){
-                game.dialogueIndex++;
-                renderDialogue(game.dialogueData, game.activeCharacter);
-            }
+            game.dialogueIndex++;
+            renderDialogue(game.dialogueData, game.activeCharacter);
         };
 
         window.resetDialogue = () => {
@@ -4285,7 +4120,7 @@
 
         function bouncer_request_help(){
             game.currentLocationId = 'The Fillmore';
-            game.pendingAcquisition.topic = 'Accreditation Required';
+            game.pendingAcquisition.topic = 'Accreditation';
             game.dialogueData = bouncer_help_dialogue_data;
             game.activeCharacter = "Intimidating Bouncer";
             game.dialogueIndex = 0;
@@ -4320,23 +4155,20 @@
         function showMetallica(){
             game.previousPhase = 10;
             game.currentLocationId = 'Home';
-            const topic = game.conversation_topics.unlocked.find(i => i.name === 'Metallica tour');
-            topic.acquired = false;
-           // toggleLandmarkVisibilityByName('Oracle Park',true);
+            toggleLandmarkVisibilityByName('Oracle Park',true);
             game.pendingAcquisition.item = 'Metallica Guitar Pick';
             game.pendingAcquisition.memory = 'Happiness';
             game.pendingAcquisition.memory_text = 'Metallica Concert!'
-            playMovie('./videos/metallica-concert.mp4','WHAT AN AMAZING CONCERT! I got a pick!' );
+            playMovie('./videos/metallica-concert.mp4','WHAT AN AMAZING CONCERT! I got one pick!' );
 
         }
 
 
         function mama_action1(){
             game.previousPhase = 10;
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Iraqi Festival Movie Ticket');
-            inventoryItem.acquired = false;
             game.currentLocationId = 'Mama';
             game.pendingAcquisition.item = 'Kubba Hamouth';
+            iphoneNotifications = appendNotification(iphoneNotifications,'E-mail', 'Subject: Congratulations! We are thrilled to announce that you are the official winner of our recent raffle! Out of all the entries received, your name was selected to receive one ticket to the Metallica show at Oracle Park.','📧',  'Oracle Park');
             iphoneNotifications = iphoneNotifications.slice(1);            
             game.mama_buttons.showHelpButton = false;
             playMovie('./videos/mama-kuba.mp4','Shukran, habibi! This is great! Just what I needed! Let me thank you... I have made your favorite dish, Kubba Hamouth!!! This always restores all the energy!' );
@@ -4353,8 +4185,8 @@
             game.bouncer_buttons.showHelpButton = false;
             game.previousPhase = 10;
             game.currentLocationId = 'The Fillmore ';
-            toggleLandmarkVisibilityByName('The Fillmore', true);
             toggleLandmarkVisibilityByName('The Fillmore ', false);
+            toggleLandmarkVisibilityByName('The Fillmore', true);
             game.bouncer_buttons.description = 'You found Bob Mould! He is sad and kinda blocked...';
             const inventoryItem = game.inventory_items.find(i => i.name === 'Accreditation');
             if (!inventoryItem) {
@@ -4362,7 +4194,6 @@
                 return;
             }
             inventoryItem.acquired = false;
-            playMovie('./videos/bouncer.mp4','Fine, you\'ve got the HSB badge... Now quit waving it in my face before I snap it in half, keep your head down, and get inside before I change my mind.' );
         }
 
         function bouncer_action2(){
@@ -4419,12 +4250,8 @@
             game.pendingAcquisition.topic = 'A.A.?';
             game.dialogueData = bob_help_dialogue_data;
             game.activeCharacter = game.names.bestie2;
-            iphoneNotifications = iphoneNotifications.slice(1);  
-            iphoneNotifications = iphoneNotifications.slice(1);            
-          
-            iphoneNotifications = appendNotification(iphoneNotifications,'E-mail', 'Subject: Congratulations! YOU are the official winner of our recent raffle! Out of all the entries received, your name was selected to receive one ticket to the Metallica show at Oracle Park.','📧',  'Oracle Park');
             game.dialogueIndex = 0;
-            const dialogueHtml = renderDialogue(bob_help_dialogue_data, 'Bob Mould');
+            const dialogueHtml = renderDialogue(bob_help_dialogue_data, game.names.bestie2);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
 
@@ -4446,7 +4273,7 @@
             game.currentLocationId = 'Peets';
             const newlocation = landmarkData['Amoeba'];
             if (newlocation.hidden === true){
-              //  toggleLandmarkVisibilityByName('Amoeba', false);
+                toggleLandmarkVisibilityByName('Amoeba', false);
                 game.pendingAcquisition.location = 'Amoeba';
             }
 
@@ -4465,10 +4292,8 @@
             game.currentLocationId = 'Peets';
             game.pendingAcquisition.item = 'Iraqi Festival Movie Ticket';
 
-            game.bestie2_buttons.showHelpButton = false;
             let inventoryItem = game.inventory_items.find(i => i.name === 'On The Road by Kerouac');
             inventoryItem.given = true;
-            inventoryItem.acquired = false;
 
             playMovie('./videos/kevin-book.mp4','WoW This is amazing! Let me thank you. I have an extra ticket for a movie in the Iraqi Festival. I am also ready to help you on your music endevour');
             const output = document.getElementById(MAIN_OUTPUT_ID);
@@ -4517,7 +4342,6 @@
                 game.dialogueIndex = 0;
                 const dialogueHtml = renderDialogue(bridget_chop_dialogue_data, 'Bridget');
                 game.bridget_buttons.trivia = true;
-
                 const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
                 switchToView(contentDiv);
             }
@@ -4590,6 +4414,7 @@
         function dj_request_help() {
             game.previousPhase = 10;
             game.currentLocationId = 'The 440'
+            game.pendingAcquisition.location = 'Cliff\'s Variety';
             game.dialogueData = dj_help_dialogue_data;
             game.activeCharacter = 'DJ Robbie';
             game.dialogueIndex = 0;
@@ -4597,10 +4422,6 @@
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             landmarkData['Cliff\'s Variety'].found = true;
             switchToView(contentDiv);
-            if (game.dj_buttons.cliff){
-                game.dj_buttons.cliff = false;
-
-            }
 
         }
 
@@ -4608,7 +4429,7 @@
             game.previousPhase = 10;
             game.currentLocationId = 'HSB Festival'
             game.pendingAcquisition.location = 'The Fillmore';
-          //  toggleLandmarkVisibilityByName('The Fillmore', false);
+            toggleLandmarkVisibilityByName('The Fillmore', false);
             game.dialogueData = bridget_help_dialogue_data;
             game.activeCharacter = 'Bridget';
             game.dialogueIndex = 0;
@@ -4785,11 +4606,11 @@
                 'Home' : './faces/habibi.jpg',
                 'BITTER END': './faces/kevind.png',
                 'Peets': './faces/kevin.png',
-                'BESTIE': './faces/sid.png',
+                'BESTIE': './faces/sid.png'
             };
 
             // Determine portrait URL using the same logic as renderDialogue
-            let portraitUrl = characterPortraits[characterName] || locationPortraits[currentLocationId]  
+            let portraitUrl = locationPortraits[currentLocationId] || characterPortraits[characterName];
             const icon = item.icon || (isItem ? '📦' : '🗣️');
 
             // 4. Construct the HTML with Portrait + Dialogue Style
@@ -4838,6 +4659,9 @@
             if (statusBar) {
                 statusBar.innerHTML = message;
                 statusBar.classList.add('border-emerald-500', 'animate-pulse-quick');
+                setTimeout(() => {
+                    statusBar.classList.remove('animate-pulse-quick', 'border-emerald-500');
+                }, 1500);
             }
         }
 
@@ -4927,115 +4751,64 @@
         }
 
 
-       function displayNewTopicAcquired(topicName) {
-        // 1. Add the topic to the game state as requested
-        game.conversation_topics.newTopicA = topicName;
+        function displayNewTopicAcquired(topicName) {
+            // 1. Add the topic to the game state as requested
+            game.conversation_topics.newTopicA = topicName;
+           
+            const newTopic = game.conversation_topics.unlocked.find(i => i.name === topicName);
+            newTopic.acquired = true;
+            console.log(newTopic, topicName);
+            
+            // 2. Setup modal overlay
+            // Increased z-index for maximum visibility
+            const modalOverlay = createElement('div', 'fixed inset-0 z-[1000] flex items-center justify-center bg-blue-950/80  backdrop-blur-md');
+            modalOverlay.id = 'topic-modal';
 
-        const newTopic = game.conversation_topics.unlocked.find(i => i.name === topicName);
-        if (!newTopic) {
-            console.error(`Topic not found: ${topicName}`);
-            return;
-        }
-        if (newTopic.acquired){
-            return;
-        }
-        newTopic.acquired = true;
+            // 3. Setup the acquisition card (using the new neon CSS class)
+            const topicBox = createElement('div', 'acquisition-card border-neon-pink shadow-[0_0_50px_rgba(255,0,255,0.3)]');
 
-        // Determine if we use an image or an emoji fallback
-        const hasImage = newTopic.image && newTopic.image !== '';
-        const topicEmoji = newTopic.icon || '💬';
-
-        // 2. Setup modal overlay
-        const modalOverlay = createElement('div', 'fixed inset-0 z-[1000] flex items-center justify-center bg-blue-950/80 backdrop-blur-md transition-opacity duration-300 opacity-0');
-        modalOverlay.id = 'topic-modal';
-
-        // 3. Setup the acquisition card
-        const topicBox = createElement('div', 'acquisition-card border-neon-pink shadow-[0_0_50px_rgba(255,0,255,0.3)] transform scale-95 transition-all duration-300 ease-out');
-
-        // Visual Content Header
-        const headerHtml = `
-            <div class="mb-4 text-center">
-                <h2 class="title-font text-3xl font-black text-white mt-1 uppercase tracking-tighter">New Topic Unlocked</h2>
-                <div class="h-1 w-24 bg-pink-500 mx-auto mt-2 rounded-full"></div>
-            </div>
-        `;
-
-        // Dynamic Image/Emoji Logic
-        const visualDisplay = `
-            <div class="flex flex-col items-center justify-center my-6">
-                ${hasImage ? `
-                    <div class="relative p-1 bg-white/10 rounded-lg border border-pink-500/50 shadow-lg overflow-hidden">
-                        <img src="${newTopic.image}" 
-                             alt="${topicName}" 
-                             class="w-32 h-32 sm:w-48 sm:h-48 object-cover rounded-md"
-                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-7xl sm:text-8xl p-4\'>${topicEmoji}</div>';" />
-                    </div>
-                ` : `
-                    <div class="text-7xl sm:text-8xl filter drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-                        ${topicEmoji}
-                    </div>
-                `}
-            </div>
-        `;
-
-        const contentHtml = `
-            <div class="text-center">
-                <p class="text-xl font-medium text-gray-300 mb-2">You can now talk about:</p>
-                <div class="topic-display inline-block px-6 py-2 bg-pink-500/20 border border-pink-500/40 rounded-full">
-                    <p class="topic-name text-2xl font-bold text-white">${topicName}</p>
+            // Content
+            const headerHtml = `
+                <div class="mb-4">
+                    <h2 class="title-font text-3xl font-black text-white mt-1">New Topic Unlocked</h2>
                 </div>
-            </div>
-        `;
+            `;
+            const contentHtml = `
+                <p class="text-xl font-medium text-gray-300 mb-4">You can now talk about:</p>
+                <div class="topic-display">
+                    <p class="topic-name">${topicName} ${newTopic.icon}</p>
+                </div>
+            `;
+           
+            topicBox.innerHTML = headerHtml + contentHtml ;
 
-        topicBox.innerHTML = headerHtml + visualDisplay + contentHtml;
-
-        // 4. Close mechanism
-        const closeTopicBox = () => {
-            modalOverlay.style.opacity = '0';
-            topicBox.style.transform = 'scale(0.95)';
-            setTimeout(() => {
+            // 4. Close mechanism
+            const closeTopicBox = () => {
                 modalOverlay.remove();
-                if (typeof closeShowNew === 'function') closeShowNew();
-            }, 300);
-        };
+                exitCinematic(); // Re-render the game to reflect the new topic
+            };
 
-        // Attach close handlers
-        topicBox.onclick = (e) => {
-            e.stopPropagation();
-            closeTopicBox();
-        };
+            // Attach close handlers
+            topicBox.onclick = (e) => {
+                e.stopPropagation();
+                closeTopicBox();
+            };
 
-        modalOverlay.onclick = () => closeTopicBox();
+            // Allow clicking the overlay to close
+            modalOverlay.onclick = () => closeTopicBox();
 
-        // 5. Display
-        modalOverlay.appendChild(topicBox);
-        document.body.appendChild(modalOverlay);
-
-        // Trigger animations
-        setTimeout(() => {
-            modalOverlay.style.opacity = '1';
-            topicBox.style.transform = 'scale(1)';
-        }, 10);
-    }
+            // 5. Display
+            modalOverlay.appendChild(topicBox);
+            document.body.appendChild(modalOverlay);
+        }
 
 
         function displayNewLocationAcquired(locationName) {
             const newlocation = landmarkData[locationName];
-            console.log(newlocation);
             if (!newlocation) {
                 console.error(`Error: Location data not found for: ${locationName}`);
                 return;
             }
-            if (!newlocation.hidden) {
-                console.log(`${newlocation} already found.`);
-                const statusBar = document.getElementById('status-bar-output');
-                if (statusBar) {
-                    statusBar.innerHTML = `<p class="italic"> ${itemName} already found</p>`;
-                }
-                return;
-            }
-
-            newlocation.hidden = false;
             const location_emoji = newlocation.emoji;
 
             // 1. Setup modal overlay (Darker with higher blur for focus)
@@ -5096,7 +4869,7 @@
                 modalOverlay.classList.add('fade-out');
                 setTimeout(() => {
                     modalOverlay.remove();
-                    if (typeof exitCinematic === 'function') closeShowNew();
+                    if (typeof exitCinematic === 'function') exitCinematic();
                 }, 300);
             };
 
@@ -5114,7 +4887,7 @@
         }
 
 
-     function displayNewItemAcquired(itemName) {
+        function displayNewItemAcquired(itemName) {
             const inventoryItem = game.inventory_items.find(i => i.name === itemName);
             if (!inventoryItem) {
                 console.error(`Item not found: ${itemName}`);
@@ -5133,54 +4906,40 @@
             inventoryItem.acquired = true;
             game.selectedItem = inventoryItem;
 
-            // Determine if we use an image or an emoji
-            const hasImage = inventoryItem.image && inventoryItem.image !== '';
             const itemEmoji = inventoryItem.icon;
 
             // 2. Setup modal overlay
+            // Start transparent and scaled down for a smooth animation
             const modalOverlay = createElement('div', 'fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-sm transition-opacity duration-300 opacity-0');
             modalOverlay.id = 'topic-modal';
 
-            // 3. Setup the acquisition card
+            // 3. Setup the acquisition card (Enhanced appearance)
             const itemBox = createElement('div', 'acquisition-card mx-4 sm:mx-auto max-w-lg w-full p-8 sm:p-10 rounded-xl shadow-2xl transform scale-95 transition-all duration-300 ease-out');
 
-            // Visual Focus: Image priority, Emoji fallback
-            const visualDisplay = `
+            // Emoji/Icon Focus: Large, central emoji with pulse animation
+            const emojiDisplay = `
                 <div class="flex flex-col items-center justify-center mb-8">
-                    ${hasImage ? `
-                        <div class="relative group">
-                            <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                            <img src="${inventoryItem.image}" 
-                                 alt="${itemName}" 
-                                 class="relative w-48 h-48 sm:w-64 sm:h-64 object-contain rounded-lg border border-white/10 shadow-2xl animate-in"
-                                 onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-[7rem] sm:text-[10rem] leading-none animate-pulse-slow\'>${itemEmoji}</div>';" />
-                        </div>
-                    ` : `
-                        <div class="text-[7rem] sm:text-[10rem] leading-none animate-pulse-slow">
-                            ${itemEmoji}
-                        </div>
-                    `}
+                    <div class="text-[7rem] sm:text-[10rem] leading-none animate-pulse-slow">
+                        ${itemEmoji}
+                    </div>
+                    
                 </div>
             `;
 
             // Content: Bold, glowing text
             const contentHtml = `
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-2 text-center tracking-tight drop-shadow-sm">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-2 text-center tracking-tight">
                     ${itemName} ACQUIRED!
                 </h2>
-                <p class="text-zinc-400 text-center text-sm font-mono uppercase tracking-widest">Added to your inventory</p>
+                
             `;
 
-            itemBox.innerHTML = visualDisplay + contentHtml;
+            itemBox.innerHTML = emojiDisplay + contentHtml;
 
             // 4. Close mechanism
             const closeNotification = () => {
-                modalOverlay.style.opacity = '0';
-                itemBox.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    modalOverlay.remove();
-                    if (typeof closeShowNew === 'function') closeShowNew();
-                }, 300);
+                modalOverlay.remove();
+                exitCinematic(); // Re-render the game to reflect the new location
             };
 
             // Attach close handlers
@@ -5189,17 +4948,21 @@
                 closeNotification();
             };
 
+            // Allow clicking the overlay to close
             modalOverlay.onclick = () => closeNotification();
 
             // 5. Display
             modalOverlay.appendChild(itemBox);
             document.body.appendChild(modalOverlay);
 
-            // Trigger animations
+
+            // Trigger the fade-in and scale-up animation after a tiny delay
             setTimeout(() => {
                 modalOverlay.style.opacity = '1';
                 itemBox.style.transform = 'scale(1)';
             }, 10);
+
+
         }
         
 
@@ -5654,6 +5417,7 @@
 
 
         async function getTopics() {
+            if (game.score >=200001) return; // Win check
 
             updateState({ 
                 isLoading: true, 
@@ -5787,18 +5551,16 @@
         
         function loadTriviaQuestion(topic) {
            
+
             const filteredQuestions = game.questionsData.filter(q => q.topic === topic);
+
             if (filteredQuestions.length === 0) {
                 return null;
             }
+
             const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
-            const selected = filteredQuestions[randomIndex];
 
-            const shuffledAnswers = [...selected.wrongAnswers, selected.correctAnswer]
-                .sort(() => Math.random() - 0.5);
-            
-            return { ...selected, shuffledAnswers };
-
+            return filteredQuestions[randomIndex];
         }
 
 
@@ -5825,8 +5587,7 @@
                         message: '',
                         isLoading: false
                     });
-                    setPhase(3,'');
-                    //return parsed
+                    return parsed
                 } else {
                     throw new Error('LLM returned malformed question data.');
                 }
@@ -5836,8 +5597,8 @@
                     message: 'QUERY FAILED. Returning to Topic Select.',
                     isLoading: false
                 });
-                setTimeout(() => setPhase(2, ''), 2000);
-
+                // Go back to topic selection if question generation fails
+                getTopics(); 
             }
         }
 
@@ -5845,16 +5606,12 @@
         function handleAnswerSelect(answer) {
             if (game.selectedAnswer !== null || game.isLoading) return; 
 
-            console.log(game.questionData);
-            if (game.selectedAnswer !== null || game.isLoading) return; 
-
             let newScore = game.chops["Backstage Blueprint"];
             let feedback = '';
-            const isCorrect = answer === game.questionData.correctAnswer;
-
+            
             updateState({ selectedAnswer: answer });
 
-            if (isCorrect) {
+            if (answer === game.questionData.correctAnswer) {
                 newScore += updateChopScore('Backstage Blueprint', 20);
                 feedback = 'Bravo! +20 Backstage Blueprint XP.';
                 showSuccessAnimation();
@@ -5864,20 +5621,41 @@
                 feedback = 'DEFEAT! Correct Answer Displayed.';
             }
 
-            updateState({ 
-                selectedAnswer: answer,
-                message: '' // Clear global message to prevent duplicate in header
-            });
-            setPhase(3, feedback);
-
-            setTimeout(() => {
-                updateState({ selectedAnswer: null, questionData: null, message: '' });
-                setPhase(0, '');
-            }, 4000);
+            updateState({ message: feedback });
+            
+            
+            setTimeout(() => getTopics(), 4000); // 3 second delay before next topic selection
             
         }
 
-      
+        // --- UI Rendering ---
+        
+        function renderPhase_boot() {
+            const welcomeContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8');
+            
+            
+            if (game.isLoading) {
+                welcomeContent.innerHTML = `
+                    <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
+                    <p class="mt-6 text-xl text-gray-400 title-font">${game.message}</p>
+                `;
+            } else if (game.isLLMLoaded) {
+                // LLM is loaded, show the START button
+
+                const startButton = createElement('button', `metal-button w-2/3 py-4 text-2xl title-font mt-12`, 'INITIATE CHALLENGE');
+                
+                // FIX: Assign an anonymous function to onclick that calls setPhase(0).
+                // This prevents the function from running immediately upon rendering.
+                startButton.onclick = () => setPhase(0, '');
+
+                welcomeContent.append(
+                    createElement('p', 'text-xl text-gray-300 mb-8 text-center', 'The Machine Core is fully charged. Hit the throttle to begin your climb to $1000 points.'),
+                    startButton
+                );
+                
+            }
+            return welcomeContent;
+        }
 
         function renderPhase2() {
             if (game.isLoading) {
@@ -5887,8 +5665,6 @@
                 `);
             }
             
-            getTopics();
-
             const topicContent = createElement('div', 'flex flex-col items-center justify-center h-full space-y-8 p-8');
             
             const topicHeader = createElement('h3', 'text-3xl font-bold title-font text-electric-cyan text-center', 'CHOOSE ONE CATEGORY');
@@ -5907,84 +5683,6 @@
             topicContent.appendChild(backButton);
             return topicContent;
         }
-
-
-
-        function renderPhase3() {
-            if (game.isLoading || !game.questionData) {
-                return createElement('div', 'flex flex-col items-center justify-center h-full p-8', `
-                    <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
-                    <p class="mt-6 text-xl text-gray-400 title-font">GENERATING QUESTION...</p>
-                `);
-            }
-            
-            const questionData = game.questionData;
-            const allAnswers = questionData.shuffledAnswers;
-            const qContent = createElement('div', 'flex flex-col h-full');
-
-            if (game.message) {
-                const feedbackEl = createElement('div', 'mt-6 p-4 text-center rounded bg-black/40 border border-white/10 animate-bounce');
-                feedbackEl.innerHTML = `<p class="text-lg font-bold text-white uppercase tracking-wider">${game.message}</p>`;
-                qContent.appendChild(feedbackEl);
-            }
-            
-            // Question Panel
-            const qPanel = createElement('div', 'p-6 bg-gray-800 rounded-lg border-2 border-electric-blue mb-8 shadow-xl');
-            qPanel.innerHTML = `
-                <p class="text-sm font-semibold text-electric-cyan mb-2">TARGET TOPIC: ${game.currentTopic.toUpperCase()}</p>
-                <p class="text-3xl font-bold text-gray-100 title-font">${questionData.question}</p>
-            `;
-            qContent.appendChild(qPanel);
-
-            // Answer Buttons
-            const answersDiv = createElement('div', 'space-y-4 flex-1');
-            allAnswers.forEach((answer) => {
-                let classes = 'w-full text-left p-5 rounded-lg border-2 font-bold transition-all duration-300 transform active:scale-95 ';
-
-                const isSelected = game.selectedAnswer === answer;
-                const isCorrect = answer === questionData.correctAnswer;
-                const isDisabled = game.selectedAnswer !== null;
-
-                if (isDisabled) {
-                    if (isCorrect) {
-                        classes += ' bg-green-700 border-green-500 shadow-lg shadow-green-700/50'; // Correct
-                        
-
-                    } else if (isSelected) {
-                        classes += ' bg-red-800 border-red-600 shadow-lg shadow-red-800/50'; // Wrong selection
-                    } else {
-                        classes += ' bg-gray-700 border-gray-600 opacity-50'; // Faded
-                    }
-                } else {
-                    classes += ' bg-gray-700 border-gray-500 hover:bg-gray-600'; // Active
-                }
-
-                const button = createElement('button', classes, answer);
-                button.disabled = isDisabled;
-                button.onclick = () => handleAnswerSelect(answer);
-                answersDiv.appendChild(button);
-            });
-
-            qContent.appendChild(answersDiv);
-
-            const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'MENU');
-            backButton.onclick = () => setPhase(0, '');
-            qContent.appendChild(backButton);
-
-
-            return qContent;
-        }
-        
-
-        const chopColorMap = {
-                "Social Influence": { bg: 'bg-blue-500', text: 'text-blue-400' },
-                "Backstage Blueprint": { bg: 'bg-yellow-500', text: 'text-yellow-400' },
-                "Rhythm Mastery": { bg: 'bg-red-500', text: 'text-red-400' },
-                "Instrument Synergy": { bg: 'bg-green-500', text: 'text-green-400' },
-                "Lyrical Flow": { bg: 'bg-orange-500', text: 'text-orange-400' },
-                "Stage Presence": { bg: 'bg-pink-500', text: 'text-pink-400' }
-            };
-
 
         // Game menu
        function renderPhase0() {
@@ -6079,7 +5777,15 @@
                 </div>
             `;
             assetsContainer.innerHTML = renderAssetRow('Active Inventory', acquiredItems) + renderAssetRow('Active Topics', acquiredTopics);
-             
+             const chopColorMap = {
+                "Social Influence": { bg: 'bg-blue-500', text: 'text-blue-400' },
+                "Backstage Blueprint": { bg: 'bg-yellow-500', text: 'text-yellow-400' },
+                "Rhythm Mastery": { bg: 'bg-red-500', text: 'text-red-400' },
+                "Instrument Synergy": { bg: 'bg-green-500', text: 'text-green-400' },
+                "Lyrical Flow": { bg: 'bg-purple-500', text: 'text-purple-400' },
+                "Stage Presence": { bg: 'bg-pink-500', text: 'text-pink-400' }
+            };
+
             // 4. STATS SECTION
             const statsSection = createElement('div', 'w-full space-y-6 pt-2 border-t border-white/10');
             const chopsHtml = game.chops.filter(c => c.isUnlocked).map(chop => {
@@ -6087,7 +5793,6 @@
                 const chopName = chop.name;
                 const chopValue = chop.points;
                 const color = chopColorMap[chopName];
-                console.log(chopName, chop.points, chopMax)
                 const percentage = Math.min(100, Math.max(0, (chop.points / chopMax) * 100));
                 return `
                     <div class="w-full">
@@ -6095,9 +5800,9 @@
                             <span class="text-gray-300">${chop.icon} ${chop.name}</span>
                             <span class="text-yellow-400 font-bold">${chop.points}/${chopMax}</span>
                         </div>
-                            <div class="w-full bg-gray-800 h-2 rounded-full border border-gray-600 overflow-hidden">
+                        <div class="w-full bg-gray-800 h-2 rounded-full border border-gray-600 overflow-hidden">
 
-                            <div class="h-full transition-all duration-500 ${color.bg}" style="width: ${percentage}%"></div>
+                            <div class="bg-indigo-500 h-full transition-all duration-500 ${color.bg} style="width: ${percentage}%"></div>
                         </div>
                     </div>`;
             }).join('');
@@ -6165,13 +5870,17 @@
             const buttonGrid = createElement('div', 'grid grid-cols-4 gap-4 w-full max-w-md mx-auto');
 
             const menubuttons = [
-                { title: 'TRIVIA', phase: 2, action: () => setPhase(2,''), iconEmoji: '💡' },
+                { title: 'TRIVIA', phase: 2, action: () => initiateTrivia(), iconEmoji: '💡' },
                 { title: 'WORDLE', phase: 7, action: () => setPhase(7,''), iconEmoji: '📝' },
                 { title: 'SONGS', phase: 8, action: () => setPhase(8,''), iconEmoji: '🎶' },
                 { title: 'JUST ONE', phase: 9, action: () => setPhase(9,''), iconEmoji: '1️' },
                 { title: 'CARDS', phase: 20, action: () => setPhase(20, ''), iconEmoji: '🃏' },
                 { title: 'FEUD', phase: 11, action: () => setPhase(11, ''), iconEmoji: '📊' },
+                { title: 'SHOP', phase: 4, action: () => setPhase(4, ''), iconEmoji: '🛒' }, 
                 { title: 'YAY', phase: 0, action: () => cheat(), iconEmoji: '🤘' },
+                { title: 'SETUP', phase: 18, action: () => setPhase(18,''), iconEmoji: '📛' },
+                { title: 'CHOPS', phase: 17, action: () => setPhase(17, ''), iconEmoji: '📋' },
+                { title: 'INTRO', phase: 12, action: () => setPhase(12,''), iconEmoji: '🎦' },
                 { title: 'MIXER', phase: 13, action: () => setPhase(13,''), iconEmoji: '🎛️' },
             ];
 
@@ -6297,13 +6006,11 @@
             { name: 'Morello\'s Guitar', price: 1800, icon: '🎸', desc: 'Ultimate Rock Power-Up.' }
         ];
 
-        let inventoryItem = game.inventory_items.find(i => i.name === 'Arn Anderson VHS');
-
-        if (game.bestie2_buttons.arn && !inventoryItem.given) {
+        if (game.bestie2_buttons.arn) {
             shopData.push({ name: 'Arn Anderson VHS', price: 100, icon: '📼', desc: 'One of the best wrestling legends!' });
         }
 
-        if (game.bob_buttons.amoeba) {
+        if (game.bob_buttons.guitar) {
             shopData.push({ name: 'Rock Guitar Tapping Technique', price: 40, icon: '📓', desc: 'Mastery book for Instrument Synergy' });
         }
         
@@ -6413,8 +6120,6 @@
                     btn.onclick = () => {
                         game.artists_bought.push(artist);
                         game.score -= price; // Deduct money
-                        let inventoryItem = game.inventory_items.find(i => i.name === 'Artist CD');
-                        inventoryItem.acquired = true;
                         
                         updateState({
                             score: game.score,
@@ -6444,15 +6149,9 @@
 
      function renderCliffs() {
         const shopData = [
-            
+            { name: 'Galactic Silver glitter', price: 25, icon: '✨', desc: 'Robbie seems to like this glitter brand' },
             { name: 'Luxury Copper Cookware Set', price: 2000, icon: '🍳', desc: 'Best set for a culinary quest' }
         ];
-
-        let inventoryItem = game.inventory_items.find(i => i.name === 'Galactic Silver glitter');
-        if (!game.dj_buttons.cliff && !inventoryItem.given){
-
-            shopData.push({ name: 'Galactic Silver glitter', price: 25, icon: '✨', desc: 'Robbie seems to like this glitter brand' },);
-        }
 
         const shopContent = createElement('div', 'flex flex-col items-center h-full p-6 rock-card shadow-2xl');
 
@@ -6525,12 +6224,65 @@
         shopContent.appendChild(grid);
         
         const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'BACK');
-        backButton.onclick = () => setPhase(10, 'Returning to Map...');
+        backButton.onclick = () => setPhase(0, 'Returning to Map...');
         shopContent.appendChild(backButton);
 
         return shopContent;
     }
 
+        function renderPhase3() {
+            if (game.isLoading || !game.questionData) {
+                return createElement('div', 'flex flex-col items-center justify-center h-full p-8', `
+                    <div class="animate-spin rounded-full h-12 w-12 border-4 border-t-electric-cyan border-gray-700"></div>
+                    <p class="mt-6 text-xl text-gray-400 title-font">GENERATING QUESTION...</p>
+                `);
+            }
+            
+            const questionData = game.questionData;
+            const allAnswers = [...questionData.wrongAnswers, questionData.correctAnswer].sort(() => Math.random() - 0.5);
+            
+            const qContent = createElement('div', 'flex flex-col h-full');
+            
+            // Question Panel
+            const qPanel = createElement('div', 'p-6 bg-gray-800 rounded-lg border-2 border-electric-blue mb-8 shadow-xl');
+            qPanel.innerHTML = `
+                <p class="text-sm font-semibold text-electric-cyan mb-2">TARGET TOPIC: ${game.currentTopic.toUpperCase()}</p>
+                <p class="text-3xl font-bold text-gray-100 title-font">${questionData.question}</p>
+            `;
+            qContent.appendChild(qPanel);
+
+            // Answer Buttons
+            const answersDiv = createElement('div', 'space-y-4 flex-1');
+            allAnswers.forEach((answer) => {
+                let classes = 'w-full text-left p-4 rounded-md border-2 text-gray-100 font-medium transition duration-200';
+                const isSelected = game.selectedAnswer === answer;
+                const isCorrect = answer === questionData.correctAnswer;
+                const isDisabled = game.selectedAnswer !== null;
+
+                if (isDisabled) {
+                    if (isCorrect) {
+                        classes += ' bg-green-700 border-green-500 shadow-lg shadow-green-700/50'; // Correct
+                        
+
+                    } else if (isSelected) {
+                        classes += ' bg-red-800 border-red-600 shadow-lg shadow-red-800/50'; // Wrong selection
+                    } else {
+                        classes += ' bg-gray-700 border-gray-600 opacity-50'; // Faded
+                    }
+                } else {
+                    classes += ' bg-gray-700 border-gray-500 hover:bg-gray-600'; // Active
+                }
+
+                const button = createElement('button', classes, answer);
+                button.disabled = isDisabled;
+                button.onclick = () => handleAnswerSelect(answer);
+                answersDiv.appendChild(button);
+            });
+            qContent.appendChild(answersDiv);
+            
+            return qContent;
+        }
+        
 
         function renderPhase7() {
         // --- Local Wordle Game State ---
@@ -6988,7 +6740,7 @@
                         game.message = "CHALLENGE FAILED. BEST LUCK NEXT TIME.";
                     }
                     game.paigow = null;
-                    setPhase(10, game.message);
+                    setPhase(0, game.message);
                 }
             }, 5000);
         }
@@ -7866,7 +7618,6 @@
         const outputMessage = document.getElementById('output-message');
         const newImageUrl = landmarkImageRegistry[name];
         const data = landmarkData[name];
-        game.iPhoneMessage = false;
         game.previousPhase = 10;
         game.currentLocationId = name;
         game.currentBuildingName = name;
@@ -8050,7 +7801,7 @@
         },
 
         { 
-            text: "I look at that bridge and see a connection. A frequency trapped under the city's skin, waiting for someone to play it.", 
+            text: "I look at that bridge and don't see a commute; I see a connection. A frequency trapped under the city's skin, waiting for someone to play it.", 
             url: "./videos/habibi-intro3.mp4" 
         },
 
@@ -8075,15 +7826,15 @@
             if (game.chopsDiscovered){
                 cinematicScript = [
                 { 
-                    text: "The rhythm of the city, the geometry of sound, the history of every stage... I see it all now. The dream isn't a whisper anymore. It's a blueprint for a revolution.", 
+                    text: "The map isn't in my hands; it's in my mind. The rhythm of the city, the geometry of sound, the history of every stage... I see it all now. The dream isn't a whisper anymore. It's a blueprint for a revolution.", 
                     url: "./videos/habibi-learn.mp4" 
                 },
                 { 
-                    text: "Every empty seat is a challenge. Every silent stage, a promise. The echo of expectation is louder than any applause I've ever heard. It's not about hoping anymore. It's about earning it.", 
+                    text: "Every empty seat is a challenge. Every silent stage, a promise. They say San Francisco is where bands come to die. But they also say it's where legends are born. The echo of expectation is louder than any applause I've ever heard. It's not about hoping anymore. It's about earning it.", 
                     url: "./videos/habibi-slims.mp4" 
                 },
                 { 
-                    text: "Now, the real work begins - Gigs to chase, songs to write, fans to win, and a message to scream from every rooftop. San Francisco... hear me. I'm coming for you. Chapter Two: The Ascent.", 
+                    text: "The lessons are learned. The blueprints are etched. Chapter One: Complete. Now, the real work begins. This city isn't just a place to practice—it's a canvas for my sound. Gigs to chase, songs to write, fans to win, and a message to scream from every rooftop. San Francisco... hear me. I'm coming for you. Chapter Two: The Ascent.", 
                     url: "./videos/chapter2.mp4" 
                 },
                 
@@ -8172,7 +7923,7 @@
                 }
                 
                 //if (typeof setPhase === "function") setPhase(10, "Sequence Complete.");
-            }, 300);
+            }, 800);
 
             
         }
@@ -8185,11 +7936,8 @@
         function exitChapterOne() {
             document.getElementById('chapterOneView').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
-
-            displayNewTopicAcquired('Musician Career');
-
-           // setPhase(10, 'Start the day');
-           // handleClick(game.currentLocationId);
+            setPhase(10, 'Start the day');
+            handleClick(game.currentLocationId);
             
         }
 
@@ -8649,6 +8397,7 @@
                 const nextPhase = (item.name === 'Chops list') ? 17 : 15;
                 setPhase(nextPhase, `Inspecting ${item.name}...`, item);
             });
+            inventoryContent.appendChild(itemGrid);
 
             // --- SECTION 2: CONVERSATION TOPICS ---
             const acquiredTopics = game.conversation_topics.unlocked.filter(item => item.acquired);
@@ -8656,8 +8405,6 @@
                 setPhase(15, `Thinking of ${topic.name}...`, topic);
             });
             inventoryContent.appendChild(topicGrid);
-            inventoryContent.appendChild(itemGrid);
-
 
             // --- BACK BUTTON ---
             //const backButton = createElement('button', 'px-10 py-3 text-lg font-bold bg-[#475569] text-white border-b-4 border-[#1e293b] hover:bg-[#64748b] active:border-b-0 active:translate-y-1 transition-all uppercase tracking-widest mt-12', 'CLOSE');
@@ -8838,7 +8585,7 @@
 
                 const newlocation = landmarkData[notification.location];
                 if (newlocation.hidden === true){
-                  //  toggleLandmarkVisibilityByName(notification.location, false); 
+                    toggleLandmarkVisibilityByName(notification.location, false); 
                     game.pendingAcquisition.location = notification.location;
                 }          
             }
@@ -8887,13 +8634,10 @@
                 // Use a slight delay to ensure the DOM has re-rendered Phase 10 elements
                 setTimeout(() => {
                     handleClick(currentLocationId);
-                }, 20); 
+                }, 50); 
             } else {
                  console.log(`[CINEMATIC EXIT] Returning to Phase ${prevPhase}.`);
             }
-
-            const locId = game.pendingAcquisition.location;
-            const locData = landmarkData[locId];
 
 
             if (game.pendingAcquisition.memory) {
@@ -8901,7 +8645,9 @@
             }
 
             if (game.pendingAcquisition.location) {
-                    displayNewLocationAcquired(game.pendingAcquisition.location);
+                // New Location found, display the location screen
+                displayNewLocationAcquired(game.pendingAcquisition.location);
+             //   toggleLandmarkVisibilityByName(game.pendingAcquisition.location, false);
             } else if (game.pendingAcquisition.topic) {
                 // New Topic found, display the topic screen
                 displayNewTopicAcquired(game.pendingAcquisition.topic);
@@ -8919,7 +8665,7 @@
         function closeMessageView() {
             game.iphoneState.view = 'notifications';
             game.iphoneState.selectedMessageIndex = null;
-            game.iPhoneMessage = true;
+
             if (game.pendingAcquisition.location) {
                 // New Location found, display the location screen
                 displayNewLocationAcquired(game.pendingAcquisition.location);
@@ -9000,7 +8746,7 @@
                 }
                 else{
                     game.currentCharacter = game.names.main;
-                    let forced_text = 'I am not ready yet! I’ve gotta figure out what it means to be a real musician...';
+                    let forced_text = 'I’ve gotta figure out how to become a real musician before I can even think about that stage! 🎸 Some of my friends might be able to show me the ropes...I can use the map icon below to navigate the city 🗺️, the phone icon to check my notifications 📱, and the backpack icon to check my inventory 🎒. Better get moving!';
                     askForDetails('Musician Career', 'topic', forced_text);
                     
                 }
@@ -9276,6 +9022,7 @@
         switch (game.phase) {
             case -1: contentElement = renderMainMenu(); break;
             case 0: contentElement = renderPhase0(); break; //  Menu
+            case 1: contentElement = renderPhase_boot(); break;
             case 2: contentElement = renderPhase2(); break; // show 2 topics
             case 3: contentElement = renderPhase3(); break;  // show trivia question
             case 4: contentElement = renderAmoeba(); break;
