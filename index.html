@@ -3933,6 +3933,7 @@
         },
 
 
+
         work: (name, data) => {
         currentContext = { name, data };
 
@@ -7616,18 +7617,15 @@
         function renderMap(){
             // This function creates the HTML structure and returns the main container.
             const mapHtml = `
-                <div id="map-container" class="w-full max-w-full flex flex-col items-center">
-                    <div id="map-host" class="game-asset rounded-lg bg-black/20 w-full relative aspect-[5/4] max-h-[70vh] flex items-center justify-center overflow-visible bg-contain bg-center bg-no-repeat">
-                        <svg class="sf-map-overlay w-full h-full object-contain" 
-                             viewBox="0 0 1000 800" 
-                             preserveAspectRatio="xMidYMid meet" 
-                             id="sf-map">
-                             <!-- Map elements here -->
+                <div id="map-container" class="w-full max-w-full overflow-hidden">
+                    <div id="map-host" class="game-asset rounded-lg bg-black/20 overflow-hidden">
+                        <svg class="sf-map-overlay w-full h-auto" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" id="sf-map">
                         </svg>
                     </div>
                     
-                    <div id="status-panel" class="mt-4 p-3 w-full rounded-lg shadow-2xl music-panel bg-gray-800/80">
-                        <div id="output-message" class="text-base md:text-lg text-white text-center">
+                    <div id="status-panel" class="mt-6 p-4 rounded-lg shadow-2xl music-panel">
+                        <!-- p class="title text-xl mb-1">>>> List of Topics / Items to interact <<<</p> -->
+                        <div id="output-message" class="text-lg text-white">
                             <span class="block">Select your destination</span>
                         </div>
                     </div>
