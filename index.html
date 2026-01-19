@@ -3248,7 +3248,7 @@
 
                     ${game.crazy_buttons.poker ? `
                     <div class="flex justify-center">
-                        <button onclick="setPhase(20, 'Poker')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Instrument Synergy')}">
+                        <button onclick="setPhase(20, 'Instrument Synergy')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Instrument Synergy')}">
                             <span class="text-sm font-bold brightness-125">Practice Instrument Synergy 🎸</span>
                         </button>
                     </div>
@@ -3272,7 +3272,7 @@
 
                     ${game.bridget_buttons.trivia ? `
                     <div class="flex justify-center">
-                        <button onclick="setPhase(2,'')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Backstage Blueprint')}">
+                        <button onclick="setPhase(2,'Backstage Blueprint')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Backstage Blueprint')}">
                             <span class="text-sm font-bold brightness-125">Practice Backstage Blueprint 📜</span>
                         </button>
                     </div>
@@ -3452,7 +3452,7 @@
 
                 ${game.crazy_buttons.poker ? `
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="setPhase(20, 'Poker')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                    <button onclick="setPhase(20, 'Instrument Synergy')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
                         <span class="text-sm font-bold text-yellow-300">Practice Instrument Synergy</span>
                     </button>
                 </div>
@@ -3758,7 +3758,7 @@
 
                  <div id="main-action-buttons" class="flex flex-col items-center">
                         <div class="flex justify-center mt-6 w-full">
-                            <button onclick="setPhase(19, 'Gear up for the Ultimate Ascent!');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                            <button onclick="setPhase(19, '');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
                                 <span class="text-base font-bold">Go shopping!</span>
                             </button>
                         </div>
@@ -3790,7 +3790,7 @@
                
                  <div id="main-action-buttons" class="flex flex-col items-center">
                         <div class="flex justify-center mt-6 w-full">
-                            <button onclick="setPhase(4, 'Shopping in Amoeba');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
+                            <button onclick="setPhase(4, '');" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
                                 <span class="text-base font-bold">Go shopping!</span>
                             </button>
                         </div>
@@ -3932,47 +3932,6 @@
                
         },
 
-
-        // --- Music Venues ---
-        venue: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                <span class="block text-xl title">// CONCERT LOG: ${name.toUpperCase()} ACTIVATED //</span>
-                <span class="block">>> VENUE TYPE: Historic Music Hall (${data.emoji})</span>
-                <span class="block">>> SCHEDULED EVENTS: 7 upcoming acts this week.</span>
-                <span class="block">>> DESCRIPTION: ${data.description}</span>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                                    <p class="italic"> </p>
-                                </div>
-
-                <div class="flex justify-center mt-4">
-                        <button onclick="setPhase(9, 'Time to play Just one!')" class="metal-button px-6 py-2">
-                            <span class="text-sm">Just One!</span>
-                        </button>
-                </div>
-                
-            `;
-        },
-
-        // --- Historical & Cultural Sites ---
-        historical: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                <span class="block text-xl title">// CULTURAL ARCHIVE: ${name.toUpperCase()} //</span>
-                <span class="block">>> ARCHIVE ID: ${data.category.substring(0, 3)}-${data.X}-${data.Y}</span>
-                <span class="block">>> HISTORICAL SUMMARY: ${data.description}</span>
-                <span class="block">>> RECOMMENDED ACTION: Research.</span>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                                    <p class="italic"> </p>
-                                </div>
-
-                <button onclick="toggleFanPanel()" class="metal-button px-6 py-2 bg-red-800 hover:bg-red-700">
-                        <span class="text-sm">Hide/show fans</span>
-                    </button>
-            `;
-        },
 
         work: (name, data) => {
         currentContext = { name, data };
@@ -7657,15 +7616,18 @@
         function renderMap(){
             // This function creates the HTML structure and returns the main container.
             const mapHtml = `
-                <div id="map-container" class="w-full max-w-full overflow-hidden">
-                    <div id="map-host" class="game-asset rounded-lg bg-black/20 overflow-hidden">
-                        <svg class="sf-map-overlay w-full h-auto" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" id="sf-map">
+                <div id="map-container" class="w-full max-w-full flex flex-col items-center">
+                    <div id="map-host" class="game-asset rounded-lg bg-black/20 w-full relative aspect-[5/4] max-h-[70vh] flex items-center justify-center overflow-visible bg-contain bg-center bg-no-repeat">
+                        <svg class="sf-map-overlay w-full h-full object-contain" 
+                             viewBox="0 0 1000 800" 
+                             preserveAspectRatio="xMidYMid meet" 
+                             id="sf-map">
+                             <!-- Map elements here -->
                         </svg>
                     </div>
                     
-                    <div id="status-panel" class="mt-6 p-4 rounded-lg shadow-2xl music-panel">
-                        <!-- p class="title text-xl mb-1">>>> List of Topics / Items to interact <<<</p> -->
-                        <div id="output-message" class="text-lg text-white">
+                    <div id="status-panel" class="mt-4 p-3 w-full rounded-lg shadow-2xl music-panel bg-gray-800/80">
+                        <div id="output-message" class="text-base md:text-lg text-white text-center">
                             <span class="block">Select your destination</span>
                         </div>
                     </div>
