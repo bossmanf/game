@@ -86,19 +86,21 @@
         /* Map Host Setup */
         #map-host {
             position: relative;
-            /* Remove padding-bottom: 80% ! It is overriding your height logic */
-            /*width:  682.67px; /* Force the specific width you want */
-            /*height: 535.33px;
-            margin: 0 auto; /* Center it */
-            aspect-ratio: 1000 / 800;
-            background-size: contain;
-            background-image: url('./sf.jpg');
-            background-size: contain; /* Changed from 'cover' to 'contain' to ensure it fits the box */
+            width: 100%;
+            /* This ensures the container always keeps the 1000:800 (5:4) aspect ratio */
+            aspect-ratio: 1000 / 800; 
+            margin: 0 auto;
+            background-color: #1a1a2e;
+            background-size: contain; /* Ensures the whole image is visible without cropping */
             background-repeat: no-repeat;
-            background-position: center;
-            transition: background-image 0.5s ease-in-out;
+            background-position: center center;
+            background-image: url('./sf.jpg');
+            transition: background-image 0.3s ease-in-out;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
 
         .sf-map-overlay {
             position: absolute;
@@ -106,7 +108,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: transparent; 
+            z-index: 10;
         }
 
         /* Landmark Node Group (Invisible clickable box) */
@@ -7617,28 +7619,29 @@
 
         };
 
-        function renderMap(){
-            // This function creates the HTML structure and returns the main container.
+      
+        function renderMap() {
             const mapHtml = `
-                <div id="map-container" class="w-full max-w-full overflow-hidden">
-                    <div id="map-host" class="game-asset flex-col justify-center rounded-lg bg-black/20 overflow-hidden">
-                        <svg class="sf-map-overlay w-full h-auto" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" id="sf-map">
+                <div id="map-container" class="w-full max-w-4xl mx-auto overflow-hidden p-2">
+                    <div id="map-host" class="game-asset rounded-xl shadow-2xl overflow-hidden relative">
+                        <!-- SVG Overlay for coordinates -->
+                        <svg class="sf-map-overlay" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" id="sf-map">
                         </svg>
                     </div>
                     
-                    <div id="status-panel" class="mt-6 p-4 rounded-lg shadow-2xl music-panel">
-                        <!-- p class="title text-xl mb-1">>>> List of Topics / Items to interact <<<</p> -->
-                        <div id="output-message" class="text-lg text-white">
-                            <span class="block">Select your destination</span>
+                    <div id="status-panel" class="mt-4 p-4 rounded-xl bg-black/40 border border-white/10 backdrop-blur-md">
+                        <div id="output-message" class="text-sm md:text-base text-gray-200 font-mono">
+                            <span class="text-neon-cyan animate-pulse">>> SYSTEM READY:</span>
+                            <span class="block mt-1">Select a destination on the tactical overlay.</span>
                         </div>
                     </div>
-                   
                 </div>
             `;
             const container = createElement('div', 'w-full px-0', mapHtml);
-            return container;
             game.dialogueIndex = 0;
+            return container;
         }
+        
         
 
         /**
@@ -7846,6 +7849,8 @@
 
 
             mapHost.style.backgroundImage = `url('${newImageUrl}')`;
+            mapHost.style.backgroundSize = 'contain'; 
+            mapHost.style.backgroundPosition = 'center';
             outputMessage.innerHTML = `<span class="block">// IMAGE TARGET LOCK: Displaying ${name.toUpperCase()} //</span>
                                        <span class="block">> DESCRIPTION: ${landmarkData[name]?.description || 'Data available.'}</span>`;
 
