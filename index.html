@@ -8626,8 +8626,8 @@
             // --- SECTION 1: PHYSICAL ITEMS ---
             const acquiredItems = game.inventory_items.filter(item => item.acquired);
             const itemGrid = createClassicGrid('Physical Assets', acquiredItems, (item) => {
-                const nextPhase = (item.name === 'Chops list') ? 17 : 15;
-                setPhase(nextPhase, '', item);
+                const targetPhase = (item.name === 'Chops list') ? 17 : 15;
+                setPhase(targetPhase, '', item); // Fix: Passes 'item' so the view updates
             });
 
             // --- SECTION 2: CONVERSATION TOPICS ---
