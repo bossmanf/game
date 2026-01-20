@@ -8627,7 +8627,7 @@
             const acquiredItems = game.inventory_items.filter(item => item.acquired);
             const itemGrid = createClassicGrid('Physical Assets', acquiredItems, (item) => {
                 const nextPhase = (item.name === 'Chops list') ? 17 : 15;
-                setPhase(nextPhase, '');
+                setPhase(nextPhase, '', item);
             });
 
             // --- SECTION 2: CONVERSATION TOPICS ---
