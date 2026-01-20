@@ -1247,7 +1247,7 @@
             text-shadow: 0 0 30px rgba(100, 100, 100, 0.6);
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
             animation: float-massive 8s ease-in-out infinite;
             filter: blur(12px);
             
@@ -1758,7 +1758,7 @@
                         'Mama⬇️': 'A.A.? Maybe his auntie? Everyone loves their Auntie!',
                     }},
 
-                     {name: 'Fretboard List', icon:'📑', acquired: false, desc: 'The list to master Fretboar control: I need the Skeleton, the Plectrum, the Conduit, and the Map', 
+                     {name: 'Fretboard List', icon:'📑', acquired: false, desc: 'The list to master Fretboard control: I need the Skeleton, the Plectrum, the Conduit, and the Map', 
                         actions : {'BITTER END': 'kevind_action5', 
                                     'The Fillmore ':'bob_action2',
                                     'HSB Festival' : 'bridget_action4'
@@ -2112,7 +2112,7 @@
                 },
 
                 {name: 'Artist CD', price: 10, icon: '💿', desc: 'Physical media to master my rhythm chops', acquired: false, 
-                    actions: { 'The 440': 'dj_chops', 'Mama':'mama_action2'},
+                    actions: { 'The 440': 'dj_chops', 'Mama⬇️':'mama_action2'},
                     messages: {
                         'BITTER END': 'CDs? I still have crates of vinyl that sound better. But sure, pop it in.',
                         'Metallica Pop-up Store': 'Check out the bass lines on track 4. Pure Cliff Burton vibes.',
@@ -2334,7 +2334,8 @@
 
         function home_action1(){
             game.home_buttons.showHelpButton = false;
-
+            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
+            topic.acquired = true;
             let forced_text = 'Some of my friends might be able to show me the ropes...I can use the map icon below to navigate the city 🗺️, the phone icon to check my notifications 📱, and the backpack icon to check my inventory 🎒. Better get moving!"';
             game.currentCharacter = game.names.main;
             askForDetails('Musician Career', 'topic', forced_text);
@@ -3240,7 +3241,7 @@
                 <div class="space-y-4 mt-4">
                     ${game.kevind_buttons.practiceChop ? `
                     <div class="flex justify-center">
-                        <button onclick="setPhase(7, 'Social Influence')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Social Influence')}">
+                        <button onclick="setPhase(7, '')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Social Influence')}">
                             <span class="text-sm font-bold brightness-125">Practice Social Influence 📣</span>
                         </button>
                     </div>
@@ -3248,7 +3249,7 @@
 
                     ${game.crazy_buttons.poker ? `
                     <div class="flex justify-center">
-                        <button onclick="setPhase(20, 'Instrument Synergy')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Instrument Synergy')}">
+                        <button onclick="setPhase(20, '')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Instrument Synergy')}">
                             <span class="text-sm font-bold brightness-125">Practice Instrument Synergy 🎸</span>
                         </button>
                     </div>
@@ -3256,7 +3257,7 @@
 
                     ${game.dj_buttons.chops ? `
                     <div class="flex justify-center">
-                        <button onclick="setPhase(8, 'Rhythm Mastery')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Rhythm Mastery')}">
+                        <button onclick="setPhase(8, '')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Rhythm Mastery')}">
                             <span class="text-sm font-bold brightness-125">Practice Rhythm Mastery 🎼</span>
                         </button>
                     </div>
@@ -3264,7 +3265,7 @@
 
                     ${game.bestie2_buttons.practiceChop ? `
                     <div class="flex justify-center">
-                        <button onclick="setPhase(9, 'Lyrical Flow')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Lyrical Flow')}">
+                        <button onclick="setPhase(9, '')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Lyrical Flow')}">
                             <span class="text-sm font-bold brightness-125">Practice Lyrical Flow 🖋️</span>
                         </button>
                     </div>
@@ -3272,7 +3273,7 @@
 
                     ${game.bridget_buttons.trivia ? `
                     <div class="flex justify-center">
-                        <button onclick="setPhase(2,'Backstage Blueprint')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Backstage Blueprint')}">
+                        <button onclick="setPhase(2,'')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Backstage Blueprint')}">
                             <span class="text-sm font-bold brightness-125">Practice Backstage Blueprint 📜</span>
                         </button>
                     </div>
@@ -3280,7 +3281,7 @@
 
                     ${game.bob_buttons.practiceChop ? `
                     <div class="flex justify-center">
-                        <button onclick="setPhase(11, 'Stage Presence')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Stage Presence')}">
+                        <button onclick="setPhase(11, '')" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Stage Presence')}">
                             <span class="text-sm font-bold brightness-125">Practice Stage Presence 🎤</span>
                         </button>
                     </div>
@@ -3822,7 +3823,7 @@
 
                 ${game.kevind_buttons.practiceChop  ? `
             <div class="flex justify-center mt-4" id="sids-help-button-container">
-                <button onclick="setPhase(7, 'Social Influence')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                <button onclick="setPhase(7, '')" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
                     <span class="text-sm font-bold text-yellow-300">Practice Social Influence</span>
                 </button>
             </div>
@@ -6504,7 +6505,7 @@
 
         function renderPhase7() {
         // --- Local Wordle Game State ---
-            const targetWord = 'music'; //game.words[Math.floor(Math.random() * game.words.length)];
+            const targetWord = game.words[Math.floor(Math.random() * game.words.length)];
 
             let guesses = []; // Array of {word: '...', result: ['absent', 'present', 'correct', ...]}
             let currentGuess = '';
@@ -7000,11 +7001,8 @@
 
 
         async function playMusicChallenge(rawMidiPath) {
-             // 1. Dispose of previous music part if it exists
-            if (game.musicPart) {
-                game.musicPart.dispose();
-                game.musicPart = null;
-            }
+
+           
             stopMusic(); // Ensure transport is stopped
 
             // Safety check
@@ -7077,7 +7075,7 @@
                 // 6. Start the Transport
                 game.musicTransport.start();
 
-                updateState({ message: `Streaming LIVE: ${game.currentSong}. GUESS THE BAND!`, isLoading: false });
+                updateState({ message: `Streaming LIVE: ${game.currentSong}`, isLoading: false });
 
             } catch (e) {
                 console.error("MIDI loading/parsing failed:", e);
@@ -7098,6 +7096,21 @@
                 game.musicTransport.stop();
                 game.musicTransport.cancel(0); // Clear all scheduled events
             }
+            if (game.leadSynth) {
+                try {
+                    game.leadSynth.releaseAll(); 
+                } catch (e) {
+                    console.warn("Synth releaseAll failed:", e);
+                }
+            }
+
+            // 3. Dispose of the specific Part (the MIDI sequence)
+            if (game.musicPart) {
+                game.musicPart.stop();
+                game.musicPart.dispose();
+                game.musicPart = null;
+            }
+
             if (game.musicLoop) {
                 game.musicLoop.dispose();
                 game.musicLoop = null;
@@ -7183,7 +7196,7 @@
             // 5. CRITICAL: Update state and force phase 8 re-render
             // We pass phase: 8 to ensure the router picks the "Challenge Active" branch of renderPhase8
             updateState({ 
-                message: `Now streaming: ${game.currentSong}. GUESS THE SONG!`, 
+                message: `Now streaming: ${game.currentSong}. GUESS THE SONG (do not write special characters!`, 
                 phase: 8 
             });
 
@@ -7326,7 +7339,7 @@
                 </div>
 
                 <div class="w-full max-w-md space-y-4">
-                    <label for="${inputId}" class="block text-lg font-semibold text-yellow-400 uppercase tracking-tight">GUESS THE SONG:</label>
+                    <label for="${inputId}" class="block text-lg font-semibold text-yellow-400 uppercase tracking-tight">GUESS THE SONG (do not use special characters):</label>
                     <input type="text" id="${inputId}" class="w-full p-4 text-xl text-white bg-gray-900 border-2 border-yellow-500/50 rounded-lg focus:ring-4 focus:ring-yellow-500/20 focus:border-yellow-500 outline-none transition-all" placeholder="Type song name..." autocomplete="off">
                     <button id="submit-button" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 text-xl rounded-lg transition-transform active:scale-95 uppercase tracking-widest">
                         SUBMIT GUESS
@@ -7631,14 +7644,14 @@
                     
                     <div id="status-panel" class="mt-4 p-4 rounded-xl bg-black/40 border border-white/10 backdrop-blur-md">
                         <div id="output-message" class="text-sm md:text-base text-gray-200 font-mono">
-                            <span class="text-neon-cyan animate-pulse">>> SYSTEM READY:</span>
-                            <span class="block mt-1">Select a destination on the tactical overlay.</span>
+                            <span class="text-neon-cyan animate-pulse"Select a destination</span>
                         </div>
                     </div>
                 </div>
             `;
             const container = createElement('div', 'w-full px-0', mapHtml);
             game.dialogueIndex = 0;
+            game.message = '';
             return container;
         }
         
@@ -8211,7 +8224,7 @@
             }
 
             const div = document.createElement('div');
-            div.className = 'dream-container relative w-full max-w-4xl mx-auto overflow-hidden rounded-xl border-4 border-yellow-500 shadow-2xl bg-black aspect-video flex items-center justify-center';
+            div.className = 'dream-container relative w-full max-w-4xl mx-auto overflow-hidden rounded-xl border-4 border-yellow-500 bg-black aspect-video flex items-center justify-center';
             
             div.innerHTML = `
                 <button id="startBtn" class="wake-button text-white font-light rounded-full z-10">
@@ -8614,7 +8627,7 @@
             const acquiredItems = game.inventory_items.filter(item => item.acquired);
             const itemGrid = createClassicGrid('Physical Assets', acquiredItems, (item) => {
                 const nextPhase = (item.name === 'Chops list') ? 17 : 15;
-                setPhase(nextPhase, `Inspecting ${item.name}...`, item);
+                setPhase(nextPhase, '');
             });
 
             // --- SECTION 2: CONVERSATION TOPICS ---
