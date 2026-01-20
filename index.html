@@ -87,9 +87,11 @@
         #map-host {
             position: relative;
             /* Remove padding-bottom: 80% ! It is overriding your height logic */
-            width: 682.67px; /* Force the specific width you want */
-            height: 535.33px;
+            /*width:  682.67px; /* Force the specific width you want */
+            /*height: 535.33px;
             margin: 0 auto; /* Center it */
+            aspect-ratio: 1000 / 800;
+            background-size: contain;
             background-image: url('./sf.jpg');
             background-size: contain; /* Changed from 'cover' to 'contain' to ensure it fits the box */
             background-repeat: no-repeat;
@@ -5961,9 +5963,11 @@
                     ⚙️ 
                 </div>
 
-                <div class="aspect-square flex flex-col items-center justify-center p-3 bg-gray-800 rounded-2xl border-2 border-white/10 shadow-xl">
-                    <span class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-tighter mb-0.5">Cash</span>
-                    <span class="text-sm md:text-lg font-black text-yellow-400 tracking-tighter">$${game.score.toLocaleString()}</span>
+                <div class="flex flex-col items-center justify-center aspect-square cursor-not-allowed p-2 bg-gray-800 rounded-xl border-2 border-white/10 transition-all md:p-5">
+                    <span class="text-[8px] md:text-[10px] font-bold text-gray-500 uppercase tracking-tighter leading-none">Cash</span>
+                    <span class="text-xs md:text-lg font-black text-yellow-400 tracking-tighter leading-none">
+                        $${game.score.toLocaleString()}
+                    </span>
                 </div>
             `;
             return iconRow;
@@ -6112,42 +6116,46 @@
             `;
 
             statsSection.append(playerStats, memoryStats);
-          const buttonmenu = createElement('div', 'p-4 bg-gray-950/90 border-t border-white/5 rounded-2xl mt-4 shadow-inner', `
-            <div class="flex flex-col items-center gap-1">
-            <p class="text-[10px] font-mono text-gray-500 uppercase tracking-[0.3em] font-bold">
-            System Debug Matrix
-            </p>
-            <div class="w-12 h-[1px] bg-blue-500/30 rounded-full"></div>
-            </div>
-            `);
+          
 
-            // Force exactly 4 columns to create the requested grouping
+            const debugWrapper = createElement('details', 'w-full mt-8 opacity-40 hover:opacity-100 transition-opacity cursor-pointer');
+            const debugSummary = createElement('summary', 'text-[10px] font-mono text-gray-500 uppercase text-center list-none outline-none mb-2', '▲ Toggle Debug Tools ▲');
+            
+            const buttonmenu = createElement('div', 'p-4 bg-gray-950/90 border-t border-white/5 rounded-2xl shadow-inner');
+            buttonmenu.innerHTML = `
+                <div class="flex flex-col items-center gap-1 mb-4">
+                    <p class="text-[10px] font-mono text-gray-500 uppercase tracking-[0.3em] font-bold">Debug Chop Games</p>
+                    <div class="w-12 h-[1px] bg-blue-500/30 rounded-full"></div>
+                </div>
+            `;
+
             const buttonGrid = createElement('div', 'grid grid-cols-4 gap-4 w-full max-w-md mx-auto');
-
             const menubuttons = [
-                { title: 'TRIVIA', phase: 2, action: () => setPhase(2,''), iconEmoji: '💡' },
-                { title: 'WORDLE', phase: 7, action: () => setPhase(7,''), iconEmoji: '📝' },
-                { title: 'SONGS', phase: 8, action: () => setPhase(8,''), iconEmoji: '🎶' },
-                { title: 'JUST ONE', phase: 9, action: () => setPhase(9,''), iconEmoji: '1️' },
-                { title: 'CARDS', phase: 20, action: () => setPhase(20, ''), iconEmoji: '🃏' },
-                { title: 'FEUD', phase: 11, action: () => setPhase(11, ''), iconEmoji: '📊' },
-                { title: 'YAY', phase: 0, action: () => cheat(), iconEmoji: '🤘' },
-                { title: 'MIXER', phase: 13, action: () => setPhase(13,''), iconEmoji: '🎛️' },
+                { title: 'TRIVIA', action: () => setPhase(2,''), iconEmoji: '💡' },
+                { title: 'WORDLE', action: () => setPhase(7,''), iconEmoji: '📝' },
+                { title: 'SONGS', action: () => setPhase(8,''), iconEmoji: '🎶' },
+                { title: 'JUST ONE', action: () => setPhase(9,''), iconEmoji: '1️' },
+                { title: 'CARDS', action: () => setPhase(20, ''), iconEmoji: '🃏' },
+                { title: 'FEUD', action: () => setPhase(11, ''), iconEmoji: '📊' },
+                { title: 'FORCE', action: () => cheat(), iconEmoji: '🤘' },
+                { title: 'MIXER', action: () => setPhase(13,''), iconEmoji: '🎛️' },
             ];
 
             menubuttons.forEach(btn => {
-                // Exact classes from your provided button snippet
                 const button = createElement('button', 
-                    'aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-105 transition-all text-2xl md:text-4xl shadow-xl flex items-center justify-center group relative', 
+                    'aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan transition-all text-2xl shadow-xl flex items-center justify-center group relative', 
                     `<span>${btn.iconEmoji}</span>
-                     <span class="absolute bottom-1 text-[7px] font-bold opacity-0 group-hover:opacity-60 transition-opacity text-white pointer-events-none uppercase tracking-tighter">${btn.title}</span>`
+                     <span class="absolute bottom-1 text-[7px] font-bold opacity-0 group-hover:opacity-60 transition-opacity text-white uppercase">${btn.title}</span>`
                 );
-                
                 button.onclick = btn.action;
                 buttonGrid.appendChild(button);
             });
 
-            menuContent.append(titleRow, iconRow, persistenceRow, statsSection, buttonmenu, buttonGrid);
+            buttonmenu.appendChild(buttonGrid);
+            debugWrapper.append(debugSummary, buttonmenu);
+
+            menuContent.append(titleRow, iconRow, persistenceRow, statsSection, debugWrapper);
+
             return menuContent;
         
         }
@@ -7613,7 +7621,7 @@
             // This function creates the HTML structure and returns the main container.
             const mapHtml = `
                 <div id="map-container" class="w-full max-w-full overflow-hidden">
-                    <div id="map-host" class="game-asset rounded-lg bg-black/20 overflow-hidden">
+                    <div id="map-host" class="game-asset flex-col justify-center rounded-lg bg-black/20 overflow-hidden">
                         <svg class="sf-map-overlay w-full h-auto" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" id="sf-map">
                         </svg>
                     </div>
@@ -8003,14 +8011,15 @@
         },
 
         { 
+            text: "You can't automate the way a string vibrates when your heart breaks. I'm done optimizing greed. I QUIT. Back to the streets, where the music is real.", 
+            url: "./videos/habibi-quit.mp4" 
+        },
+
+        { 
             text: "I look at that bridge and see a connection. A frequency trapped under the city's skin, waiting for someone to play it.", 
             url: "./videos/habibi-intro3.mp4" 
         },
 
-        { 
-            text: "You can't automate the way a string vibrates when your heart breaks. I'm done optimizing greed. I QUIT. Back to the streets, where the music is real.", 
-            url: "./videos/habibi-quit.mp4" 
-        },
 
         { 
             text: "They can keep their silicon. I’ve got six strings and the truth. Time to stop making a living and start making some noise.", 
