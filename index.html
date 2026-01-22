@@ -2161,7 +2161,7 @@
             { id: 1, app: game.names.bestie3, emoji: '💬', summary: 'New message', fullContent: "Hey buddy! Come meet me at the Bitter End for a couple of beers!", unread: true , location: 'BITTER END', topic: null},
             { id: 2, app: 'SF Weather', emoji: '☀️', summary: 'Karl’s Vacation', fullContent: "Karl the Fog has officially packed his bags! Expect a rare streak of clear blue skies for the next few weeks. Sunglasses: Required. 😎", unread: true, location: null},
             { id: 5, app: 'News', emoji: '📰', summary: 'Breaking News', fullContent: "Bay Area legends METALLICA have officially confirmed they will be taking over San Francisco’s Oracle Park for a massive stadium performance later this month! 🤘", unread: true, location: null , topic: 'Metallica tour'},
-            { id: 3, app: game.names.bestie, emoji: '💬', summary: 'New message', fullContent: "Hey boboo! Let's meet at my place. It's been a while! ", unread: true , location: 'BESTIE', topic: null}
+            { id: 3, app: game.names.bestie, emoji: '💬', summary: 'New message', fullContent: "Hey booboo! Let's meet at my place. It's been a while! ", unread: true , location: 'BESTIE', topic: null}
             
            
             // max is 6
@@ -3907,7 +3907,7 @@
                 ${game.popup_buttons.tour? `
             <div class="flex justify-center mt-4" id="sids-cheer-button-container">
                 <button onclick="popup_action1();" class="metal-button px-6 py-2">
-                    <span class="text-sm">Greed the clerk</span>
+                    <span class="text-sm">Greet the clerk</span>
                 </button>
             </div>
         ` : ''}
@@ -6228,7 +6228,7 @@
             instructionsContent.appendChild(imageContainer);
             
             const backButton = createElement('button', 'punk-button px-8 py-3 text-xl font-bold mt-auto', 'Back to the Streets');
-            backButton.onclick = () => setPhase(10, 'Ready for the next challenge.');
+            backButton.onclick = () => setPhase(10, '');
             instructionsContent.appendChild(backButton);
 
             return instructionsContent;
@@ -8515,7 +8515,7 @@
             craftContent.appendChild(mainArea);
 
             const backButton = createElement('button', 'punk-button px-8 py-3 text-xl font-bold mt-auto', 'Back to the Streets');
-            backButton.onclick = () => setPhase(0, 'Ready for the next challenge.');
+            backButton.onclick = () => setPhase(0, '');
             craftContent.appendChild(backButton);
             return craftContent;
         }
