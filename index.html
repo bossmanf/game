@@ -9541,8 +9541,10 @@
             const percent = progression.progressPercentage || 0;
             const chopMax = 100;
 
-            const chopContent = createElement('div', 'flex flex-col items-center justify-center min-h-full p-4 md:p-8 space-y-8 bg-zinc-950/20');
-            const documentContainer = createElement('div', 'w-full max-w-2xl p-8 space-y-6 paper-document bg-white shadow-2xl border border-gray-300 relative overflow-hidden');
+
+              const chopContent = createElement('div', 'flex flex-col items-center justify-start min-h-full p-2 sm:p-4 md:p-8 space-y-4 bg-zinc-950/20 w-full');
+                const documentContainer = createElement('div', 'w-full max-w-2xl p-4 sm:p-8 space-y-4 sm:space-y-6 paper-document bg-white shadow-2xl border border-gray-300 relative overflow-hidden');
+
 
             const isUnlocked = game.kevind_buttons && game.kevind_buttons.chops === true;
 
