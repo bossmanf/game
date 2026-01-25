@@ -1313,6 +1313,49 @@
             50% { opacity: 0; }
         }
 
+        .retro-tab {
+            background: var(--tape-gray);
+            border-top: 3px solid #666;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .retro-tab:hover {
+            background: #555;
+            transform: translateY(-5px);
+        }
+
+        .retro-tab.active {
+            background: #b22222; /* Red Gaffer Tape */
+            border-top-color: #ff4444;
+            transform: translateY(-10px);
+        }
+
+        .todo-paper {
+            background-color: var(--paper-color);
+            color: #222;
+            background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+            background-size: 20px 20px;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.5);
+            min-height: 400px;
+        }
+
+        .marker-font {
+            font-family: 'Permanent Marker', cursive;
+        }
+
+        .stat-bar-bg {
+            background: #333;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            background: #eab308;
+            height: 100%;
+        }
 
 
 
@@ -1490,6 +1533,8 @@
         const game = {
             phase: -1,             // 1: Welcome, 2: Topic Selection, 3: Question
             score: 20,
+            level: 0,
+            refresh: false,
             isLLMLoaded: false,
             secrets: 0,
             isLoading: false,
@@ -1599,10 +1644,12 @@
             sids_buttons :
             {
                 showCheerButton: true,
-                showHelpButton: true 
+                showHelpButton: true,
+                money:false
             },
             kevind_buttons : 
             {
+                chops:false,
                 practiceChop: false,
                 guitar: false
             },
@@ -2182,6 +2229,12 @@
         };
 
 
+        let missions = [
+                { id: 'shirt', text: 'Scavenge Metallica T-Shirt', completed: true, urgent: false },
+                { id: 'ladder', text: 'Beat Rick’s "Ladder Lock" challenge', completed: false, urgent: false },
+                { id: 'tape', text: 'Fix the ring tear (Get Gaffer Tape 🎞️)', completed: false, urgent: false },
+                { id: 'archive', text: 'Find the A.A. Archive', completed: false, urgent: true }
+        ];    
 
         const LEVEL_CONFIG = [
 
@@ -2214,7 +2267,7 @@
 
             "BITTER END": { X: 310, Y: 325, W: 50, H: 40, category: "bar", emoji: "🍻", actionKey: "bar", description: "A legendary Richmond dive where the air is thick with the smell of stale beer and history.", hidden: true, character: game.names.bestie3},
 
-            "Metallica Pop-up Store": { X: 690, Y: 540, W: 40, H: 30, category: "popup", emoji: "🛍️", actionKey: "popup", description: "A temporary shrine to the gods of metal. Amidst the limited-edition vinyl and black denim, you can feel the heavy-metal heartbeat of the city pulsing louder than the Apex algorithms.", hidden: true , character: 'Pop-up Clerk'},
+            "Metallica Pop-up Store": { X: 580, Y: 440, W: 40, H: 30, category: "popup", emoji: "🛍️", actionKey: "popup", description: "A temporary shrine to the gods of metal. Amidst the limited-edition vinyl and black denim, you can feel the heavy-metal heartbeat of the city pulsing louder than the Apex algorithms.", hidden: true , character: 'Pop-up Clerk'},
 
             "BESTIE": { X: 640, Y: 350, W: 40, H: 40, category: "sids", emoji: "🏠", actionKey: "sids",  description:"A high-rise haven, the perfect host’s sanctuary for entertainment.",  hidden: true , character: game.names.bestie },
 
@@ -2230,7 +2283,7 @@
 
             "The 440": { X: 410, Y: 440, W: 60, H: 40, category: "t440", emoji: "🏳️‍🌈", actionKey: "t440", description: "A high-energy Castro staple where the alcohol never stops. It’s loud and it’s proud.", hidden: true , character: 'DJ Robbie'},
 
-            "Cliff\'s Variety": { X: 410, Y: 440, W: 60, H: 40, category: "cliffs", emoji: "🛒", actionKey: "cliffs", description: "A neighborhood treasure chest. From hardware to confetti, if you need a specialized tool for your guitar or a costume for your show, Cliff’s has the magic in stock.", hidden: true , found: true, character: 'Bartender'},
+            "Cliff\'s Variety": { X: 410, Y: 440, W: 60, H: 40, category: "cliffs", emoji: "🛒", actionKey: "cliffs", description: "A neighborhood treasure chest. From hardware to confetti, if you need a specialized tool for your guitar or a costume for your show, Cliff’s has the magic in stock.", hidden: true , found: false, character: 'Bartender'},
 
             "Peets": { X: 410, Y: 440, W: 60, H: 40, category: "peets", emoji: "☕", actionKey: "peets", description: "The Musician’s Fuel Station. A chill corner to sit with a notebook, watch the city pass by, and plan your next move over a dark roast.", hidden: true , character: game.names.bestie2},
 
@@ -2336,7 +2389,7 @@
             game.home_buttons.showHelpButton = false;
             let topic = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
             topic.acquired = true;
-            let forced_text = 'Some of my friends might be able to show me the ropes...I can use the map icon below to navigate the city 🗺️, the phone icon to check my notifications 📱, and the backpack icon to check my inventory 🎒. Better get moving!"';
+            let forced_text = 'Some of my friends might be able to show me the ropes...I can use the MAP icon below to navigate the city 🗺️, the INBOX icon to check my notifications 📱, and the BAG icon to check my inventory 🎒. Better get moving!"';
             game.currentCharacter = game.names.main;
             askForDetails('Musician Career', 'topic', forced_text);
 
@@ -2435,10 +2488,14 @@
                 isUnlocked: true
             }));
 
-            toggleLandmarkVisibilityByName('Metallica Pop-up Store', false);
+            
+
+           // toggleLandmarkVisibilityByName('Metallica Pop-up Store', false);
             game.bridget_buttons.photo = true;           
             let inventoryItem = game.inventory_items.find(i => i.name === 'Photo');
             inventoryItem.acquired = false;
+            inventoryItem = game.inventory_items.find(i => i.name === 'Metallica t-shirt');
+            inventoryItem.acquired = true;
             inventoryItem = game.inventory_items.find(i => i.name === 'Accreditation');
             inventoryItem.acquired = true;
             inventoryItem = game.inventory_items.find(i => i.name === 'On The Road by Kerouac');
@@ -2447,6 +2504,8 @@
             inventoryItem = game.conversation_topics.unlocked.find(i => i.name === 'Fretboard List');
             inventoryItem.acquired = true;
             inventoryItem = game.conversation_topics.unlocked.find(i => i.name === 'Accreditation Required');
+            inventoryItem.acquired = true;
+            inventoryItem = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
             inventoryItem.acquired = true;
 
 
@@ -2565,12 +2624,12 @@
                 return;
             }
 
-            if (inventoryItem.given===true) {
+            if (inventoryItem.given===true && !sids_buttons.money){
 
                 // --- HELP / LEARN LOGIC ---
                 game.score += 1000;
                 playMovie('./videos/sid-money.mp4', 'Sid wants to help you in your musician career and gives you $1000');
-                
+                sids_buttons.money = false;
                 
             } else {
 
@@ -2618,6 +2677,7 @@
             game.dialogueData = kevind_music_dialogue_data;
             game.activeCharacter = game.names.bestie3;
             game.dialogueIndex = 0;
+            game.kevind_buttons.chops = true;
             const dialogueHtml = renderDialogue(kevind_music_dialogue_data, game.names.bestie3);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv); 
@@ -3226,7 +3286,9 @@
                         <span class="text-sm font-bold text-yellow-300">START YOUR MUSICIAN CAREER!</span>
                     </button>
                 </div>
-                ` : `
+                ` : ''}
+
+                ${game.kevind_buttons.chops ? `
                 <div class="flex justify-center mt-6">
                     <button onclick="checkChopMastery()" class="career-milestone-button px-10 py-5 rounded-xl border-4">
                         <div class="flex flex-col items-center">
@@ -3235,7 +3297,7 @@
                         </div>
                     </button>
                 </div>
-                `}
+                ` : ''}
 
                 <!-- Dynamic Chop Practice Buttons -->
                 <div class="space-y-4 mt-4">
@@ -4149,7 +4211,7 @@
         }
 
         function renderDialogue(dialogueData, characterName) {
-            const container = document.getElementById('status-panel');
+            const container = document.getElementById('content-panel');
             const currentIndex = game.dialogueIndex;
             const line = dialogueData[currentIndex];
             game.dialogueData = dialogueData;
@@ -4318,6 +4380,12 @@
                 return;
             }
             inventoryItem.acquired = false;
+            const topic = game.conversation_topics.unlocked.find(i => i.name === 'Accreditation Required');
+            if (!topic) {
+                console.error(`Item not found: ${itemName}`);
+                return;
+            }
+            topic.acquired = false;
             playMovie('./videos/bouncer.mp4','Fine, you\'ve got the HSB badge... Now quit waving it in my face before I snap it in half, keep your head down, and get inside before I change my mind.' );
         }
 
@@ -4650,7 +4718,7 @@
                         <div class="h-1 w-32 bg-gradient-to-r from-transparent via-yellow-400 to-transparent mx-auto mb-6"></div>
 
                         <p class="text-white text-2xl font-bold mb-8 uppercase tracking-widest">
-                            ${chopName}
+                            You can now practice ${chopName} at home!
                         </p>
 
                         <button id="close-achievement" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-xl text-xl transition-all transform hover:scale-105 active:scale-95 shadow-[0_5px_0_rgb(161,98,7)]">
@@ -5479,7 +5547,7 @@
                     { text: 'RESTORE SESSION (WIP)', icon: '📂', action: loadGame , disabled: true},
                     { text: 'CHOP GALLERY', icon: '🏆', action: () => showGameMessage("Locked until Chapter 2") },
                     //{ text: 'CHOP GALLERY1', icon: '🏆', action: () => debugUnlockAll()},
-                    { text: 'OPTIONS', icon: '⚙️', action: () => setPhase(0, '') }
+                    { text: 'OPTIONS (disabled)', icon: '⚙️', action: () => setPhase(0, '') }
                 ];
 
                 buttons.forEach(b => {
@@ -5501,6 +5569,89 @@
                 
                 return container;
             }
+
+
+            function addMission(id, text, urgent) {
+                if (missions.find(m => m.id === id)) return; // Prevent duplicates
+                missions.push({ id, text, completed: false, urgent });
+            }
+
+            /**
+             * Toggles a mission's completion status by ID.
+             */
+            function toggleMission(id) {
+                const mission = missions.find(m => m.id === id);
+                if (mission) {
+                    mission.completed = !mission.completed;
+                }
+            }
+
+            /**
+             * Renders the To-Do screen into the main content area.
+             */
+         function renderMissionScreen() {
+            // We create a new container instead of looking for 'screen-mission' in the DOM,
+            // so it fits the pattern of your other render functions.
+            const missionWrapper = createElement('div', 'w-full flex justify-center p-4');
+
+            // Create the paper element
+            const paper = createElement('div', 'todo-paper p-6 transform -rotate-1 relative overflow-hidden bg-white text-black shadow-lg border-2 border-black/10 max-w-md w-full');
+            
+            // Urgent tag
+            const urgentTag = createElement('div', 'absolute top-0 right-0 p-2 bg-blue-600 text-white text-[10px] font-bold -rotate-12 marker-font translate-x-1 -translate-y-1');
+            urgentTag.innerText = 'URGENT';
+            paper.appendChild(urgentTag);
+
+            // Title
+            const title = createElement('h2', 'marker-font text-2xl border-b-2 border-black mb-4');
+            title.innerText = 'THE GIG LIST';
+            paper.appendChild(title);
+
+            // List Container
+            const ul = createElement('ul', 'space-y-3');
+            
+            // Safety check for missions array
+            const missionList = (typeof missions !== 'undefined') ? missions : [];
+            
+            missionList.forEach(mission => {
+                const li = createElement('li', 'flex items-center gap-3');
+                
+                // Checkbox logic
+                const checkbox = createElement('input', 'accent-red-600 w-4 h-4 cursor-pointer');
+                checkbox.type = 'checkbox';
+                checkbox.checked = mission.completed;
+                if (typeof toggleMission === 'function') {
+                    checkbox.onchange = () => toggleMission(mission.id);
+                }
+
+                // Text logic
+                const textSpan = createElement('span', 'font-medium transition-all text-black');
+                textSpan.innerText = mission.text;
+                
+                if (mission.completed) {
+                    textSpan.className += ' line-through opacity-40';
+                } else if (mission.urgent) {
+                    textSpan.className += ' text-red-700 font-bold';
+                }
+
+                li.appendChild(checkbox);
+                li.appendChild(textSpan);
+                ul.appendChild(li);
+            });
+
+            paper.appendChild(ul);
+
+            // Footer note
+            const footer = createElement('div', 'mt-8 pt-4 border-t border-black/20 text-xs italic opacity-70 text-black');
+            footer.innerHTML = `* Note: Mama needs Zataar for the feast. Don't forget!`;
+            paper.appendChild(footer);
+
+            missionWrapper.appendChild(paper);
+            
+            // CRITICAL FIX: Return the element so renderGame can append it
+            return missionWrapper;
+        }
+
 
          async function saveGame() {
             // 1. Define which keys we want to EXCLUDE from the save file
@@ -5935,36 +6086,66 @@
                 "Stage Presence": { bg: 'bg-pink-500', text: 'text-pink-400' }
             };
 
+            
         function getIconRow() {
             const unreadCount = getUnreadNotificationCount();
-             const badgeHtml = unreadCount > 0 
-                ? `<span class="absolute -top-2 -right-2 bg-red-600 text-sm font-bold rounded-full h-8 w-8 flex items-center justify-center border-2 border-white">${unreadCount}</span>` 
+            const badgeHtml = unreadCount > 0 
+                ? `<span class="absolute top-1 right-4 bg-red-600 text-[10px] font-black rounded-full h-4 w-4 flex items-center justify-center border border-white animate-bounce">${unreadCount}</span>` 
                 : '';
-            const iconRow = createElement('div', 'w-full flex flex-wrap items-center justify-center gap-3 md:gap-6 pb-6  border-white/10');
 
-            iconRow.innerHTML = `
-                <button onclick="setPhase(10,'')" class="aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl">🗺️</button>
-                
-                <button onclick="setPhase(14,'')" class="aspect-square p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-electric-cyan hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl">🎒</button>
-                
-                <div class="relative aspect-square cursor-pointer p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" onclick="setPhase(16)">
-                    📱 ${badgeHtml}
+            // Create a fragment or a container to return multiple fixed elements
+            const navContainer = document.createDocumentFragment();
+
+            // 1. FLOATING HUD (Top Right)
+            const hud = createElement('div', 'fixed top-4 right-4 bg-zinc-900 border-2 border-zinc-700 p-2 rounded shadow-xl z-[60] flex flex-col min-w-[100px]');
+            hud.innerHTML = `
+                <div class="flex items-center justify-between gap-2 mb-1">
+                    <span class="text-[10px] uppercase text-zinc-500 font-bold">Funds</span>
+                    <span class="text-green-500 font-bold tracking-tighter">$${game.score.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
                 </div>
-
-                <div class="relative aspect-square cursor-pointer p-3 bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-neon-pink hover:scale-105 transition-all md:p-5 text-2xl md:text-4xl shadow-xl" onclick="setPhase(0, '')">
-                    ⚙️ 
-                </div>
-
-                <div class="flex flex-col items-center justify-center aspect-square cursor-not-allowed p-2 bg-gray-800 rounded-xl border-2 border-white/10 transition-all md:p-5">
-                    <span class="text-[8px] md:text-[10px] font-bold text-gray-500 uppercase tracking-tighter leading-none">Cash</span>
-                    <span class="text-xs md:text-lg font-black text-yellow-400 tracking-tighter leading-none">
-                        $${game.score.toLocaleString()}
-                    </span>
+                <div class="flex items-center justify-between gap-2 border-t border-zinc-800 pt-1">
+                    <span class="text-[10px] uppercase text-zinc-500 font-bold">Fans</span>
+                    <span class="text-yellow-500 font-bold tracking-tighter">${(game.fans || 0).toLocaleString()}</span>
                 </div>
             `;
-            return iconRow;
-        }
+            navContainer.appendChild(hud);
 
+            // 2. BOTTOM NAVIGATION BAR
+            const nav = createElement('nav', 'fixed bottom-0 left-0 w-full bg-black/95 p-2 flex justify-center items-end gap-1 border-t-4 border-zinc-800 z-50 pb-safe');
+
+            const createTab = (icon, label, phase, isActive = false, extraHtml = '') => {
+                const activeClass = isActive 
+                    ? 'bg-zinc-800 border-t-2 border-cyan-400 text-white' 
+                    : 'text-zinc-500 border-t-2 border-transparent hover:bg-zinc-900';
+                
+                const tab = createElement('div', `relative p-2 flex flex-col items-center w-16 sm:w-20 cursor-pointer transition-all ${activeClass}`);
+                tab.onclick = () => setPhase(phase, '');
+                
+                tab.innerHTML = `
+                    <span class="text-xl">${icon}</span>
+                    <span class="text-[9px] font-bold mt-1 uppercase tracking-tighter">${label}</span>
+                    ${extraHtml}
+                `;
+                return tab;
+            };
+
+            const currentPhase = game.phase;
+
+            nav.appendChild(createTab('🗺️', 'MAP', 10, currentPhase === 10));
+            nav.appendChild(createTab('🎒', 'BAG', 14, currentPhase === 14));
+            nav.appendChild(createTab('📝', 'To-Do', 1, currentPhase === 1));
+            nav.appendChild(createTab('📱', 'Inbox', 16, currentPhase === 16, badgeHtml));
+
+            if (game.kevind_buttons && game.kevind_buttons.chops) {
+                nav.appendChild(createTab('🎸', 'Chops', 17, currentPhase === 17));
+            }
+
+            nav.appendChild(createTab('⚙️', 'Config', 0, currentPhase === 0));
+
+            navContainer.appendChild(nav);
+
+            return navContainer;
+        }
         // Game menu
        function renderPhase0() {
             const progression = getLevelProgression();
@@ -5974,7 +6155,7 @@
 
             // 1. TITLE ROW
             const titleRow = createElement('div', 'w-full text-center mt-2');            
-            const title = createElement('h3', 'text-3xl font-extrabold title-font text-neon-pink uppercase tracking-tighter mb-1', 'MAIN MENU');
+            const title = createElement('h3', 'text-3xl font-extrabold title-font text-neon-pink uppercase tracking-tighter mb-1', 'SETTINGS');
             title.style.textShadow = '0 0 20px rgba(255, 0, 255, 0.6)';
             titleRow.appendChild(title);
 
@@ -6087,27 +6268,6 @@
                     ${chopsHtml}
                 </div>
             `;
-
-            // 2. SOCIAL STATS (Fans & Memories)
-            const memoryStats = createElement('div', 'w-full flex justify-center gap-6 py-4 border-t border-b border-white/10  ');
-            memoryStats.innerHTML = `
-                
-                <div class="p-3 bg-gray-800/50 rounded-2xl border border-neon-pink/30">
-                    <p class="text-[10px] font-mono text-neon-pink mb-2 uppercase tracking-widest text-center">Memories</p>
-                    <div class="flex flex-wrap justify-center gap-2">
-                        ${Object.entries(game.memories)
-                            .filter(([type, count]) => count > 0)
-                            .map(([type, count]) => `
-                            <div class="flex flex-col items-center p-2 bg-gray-900 rounded-xl border border-white/10 w-12 aspect-square">
-                                <span class="text-lg">${memoryComponentMatrix[type]?.emoji || '❓'}</span>
-                                <span class="text-[10px] font-bold text-yellow-400">${count}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-
-            statsSection.append(playerStats, memoryStats);
           
 
             const debugWrapper = createElement('details', 'w-full mt-8 opacity-40 hover:opacity-100 transition-opacity cursor-pointer');
@@ -7622,30 +7782,7 @@
         };
 
       
-        function renderMap() {
-            const mapHtml = `
-                <div id="map-container" class="w-full max-w-4xl mx-auto overflow-hidden p-2">
-                    <div id="map-host" class="game-asset rounded-xl shadow-2xl overflow-hidden relative">
-                        <!-- SVG Overlay for coordinates -->
-                        <svg class="sf-map-overlay" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" id="sf-map">
-                        </svg>
-                    </div>
-                    
-                    <div id="status-panel" class="mt-4 p-4 rounded-xl bg-black/40 border border-white/10 backdrop-blur-md">
-                        <div id="output-message" class="text-sm md:text-base text-gray-200 font-mono">
-                            <span class="text-neon-cyan animate-pulse"Select a destination</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            const container = createElement('div', 'w-full px-0', mapHtml);
-            game.dialogueIndex = 0;
-            game.message = '';
-            return container;
-        }
         
-        
-
         /**
          * Just One elements below
          */
@@ -7827,58 +7964,70 @@
      */
 
 
-    function handleClick(name) {
-        const mapHost = document.getElementById('map-host');
+   function handleClick(name) {
+        const mapLayer = document.getElementById('map-layer');
+        const sceneLayer = document.getElementById('scene-layer');
+        const sceneBg = document.getElementById('scene-background');
         const outputMessage = document.getElementById('output-message');
+        
+        // SAFETY: If we are in a state where these elements don't exist yet, 
+        // we should abort or re-trigger after a frame.
+        if (!mapLayer || !sceneLayer || !outputMessage) {
+            console.warn(`[handleClick] UI elements not found for ${name}. Retrying...`);
+            return; 
+        }
+
         const newImageUrl = landmarkImageRegistry[name];
         const data = landmarkData[name];
-        game.iPhoneMessage = false;
-        game.previousPhase = 10;
-        game.currentLocationId = name;
-        game.currentBuildingName = name;
-        game.currentCharacter = data.character;
-        game.currentBuildingData = data;
-        console.log('Entering ', game.currentLocationId, game.currentBuildingName, game.currentCharacter, game.currentBuildingData, ' maphost:', mapHost, ' URL', newImageUrl);
-        
-        //if (name === game.currentBuildingName) {
-        console.log('image:', newImageUrl, 'maphost:', mapHost, 'data:', data);
-        if (newImageUrl && mapHost) {
-            const mapElement = document.getElementById('sf-map');
-            if (!mapElement) return;
-            
-            // Clear all previous children
-            mapElement.innerHTML = ''; 
 
-
-            mapHost.style.backgroundImage = `url('${newImageUrl}')`;
-            mapHost.style.backgroundSize = 'contain'; 
-            mapHost.style.backgroundPosition = 'center';
-            outputMessage.innerHTML = `<span class="block">// IMAGE TARGET LOCK: Displaying ${name.toUpperCase()} //</span>
-                                       <span class="block">> DESCRIPTION: ${landmarkData[name]?.description || 'Data available.'}</span>`;
-
-            if (data) {
-                const actionFunc = actionRegistry[data.actionKey];
-                let message = '';
-
-                if (actionFunc) {
-                    // Execute the unique function associated with this landmark's category
-                    message = actionFunc(name, data);
-                } else {
-                    // Fallback message if actionKey is missing
-                    message = `<span class="block text-xl title">// ERROR: ACTION KEY MISSING //</span>
-                               <span class="block">>> Location: ${name}. Action key '${data.actionKey}' not found.</span>`;
-                }
-                
-                // Update the status panel
-                outputMessage.innerHTML = message;
-                
-            } else {
-                outputMessage.innerHTML = `<span class="block text-xl title">// ERROR: DATA NOT FOUND //</span>
-                                           <span class="block">>> Location: ${name} data missing from landmark list.</span>`;
-            }
+        if (!newImageUrl) {
+            outputMessage.innerHTML = `<span class="text-red-400">>> ACCESS DENIED: IMAGE DATA FOR ${name} NOT FOUND</span>`;
+            return;
         }
-        else {
-        outputMessage.innerHTML = `<span class="block text-red-400">// ERROR: Image not available for ${name} //</span>`;
+
+        game.currentLocationId = name;
+
+        // Switch Visuals safely
+        mapLayer.classList.add('hidden');
+        sceneLayer.classList.remove('hidden');
+        
+        if (sceneBg) {
+            sceneBg.style.backgroundImage = `url('${newImageUrl}')`;
+        }
+
+        // Render Content Below
+        let content = "";
+        if (data && actionRegistry[data.actionKey]) {
+            content = actionRegistry[data.actionKey](name, data);
+        } else {
+            content = `
+                <div class="p-4">
+                    <h2 class="text-xl text-cyan-400 font-bold mb-2 uppercase">${name.replace(/_/g, ' ')}</h2>
+                    <p class="text-gray-400 font-mono">LOCATION REACHED. NO ACTIVE TASKS DETECTED AT THIS COORDINATE.</p>
+                </div>`;
+        }
+
+        outputMessage.innerHTML = content;
+    }
+
+
+
+
+
+    function goBackToMap() {
+        const mapLayer = document.getElementById('map-layer');
+        const sceneLayer = document.getElementById('scene-layer');
+        const outputMessage = document.getElementById('output-message');
+
+        game.currentLocationId = null;
+
+        if (mapLayer && sceneLayer) {
+            sceneLayer.classList.add('hidden');
+            mapLayer.classList.remove('hidden');
+            outputMessage.innerHTML = '<span class="text-neon-cyan">Back in San Francisco. Select a destination.</span>';
+            
+            // Refresh markers
+            renderLandmarks();
         }
     }
 
@@ -7888,114 +8037,94 @@
      * Renders all landmark markers and their bounding boxes.
      */
     function renderLandmarks() {
-      const mapElement = document.getElementById('sf-map');
-        if (!mapElement) return;
+        const mapElement = document.getElementById('sf-map');
+        if (!mapElement || game.currentLocationId) return;
 
-        // Clear all previous children
         mapElement.innerHTML = '';
 
-        // Constants for background sizing
-        const TEXT_HEIGHT = 20; // Estimated height of the text area
-        const TEXT_BASELINE_OFFSET = 24; // Y position offset for the text baseline
-        const CHAR_WIDTH_ESTIMATE = 9; // Estimated pixel width per character
-        const PADDING = 12; // Padding around the text
+        if (game.currentLocationId) return;
 
         for (const name in landmarkData) {
             const bbox = landmarkData[name];
+            if (bbox.Y >= 800 || bbox.hidden) continue;
 
-            // Only render nodes that are visible on the map (Y < 800)
-            const isRendered = bbox.Y < 800;
+            const centerX = bbox.X + (bbox.W / 2);
+            const centerY = bbox.Y + (bbox.H / 2);
 
-            if (isRendered) {
+            const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            group.setAttribute('class', 'landmark-group cursor-pointer');
+            group.onclick = () => handleClick(name);
 
-                // Read the 'hidden' property
-                const isHidden = bbox.hidden || false;
+            // Marker Emoji
+            const markerEmoji = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            markerEmoji.setAttribute('x', centerX);
+            markerEmoji.setAttribute('y', centerY);
+            markerEmoji.setAttribute('font-size', '24');
+            markerEmoji.setAttribute('text-anchor', 'middle');
+            markerEmoji.textContent = bbox.emoji;
 
-                // Calculate center of bounding box for the visual node
-                const centerX = bbox.X + (bbox.W / 2);
-                const centerY = bbox.Y + (bbox.H / 2);
+            // Label
+            const markerName = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            markerName.setAttribute('x', centerX);
+            markerName.setAttribute('y', centerY + 25);
+            markerName.setAttribute('text-anchor', 'middle');
+            markerName.setAttribute('fill', 'white');
+            markerName.setAttribute('style', 'font-size: 10px; font-weight: bold; text-shadow: 1px 1px 2px black;');
+            markerName.textContent = name.toUpperCase();
 
-                // --- Create a group for the whole landmark (emoji + name + click area) ---
-                const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-                group.setAttribute('class', `landmark-group ${isHidden ? 'hidden' : ''}`);
-                group.setAttribute('title', name);
-                group.onclick = () => handleClick(name);
-
-                // --- 1. Draw the Invisible Bounding Box (Clickable Area) ---
-                const nodeRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                // Add padding around the bounding box for easier clicking
-                nodeRect.setAttribute('x', bbox.X - 5);
-                nodeRect.setAttribute('y', bbox.Y - 5);
-                nodeRect.setAttribute('width', bbox.W + 10);
-                nodeRect.setAttribute('height', bbox.H + 10);
-                nodeRect.setAttribute('fill', '#000');
-                nodeRect.setAttribute('opacity', 0);
-
-                group.appendChild(nodeRect);
-
-                // --- 2. Draw the Visual Landmark Marker (Emoji) ---
-                const markerEmoji = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                markerEmoji.setAttribute('x', centerX);
-                markerEmoji.setAttribute('y', centerY + 3);
-                markerEmoji.setAttribute('font-size', '24');
-                markerEmoji.setAttribute('text-anchor', 'middle');
-                markerEmoji.setAttribute('class', 'landmark-emoji');
-               // markerEmoji.setAttribute('fill', '#fff'); //
-                markerEmoji.textContent = bbox.emoji;
-
-                group.appendChild(markerEmoji);
-
-                // --- 3. Name Truncation Logic ---
-                let displayName = name;
-                const maxChars = 12;
-
-                if (name.length > 15) {
-                    // Prefer splitting by space if the first word is short enough
-                    if (name.indexOf(' ') !== -1 && name.split(' ')[0].length < maxChars) {
-                        displayName = name.split(' ')[0] + '...';
-                    } else {
-                        // Otherwise, just truncate
-                        displayName = name.substring(0, maxChars) + '...';
-                    }
-                }
-
-                displayName = displayName.toUpperCase(); // Ensure uppercase for map
-
-                // Estimate background width based on the final display name length
-                const backgroundWidth = Math.max(70, displayName.length * CHAR_WIDTH_ESTIMATE + PADDING); // Min 70px
-
-                // --- 4. Draw the Shading Background (Rectangle) ---
-                const markerBg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                // Y position calculation: text baseline (24) minus text height (20) to place the box over the text area
-                const bgY = centerY + TEXT_BASELINE_OFFSET - TEXT_HEIGHT;
-                const bgX = centerX - (backgroundWidth / 2);
-
-                markerBg.setAttribute('x', bgX);
-                markerBg.setAttribute('y', bgY);
-                markerBg.setAttribute('width', backgroundWidth);
-                markerBg.setAttribute('height', TEXT_HEIGHT);
-                markerBg.setAttribute('rx', 4); // Rounded corners
-                markerBg.setAttribute('fill', 'rgba(200, 200, 200, 0.7)'); // Semi-transparent dark background
-                markerBg.setAttribute('class', 'landmark-name-bg');
-
-                group.appendChild(markerBg); // Must be appended before text
-
-                // --- 5. Draw the Location Name (Text) ---
-                const markerName = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                markerName.setAttribute('x', centerX);
-                markerName.setAttribute('y', centerY + TEXT_BASELINE_OFFSET);
-                markerName.setAttribute('text-anchor', 'middle');
-                markerName.setAttribute('class', 'landmark-name');
-                markerName.setAttribute('fill', '#000'); // White text for high contrast
-                markerName.textContent = displayName;
-
-                group.appendChild(markerName);
-
-                mapElement.appendChild(group);
-            }
+            group.appendChild(markerEmoji);
+            group.appendChild(markerName);
+            mapElement.appendChild(group);
         }
-        return mapElement;
     }
+
+    function renderMap() {
+    const mapHtml = `
+        <div id="game-viewport" class="w-full max-w-4xl mx-auto bg-slate-900 rounded-xl overflow-hidden shadow-2xl flex flex-col">
+            
+            <!-- TOP SECTION: THE VISUAL (Map or Scene Background) -->
+            <div class="relative w-full overflow-hidden" style="height: 500px; min-height: 500px;">
+                
+                <!-- LAYER 1: THE WORLD MAP -->
+                <div id="map-layer" class="w-full h-full transition-all duration-300">
+                    <div id="map-host" class="w-full h-full bg-cover bg-center relative" style="background-image: url('./sf.jpg');">
+                        <svg class="w-full h-full" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet" id="sf-map"></svg>
+                    </div>
+                </div>
+
+                <!-- LAYER 2: THE LOCATION SCENE -->
+                <div id="scene-layer" class="hidden w-full h-full bg-black transition-all duration-300">
+                    <div id="scene-background" class="w-full h-full bg-cover bg-center relative">
+                        <!-- Navigation Overlay -->
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM SECTION: THE CONTENT PANEL (Action Registry Output) -->
+            <div id="content-panel" class="w-full bg-slate-800 border-t border-white/10 p-6 min-h-[150px]">
+                <div id="output-message" class="font-mono text-gray-100 leading-relaxed">
+                    <span class="text-cyan-400 animate-pulse">>> INITIALIZING SYSTEM... SELECT DESTINATION ON MAP.</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    const container = document.createElement('div');
+    container.className = "w-full p-4";
+    container.innerHTML = mapHtml;
+
+    game.currentLocationId = null;
+    
+    setTimeout(() => {
+        renderLandmarks();
+    }, 50);
+
+    return container;
+}
+            
+
+
 
         let cinematicScript = [
         { 
@@ -8537,7 +8666,7 @@
                 });
                 let nextRank = LEVEL_CONFIG[game.level].rank;
                 game.rank = nextRank;
-                showGameMessage(`RANK UP! You are now a ${nextRank}! Scores reset for new tier.`, 'success');
+                showGameMessage(`YOU LEVEL UP! You are now a ${nextRank}! Scores reset for new tier.`, 'success');
 
                 return -previousPoints;
             }
@@ -8547,6 +8676,10 @@
 
 
         function renderInventory() {
+
+            addMission(1, 'Testing', false); 
+            toggleMission(1);
+
             // Main container with the classic dark palette background
             const inventoryContent = createElement('div', 'flex flex-col items-center h-full p-8 space-y-12 bg-[#1a1a2e]');
 
@@ -8559,12 +8692,6 @@
             hint.innerHTML = `<span class="mr-2">▶</span> Select an icon for details <span class="ml-2">◀</span>`;
             inventoryContent.appendChild(hint);
 
-            /**
-             * Helper to create the Adventure-style grid
-             * @param {string} label - Category title
-             * @param {Array} items - List of item objects
-             * @param {Function} onClickAction - Function to run on click
-             */
             const createClassicGrid = (label, items, onClickAction) => {
                 const wrapper = createElement('div', 'w-full max-w-2xl flex flex-col');
                 
@@ -8622,11 +8749,34 @@
             // --- SECTION 2: CONVERSATION TOPICS ---
             const acquiredTopics = game.conversation_topics.unlocked.filter(item => item.acquired);
             const topicGrid = createClassicGrid('Knowledge & Topics', acquiredTopics, (topic) => {
-                setPhase(15, `Thinking of ${topic.name}...`, topic);
+                setPhase(15, '', topic);
             });
+
+            const memoryItems = Object.entries(game.memories)
+                .filter(([type, count]) => count > 0)
+                .map(([type, count]) => {
+                    const data = memoryComponentMatrix[type] || { emoji: '❓', color: '#fff', description: '' };
+                    return {
+                        name: type,
+                        icon: data.emoji,
+                        color: data.color,
+                        description: data.description,
+                        count: count,
+                        isMemory: true
+                    };
+                });
+
             inventoryContent.appendChild(topicGrid);
             inventoryContent.appendChild(itemGrid);
 
+            // Only append if there's at least one memory discovered
+            if (memoryItems.length > 0) {
+                const memoryGrid = createClassicGrid('Soul Memories', memoryItems, (memory) => {
+                    // Optional: Define a phase or a specific modal for viewing memory details
+                    setPhase(15, '', memory); 
+                });
+                inventoryContent.appendChild(memoryGrid);
+            }
 
             // --- BACK BUTTON ---
             //const backButton = createElement('button', 'px-10 py-3 text-lg font-bold bg-[#475569] text-white border-b-4 border-[#1e293b] hover:bg-[#64748b] active:border-b-0 active:translate-y-1 transition-all uppercase tracking-widest mt-12', 'CLOSE');
@@ -8640,9 +8790,11 @@
 
         function renderItem() {
             const item = game.selectedItem;
-            if (!item) return renderInventory(); // Fallback if no item is selected
+            if (!item) return renderInventory(); 
+
             const viewerContent = createElement('div', 'flex flex-col items-center justify-center h-full p-8 space-y-8');
             
+            // Title
             const title = createElement('h3', 'text-4xl font-extrabold title-font text-electric-cyan text-center mb-6', item.name.toUpperCase());
             title.style.textShadow = '0 0 10px #00FFFF';
             viewerContent.appendChild(title);
@@ -8650,52 +8802,56 @@
             // Container for the rotating item
             const itemDisplay = createElement('div', 'w-64 h-64 flex items-center justify-center p-8 bg-gray-900 rounded-full border-4 border-neon-pink shadow-2xl');
             
-            const inventoryEntry = game.inventory_items.find(i => i.name === item.name);
-            let imageUrl = inventoryEntry ? inventoryEntry.image : null;
+            // --- CHANGE 1: Logic to find the correct data/image/icon source ---
+            let displayImageUrl = null;
+            let displayDescription = item.desc || item.description; // Fallback to either field
+            let displayIcon = item.icon;
 
-            if (imageUrl) {
-                // Plot the image property if it exists
-                const rotatingImg = createElement('img', 'w-full h-full object-contain rotating-item');
-                rotatingImg.src = imageUrl;
-                rotatingImg.alt = item.name;
-                
-                // Add error fallback back to icon if image fails to load (e.g. 404)
-                rotatingImg.onerror = () => {
-                    rotatingImg.replaceWith(createElement('span', 'text-9xl rotating-item', item.icon));
-                };
-                itemDisplay.appendChild(rotatingImg);
+            // Check if it's a Memory first
+            if (item.isMemory) {
+                const memoryData = memoryComponentMatrix[item.name];
+                if (memoryData) {
+                    displayDescription = memoryData.description;
+                    displayIcon = memoryData.emoji;
+                    // Memories might use tailwind colors instead of images
+                    const coloredOrb = createElement('div', `w-full h-full rounded-full flex items-center justify-center text-9xl rotating-item ${memoryData.tailwind || 'bg-blue-500'}`);
+                    coloredOrb.innerText = displayIcon;
+                    itemDisplay.appendChild(coloredOrb);
+                }
             } else {
-                // Fallback to current rotating emoji
+                // Handle standard Items and Topics
+                const inventoryEntry = game.inventory_items.find(i => i.name === item.name);
+                const topicEntry = game.conversation_topics.unlocked.find(i => i.name === item.name);
+                displayImageUrl = inventoryEntry?.image || topicEntry?.image;
 
-                let topicEntry = game.conversation_topics.unlocked.find(i => i.name === item.name);
-                imageUrl = topicEntry ? topicEntry.image : null;
-
-                if (imageUrl) {
-                    // Plot the image property if it exists
+                if (displayImageUrl) {
                     const rotatingImg = createElement('img', 'w-full h-full object-contain rotating-item');
-                    rotatingImg.src = imageUrl;
+                    rotatingImg.src = displayImageUrl;
                     rotatingImg.alt = item.name;
-                    
-                    // Add error fallback back to icon if image fails to load (e.g. 404)
                     rotatingImg.onerror = () => {
-                        rotatingImg.replaceWith(createElement('span', 'text-9xl rotating-item', item.icon));
+                        rotatingImg.replaceWith(createElement('span', 'text-9xl rotating-item', displayIcon));
                     };
                     itemDisplay.appendChild(rotatingImg);
                 } else {
-                    // Fallback to current rotating emoji
-                    const rotatingIcon = createElement('span', 'text-9xl rotating-item', item.icon);
+                    const rotatingIcon = createElement('span', 'text-9xl rotating-item', displayIcon);
                     itemDisplay.appendChild(rotatingIcon);
                 }
-
             }
 
             const details = createElement('div', 'text-center max-w-md space-y-4');
             
-            // Description
-            const desc = createElement('p', 'text-xl text-gray-300 mono-font p-4 bg-gray-700/50 rounded-lg border border-gray-600', item.desc);
+            // --- CHANGE 2: Displaying extra memory stats if applicable ---
+            const desc = createElement('p', 'text-xl text-gray-300 mono-font p-4 bg-gray-700/50 rounded-lg border border-gray-600', displayDescription);
             details.appendChild(desc);
 
-            // Stats/Price (if available)
+            // If it's a memory, show its "Purpose" or "Stats"
+            if (item.isMemory && memoryComponentMatrix[item.name]) {
+                const stats = memoryComponentMatrix[item.name];
+                const statsBox = createElement('div', 'text-sm text-indigo-300 italic font-mono');
+                statsBox.innerHTML = `Purpose: ${stats.purpose}<br>Grit: ${stats.grit} | Soul: ${stats.soul} | Depth: ${stats.depth}`;
+                details.appendChild(statsBox);
+            }
+
             if (item.price !== undefined) {
                 const priceInfo = createElement('p', 'text-2xl font-bold text-yellow-400', `Acquisition Cost: $${item.price}`);
                 details.appendChild(priceInfo);
@@ -8704,11 +8860,7 @@
             viewerContent.appendChild(itemDisplay);
             viewerContent.appendChild(details);
 
-            const backButton = createElement(
-                'button', 
-                'metal-button px-3 py-1 text-sm mt-4 bg-green-600 hover:bg-green-700', 
-                'CLOSE'
-            );
+            const backButton = createElement('button', 'metal-button px-3 py-1 text-sm mt-4 bg-green-600 hover:bg-green-700', 'CLOSE');
             backButton.onclick = () => setPhase(14, '');
             viewerContent.appendChild(backButton);
 
@@ -8845,47 +8997,54 @@
             renderGame(); // Force a full game render to update UI.
         }
 
-        function exitCinematic() {
+       function exitCinematic() {
             const prevPhase = game.previousPhase;
             const currentLocationId = game.currentLocationId;
             
-            // 1. Return to the previous game phase
-            setPhase(prevPhase, ''); 
+            // 1. Re-render the main game UI
+            renderGame(); 
 
-            // 2. If the previous phase was the Map (Phase 10), re-trigger the location click.
-            // This is crucial to ensure the location's action content is displayed immediately,
-            // rather than just the base map.
+            // 2. If we were looking at the map, we want to go back into the location view
             if (prevPhase === 10 && currentLocationId) {
-                console.log(`[CINEMATIC EXIT] Returning to Map (Phase 10) and refreshing location: ${currentLocationId}`);
-                // Use a slight delay to ensure the DOM has re-rendered Phase 10 elements
+                console.log(`[CINEMATIC EXIT] Refreshing location: ${currentLocationId}`);
+                
+                // Clear map SVG if it exists
+                const mapElement = document.getElementById('sf-map');
+                if (mapElement) mapElement.innerHTML = '';
+
+                game.refresh = true;
+                
+                // We use requestAnimationFrame or a slightly longer timeout to ensure 
+                // the browser has finished the 'renderGame' DOM injection.
                 setTimeout(() => {
-                    handleClick(currentLocationId);
-                }, 20); 
-            } else {
-                 console.log(`[CINEMATIC EXIT] Returning to Phase ${prevPhase}.`);
+                    const checkElement = document.getElementById('map-layer');
+                    if (checkElement) {
+                        handleClick(currentLocationId);
+                    } else {
+                        // Fallback: If DOM still isn't ready, try one more time
+                        console.log("DOM not ready, retrying handleClick...");
+                        setTimeout(() => handleClick(currentLocationId), 50);
+                    }
+                }, 100); 
             }
 
-            const locId = game.pendingAcquisition.location;
-            const locData = landmarkData[locId];
-
-
+            // 3. Handle acquisitions
             if (game.pendingAcquisition.memory) {
                 displayMemory(game.pendingAcquisition.memory_text, game.pendingAcquisition.memory);
             }
 
             if (game.pendingAcquisition.location) {
-                    displayNewLocationAcquired(game.pendingAcquisition.location);
+                displayNewLocationAcquired(game.pendingAcquisition.location);
             } else if (game.pendingAcquisition.topic) {
-                // New Topic found, display the topic screen
                 displayNewTopicAcquired(game.pendingAcquisition.topic);
             } else if (game.pendingAcquisition.item) {
-                // New Topic found, display the topic screen
                 displayNewItemAcquired(game.pendingAcquisition.item);
             } else if (game.pendingAcquisition.chop) {
-                // New Topic found, display the topic screen
                 showChopMasteryWindow(game.pendingAcquisition.chop);
             }
-            game.pendingAcquisition = { location: null, topic: null , item: null, chop: null};
+            
+            // Reset pending
+            game.pendingAcquisition = { location: null, topic: null, item: null, chop: null, memory: null };
         }
 
 
@@ -8961,19 +9120,19 @@
             // 1. Validate that every chop is unlocked
             const allMastered = game.chops.every(chop => chop.isUnlocked);
 
-            if (allMastered) {
+            if (allMastered && game.level===1) {
                 game.chopsDiscovered = true;
                 showMasteryCelebration();
             } else {
 
                 const chops_list = game.inventory_items.find(i => i.name === 'Chops list');
                 if (chops_list.acquired){
-                    game.message = "Working on it! I still need to discover some of the chops";
-                    setPhase(17, 'Working on it! I still need to discover some of the chops');
+                    game.message = "Working on it! I still need to discover some of the chops and then level up!";
+                    setPhase(17, 'Working on it! I still need to discover some of the chops and then level up!');
                 }
                 else{
                     game.currentCharacter = game.names.main;
-                    let forced_text = 'I am not ready yet! I’ve gotta figure out what it means to be a real musician...';
+                    let forced_text = 'I am not ready yet! I’ve gotta figure out what it means to be a real musician... Some of my friends may help me. I can visit them using the MAP and should check my phone INBOX too!';
                     askForDetails('Musician Career', 'topic', forced_text);
                     
                 }
@@ -9180,9 +9339,9 @@
             chopContent.appendChild(documentContainer);
 
             // Back button retains the metal style as it's outside the "paper" area
-            const backButton = createElement('button', 'metal-button w-full max-w-xs py-3 text-lg mt-12 bg-gray-600 hover:bg-gray-700', 'BACK TO INVENTORY');
-            backButton.onclick = () => setPhase(14, '');
-            chopContent.appendChild(backButton);
+            //const backButton = createElement('button', 'metal-button w-full max-w-xs py-3 text-lg mt-12 bg-gray-600 hover:bg-gray-700', 'BACK TO INVENTORY');
+            //backButton.onclick = () => setPhase(14, '');
+            //chopContent.appendChild(backButton);
 
             return chopContent;
         }
@@ -9231,28 +9390,33 @@
      * Main render function: builds the entire UI based on game state.
      */
 
-    function renderGame() {   
-
+   function renderGame() {
+        // Clear the main container
         container.innerHTML = '';
         
-        const unifiedWrapper = createElement('div', 'w-full h-full flex flex-col space-y-2 max-w-2xl mx-auto');
+        // 1. Create the main wrapper
+        // We ensure it has relative positioning and min-h-screen or h-full logic
+        const unifiedWrapper = createElement('div', 'w-full h-full flex flex-col max-w-2xl mx-auto relative');
 
-        const phaseContainer = createElement('div', 'flex-1 relative w-full bg-gray-900/30 rounded-2xl border border-white/10 p-2 overflow-hidden flex flex-col');
+        // 2. Create the Phase Container
+        // Added 'mb-20' conditionally below if nav is present to prevent overlap
+        const phaseContainer = createElement('div', 'flex-1 relative w-full bg-gray-900/30 rounded-2xl border border-white/10 p-2 overflow-y-auto flex flex-col');
 
         let contentElement;
         switch (game.phase) {
             case -1: contentElement = renderMainMenu(); break;
-            case 0: contentElement = renderPhase0(); break; //  Menu
-            case 2: contentElement = renderPhase2(); break; // show 2 topics
-            case 3: contentElement = renderPhase3(); break;  // show trivia question
+            case 0: contentElement = renderPhase0(); break; 
+            case 1: contentElement = renderMissionScreen(); break;
+            case 2: contentElement = renderPhase2(); break;
+            case 3: contentElement = renderPhase3(); break;
             case 4: contentElement = renderAmoeba(); break;
-            case 7: contentElement = renderPhase7(); break; // Wordle Game!
-            case 8: contentElement = renderPhase8(); break; // Midi Game!
-            case 9: contentElement = renderPhase9(); break; // Just one
-            case 10: contentElement = renderMap(); break; 
-            case 11: contentElement = renderPhase11(); break; // Family feud
-            case 12: contentElement = renderPhase12(); break; // intro
-            case 13: contentElement = renderPhase13(); break; // Song mixer
+            case 7: contentElement = renderPhase7(); break;
+            case 8: contentElement = renderPhase8(); break;
+            case 9: contentElement = renderPhase9(); break;
+            case 10: contentElement = renderMap(); break;
+            case 11: contentElement = renderPhase11(); break;
+            case 12: contentElement = renderPhase12(); break;
+            case 13: contentElement = renderPhase13(); break;
             case 14: contentElement = renderInventory(); break;
             case 15: contentElement = renderItem(); break;
             case 16: contentElement = renderPhone(); break;
@@ -9268,46 +9432,47 @@
                 b.onclick = () => setPhase(0, '');
                 contentElement.appendChild(b);
         }
-        phaseContainer.appendChild(contentElement);
+
+        // Append the content to the phase container
+        if (contentElement) {
+            phaseContainer.appendChild(contentElement);
+        }
+        
         unifiedWrapper.appendChild(phaseContainer);
+
+        // 3. Message Bar
         if (game.message) {
             const messageBar = document.createElement('div');
-                messageBar.className = 'py-1 px-3 text-xs text-center rounded bg-black/40 text-cyan-400 border border-cyan-900/30 shrink-0';
-                messageBar.textContent =game.message;
+            messageBar.className = 'mt-2 py-1 px-3 text-xs text-center rounded bg-black/40 text-cyan-400 border border-cyan-900/30 shrink-0';
+            messageBar.textContent = game.message;
             unifiedWrapper.appendChild(messageBar);
         }
 
-
-        // 3. Status & Navigation Bar (The Icon Row)
-        // Only show during gameplay (Phase 10+ usually represents the "World Map" loop)
-        const validPhases = [4, 14, 15, 16, 17, 19];
-
+        // 4. Navigation Bar (The Icon Row)
+        const validPhases = [1, 4, 14, 15, 16, 17, 19];
         if ((game.phase === 10) || validPhases.includes(game.phase)) {
-        
-            const unreadCount = getUnreadNotificationCount();
-            const badgeHtml = unreadCount > 0 
-                ? `<span class="absolute -top-2 -right-2 bg-red-600 text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center border border-white animate-pulse">${unreadCount}</span>` 
-                : '';
-
-            const iconRow = getIconRow();            
+            // Add padding to the wrapper so the fixed nav doesn't cover content
+            // Alternatively, we add a spacer div at the end of the flex column
+            const iconRow = getIconRow();
             unifiedWrapper.appendChild(iconRow);
+            
+            // Add a spacer to push content up above the fixed nav
+            const spacer = createElement('div', 'h-20 w-full shrink-0');
+            unifiedWrapper.appendChild(spacer);
         }
 
+        container.appendChild(unifiedWrapper);
 
-       container.appendChild(unifiedWrapper);
-
-       if (game.phase === 10){
-
-            if (game.startGame) { 
+        // Handle Map-specific logic
+        if (game.phase === 10) {
+            if (game.startGame) {
                 game.startGame = false;
-            }
-            else{
-                // Wait a moment to ensure the browser has fully rendered the SVG element
-                renderLandmarks(0);
+            } else {
+                // Ensure renderLandmarks is called after DOM is ready
+                setTimeout(() => renderLandmarks(0), 0);
             }
         }
     }
-        
 
 
     // Initialize the game when the window loads

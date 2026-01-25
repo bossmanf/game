@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gear Rack UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Permanent+Marker&display=swap');
+
+        :root {
+            --paper-color: #f4f1ea;
+            --ink-blue: #1a2a6c;
+            --tape-gray: #4a4a4a;
+        }
+
+        body {
+            background-color: #121212;
+            font-family: 'Courier Prime', monospace;
+            color: white;
+        }
+
+        .retro-tab {
+            background: var(--tape-gray);
+            border-top: 3px solid #666;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .retro-tab:hover {
+            background: #555;
+            transform: translateY(-5px);
+        }
+
+        .retro-tab.active {
+            background: #b22222; /* Red Gaffer Tape */
+            border-top-color: #ff4444;
+            transform: translateY(-10px);
+        }
+
+        .todo-paper {
+            background-color: var(--paper-color);
+            color: #222;
+            background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+            background-size: 20px 20px;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.5);
+            min-height: 400px;
+        }
+
+        .marker-font {
+            font-family: 'Permanent Marker', cursive;
+        }
+
+        .stat-bar-bg {
+            background: #333;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            background: #eab308;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 min-h-screen">
+
+    <!-- Content Area (Example: The Gig Poster / To-Do List) -->
+    <div id="screen-content" class="w-full max-w-md mb-8">
+        <!-- TO-DO LIST (MISSION GOALS) -->
+        <div class="todo-paper p-6 transform -rotate-1 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-2 bg-blue-600 text-white text-xs -rotate-12 marker-font">URGENT</div>
+            <h2 class="marker-font text-2xl border-b-2 border-black mb-4">THE GIG LIST</h2>
+            <ul class="space-y-3">
+                <li class="flex items-center gap-2">
+                    <input type="checkbox" checked class="accent-red-600">
+                    <span class="line-through opacity-50">Scavenge Metallica T-Shirt</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <input type="checkbox" class="accent-red-600">
+                    <span>Beat Rick’s "Ladder Lock" challenge</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <input type="checkbox" class="accent-red-600">
+                    <span>Fix the ring tear (Get Gaffer Tape 🎞️)</span>
+                </li>
+                <li class="flex items-center gap-2">
+                    <input type="checkbox" class="accent-red-600">
+                    <span class="text-red-700 font-bold">Find the A.A. Archive</span>
+                </li>
+            </ul>
+            <div class="mt-8 pt-4 border-t border-black text-sm italic">
+                * Note: Mama needs Zataar for the feast. Don't forget!
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVIGATION BAR (THE GEAR RACK) -->
+    <nav class="fixed bottom-0 left-0 w-full bg-black/90 p-2 flex justify-center gap-1 border-t-4 border-zinc-800">
+        
+        <!-- Button 1: MAP -->
+        <div class="retro-tab p-3 flex flex-col items-center w-20 active">
+            <span class="text-xl">🗺️</span>
+            <span class="text-[10px] font-bold mt-1 uppercase">Route</span>
+        </div>
+
+        <!-- Button 2: INVENTORY -->
+        <div class="retro-tab p-3 flex flex-col items-center w-20">
+            <span class="text-xl">🎒</span>
+            <span class="text-[10px] font-bold mt-1 uppercase">Bag</span>
+        </div>
+
+        <!-- Button 3: MISSIONS (New!) -->
+        <div class="retro-tab p-3 flex flex-col items-center w-20">
+            <span class="text-xl">📝</span>
+            <span class="text-[10px] font-bold mt-1 uppercase">To-Do</span>
+        </div>
+
+        <!-- Button 4: PHONE -->
+        <div class="retro-tab p-3 flex flex-col items-center w-20">
+            <span class="text-xl">📱</span>
+            <span class="text-[10px] font-bold mt-1 uppercase">Inbox</span>
+        </div>
+
+        <!-- Button 5: STATUS / SETTINGS -->
+        <div class="retro-tab p-3 flex flex-col items-center w-20">
+            <span class="text-xl">🎸</span>
+            <span class="text-[10px] font-bold mt-1 uppercase">Chops</span>
+        </div>
+
+    </nav>
+
+    <!-- Floating HUD (Top Right: Cash & Fans) -->
+    <div class="fixed top-4 right-4 bg-zinc-900 border-2 border-zinc-700 p-2 rounded shadow-xl">
+        <div class="flex items-center gap-2 mb-1">
+            <span class="text-green-500 font-bold">$142.00</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-xs uppercase text-zinc-400">Fans:</span>
+            <span class="text-yellow-500 font-bold">542</span>
+        </div>
+    </div>
+
+</body>
+</html>
