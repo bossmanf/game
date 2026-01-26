@@ -1357,6 +1357,49 @@
             height: 100%;
         }
 
+         /* LCD Marquee Animation */
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-150%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 12s linear infinite;
+        }
+
+        /* Tape Spin Animation */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spinning {
+            animation: spin 3s linear infinite;
+        }
+
+        /* Realistic Button Press */
+        .btn-press:active {
+            transform: translateY(2px);
+            border-bottom-width: 0px !important;
+            margin-bottom: 2px;
+        }
+
+        /* VU Meter Animation */
+        @keyframes bounce {
+            0%, 100% { height: 4px; }
+            50% { height: 16px; }
+        }
+        .vu-bar {
+            width: 4px;
+            background: #fb923c;
+            border-radius: 1px;
+        }
+        .vu-anim { animation: bounce 0.4s ease-in-out infinite; }
+
+        .glass-shine {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+        }
+
 
 
 
@@ -1526,6 +1569,64 @@
             { id: 10, title: 'Black and Blue', type: 'Heavy Blues', required: ['Freedom', 'Anger'], mix: { grit: 3, soul: 0, depth: 2 }, target: 'Fillmore (Requires higher Flow)', found: false ,  available: false},
         ];
 
+        const RAW_SONGS_DATA = `
+        ./disco/Overcast.mp3
+        ./electronica/Tyrant.mp3
+        ./electronica/Inspired.mp3
+        ./electronica/Half Mystery.mp3
+        ./ethnic/Paradise_Found.mp3
+        ./ethnic/Zanzibar.mp3
+        ./ethnic/Nightdreams.mp3
+        ./ethnic/Lotus.mp3
+        ./ethnic/Sardana.mp3
+        ./rock/Metalmania.mp3
+        ./rock/urban_theme_bpm115.mp3
+        ./rock/Motherlode.mp3
+        ./rock/Riptide.mp3
+        ./rock/Twisted.mp3
+        ./rock/Breakdown.mp3
+        ./rock/Exhilarate.mp3
+        ./contemporary/Groundwork.mp3
+        ./contemporary/Dreamer.mp3
+        ./contemporary/Evening.mp3
+        ./contemporary/Immersed.mp3
+        ./contemporary/Sincerely.mp3
+        ./contemporary/Morning.mp3
+        ./contemporary/Super Power Cool Dude.mp3
+        ./jazz/Ultralounge.mp3
+        `;
+
+        function parseLibrary(text) {
+            const library = {};
+            const lines = text.trim().split('\n');
+            lines.forEach(line => {
+                const parts = line.split('/'); // ["", "disco", "song.mp3"]
+                if (parts.length >= 3) {
+                    const genre = parts[1];
+                    const filename = parts[2];
+                    if (!library[genre]) library[genre] = [];
+                    library[genre].push({
+                        title: filename.replace('.mp3', ''),
+                        url: `./songs/${genre}/${filename}`
+                    });
+                }
+            });
+            console.log(library);
+            return library;
+        }
+
+        const library = parseLibrary(RAW_SONGS_DATA);
+
+        // Define Station UI mapping
+        const STATIONS = [
+            { id: 'disco', name: 'DISCO', icon: '🪩', color: 'from-purple-600', tracks: library['disco'] || [] },
+            { id: 'electronica', name: 'ELECTRO', icon: '⌨️', color: 'from-cyan-600', tracks: library['electronica'] || [] },
+            { id: 'ethnic', name: 'ETHNIC', icon: '🌍', color: 'from-emerald-600', tracks: library['ethnic'] || [] },
+            { id: 'rock', name: 'ROCK', icon: '🎸', color: 'from-red-600', tracks: library['rock'] || [] },
+            { id: 'jazz', name: 'JAZZ', icon: '🎷', color: 'from-blue-600', tracks: library['jazz'] || [{title: 'No Signal', url: ''}] },
+            { id: 'contemporary', name: 'AMBIENT', icon: '🌊', color: 'from-indigo-600', tracks: library['contemporary'] || [{title: 'No Signal', url: ''}] }
+        ];
+
 
         const game = {
             phase: -1,             // 1: Welcome, 2: Topic Selection, 3: Question
@@ -1632,6 +1733,13 @@
                 Freedom: 0,
                 Gratitude: 0,
                 Resilience: 0,
+            },
+            radio: {
+                currentStation: STATIONS[0],
+                currentTrackIndex: 0,
+                isPlaying: false,
+                volume: -12,
+                player: null
             },
             songRecipes: songRecipesData,
             mixedScore: { grit: 0, soul: 0, depth: 0 },
@@ -3131,7 +3239,7 @@
                 { speaker: 'Player', text: "The BAG icon 🎒 is my lifeblood. It tracks my cash, the items I've collected, and the conversation topics I've unlocked." },
                 { speaker: 'Player', text: "The To-Do list 📋 is essential. It keeps track of my current quests and objectives so I don't lose focus on the mission." },
                 { speaker: 'Player', text: "My Career 🎸 tab shows my growth as a musician—my stats, fan count, and progress toward the chapter goal." },
-                { speaker: 'Player', text: "The Settings ⚙️ gear is currently under maintenance, so no need to worry about that for now." },
+                { speaker: 'Player', text: "You can use the Settings ⚙️ gear to choose music from different radio stations." },
                 { speaker: 'Player', text: "Everything seems clear. Better get moving before the scene leaves me behind!" }
             ];
 
@@ -5945,7 +6053,7 @@
             }
             msgBox.innerText = text.toUpperCase();
             document.body.appendChild(msgBox);
-            setTimeout(() => msgBox.remove(), 3000);
+            setTimeout(() => msgBox.remove(), 5000);
         }
 
 
@@ -6206,6 +6314,7 @@
 
 
 
+
         function renderPhase3() {
             if (game.isLoading || !game.questionData) {
                 return createElement('div', 'flex flex-col items-center justify-center h-full p-8', `
@@ -6348,6 +6457,7 @@
 
         return navContainer;
     }
+
 
         // Game menu
        function renderPhase0() {
@@ -6509,7 +6619,25 @@
             buttonmenu.appendChild(buttonGrid);
             debugWrapper.append(debugSummary, buttonmenu);
 
+            const radioSection = renderRadio();
+           
+
+     
+
             menuContent.append(titleRow, iconRow, persistenceRow, statsSection, debugWrapper);
+
+            //if (!game.radio.isInitialized) {
+            //    const powerBtn = document.createElement('button');
+             //   powerBtn.className = "bg-orange-600 text-white font-black py-4 px-4 rounded-2xl text-2xl shadow-2xl hover:bg-orange-500 active:scale-95 transition-all";
+             //   powerBtn.innerText = "POWER ON RADIO";
+             //   powerBtn.onclick = async () => {
+             //       await resumeContext();
+              //      renderGame();
+              //  };
+              //  menuContent.appendChild(powerBtn);
+            //}
+
+            menuContent.appendChild(radioSection);
 
             return menuContent;
         
@@ -7500,7 +7628,7 @@
             }
 
             game.message = resultMessage;
-            
+            togglePlay();
             // Wait 3 seconds, then move to the menu
             setTimeout(() => {
                 game.phase = 10;
@@ -7512,6 +7640,7 @@
         }
 
         function startPhase8Challenge() {
+            stopRadio();
             if (!game.selectedPracticeArtist) return;
 
             // 1. Normalize the selected artist name
@@ -7662,7 +7791,7 @@
             div.appendChild(startButton);
             const backButton = document.createElement('button');
             backButton.className = 'px-8 py-2 text-sm font-bold text-gray-500 hover:text-white transition-colors uppercase tracking-widest mt-4';
-            backButton.innerText = '← Return to Studio';
+            backButton.innerText = '← RETURN';
             backButton.onclick = () => {
                 setPhase(10, '');
             };
@@ -8532,6 +8661,306 @@
             }, 300);
 
             
+        }
+        async function resumeContext() {
+            if (Tone.context.state !== 'running') {
+                try {
+                    await Tone.start();
+                    game.radio.isInitialized = true;
+                    console.log("Audio Context Started");
+                } catch (e) {
+                    console.error("Failed to start Tone.js:", e);
+                }
+            }
+        }
+
+        function playTrack() {
+            // 1. Cleanup existing player
+            if (game.radio.player) {
+                try {
+                    game.radio.player.stop();
+                    game.radio.player.dispose();
+                } catch (e) {
+                    console.warn("Error cleaning up player:", e);
+                }
+                game.radio.player = null;
+            }
+
+            const station = game.radio.currentStation;
+            const track = station.tracks[game.radio.currentTrackIndex];
+            
+            if (!track || !track.url) {
+                game.radio.errorState = "NO SIGNAL";
+                game.radio.isPlaying = false;
+                renderGame();
+                return;
+            }
+
+            console.log('Testing ', track.url);
+            // 2. Create new player with explicit destination connection
+            // Note: EncodingError usually means the URL is valid but the format is unreadable
+            const player = new Tone.Player({
+                url: track.url,
+                autostart: true,
+                volume: game.radio.volume,
+                onload: () => {
+                    console.log("Track Loaded Successfully:", track.title);
+                    game.radio.isPlaying = true;
+                    game.radio.errorState = false;
+                    // Ensure UI reflects active state
+                    setTimeout(renderGame, 50);
+                },
+                onerror: (err) => {
+
+                    console.error("Tone Player Error (Decoding/Loading):", err);
+                    // If decoding fails, mark as error but allow user to try next track
+                    game.radio.errorState = "DECODE ERROR";
+                    game.radio.isPlaying = false;
+                    renderGame();
+                    
+                    // Auto-cleanup failed player
+                    if (player) {
+                        player.dispose();
+                    }
+                }
+            }).toDestination();
+
+            // 3. Setup event listeners
+            player.onstop = () => {
+                // Only auto-advance if it stopped naturally at the end (not manual stop)
+                if (game.radio.isPlaying && player.state === 'stopped' && player.buffer.loaded) {
+                    // Check if we reached the end of the track
+                    const bufferDuration = player.buffer.duration;
+                    if (bufferDuration > 0) {
+                        console.log("Track finished, moving to next...");
+                        changeTrack(1);
+                    }
+                }
+            };
+
+            game.radio.player = player;
+        }
+
+        async function togglePlay() {
+            await resumeContext();
+            if (game.radio.isPlaying) {
+                stopRadio();
+            } else {
+                playTrack();
+            }
+        }
+
+        function changeStation(id) {
+            const station = STATIONS.find(s => s.id === id);
+            if (station) {
+                game.radio.currentStation = station;
+                game.radio.currentTrackIndex = 0;
+                game.radio.errorState = false;
+                
+                // If it was already playing, switch immediately
+                if (game.radio.isPlaying) {
+                    playTrack();
+                } else {
+                    renderGame();
+                }
+            }
+        }
+
+        function changeTrack(dir) {
+            const trackCount = game.radio.currentStation.tracks.length;
+            if (trackCount === 0) return;
+
+            game.radio.currentTrackIndex = (game.radio.currentTrackIndex + dir + trackCount) % trackCount;
+            game.radio.errorState = false;
+            
+            // Auto-play the next track if the radio is "on"
+            if (game.radio.isPlaying || game.radio.errorState === "DECODE ERROR") {
+                playTrack();
+            } else {
+                renderGame();
+            }
+        }
+
+        function stopRadio() {
+            if (game.radio.player) {
+                try {
+                    game.radio.player.stop();
+                    game.radio.player.dispose();
+                } catch (e) {
+                    console.error("Stop Error:", e);
+                }
+                game.radio.player = null;
+            }
+            game.radio.isPlaying = false;
+            game.radio.errorState = false;
+            renderGame();
+        }
+
+        function updateVolume(val) {
+            const volumeValue = parseFloat(val);
+            game.radio.volume = volumeValue;
+            
+            // Update the player volume immediately if it exists
+            if (game.radio.player) {
+                game.radio.player.volume.value = volumeValue;
+            }
+            
+            // Update the dB text label in the UI without a full re-render for performance
+            const volLabel = document.querySelector('.font-mono.w-8');
+            if (volLabel) {
+                volLabel.textContent = `${Math.round(volumeValue)}dB`;
+            }
+        }
+
+        /**
+         * Updated Component with Error States in LCD
+         */
+        function renderRadio() {
+            const station = game.radio.currentStation;
+            const track = station.tracks[game.radio.currentTrackIndex];
+            
+            let displayTitle = "--- STANDBY ---";
+            if (game.radio.errorState) {
+                displayTitle = game.radio.errorState;
+            } else if (game.radio.isPlaying) {
+                displayTitle = track ? track.title : 'NO SIGNAL';
+            }
+
+            const radioWrapper = document.createElement('div');
+            radioWrapper.className = 'flex flex-col items-center mt-6 w-full px-4';
+
+            // Thematic names and updated metadata for the UI rendering
+            const THEMED_STATIONS = [
+                { id: 'disco', name: 'Neon Overdrive', genre: 'Nu-Disco', icon: '🪩', color: 'from-pink-500' },
+                { id: 'electronica', name: 'Silicon Soul', genre: 'Electronic', icon: '🤖', color: 'from-cyan-500' },
+                { id: 'ethnic', name: 'Global Pulse', genre: 'World', icon: '🌍', color: 'from-emerald-500' },
+                { id: 'rock', name: 'Titanium Reef', genre: 'Heavy Rock', icon: '🎸', color: 'from-red-600' },
+                { id: 'contemporary', name: 'Vapor Stream', genre: 'Contemporary', icon: '☁️', color: 'from-indigo-400' },
+                { id: 'jazz', name: 'Jazz Club', genre: 'Jazzy', icon: '🎷', color: 'from-amber-500' }
+            ];
+
+            radioWrapper.innerHTML = `
+                <div class="w-full max-w-[480px] bg-zinc-900 border-x-[12px] border-zinc-800 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 flex flex-col gap-6 ring-1 ring-white/10 relative">
+                    
+                    <!-- DECORATIVE VENT -->
+                    <div class="absolute top-4 right-12 flex gap-1">
+                        <div class="w-8 h-1 bg-zinc-800 rounded-full"></div>
+                        <div class="w-8 h-1 bg-zinc-800 rounded-full"></div>
+                        <div class="w-8 h-1 bg-zinc-800 rounded-full"></div>
+                    </div>
+
+                    <!-- LCD DISPLAY -->
+                    <div class="relative w-full bg-[#0d0f0d] border-4 border-zinc-800 rounded-2xl p-5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)] overflow-hidden lcd-glow">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] text-orange-600 font-black uppercase tracking-[0.2em] mb-1">Frequency Modulator</span>
+                                <div class="flex items-center gap-2">
+                                     <span class="text-[12px] text-orange-400/90 uppercase font-black tracking-tighter">
+                                        CH.${(THEMED_STATIONS.findIndex(s => s.id === station.id) + 1).toString().padStart(2, '0')}
+                                     </span>
+                                     <span class="text-[12px] text-white/40 font-mono">|</span>
+                                     <span class="text-[12px] text-orange-400/90 uppercase font-black">${station.name}</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-1.5 h-6 items-end">
+                                ${[0.1, 0.4, 0.2, 0.5, 0.3].map(d => `
+                                    <div class="vu-bar w-1.5 ${game.radio.isPlaying && !game.radio.errorState ? 'vu-anim' : ''}" 
+                                         style="height: 6px; animation-delay: ${d}s; background: ${game.radio.errorState ? '#ef4444' : '#f97316'}"></div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="h-16 bg-black/60 flex items-center border border-white/5 rounded-xl px-4 overflow-hidden relative">
+                            <div class="w-full overflow-hidden">
+                                <h2 class="text-3xl font-black italic uppercase title-font whitespace-nowrap
+                                    ${game.radio.isPlaying && !game.radio.errorState ? 'animate-marquee' : ''} 
+                                    ${game.radio.errorState ? 'text-red-500' : 'text-orange-500'}">
+                                    ${displayTitle}
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex justify-between items-center text-[9px] text-orange-900 font-bold uppercase tracking-widest">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full ${game.radio.isPlaying ? 'bg-orange-500 animate-pulse' : 'bg-zinc-800'}"></div>
+                                <span>${game.radio.errorState ? 'Sync Failure' : (game.radio.isPlaying ? 'Receiving' : 'Standby')}</span>
+                            </div>
+                            <span>88.5 — 108.0 MHz</span>
+                        </div>
+                    </div>
+
+                    <!-- VOLUME SLIDER -->
+                    <div class="flex items-center gap-4 bg-zinc-950/80 p-4 rounded-2xl border border-white/5 shadow-inner">
+                        <div class="bg-zinc-800 p-1.5 rounded-lg">
+                            <svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                        </div>
+                        <input type="range" id="vol-slider" min="-60" max="10" value="${game.radio.volume}" 
+                               class="flex-1 accent-orange-500 bg-zinc-800 h-2 rounded-lg appearance-none cursor-pointer">
+                        <span class="text-xs text-orange-500 font-mono font-bold w-12 text-right">${Math.round(game.radio.volume)}dB</span>
+                    </div>
+
+                    <!-- ENHANCED STATION GRID -->
+                    <div class="grid grid-cols-2 gap-4">
+                        ${THEMED_STATIONS.map(st => {
+                            const isActive = station.id === st.id;
+                            return `
+                                <button id="station-${st.id}" 
+                                        class="group relative h-20 bg-zinc-800 border-b-4 border-zinc-950 active:border-b-0 active:translate-y-1 transition-all duration-100 rounded-2xl overflow-hidden shadow-lg">
+                                    <!-- Background Accent -->
+                                    <div class="absolute inset-0 bg-gradient-to-br ${st.color} to-transparent opacity-10 group-hover:opacity-20 transition-opacity"></div>
+                                    
+                                    <!-- Active indicator -->
+                                    <div class="absolute top-0 left-0 w-1 h-full bg-orange-500 transition-transform duration-300 ${isActive ? 'scale-y-100' : 'scale-y-0'}"></div>
+                                    
+                                    <div class="relative z-10 flex items-center p-3 gap-3">
+                                        <div class="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center text-2xl shadow-inner border border-white/5">
+                                            ${st.icon}
+                                        </div>
+                                        <div class="flex flex-col items-start overflow-hidden">
+                                            <span class="text-[10px] font-black uppercase tracking-tighter text-zinc-500 ${isActive ? 'text-orange-500' : ''}">${st.genre}</span>
+                                            <span class="text-xs font-black uppercase text-white truncate w-full tracking-tight">${st.name}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Industrial screws decor -->
+                                    <div class="absolute top-1 right-1 w-1 h-1 rounded-full bg-white/10"></div>
+                                    <div class="absolute bottom-1 right-1 w-1 h-1 rounded-full bg-white/10"></div>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- INDUSTRIAL CONTROLS -->
+                    <div class="grid grid-cols-4 gap-4 pt-6 border-t-2 border-zinc-800/80">
+                        <button id="radio-prev" class="group h-14 bg-zinc-800 hover:bg-zinc-700 border-b-4 border-zinc-950 active:border-b-0 active:translate-y-1 rounded-2xl flex items-center justify-center transition-all">
+                            <span class="text-2xl group-hover:scale-110 transition-transform">⏪</span>
+                        </button>
+                        <button id="radio-toggle" class="group h-14 bg-zinc-800 hover:bg-zinc-700 border-b-4 border-zinc-950 active:border-b-0 active:translate-y-1 rounded-2xl flex items-center justify-center transition-all">
+                            <span class="text-2xl group-hover:scale-110 transition-transform ${game.radio.isPlaying ? 'text-orange-500' : 'text-emerald-500'}">
+                                ${game.radio.isPlaying ? '⏸' : '▶️'}
+                            </span>
+                        </button>
+                        <button id="radio-stop" class="group h-14 bg-zinc-800 hover:bg-zinc-700 border-b-4 border-zinc-950 active:border-b-0 active:translate-y-1 rounded-2xl flex items-center justify-center transition-all">
+                            <span class="text-2xl group-hover:scale-110 transition-transform text-red-600">⏹️</span>
+                        </button>
+                        <button id="radio-next" class="group h-14 bg-zinc-800 hover:bg-zinc-700 border-b-4 border-zinc-950 active:border-b-0 active:translate-y-1 rounded-2xl flex items-center justify-center transition-all">
+                            <span class="text-2xl group-hover:scale-110 transition-transform">⏩</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Re-bind events
+            radioWrapper.querySelector('#vol-slider').oninput = (e) => updateVolume(e.target.value);
+            radioWrapper.querySelector('#radio-prev').onclick = () => changeTrack(-1);
+            radioWrapper.querySelector('#radio-toggle').onclick = () => togglePlay();
+            radioWrapper.querySelector('#radio-stop').onclick = () => stopRadio();
+            radioWrapper.querySelector('#radio-next').onclick = () => changeTrack(1);
+            
+            THEMED_STATIONS.forEach(st => {
+                const btn = radioWrapper.querySelector(`#station-${st.id}`);
+                if(btn) btn.onclick = () => changeStation(st.id);
+            });
+
+            return radioWrapper;
         }
 
         function startChapterOne() {
@@ -9727,7 +10156,7 @@
         }
 
         // 4. Navigation Bar (The Icon Row)
-        const validPhases = [1, 4, 14, 15, 16, 17, 19, 5];
+        const validPhases = [1, 4, 14, 15, 16, 17, 19, 5, 8, 20, 7, 9, 11, 13];
         if ((game.phase === 10) || validPhases.includes(game.phase)) {
             // Add padding to the wrapper so the fixed nav doesn't cover content
             // Alternatively, we add a spacer div at the end of the flex column
@@ -9841,8 +10270,13 @@
     window.closeCelebration = closeCelebration;
     window.checkChopMastery = checkChopMastery;
     window.cheat = cheat;
-
-
+    window.resumeContext = resumeContext;
+    window.stopRadio = stopRadio;
+    window.togglePlay = togglePlay;
+    window.playTrack = playTrack;
+    window.changeStation = changeStation;
+    window.changeTrack = changeTrack;
+     
 
  
 
