@@ -51,7 +51,7 @@
 
         body {
             /* Using a safer background property for better compatibility */
-            background-image: url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png?fit=crop&w=1920&q=80');
+            
             background-size: cover;
             background-attachment: fixed;
             background-position: center center;
@@ -61,6 +61,16 @@
             font-family: 'Chakra Petch', sans-serif;
             color: #F7FAFC;
             padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+        }
+
+        .phase-container-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
+                              url('https://www.greatmusichall.com/wp-content/uploads/2020/07/venue_main_image-5.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
         .punk-font { font-family: 'Bangers', cursive; }
@@ -205,6 +215,12 @@
 
         .game-header {
             border-bottom: 1px solid #3d3d3d;
+        }
+
+        .glass-panel {
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
        .wordle-grid {
@@ -1571,6 +1587,11 @@
 
         const RAW_SONGS_DATA = `
         ./disco/Overcast.mp3
+        ./disco/Realizer.mp3
+        ./disco/funky-victory-loop.mp3
+        ./disco/divide_ambient.ogg
+        ./disco/01_firstspace_-_disco_eternal_2.mp3
+        ./disco/into_the_night.mp3
         ./electronica/Tyrant.mp3
         ./electronica/Inspired.mp3
         ./electronica/Half Mystery.mp3
@@ -1579,6 +1600,7 @@
         ./ethnic/Nightdreams.mp3
         ./ethnic/Lotus.mp3
         ./ethnic/Sardana.mp3
+        ./rock/Hotrock.mp3
         ./rock/Metalmania.mp3
         ./rock/urban_theme_bpm115.mp3
         ./rock/Motherlode.mp3
@@ -1594,6 +1616,10 @@
         ./contemporary/Morning.mp3
         ./contemporary/Super Power Cool Dude.mp3
         ./jazz/Ultralounge.mp3
+        ./jazz/Airport Lounge.mp3
+        ./jazz/Ultralounge.mp3
+        ./jazz/Backed Vibes Clean.mp3
+        ./jazz/Smooth Lovin.mp3
         `;
 
         function parseLibrary(text) {
@@ -4719,6 +4745,9 @@
             inventoryItem.acquired = false;
             toggleMission('bestie2');
             playMovie('./videos/kevin-book.mp4','WoW This is amazing! Let me thank you. I have an extra ticket for a movie in the Iraqi Festival. I am also ready to help you on your music endevour');
+            iphoneNotifications = iphoneNotifications.slice(1);            
+            iphoneNotifications = appendNotification(iphoneNotifications,'MeetFighters', '<IBEARIAN> Hope to wrestle you some day, sexy! Let\’s stay in touch!', '🤼', '');
+
             const output = document.getElementById(MAIN_OUTPUT_ID);
             if (output) {
                 output.innerHTML = '';
@@ -6624,7 +6653,9 @@
 
      
 
-            menuContent.append(titleRow, iconRow, persistenceRow, statsSection, debugWrapper);
+           // menuContent.append(titleRow, iconRow, persistenceRow, statsSection, debugWrapper);
+
+            menuContent.append(titleRow, iconRow, debugWrapper);
 
             //if (!game.radio.isInitialized) {
             //    const powerBtn = document.createElement('button');
@@ -6646,6 +6677,18 @@
 
 
          function renderPhase_setup() {
+
+            const station = STATIONS.find(s => s.id === 'rock');
+            
+            game.radio.currentStation = station;
+            game.radio.currentTrackIndex = 0;
+            game.radio.errorState = false;
+            if (!game.radio.isPlaying)  { 
+                playTrack();
+                game.radio.isPlaying=true;
+            }
+
+
             const container = createElement('div', 'bg-black/80 p-8 glitch-border');
             
             const title = createElement('h2', 'text-4xl punk-title text-white mb-8', 'WHO THE HECK ARE YOU?');
@@ -8831,10 +8874,10 @@
 
             // Thematic names and updated metadata for the UI rendering
             const THEMED_STATIONS = [
-                { id: 'disco', name: 'Neon Overdrive', genre: 'Nu-Disco', icon: '🪩', color: 'from-pink-500' },
-                { id: 'electronica', name: 'Silicon Soul', genre: 'Electronic', icon: '🤖', color: 'from-cyan-500' },
-                { id: 'ethnic', name: 'Global Pulse', genre: 'World', icon: '🌍', color: 'from-emerald-500' },
                 { id: 'rock', name: 'Titanium Reef', genre: 'Heavy Rock', icon: '🎸', color: 'from-red-600' },
+                { id: 'disco', name: 'Neon Overdrive', genre: 'Nu-Disco', icon: '🪩', color: 'from-pink-500' },
+                { id: 'electronica', name: 'Silicon Soul', genre: 'Electronic', icon: '🎛️', color: 'from-cyan-500' },
+                { id: 'ethnic', name: 'Global Pulse', genre: 'World', icon: '🌍', color: 'from-emerald-500' },
                 { id: 'contemporary', name: 'Vapor Stream', genre: 'Contemporary', icon: '☁️', color: 'from-indigo-400' },
                 { id: 'jazz', name: 'Jazz Club', genre: 'Jazzy', icon: '🎷', color: 'from-amber-500' }
             ];
@@ -8842,12 +8885,20 @@
             radioWrapper.innerHTML = `
                 <div class="w-full max-w-[480px] bg-zinc-900 border-x-[12px] border-zinc-800 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 flex flex-col gap-6 ring-1 ring-white/10 relative">
                     
-                    <!-- DECORATIVE VENT -->
-                    <div class="absolute top-4 right-12 flex gap-1">
-                        <div class="w-8 h-1 bg-zinc-800 rounded-full"></div>
-                        <div class="w-8 h-1 bg-zinc-800 rounded-full"></div>
-                        <div class="w-8 h-1 bg-zinc-800 rounded-full"></div>
+                    <!-- SIRIUS-STYLE HEADER -->
+                <div class="flex justify-between items-center px-1">
+                    <div class="flex flex-col">
+                        <h1 class="text-white font-black italic text-xl tracking-tighter leading-none">
+                            SIRIUS<span class="text-orange-500">FM</span>
+                        </h1>
+                        <span class="text-[8px] text-zinc-500 font-bold tracking-[0.3em] uppercase">Satellite Network</span>
                     </div>
+                    <div class="flex gap-1">
+                        <div class="w-1.5 h-1.5 rounded-full bg-zinc-700"></div>
+                        <div class="w-1.5 h-1.5 rounded-full bg-zinc-700"></div>
+                        <div class="w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_5px_#f97316]"></div>
+                    </div>
+                </div>
 
                     <!-- LCD DISPLAY -->
                     <div class="relative w-full bg-[#0d0f0d] border-4 border-zinc-800 rounded-2xl p-5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)] overflow-hidden lcd-glow">
@@ -10099,14 +10150,11 @@
    function renderGame() {
         // Clear the main container
         container.innerHTML = '';
-        
-        // 1. Create the main wrapper
-        // We ensure it has relative positioning and min-h-screen or h-full logic
-        const unifiedWrapper = createElement('div', 'w-full h-full flex flex-col max-w-2xl mx-auto relative');
+        // Use glass-panel if I want the botton menu to adjust as much as possible and float to the min height
+        const unifiedWrapper = createElement('div', 'w-full h-full flex flex-col phase-container-bg max-w-2xl mx-auto relative');
 
         // 2. Create the Phase Container
-        // Added 'mb-20' conditionally below if nav is present to prevent overlap
-        const phaseContainer = createElement('div', 'flex-1 relative w-full bg-gray-900/30 rounded-2xl border border-white/10 p-2 overflow-y-auto flex flex-col');
+        const phaseContainer = createElement('div', 'flex-1 relative w-full bg-gray-900/30  rounded-2xl border border-white/10 p-2 overflow-y-auto flex flex-col');
 
         let contentElement;
         switch (game.phase) {

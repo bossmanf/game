@@ -1,0 +1,82 @@
+./disco/Disco con Tutti.mp3
+./disco/Stringed Disco.mp3
+./disco/Electro Cabello.mp3
+./disco/Overcast.mp3
+./disco/Ether Disco.mp3
+./disco/Who Likes to Party.mp3
+./disco/Disco Lounge.mp3
+./disco/Aurea Carmina.mp3
+./electronica/Ethernight Club.mp3
+./electronica/Tyrant.mp3
+./electronica/Deep and Dirty.mp3
+./electronica/Limit 70.mp3
+./electronica/Inspired.mp3
+./electronica/Jerry Five.mp3
+./electronica/Half Mystery.mp3
+./electronica/Rising Tide (faster).mp3
+./electronica/Cloud Dancer.mp3
+./electronica/Raving Energy (faster).mp3
+./electronica/Delightful D.mp3
+./electronica/Dream Catcher.mp3
+./ethnic/Derp Nugget.mp3
+./ethnic/Truth in the Stones.mp3
+./ethnic/Paradise_Found.mp3
+./ethnic/Zanzibar.mp3
+./ethnic/Fiddles McGinty.mp3
+./ethnic/Nightdreams.mp3
+./ethnic/Hidden Wonders.mp3
+./ethnic/Lotus.mp3
+./ethnic/Mystery Bazaar.mp3
+./ethnic/Guzheng City.mp3
+./ethnic/Lord of the Land.mp3
+./ethnic/Ancient Mystery Waltz Presto.mp3
+./ethnic/Big Drumming.mp3
+./ethnic/Ave Marimba.mp3
+./ethnic/Sardana.mp3
+./ethnic/Mystic Force.mp3
+./rock/Beach Bum.mp3
+./rock/El Magicia.mp3
+./rock/Cool Rock.mp3
+./rock/Sax Rock and Roll.mp3
+./rock/Metalmania.mp3
+./rock/urban_theme_bpm115.mp3
+./rock/What You Want ver 2.mp3
+./rock/RetroFuture Nasty.mp3
+./rock/Ready Aim Fire.mp3
+./rock/Motherlode.mp3
+./rock/Riptide.mp3
+./rock/I Feel You.mp3
+./rock/Summon the Rawk.mp3
+./rock/Twisted.mp3
+./rock/Breakdown.mp3
+./rock/Exhilarate.mp3
+./rock/Take the Lead.mp3
+./rock/Burn The World Waltz .mp3
+./contemporary/Groundwork.mp3
+./contemporary/Kings of Tara.mp3
+./contemporary/Dreamer.mp3
+./contemporary/Magic Escape Room.mp3
+./contemporary/Evening.mp3
+./contemporary/Immersed.mp3
+./contemporary/Sincerely.mp3
+./contemporary/Morning.mp3
+./contemporary/Super Power Cool Dude.mp3
+./contemporary/Heavy Heart.mp3
+./contemporary/Ether Vox.mp3
+./contemporary/Angel Share.mp3
+./contemporary/Carpe Diem.mp3
+./contemporary/Almost Bliss.mp3
+./contemporary/Suave Standpipe.mp3
+./jazz/Space Jazz.mp3
+./jazz/Nouvelle Noel.mp3
+./jazz/Airport Lounge.mp3
+./jazz/Ultralounge.mp3
+./jazz/Lobby Time.mp3
+./jazz/George Street Shuffle.mp3
+./jazz/Past Sadness.mp3
+./jazz/In Your Arms.mp3
+./jazz/Fuzzball Parade.mp3
+./jazz/Study And Relax.mp3
+./jazz/Backed Vibes Clean.mp3
+./jazz/Smooth Lovin.mp3
+./jazz/Jazz Brunch.mp3

@@ -1371,8 +1371,7 @@ Pink_Floyd/Nobody_Home.mid
 Pink_Floyd/Hey_You.mid
 Pink_Floyd/Bike.mid
 Pink_Floyd/Money.mid
-Pink_Floyd/The_Trial.mid
-
+Pink_Floyd/The_Trial.mids
 Pink_Floyd/Wots..._Uh_the_Deal.mid
 Pink_Floyd/The_Trial.mid
 Pink_Floyd/Money.mid
