@@ -1329,47 +1329,6 @@
             50% { opacity: 0; }
         }
 
-        .check-mark {
-            color: #15803d;
-            font-size: 3rem;
-        }
-
-        .scrapbook-page {
-            background-color: #f4eccd;
-            background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 100px rgba(139, 69, 19, 0.1);
-            color: #433422;
-            border-radius: 4px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .water-stain {
-            position: absolute;
-            background: rgba(139, 69, 19, 0.08);
-            filter: blur(20px);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .photo-slot {
-            background: #e2d7b5;
-            border: 2px dashed #a39476;
-            aspect-ratio: 4/3;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            transition: all 0.5s ease;
-        }
-
-        .photo-revealed {
-            background: white;
-            border: 8px solid white;
-            box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
-            transform: rotate(-1deg);
-        }
-
         .retro-tab {
             background: var(--tape-gray);
             border-top: 3px solid #666;
@@ -1612,185 +1571,7 @@
     <script type="module">
         // Global Game State
 
-         let storageMode = 'save'; // 'save' or 'load'
-
-        // --- CORE PERSISTENCE ---
-        const getSafeSaveData = () => {
-            const cache = new Set();
-            return (key, value) => {
-                if (typeof value === 'object' && value !== null) {
-                    if (cache.has(value)) return;
-                    cache.add(value);
-                    if (value.constructor && value.constructor.name !== 'Object' && value.constructor.name !== 'Array') return undefined;
-                }
-                return value;
-            };
-        };
-
-      function saveGameData(slotName) {
-            if (!slotName) return false;
-            try {
-                const storageKey = `habibi_save_${slotName}`;
-
-                // Define a replacer to strip out circular or non-serializable properties
-                const replacer = (key, value) => {
-                    // Remove the Tone.js player or any property starting with '_' (common for internal refs)
-                    if (key === 'player' || key.startsWith('_')) {
-                        return undefined;
-                    }
-                    // Add other complex non-data objects here if needed
-                    if (value instanceof HTMLElement) {
-                        return undefined;
-                    }
-                    return value;
-                };
-
-                const fullState = { 
-                    game, 
-                    iphoneNotifications, 
-                    missions, 
-                    LEVEL_CONFIG, 
-                    landmarkData, 
-                    timestamp: new Date().toISOString() 
-                };
-
-                // Pass the replacer function to stringify
-                const serializedData = JSON.stringify(fullState, replacer);
-                localStorage.setItem(storageKey, serializedData);
-                
-                console.log(`Game saved successfully to ${storageKey}`);
-                return true;
-            } catch (e) { 
-                console.error("Save failed:", e); 
-                return false; 
-            }
-        }
-
-        function loadGameData(slotName) {
-
-
-            if (!slotName) return false;
-            try {
-                const storageKey = `habibi_save_${slotName}`;
-                const rawData = localStorage.getItem(storageKey);
-                
-                if (!rawData) {
-                    console.error("No data found for", storageKey);
-                    return false;
-                }
-
-                const parsed = JSON.parse(rawData);
-                
-                // 1. Restore the main Game object
-                if (parsed.game) {
-                    // Instead of Object.assign (shallow), we replace the nested structures
-                    // directly to ensure arrays like 'chops' and 'inventory_items' are clean.
-                    for (let key in parsed.game) {
-                        if (parsed.game.hasOwnProperty(key)) {
-                            game[key] = parsed.game[key];
-                        }
-                    }
-                }
-
-                // 2. Restore Global Arrays
-                if (parsed.iphoneNotifications) iphoneNotifications = [...parsed.iphoneNotifications];
-                if (parsed.missions) missions = [...parsed.missions];
-                
-                // 3. Restore Configs
-                if (parsed.LEVEL_CONFIG) Object.assign(LEVEL_CONFIG, parsed.LEVEL_CONFIG);
-                if (parsed.landmarkData) Object.assign(landmarkData, parsed.landmarkData);
-
-                // 4. Critical: Re-initialize Tone.js / Radio if necessary
-                // Since we can't save the 'player' instance, we reset it
-                if (game.radio) {
-                    game.radio.isPlaying = false;
-                    game.radio.player = null; 
-                }
-
-                console.log("Loaded successfully from", storageKey);
-                
-
-                 game.musicTransport = Tone.Transport;
-                if (!game.leadSynth || typeof game.leadSynth.triggerAttackRelease !== 'function') {
-                    game.leadSynth = new Tone.PolySynth(Tone.Synth).toDestination();
-                }
-
-                // Return to main menu / refresh UI
-                setPhase(0); 
-                return true;
-            } catch (e) {
-                console.error("Load error:", e);
-                return false;
-            }
-        }
-
-      
-
-   // --- VIEW: STORAGE CONFIG ---
-        function renderConfig() {
-            const isSave = storageMode === 'save';
-            const menu = createElement('div', 'flex flex-col items-center w-full p-8 space-y-6 bg-zinc-900 rounded-3xl border-2 border-white/5 shadow-2xl');
-            
-            menu.innerHTML = `
-                <div class="text-center">
-                    <h2 class="text-2xl font-black title-font ${isSave ? 'text-pink-500' : 'text-cyan-500'} uppercase">
-                        ${isSave ? 'Archive Session' : 'Restore Session'}
-                    </h2>
-                    <p class="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mt-1">Enter keyword to proceed</p>
-                </div>
-
-                <div class="w-full space-y-4">
-                    <input type="text" id="storage-input" 
-                        class="w-full bg-black border-2 border-zinc-800 text-white p-4 rounded-xl font-mono text-center text-xl focus:outline-none focus:border-white/20 transition-colors" 
-                        placeholder="..." autofocus>
-                    
-                    <button id="execute-storage" class="metal-button w-full py-4 text-lg">
-                        ${isSave ? 'Write to Disk' : 'Read from Disk'}
-                    </button>
-                    
-                    <p id="storage-status" class="text-[11px] text-center font-bold uppercase tracking-tight min-h-[1rem]"></p>
-                </div>
-
-                <button id="cancel-storage" class="text-zinc-500 hover:text-white uppercase text-xs font-bold tracking-widest">Go back</button>
-            `;
-
-            const input = menu.querySelector('#storage-input');
-            const status = menu.querySelector('#storage-status');
-            const btn = menu.querySelector('#execute-storage');
-
-            btn.onclick = () => {
-                const val = input.value.trim();
-                if (!val) {
-                    status.innerText = "Error: Name required";
-                    status.className = "text-[11px] text-center font-bold uppercase text-red-500";
-                    return;
-                }
-
-                if (isSave) {
-                    const ok = saveGameData(val);
-                    status.innerText = ok ? `Success: Saved as '${val}'` : "Write Error";
-                    status.className = ok ? "text-emerald-400" : "text-red-400";
-                } else {
-                    const ok = loadGameData(val);
-                    if (!ok) {
-                        status.innerText = `Error: No save found for '${val}'`;
-                        status.className = "text-red-400 text-[11px] text-center font-bold uppercase";
-                    }
-                }
-            };
-
-            // Support 'Enter' key
-            input.onkeydown = (e) => { if (e.key === 'Enter') btn.click(); };
-
-            menu.querySelector('#cancel-storage').onclick = () => {
-                setPhase(game.home_buttons.showHelpButton ? -1 : 0);
-            };
-
-            return menu;
-        }
-
-
-
+        
         const songRecipesData = [
             { id: 1, title: 'Concrete Heart', type: 'Punk Anthem', required: ['Resilience', 'Anger'], mix: { grit: 5, soul: -2, depth: 2 }, target: 'Bottom of the Hill (High Grit Req)', found: false , available: true},
             { id: 2, title: 'Fuzz & Flowers', type: 'Power Ballad', required: ['Resilience', 'Love'], mix: { grit: 2, soul: 2, depth: 2 }, target: 'The Chapel (Balanced Mix Req)', found: false,  available: false },
@@ -1873,10 +1654,9 @@
         ];
 
 
-        let game = {
+        const game = {
             phase: -1,             // 1: Welcome, 2: Topic Selection, 3: Question
             score: 20,
-            chapter: 1,
             level: 0,
             isLLMLoaded: false,
             secrets: 0,
@@ -1887,7 +1667,6 @@
             words: [],
             midis: [],
             fans: 0,
-            musicPart: {},
             dialogueIndex: 0,
             dialogueData: '', 
             activeCharacter: '',
@@ -1897,46 +1676,6 @@
             questionData: null,
             questionsData: [],   // {question, correctAnswer, wrongAnswers[]}
             selectedAnswer: null, // The answer the player clicked
-            scrapbookPage: 0,
-            solvedLocations: new Set(),
-            locations: [
-                {
-                    id: "Coit Tower",
-                    name: "Coit Tower",
-                    visual: "I remember a tall, white concrete tower that looked exactly like the nozzle of a giant firehose sticking out of the hill.",
-                    sensory: "I remember the wind whistling through the arches at the very top while the whole city spread out like a toy set below me."
-                },
-                {
-                    id: "Painted Ladies",
-                    name: "The Painted Ladies",
-                    visual: "I remember a row of Victorian sisters, all dressed in different pastel colors, sitting perfectly in a line against the skyline.",
-                    sensory: "We sat on the grass of the park across the street, eating sandwiches and watching the sunset hit the windows of those fancy houses."
-                },
-                {
-                    id: "Lombard Street",
-                    name: "Lombard Street",
-                    visual: "I remember a street so crooked it looked like a red-brick snake winding its way through a garden of hydrangeas.",
-                    sensory: "My stomach used to do flips as we drove down those eight sharp turns, feeling like we were on a very slow roller coaster."
-                },
-                {
-                    id: "Fisherman\'s Wharf",
-                    name: "Fisherman’s Wharf",
-                    visual: "I remember a giant wooden steering wheel sign welcoming us to the docks where the crab pots were boiling.",
-                    sensory: "The barking of the sea lions was so loud you could hear it over the sound of the foghorns and the tourists."
-                },
-                {
-                    id: "Alcatraz",
-                    name: "Alcatraz",
-                    visual: "I remember looking out at that lonely, grey rock in the middle of the blue bay, wondering if anyone ever really swam away.",
-                    sensory: "Even from the shore, that place felt cold. It was the only island in the world where the guests were never allowed to leave."
-                },
-                {
-                    id: "Lands End",
-                    name: "Lands End",
-                    visual: "I remember a stone labyrinth built on the edge of a cliff, with the ruins of an old bathhouse crumbling into the Pacific below.",
-                    sensory: "The air there tasted like pure salt, and the cypress trees were all bent sideways from years of fighting the ocean wind."
-                }
-            ],
             artists: ['ABBA',
                     'Backstreet Boys',
                     'Bruce Springsteen',
@@ -2000,12 +1739,12 @@
             songCounts: 0,
             // Musician Chop Skills (XP values)
             chops: [
-                { name: "Social Influence", points: 0, level: 0, isUnlocked: false, icon: '📣' },
-                { name: "Instrument Synergy", points: 0, level: 0, isUnlocked: false, icon: '🎸' },
-                { name: "Rhythm Mastery", points: 0, level: 0, isUnlocked: false, icon: '🎼' },
-                { name: "Lyrical Flow", points: 0, level: 0, isUnlocked: false, icon: '🖋️' },
-                { name: "Backstage Blueprint", points: 0, level: 0, isUnlocked: false, icon: '📜' },
-                { name: "Stage Presence", points: 0, level: 0, isUnlocked: false, icon: '🎤' }
+                { name: "Social Influence", points: 82, level: 0, isUnlocked: false, icon: '📣' },
+                { name: "Instrument Synergy", points: 96, level: 0, isUnlocked: false, icon: '🎸' },
+                { name: "Rhythm Mastery", points: 91, level: 0, isUnlocked: false, icon: '🎼' },
+                { name: "Lyrical Flow", points: 68, level: 0, isUnlocked: false, icon: '🖋️' },
+                { name: "Backstage Blueprint", points: 85, level: 0, isUnlocked: false, icon: '📜' },
+                { name: "Stage Presence", points: 76, level: 0, isUnlocked: false, icon: '🎤' }
             ],
 
             chopsDiscovered : false,
@@ -2036,8 +1775,7 @@
             {
                 showCheerButton: true,
                 showHelpButton: true,
-                money:false,
-                helpChapter2:false
+                money:false
             },
             kevind_buttons : 
             {
@@ -2045,11 +1783,7 @@
                 practiceChop: false,
                 guitar: false
             },
-            rick_buttons:
-            {
-                tape:false,
-                request_help:true
-            },
+
             bridget_buttons:
             {
                 showHelpButton:true,
@@ -2073,21 +1807,11 @@
                 badge: true
             },
             mama_buttons:{
-                showHelpButton:true,
-                showHelpButton2:true
+                showHelpButton:true
             },
             home_buttons:{
                 showHelpButton: true,
                 musician: true
-            },
-            cool_bouncer_buttons:
-            {
-
-                showHelpButton:true,
-                showHelpButton2:true,
-                description: 'A good looking youngster bouncer is at the door'
-
-                
             },
             bouncer_buttons:
             {
@@ -2138,7 +1862,6 @@
                      'BESTIE': 'sid_money_action'
                  },messages: {
                         'BITTER END': 'It’s a hard life. Late nights, bad food, and people who don’t listen. You sure about this?',
-                        'BITTER END ': 'Don\'t call it a career. Call it a \'multi-disciplinary sonic journey.\' Careers are for people who work at Apex.', 
                         'Metallica Pop-up Store': 'If you make it big, remember who sold you your first shirt!',
                         'BESTIE': 'I know nothing but maybe ${game.names.bestie3} can help you!',
                         'HSB Festival': 'We\'re always looking for new talent. Keep your eyes on the main stage.',
@@ -2152,7 +1875,7 @@
                     }},
                  
 
-                    {name:"Accreditation Required",icon:'🛂',acquired:false,image:'./sprites/bouncer.jpg',desc:'The Fillmore bouncer won\'t let me access without it', actions:{
+                    {name:"Accreditation Required",icon:'🛂',acquired:false,desc:'The Fillmore bouncer won\'t let me access without it', actions:{
                     'HSB Festival': 'bridget_action2'
                     },
                     messages: {
@@ -2174,7 +1897,6 @@
                     'The 440': 'dj_action3' }, 
                     messages: {
                     'BITTER END': 'They still got it. See \'em before they get too old to move.',
-                    'BITTER END ': 'I prefer bands that play in laundromats and only release music via carrier pigeon.',
                     'Metallica Pop-up Store': 'The greatest show on earth! We\'re following them city to city.',
                     'BESTIE': 'No, thanks! but probably your music buddy will know about it...',
                     'HSB Festival': 'I think they have a ruffle in their pop-up store. I wish I knew where it is...',
@@ -2204,7 +1926,7 @@
                         }
                     },
 
-                    {name: 'A.A.?', icon:'🅰️', acquired: false, image: './sprites/aa.png', desc: 'Bob needs motivation from this mysterious name. I think it is related to wrestling... ', actions : {'Peets': 'bestie2_action1', 'BITTER END': 'kevind_action7', 'Wrestling Club': 'rick_action1'},
+                    {name: 'A.A.?', icon:'🅰️', acquired: false, desc: 'Bob needs motivation from this mysterious name. I think it is related to wrestling... ', actions : {'Peets': 'bestie2_action1', 'BITTER END': 'kevind_action7', 'Wrestling Club': 'rick_action1'},
                     messages: {
                         'BITTER END': 'Alcoholics Anonymous? No, Bob doesn\'t drink. He\'s addicted to the grind.',
                         'Metallica Pop-up Store': 'Maybe a local band? Never heard of \'em.',
@@ -2218,7 +1940,7 @@
                         'Mama⬇️': 'A.A.? Maybe his auntie? Everyone loves their Auntie!',
                     }},
 
-                     {name: 'Fretboard List', icon:'📑', image: './sprites/fretboard.jpg', acquired: false, desc: 'The list to master Fretboard control: I need the Skeleton, the Plectrum, the Conduit, and the Map', 
+                     {name: 'Fretboard List', icon:'📑', acquired: false, desc: 'The list to master Fretboard control: I need the Skeleton, the Plectrum, the Conduit, and the Map', 
                         actions : {'BITTER END': 'kevind_action5', 
                                     'The Fillmore ':'bob_action2',
                                     'HSB Festival' : 'bridget_action4'
@@ -2234,46 +1956,7 @@
                         'Peets': 'A checklist for technical proficiency. How very... methodical.',
                         'Mama⬇️': 'A shopping list? Do you need me to go to the store for you, habibi?',
                         'Wrestling Club' : 'Training camp is over when this list is finished.'
-                    }},
-
-                    {name: 'San Francisco Attire', icon: '👕', acquired: false, desc: 'I need to dress like a Bay Area person to get access to Lagunitas...', image: './sprites/sf-attire.jpg',
-                        actions : {'': '' 
-                                   
-                                },
-                    messages: {
-                        
-                       
-                        'Mama⬇️': 'Do you need me to go to the store for you, habibi?',
-                        'Wrestling Club' : 'A singlet is always the answer!'
-                    }},
-
-
-                    {name: 'Song Writing', icon:'📑', acquired: false, desc: 'I need to learn how to write songs!', image: './sprites/songwriting.jpg',
-                        actions : {'': '' 
-                                   
-                                },
-                    messages: {
-                        'BITTER END': 'I can check off a few of these for you, but you owe me a drink later.',
-                       
-                        'BESTIE': 'Wait, there\'s a TEST? I didn\'t know being a rockstar required homework.',
-                       
-                        'Mama⬇️': 'A shopping list? Do you need me to go to the store for you, habibi?',
-                        'Wrestling Club' : 'Training camp is over when this list is finished.'
-                    }},
-                    {name: 'Music Gig', icon:'🎸', acquired: false, desc: 'I need to figure out how to get music gigs', image: './sprites/gig.jpg',
-                        actions : {'': '' },
-                    messages: {
-                        'BITTER END': 'I can check off a few of these for you, but you owe me a drink later.',
-                       
-                        'BESTIE': 'Wait, there\'s a TEST? I didn\'t know being a rockstar required homework.',
-                       
-                        'Mama⬇️': 'A shopping list? Do you need me to go to the store for you, habibi?',
-                        'Wrestling Club' : 'Training camp is over when this list is finished.'
-                    }},
-
-
-
-
+                    }}
 
                 ],
                 newTopicA: null, // Will hold the latest acquired topic string
@@ -2281,7 +1964,7 @@
 
             inventory_items: [
                 { name: "Driver's License ID", icon: '🪪', image: './sprites/id.jpg', acquired: true, desc: 'My official identification. Valid and up to date' ,  
-                    actions : {'The Fillmore': 'bouncer_action2', 'BITTER END ': 'cool_bouncer_action1'},
+                    actions : {'The Fillmore': 'bouncer_action2'},
                     messages: 
                         { 'BITTER END': 'Nice. This gets us into that dive bar on 6th? I need a whiskey.',
                         'Metallica Pop-up Store': 'I know you are an adult, sir',
@@ -2308,12 +1991,11 @@
                         'The 440': 'Is that an Apex badge or are you just happy to see me? Just kidding. Seriously though, don\'t leave that on the bar. The beer might dissolve the corporate ego right out of it',
                         'Peets': 'We see a thousand of these a day. Usually attached to a guy who\'s too busy on a \'Sync-call\' to say please. You look like you\'re actually awake, though. Coffee’s on me if you trash it.',
                         'Mama⬇️': 'Oh, habibi... why are you still carrying that heavy thing? It\'s not a key, it\'s a shackle. Put it in a drawer and forget who they told you to be',
-                        'Wrestling Club' : 'They have something to do with AI, right?',
-                        'BITTER END ' : 'Yikes. It\’s giving \'I sold my soul for a 401k and a standing desk.\' I only respect accreditation if it\'s a hand-stamped, recycled-pulp pass to a DIY basement show in Oakland. That badge isn\'t access; it\'s a leash. But hey, if it gets you free oat-milk lattes in the breakroom, I guess it’s a functional aesthetic'
+                        'Wrestling Club' : 'They have something to do with AI, right?'
                     }},
 
 
-                    { name: "Cash", icon: '💵', acquired: true, image: './sprites/cash.png', desc: 'Money, money! Essential for street purchases, bribes, and late-night eats!' ,  actions: {'Metallica Pop-up Store': 'handleRaffleEntry'},
+                    { name: "Cash", icon: '💵', acquired: true, desc: 'Money, money! Essential for street purchases, bribes, and late-night eats!' ,  actions: {'Metallica Pop-up Store': 'handleRaffleEntry'},
                     messages: 
                         { 'BESTIE': 'You are giving ME money... Really?',
                         'BITTER END': 'Do you want to buy another round?',
@@ -2325,11 +2007,10 @@
                         'Peets': 'Money is just a metaphor for time spent doing things we hate. Keep your metaphors.',
                         'Mama⬇️': 'Oh, buy yourself a nice sweater, dear. It gets so chilly in the city.',
                         'The Fillmore ': 'Enough for a coffee and a pack of strings. Don\'t let the label see you have it.',
-                        'Wrestling Club' : 'Dusty Rhodes used to say cash is king, but the belt is God. Keep the green stuff.',
-                        'BITTER END ' : 'Using physical currency is so... aggressively tactile. I haven\'t touched a \'bill\' since I switched to my biometric-scan payment ring.'
+                        'Wrestling Club' : 'Dusty Rhodes used to say cash is king, but the belt is God. Keep the green stuff.'
                     }},
 
-                     { name: 'Fender Squier Stratocaster', acquired: true, image: './sprites/guitar.png', icon: '🎸', desc: 'My first guitar! Humble beginnings with a classic sound.' ,actions: { 'Crazy K': 'crazy_action2', 'The Fillmore ':'bob_action4' , 'BITTER END': 'kevind_action6', 'Metallica Pop-up Store':'popup_action2','BESTIE':'sid_action3','HSB Festival':'bridget_action5','The 440':'dj_action4', 'Peets':'bestie2_action4','Mama⬇️':'mama_action3'} ,
+                     { name: 'Fender Squier Stratocaster', acquired: true, icon: '🎸', desc: 'My first guitar! Humble beginnings with a classic sound.' ,actions: { 'Crazy K': 'crazy_action2', 'The Fillmore ':'bob_action4' , 'BITTER END': 'kevind_action6', 'Metallica Pop-up Store':'popup_action2','BESTIE':'sid_action3','HSB Festival':'bridget_action5','The 440':'dj_action4', 'Peets':'bestie2_action4','Mama⬇️':'mama_action3'} ,
                     messages: {
                     'BITTER END': 'A Squier? Better than nothing. At least it stays in tune... mostly.',
                     'Metallica Pop-up Store': 'Standard gear. You gotta start somewhere before you get the ESP, right?',
@@ -2340,8 +2021,7 @@
                     'The 440': 'It’s cute. Needs some stickers or something to give it some "vibe."',
                     'Peets': 'The industrial design of the 1950s—perfection in utility, if a bit cliché.',
                     'Mama⬇️': 'Such a beautiful violin! Why is it made of metal and plastic?',
-                    'Wrestling Club' : 'A beginner\'s tool. Everyone starts with a Squier; everyone starts as a jobber.',
-                    'BITTER END ':  'It\’s very \'garage-punk-revival'
+                    'Wrestling Club' : 'A beginner\'s tool. Everyone starts with a Squier; everyone starts as a jobber.'
                     }},
 
                     { name: "Accreditation", icon: '🛂', acquired: false, image: './sprites/hsb_badge.jpg', desc: 'High-level HSB credentials needed to access VIP areas and backstage zones' ,  
@@ -2428,7 +2108,7 @@
                     }},
 
 
-                {name: 'Galactic Silver glitter', price: 25, icon:'✨', image: './sprites/glitter.png', acquired: false, given: false, desc: 'Used to customize any gear or face for high-glam. DJ Robbie seems to like this brand', actions : {'The 440': 'dj_action1'},
+                {name: 'Galactic Silver glitter', price: 25, icon:'✨', acquired: false, given: false, desc: 'Used to customize any gear or face for high-glam. DJ Robbie seems to like this brand', actions : {'The 440': 'dj_action1'},
                     messages:
                         {'BESTIE': 'Ummm... Really? No way!',
                         'Metallica Pop-up Store': 'No refunds!',
@@ -2440,8 +2120,7 @@
                         'Mama⬇️': 'Oh, how sparkly! You always did like shiny things when you were little.',
                         'The Fillmore ': 'Gold is for champions. Silver is for the runner-up. But at least it catches the light.',
                         'BITTER END': 'I haven\'t seen that much glitter since the 80s hair metal revival. My eyes hurt.',
-                        'Wrestling Club' : 'Glitter? You think this is the 70s? We’re here to sweat, not sparkle!',
-                        'BITTER END ' : 'I hope that’s biodegradable. If you’re polluting the Mission with non-eco-friendly shimmer, we’re going to have a problem."' 
+                        'Wrestling Club' : 'Glitter? You think this is the 70s? We’re here to sweat, not sparkle!' 
                     }},
 
                   {name: 'Disco Ball', price: 2, icon:'🪩', acquired: false, given: false, desc: ' They can "light up" a dull venue. I LOVE these guys!', actions : {'BESTIE': 'sid_action1'},
@@ -2460,7 +2139,7 @@
                         }
                     },
 
-                 { name: 'Arn Anderson VHS', acquired: false, image: './sprites/arnvideo.png', given: false, price: 50, icon: '📼', desc: 'Footage of this legendary wrestler' , actions : {'The Fillmore ': 'bob_action1'},
+                 { name: 'Arn Anderson VHS', acquired: false, given: false, price: 50, icon: '📼', desc: 'Footage of this legendary wrestler' , actions : {'The Fillmore ': 'bob_action1'},
                         messages:
                             {'Metallica Pop-up Store': 'No refunds!',
                             'HSB Festival': 'Ugh...',
@@ -2475,7 +2154,7 @@
                         } 
                 },
 
-               { name: 'Don Quixote', acquired: false, price: 15, image: './sprites/donquixote.png', icon: '📕', desc: 'A book symbolizing the "impossible dream (or something like that)"' , 
+               { name: 'Don Quixote', acquired: false, price: 15, icon: '📕', desc: 'A book symbolizing the "impossible dream (or something like that)"' , 
                 actions: {'Peets': 'bestie2_action3'},
                 messages:
                     {'Metallica Pop-up Store': 'No refunds!',
@@ -2488,12 +2167,11 @@
                     'Mama⬇️': 'A classic! Such a sad story about a man who just wanted to be a hero.',
                     'The Fillmore ': 'Fighting windmills? Sounds like every tour I\'ve ever been on',
                     'The Fillmore': 'We have a "no weapons" policy. Even imaginary ones.',
-                    'Wrestling Club' : 'The man was a jobber who thought he was a main-eventer. Classic heel move.',
-                    'BITTER END ' : 'A bit long-winded, but the \'tilting at windmills\' metaphor is basically me trying to find a gluten-free sourdough in this city.'
+                    'Wrestling Club' : 'The man was a jobber who thought he was a main-eventer. Classic heel move.'
                 } 
                 },
                 
-                { name: 'On The Road by Kerouac', acquired: false, image: './sprites/ontheroad.png', given: false, price: 35, icon: '📘', desc: 'The ultimate SF "beatnik" bible!' ,
+                { name: 'On The Road by Kerouac', acquired: false, given: false, price: 35, icon: '📘', desc: 'The ultimate SF "beatnik" bible!' ,
                 actions:{ 'Peets': 'bestie2_action2'} ,
                     messages:
                         {'Metallica Pop-up Store': 'No refunds!',
@@ -2511,7 +2189,7 @@
                     },
 
                         
-                { name: 'Kubba Hamouth', acquired: false, image: './sprites/kubba.png', given:false, icon: '🍲', desc: 'Popular Iraqi and Kurdish soup featuring meat-stuffed dumplings in a tangy broth. SO YUMMY!',
+                { name: 'Kubba Hamouth', acquired: false, given:false, icon: '🍲', desc: 'Popular Iraqi and Kurdish soup featuring meat-stuffed dumplings in a tangy broth. SO YUMMY!',
                     actions:{ 'Crazy K': 'crazy_action1'} ,
                     messages:
                         {'Metallica Pop-up Store': 'That looks yummy',
@@ -2541,13 +2219,12 @@
                         'Crazy K': 'The flickering light of the projector is a form of hypnotism. Be careful!',
                         'The Fillmore ': 'Culture is the only thing the industry can\'t fully digitize. Keep that.',
                         'The Fillmore': 'This isn\'t valid for entry here. Read the fine print.',
-                        'Wrestling Club': 'Is it a documentary about the Sheikh? No? Then I\'ll pass.',
-                        'BITTER END ': 'That\’s a deep cut. Very curated.'  
+                        'Wrestling Club': 'Is it a documentary about the Sheikh? No? Then I\'ll pass.' 
                     }
                 },
 
 
-                { name: 'Guitar Pick', price: 1, acquired: false, image: './sprites/pick.png', icon: '🔻', desc: 'A standard consumable. Always good to have a spare.', 
+                { name: 'Guitar Pick', price: 1, acquired: false, icon: '🔻', desc: 'A standard consumable; always good to have a spare.', 
                     actions:{'Crazy K': 'crazy_action5'},
 
                     messages:
@@ -2561,13 +2238,12 @@
                     'Mama⬇️': 'It\'s so small! Don\'t let the cat swallow it!',
                     'The Fillmore ': 'Small, but it holds all my power. If I lose this... I’m just a guy with a box.',
                     'The Fillmore': 'Don\'t throw that at the band. I\'m watching you.',
-                    'Wrestling Club' : 'Looks like a thumb-tack for a deathmatch. A bit small for my taste.',
-                    'BITTER END ': 'I only use recycled ocean-plastic picks.' 
+                    'Wrestling Club' : 'Looks like a thumb-tack for a deathmatch. A bit small for my taste.'
                  }
                 },
 
 
-                { name: 'Rock Guitar Tapping Technique', image:'./sprites/tapbook.png', price: 40, acquired: false, icon: '📓',  given: false, desc: 'Mastery book for Instrument Synergy', actions: { 'Crazy K': 'crazy_action2' } , 
+                { name: 'Rock Guitar Tapping Technique', price: 40, acquired: false, icon: '📓',  given: false, desc: 'Mastery book for Instrument Synergy', actions: { 'Crazy K': 'crazy_action2' } , 
                     messages: {
                         'BITTER END': 'Tapping? Mmm...',
                         'Metallica Pop-up Store': 'Kirk uses some of these patterns in his solos! Great pick.',
@@ -2584,7 +2260,7 @@
                   },
 
 
-                { name: 'Positive Grid Spark Combo Amp', image: './sprites/amp.png', acquired: false, price: 300, icon: '📻', desc: 'A hardware upgrade allowing me to switch tones' ,actions: { 'Crazy K': 'crazy_action2' } ,
+                { name: 'Positive Grid Spark Combo Amp', acquired: false, price: 300, icon: '📻', desc: 'A hardware upgrade allowing me to switch tones' ,actions: { 'Crazy K': 'crazy_action2' } ,
                     messages:{
                      'BITTER END': 'A digital amp? I prefer the smell of burning vacuum tubes, but it’s portable, I’ll give you that.',
                     'Metallica Pop-up Store': 'Perfect for practicing "One" without blowing out your windows.',
@@ -2601,7 +2277,7 @@
                     }
                 },
                  
-                { name: 'Metallica Guitar Pick', image: './sprites/metallicapick.png', price: 'Priceless', acquired: false, icon: '🔽', desc: 'A rare collectible obtained in the Metallica concert!', actions: { 'Crazy K': 'crazy_action2' },
+                { name: 'Metallica Guitar Pick', price: 'Priceless', acquired: false, icon: '🔽', desc: 'A rare collectible obtained in the Metallica concert!', actions: { 'Crazy K': 'crazy_action2' },
                     messages:{
                     'BITTER END': 'Is that James\'s? Don\'t lose that. Those things are like gold to the right people.',
                     'Metallica Pop-up Store': 'That is so freaking awesome! Rock on!',
@@ -2650,58 +2326,7 @@
                 },
 
 
-                { name: 'Gaffer Tape', icon: '🩹', image: './sprites/gaffertape.png', acquired: false, desc: 'Ideal to fix gear, ring tears', price: 20, actions: {'Wrestling Club': 'rick_action1'} , 
-                    messages: {}
-                },
-
-
-                { name: 'Pashmina', acquired: false, price: 30, icon: '🧣', desc: 'A vintage Pashmina that mama owned',
-                    actions : { 'BESTIE': 'sid_pashmina'},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-                 { name: 'Scrapbook', acquired: false, image:'./sprites/scrapbook.png', price: '', icon: '📖', desc: 'Mama\s damaged scrapbook',
-                    actions : {},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-                { name: 'Polaroid', acquired: false, price: '150', icon: '📷', desc: 'A Polaroid camera',
-                    actions : {},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-                 { name: 'Secret Code', acquired: false, image: './sprites/code.jpg', price: '', icon: '🔐', desc: 'A 5-letter code to access GAMH',
-                    actions : {},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-
-                
-
+                { name: 'Gaffer Tape', icon: '🩹', acquired: false, desc: 'Ideal to fix gear, ring tears', price: 20 },
                 { name: 'Chicken Pho', icon: '🍜', acquired: false, desc: 'Restores maximum health and focus.', price: 100 },
                 { name: 'Magic Zataar Spices', icon: '🌶️', acquired: false,desc: 'Boosts your focus and gives charisma.', price: 50 },
                  {name: 'Luxury Copper Cookware Set', price: 2000, icon:'🍳',  acquired: false, desc: 'Best set for a culinary quest'},
@@ -2712,7 +2337,7 @@
 
 
         let iphoneNotifications = [
-            { id: 1, app: game.names.bestie3, emoji: '💬', summary: 'New message', fullContent: "Hey buddy! Come meet me at the Bitter End for a couple of beers! Young crowd here!", unread: true , location: 'BITTER END ', topic: null},
+            { id: 1, app: game.names.bestie3, emoji: '💬', summary: 'New message', fullContent: "Hey buddy! Come meet me at the Bitter End for a couple of beers!", unread: true , location: 'BITTER END', topic: null},
             { id: 2, app: 'SF Weather', emoji: '☀️', summary: 'Karl’s Vacation', fullContent: "Karl the Fog has officially packed his bags! Expect a rare streak of clear blue skies for the next few weeks. Sunglasses: Required. 😎", unread: true, location: null},
             { id: 5, app: 'News', emoji: '📰', summary: 'Breaking News', fullContent: "Bay Area legends METALLICA have officially confirmed they will be taking over San Francisco’s Oracle Park for a massive stadium performance later this month! 🤘", unread: true, location: null , topic: 'Metallica tour'},
             { id: 3, app: game.names.bestie, emoji: '💬', summary: 'New message', fullContent: "Hey booboo! Let's meet at my place. It's been a while! ", unread: true , location: 'BESTIE', topic: null}
@@ -2769,8 +2394,6 @@
 
             "BITTER END": { X: 310, Y: 325, W: 50, H: 40, category: "bar", emoji: "🍻", actionKey: "bar", description: "A legendary Richmond dive where the air is thick with the smell of stale beer and history.", hidden: true, character: game.names.bestie3},
 
-            "BITTER END ": { X: 310, Y: 325, W: 50, H: 40, category: "bitter_end", emoji: "🍻", actionKey: "bitter_end", description: "A legendary Richmond dive where the air is thick with the smell of stale beer and history.", hidden: true, character: 'Cool Bouncer'},
-
             "Metallica Pop-up Store": { X: 580, Y: 510, W: 40, H: 30, category: "popup", emoji: "🛍️", actionKey: "popup", description: "A temporary shrine to the gods of metal. Amidst the limited-edition vinyl and black denim, you can feel the heavy-metal heartbeat of the city pulsing louder than the Apex algorithms.", hidden: true , character: 'Pop-up Clerk'},
 
             "BESTIE": { X: 640, Y: 350, W: 40, H: 40, category: "sids", emoji: "👠", actionKey: "sids",  description:"A high-rise haven, the perfect host’s sanctuary for entertainment.",  hidden: true , character: game.names.bestie },
@@ -2792,40 +2415,32 @@
             "Peets": { X: 410, Y: 440, W: 60, H: 40, category: "peets", emoji: "☕", actionKey: "peets", description: "The Musician’s Fuel Station. A chill corner to sit with a notebook, watch the city pass by, and plan your next move over a dark roast.", hidden: true , character: game.names.bestie2},
 
             "Amoeba": { X: 360, Y: 390, W: 50, H: 40, category: "amoeba", emoji: "☮️", actionKey: "amoeba", description: "A sprawling cathedral of physical media. In the Haight-Ashbury shadows, this is the headquarters for the counterculture—where every record is a weapon against the digital Sync.", hidden: true, character: 'Character X' },
-
             "Mama⬇️": { X: 350, Y: 730, W: 60, H: 40, category: "mama", emoji: "🏡", actionKey: "mama", description: "A cozy Mission-style home that smells like Zataar and home-cooked Baklava.", hidden: true, character: 'Mama' },
 
             "Oracle Park": { X: 700, Y: 390, W: 40, H: 30, category: "oracle", emoji: "⚾", actionKey: "oracle", description: "The Lion’s Den. A massive, modern colossus on the water. Modern home of the San Francisco Giants.", hidden: true, character: game.names.main },
 
              "APEX Office": { X: 640, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "work", description: "A towering monolith of glass and surveillance overlooking the Bay. Inside, the air is filtered, the lighting is 'optimized' for maximum productivity, and the silence is heavy. This isn't a workplace; it’s a high-frequency hive where human creativity is harvested by the Omni-Sync algorithm. Every cubicle is a cage, and every badge-swipe is a data point. To the world, it’s the pinnacle of tech success; to you, it’s the place where music goes to die.", hidden: true , character: 'APEX'},
 
-             "Wrestling Club": { X: 510, Y: 420, W: 40, H: 30, category: "wrestling_club", emoji: "🤼", actionKey: "wrestling_club", description: "The Grappling Club where wrestling buddies meet weekly. It smells of wintergreen liniment, old canvas, and pure adrenaline.", hidden: true , character: 'Rick'},
+             "Wrestling Club": { X: 520, Y: 390, W: 40, H: 30, category: "wrestling_club", emoji: "🤼", actionKey: "wrestling_club", description: "The Grappling Club smells of wintergreen liniment, old canvas, and pure adrenaline. The walls are plastered with faded posters of Lucha Libre legends and local indie wrestling flyers, their edges curling from the humidity of twenty people training at once.", hidden: true , character: 'Rick'},
 
             "Chase Center": { X: 690, Y: 440, W: 40, H: 30, category: "Sports/Venue", emoji: "🏀", actionKey: "sports", description: "Modern home of the Golden State Warriors.", hidden: true, character: 'Character X' },
             // Commercial / Transit
             "Ferry Building": { X: 720, Y: 260, W: 30, H: 30, category: "building", emoji: "🚢", actionKey: "building", description: "Historic marketplace and transit nexus.", hidden: true , character: game.names.bestie},
-  
-            "Castro Gym": { X: 410, Y: 440, W: 60, H: 40, category: "gym", emoji: "💪", actionKey: "gym", description: "A local fitness center popular within the gay crowd", hidden: true , character: game.names.bestie2},
-
-            "Oasis": { X: 560, Y: 370, W: 40, H: 30, category: "Infrastructure", emoji: "🦄", actionKey: "infrastructure", description: "Major international airport.", hidden: true, character: 'Bouncer' },
+            "SF Fitness": { X: 570, Y: 450, W: 40, H: 30, category: "Commercial", emoji: "💪", actionKey: "commercial", description: "A local fitness center.", hidden: true , character: 'Character X' },
+            "Oasis": { X: 560, Y: 370, W: 40, H: 30, category: "Infrastructure", emoji: "👠", actionKey: "infrastructure", description: "Major international airport.", hidden: true, character: 'Character X' },
             "City Lights": { X: 590, Y: 250, W: 30, H: 30, category: "Cultural", emoji: "📚", actionKey: "cultural", description: "Legendary independent bookstore and publisher in North Beach.", hidden: true , character: 'Character X'},
             "Public Library": { X: 580, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "📖", actionKey: "venue", description: "Historic theater in Mid-Market.", hidden: true, character: 'Character X'},
             "Dolores Park": { X: 480, Y: 458, W: 40, H: 40, category: "Park/Nature", emoji: "🏞️", actionKey: "nature", description: "Popular spot in the Mission District with a great skyline view.", hidden: true, character: 'Character X' },
-            "Lombard Street": { X: 530, Y: 195, W: 40, H: 40, category: "Park/Nature", emoji: "⌇", actionKey: "nature", description: "Popular street, famous for a steep, one-block section with eight hairpin turns",hidden:true, character: ''},
-             "Coit Tower": { X: 640, Y: 180, W: 40, H: 40, category: "Park/Nature", emoji: "♜", actionKey: "nature", description: "rising from the top of Telegraph Hill, has been an emblem of San Francisco's skyline ",hidden:true, character: ''},
-            "Lands End": { X: 90, Y: 270, W: 60, H: 40, category: "Park/Nature", emoji: "🌊", actionKey: "nature", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: true, character: 'Character X' },
+            "Land's End": { X: 90, Y: 270, W: 60, H: 40, category: "Park/Nature", emoji: "🌊", actionKey: "nature", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: true, character: 'Character X' },
             "Painted Ladies": { X: 450, Y: 360, W: 50, H: 40, category: "Cultural", emoji: "🎨", actionKey: "cultural", description: "Iconic Victorian and Edwardian houses near Alamo Square.", hidden: true, character: 'Character X' },
             "Karaoke": { X: 450, Y: 320, W: 50, H: 40, category: "Cultural", emoji: "🎤", actionKey: "cultural", description: "Iconic Victorian and Edwardian houses near Alamo Square.", hidden: true, character: 'Character X' },
             "Golden Gate Bridge": { X: 200, Y: 150, W: 50, H: 50, category: "Infrastructure", emoji: "🌉", actionKey: "infrastructure", description: "Iconic suspension bridge.", hidden: true, character: 'Character X' },
-            "Alcatraz": { X: 540, Y: 30, W: 30, H: 30, category: "Historical", emoji: "⛓️", actionKey: "historical", description: "Infamous former federal prison.", hidden: true, character: 'Character X' },
-            "Lagunitas⬆️": { X: 320, Y: 30, W: 30, H: 30, category: "lagunitas", emoji: "🍺", actionKey: "lagunitas", description: "Lively taproom offering beer tastings", hidden: true, character: game.names.bestie3},
-            "Lagunitas⬆️ ": { X: 220, Y: 30, W: 30, H: 30, category: "lagunitas", emoji: "🍺", actionKey: "lagunitas", description: "Lively taproom offering beer tastings", hidden: true, character: 'Cool Bouncer'},
+            "Alcatraz": { X: 580, Y: 30, W: 30, H: 30, category: "Historical", emoji: "🏛️", actionKey: "historical", description: "Infamous former federal prison.", hidden: true, character: 'Character X' },
             "SFO Airport⬇️": { X: 690, Y: 750, W: 60, H: 40, category: "Infrastructure", emoji: "✈️", actionKey: "infrastructure", description: "Major international airport.", hidden: true, character: 'Character X' },
-            "Fisherman\'s Wharf": { X: 550, Y: 155, W: 40, H: 30, category: "Commercial", emoji: "🦀", actionKey: "cultural", description: "Tourist hub with Pier 39.", hidden: true, character: 'Character X' },
+            "Fisherman's Wharf": { X: 530, Y: 160, W: 40, H: 30, category: "Commercial", emoji: "🦀", actionKey: "cultural", description: "Tourist hub with Pier 39.", hidden: true, character: 'Character X' },
             "Open Mic Bar": { X: 120, Y: 600, W: 60, H: 40, category: "Park/Nature", emoji: "🎤", actionKey: "nature", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: true, character: 'Character X' },
             "The Chapel": { X: 520, Y: 500, W: 30, H: 30, category: "Music Venue", emoji: "🎸", actionKey: "venue", description: "Mid-sized venue in the Mission District.", hidden: true, character: 'Character X' },
-            "GAMH": { X: 510, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "gamh", description: "Elegant, historic hall.", hidden: true, character: 'Bridget' },
-            "GAMH ": { X: 510, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "gamh_", description: "Elegant, historic hall.", hidden: true, character: 'Intimidating Bouncer' },
+            "GAMH": { X: 510, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "🎷", actionKey: "venue", description: "Elegant, historic hall.", hidden: true, character: 'Character X' },
             "Warfield": { X: 570, Y: 340, W: 30, H: 30, category: "Music Venue", emoji: "🥁", actionKey: "venue", description: "Historic theater in Mid-Market.", hidden: true, character: 'Character X' },
             // --- NEW LOCATION: Venue ---
             "Slim's": { X: 580, Y: 380, W: 30, H: 30, category: "Music Venue", emoji: "🎤", actionKey: "venue", description: "Closed but iconic former music venue in SOMA.", hidden: true, character: 'Character X' },
@@ -2895,16 +2510,6 @@
             game.pendingAcquisition.item = 'Don Quixote';
             playMovie('./videos/habibi-quixote.mp4', 'You found an interesting book, \'Don Quixote\'!');
 
-        }
-
-        function rick_action1(){
-            game.currentLocationId = 'Wrestling Club';
-            game.previousPhase = 5;
-           // let inventoryItem = game.inventory_items.find(i => i.name === 'Gaffer Tape');
-            iphoneNotifications = appendNotification(iphoneNotifications,'E-mail URGENT!', 'Subject: Outstanding Asset Recovery - Action Required. Our records indicate that Employee Asset #8821 is still in possession of an active Omni-Sync Badge. This device is proprietary Apex technology. You are hereby ordered to return to the APEX Tower immediately. Compliance is the only rhythm. Return the badge.','📧',  'APEX Office');
-            //inventoryItem.acquired = false;
-            //inventoryItem.given = true;
-            playMovie('./videos/rick-tape.mp4', 'You helped Rick fix the mat. Now you can wrestle!!');
         }
 
         function home_action1(){
@@ -3119,14 +2724,14 @@
 
         function bob_action3(){
             game.secrets +=1;
-            playMovie('./videos/bob-gummy.mp4','OMG! These gummies are hassansational! (Easter Egg found!)' );
+            playMovie('./videos/bob-gummy.mp4','OMG! These gummies are hassansational! (Eastern Egg found!)' );
 
         }
 
         function bob_action4(){
             game.secrets +=1;
             game.fans +=1;
-            playMovie('./videos/bob-guitar.mp4','ROCK IT! MAKES NO SENSE AT ALL! 🎶🎶 (Easter Egg found!)' );
+            playMovie('./videos/bob-guitar.mp4','ROCK IT! MAKES NO SENSE AT ALL! 🎶🎶 (Eastern Egg found!)' );
 
         }
 
@@ -3141,7 +2746,7 @@
             inventoryItem.acquired = false;
             inventoryItem.given = true;
             toggleMission('bestie');
-            iphoneNotifications = appendNotification(iphoneNotifications,'Bridget', 'Hey! I can totally use your help at the Hardly Strictly Bluegrass Festival at the Golden Gate Park right now!', '💬', 'HSB Festival');
+
             playMovie('./videos/sid-disco.mp4', 'FABOLOUS! Sid is ready for the disco fashion party! Now he can listen to you...'); 
 
         }
@@ -3149,13 +2754,13 @@
         function sid_action2(){
             game.currentLocationId = 'BESTIE';
             game.secrets +=1;
-            playMovie('./videos/sid-gummies.mp4', 'Fun times tricking your bestie! (Easter Egg found!)'); 
+            playMovie('./videos/sid-gummies.mp4', 'Fun times tricking your bestie! (Eastern Egg found!)'); 
         }
 
         function sid_action3(){
             game.secrets +=1;
             game.fans +=1;
-            playMovie('./videos/sid-guitar.mp4', 'Fun times tricking your bestie! (Easter Egg found!)'); 
+            playMovie('./videos/sid-guitar.mp4', 'Fun times tricking your bestie! (Eastern Egg found!)'); 
         }
 
         function sid_money_action() {
@@ -3172,7 +2777,7 @@
 
                     // --- HELP / LEARN LOGIC ---
                     game.score += 1000;
-                    playMovie('./videos/sid-money.mp4', 'Sid wants to help you in your musician career and gives you $1000! He can also help you with your chops');
+                    playMovie('./videos/sid-money.mp4', 'Sid wants to help you in your musician career and gives you $1000');
                     game.sids_buttons.money = true;
                 }
                 else{
@@ -3325,7 +2930,7 @@
                 game.secrets +=1;
                 game.fans +=1;
                 game.kevind_buttons.fan = true;
-                playMovie('./videos/kevind-guitar.mp4','Not bad, buddy! Keep it up! I am your fan! (Easter Egg found!)' );
+                playMovie('./videos/kevind-guitar.mp4','Not bad, buddy! Keep it up! I am your fan! (Eastern Egg found!)' );
             }
             else{
                 const statusBar = document.getElementById('status-bar-output');
@@ -3341,7 +2946,7 @@
 
         function kevind_action7(){
             game.secrets +=1;
-            playMovie('./videos/kevind-aa.mp4','Alcoholics Anonymous? NOOOO!!! I swear I am good, buddy! (Easter Egg found!)' );
+            playMovie('./videos/kevind-aa.mp4','Alcoholics Anonymous? NOOOO!!! I swear I am good, buddy! (Eastern Egg found!)' );
         }
 
         function dj_action1(){
@@ -3404,7 +3009,7 @@
             if (!game.dj_buttons.metallica){
                 game.secrets +=1;
                 game.dj_buttons.metallica = true;
-                playMovie('./videos/dj-metallica.mp4','You must be kidding me! This is not gay at all! (Easter Egg found!)' );
+                playMovie('./videos/dj-metallica.mp4','You must be kidding me! This is not gay at all! (Eastern Egg found!)' );
             }
             else{
                 const statusBar = document.getElementById('status-bar-output');
@@ -3421,7 +3026,7 @@
         function dj_action4(){
             game.secrets +=1;
             game.fans +=21;
-            playMovie('./videos/dj-guitar.mp4', 'You gained 21 fans (Easter Egg found!)'); 
+            playMovie('./videos/dj-guitar.mp4', 'You gained 21 fans (Eastern Egg found!)'); 
         }
 
 
@@ -3472,6 +3077,8 @@
             game.score = game.score - 5;
             game.popup_buttons.tour = false;
 
+            iphoneNotifications = appendNotification(iphoneNotifications,'Bridget', 'Hey! I can totally use your help at the Hardly Strictly Bluegrass Festival at the Golden Gate Park right now!', '💬', 'HSB Festival')
+
             playMovie('./videos/popup-raffle.mp4','So you want to enter the $5 raffle to gain a ticket for the Metallica concert? Cool! You\'re officially on the list! If you\'re the chosen one, we\’ll blast an email your way faster than a Kirk Hammett solo. 📧⚡. Good luck!' );
             // Update the status bar to confirm the action was successful
             if (statusBar) {
@@ -3494,7 +3101,7 @@
         function popup_action2(){
             game.secrets +=1;
             game.fans +=10;
-            playMovie('./videos/popup-guitar.mp4','You gained 10 new fans! (Easter Egg found!)' );
+            playMovie('./videos/popup-guitar.mp4','You gained 10 new fans! (Eastern Egg found!)' );
 
         }
 
@@ -3527,7 +3134,7 @@
             switchToView(contentDiv);  
             game.bridget_buttons.photo = true;
             if (game.bridget_buttons.action2){
-               
+                iphoneNotifications = appendNotification(iphoneNotifications,'E-mail URGENT!', 'Subject: Outstanding Asset Recovery - Action Required. Our records indicate that Employee Asset #8821 is still in possession of an active Omni-Sync Badge. This device is proprietary Apex technology. You are hereby ordered to return to the APEX Tower immediately. Compliance is the only rhythm. Return the badge.','📧',  'APEX Office');
                 game.bridget_buttons.action2 = false;
             }
             iphoneNotifications = iphoneNotifications.slice(1);            
@@ -3550,14 +3157,14 @@
 
         function bridget_action4(){
             game.secrets +=1;
-            playMovie('./videos/bridget-note.mp4','Too stressful to Bridget! (Easter Egg found!)' );
+            playMovie('./videos/bridget-note.mp4','Too stressful to Bridget! (Eastern Egg found!)' );
 
         }
 
         function bridget_action5(){
             game.secrets +=1;
             game.fans +=23;
-            playMovie('./videos/bridget-guitar.mp4','You gained 23 new fans! (Easter Egg found!)' );
+            playMovie('./videos/bridget-guitar.mp4','You gained 23 new fans! (Eastern Egg found!)' );
 
         }
 
@@ -3600,8 +3207,6 @@
             'bridget_action4' : bridget_action4,
             'bridget_action5' : bridget_action5,
             'bridget_chops'   : bridget_chops,
-            'cool_bouncer_action1': cool_bouncer_action1,
-            'cool_bouncer_action2': cool_bouncer_action2,
             'bouncer_action1' : bouncer_action1,
             'bouncer_action2' : bouncer_action2,
             'bestie2_action1' : bestie2_action1,
@@ -3761,19 +3366,6 @@
                 { speaker: 'Bestie', text: "Thank you, habibi. I’ll be right here, waiting for a little inspiration to knock on the door." }
             ]
 
-        const mama_help_dialogue_data2 = [
-            { speaker: 'Player', text: "Mama? You're unusually quiet. What's wrong?" },
-            { speaker: 'Mama', text: "Oh, Habibi... There was a leak 🌧️ My old scrapbook from the 70s—the one with all my first memories of the city—it's ruined. The water soaked through everything." },
-            { speaker: 'Player', text: "No way. Not the one with the photos you took when you first arrived? Let me see." },
-            { speaker: 'Mama', text: "The ink ran, and the photos are just... blurred colors now. 🖼️❌ I can't even tell which street is which. I wanted to show you where I felt the 'Love' for this city for the first time." },
-            { speaker: 'Player', text: "Wait, look at the back of the pages. You wrote things down. 'The wind tastes like salt and sourdough here'... 'The stairs feel like a spine of flowers'..." },
-            { speaker: 'Mama', text: "I remember the feelings, but my mind is like the photos—cloudy. I can't remember the names of the landmarks anymore. 🌫️" },
-            { speaker: 'Player', text: "Mama, don't worry. I know this city like the back of my fretboard. 🎸 If you tell me those memories, I'll figure out where they happened." },
-            { speaker: 'Mama', text: "You would do that? But the photos are gone forever, even if we find the spots." },
-            { speaker: 'Player', text: "I’ll do you one better. I’ll go to every single one of them and take new photos. We’ll build a 'New Era' scrapbook together. 📸✨" },
-            { speaker: 'Mama', text: "That would mean everything to me. Here... take these notes. Find the places where the city speaks to the soul, and bring them home to me. 💖" }
-        ];
-
 
         const bestie2_help_dialogue_data = [
             { speaker: 'Player', text: "Hey {bestie}! I think you can help me become a better song writer" },
@@ -3794,40 +3386,6 @@
         { speaker: 'Player', text: "No clichés, just the perfect bridge... I'm ready. Let’s see if I’ve got the vision to find that one word." }     
 
         ]
-
-        const cool_bouncer_help_dialogue_data = [
-            { speaker: 'Bouncer', text: "Whoa there, Gandalf. Hold up. You’re vibrating on a frequency that's a little too... 'analog' for this function." },
-            { speaker: 'Player', text: "Analog? I do not need to be digital to proof anything. I'm just here to see my friend." },
-            { speaker: 'Bouncer', text: "Look, the policy is strict. This is a 'Gen-Z and Beyond' mixer. You look like you're pushing fifty-five, pops." },
-            { speaker: 'Player', text: "Fifty-five?! I am younger than 50!" },
-            { speaker: 'Bouncer', text: "Nice try. You’ve got 'I-actually-lived-through-the-70s' fatigue in your eyes. I need proof of youth." },
-            { speaker: 'Player', text: "Proof? What, you want to see my TikTok following? My snap streak?" },
-            { speaker: 'Bouncer', text: "Show me something to proof your age." },
-            { speaker: 'Player', text: "You're lucky I'm a patient man. I'll be back with something that’ll make your kale smoothie curdle." },
-            { speaker: 'Bouncer', text: "I prefer Oat-Milk Lattes with a shot of collagen, actually. Now move along before you break a hip" }
-        ];
-
-        const bouncer_help_dialogue_data2 = [
-              { speaker: 'Bouncer', text: "Hold it right there. Unless you know the code, you're just another tourist blocking the sidewalk." },
-            { speaker: 'Player', text: "I'm here to see Bridget. I'm sure there's just been a misunderstanding with the front office." },
-            { speaker: 'Bouncer', text: "The only misunderstanding is you thinking you can talk your way past me. Give me the code or move along before I move you myself." },
-            { speaker: 'Player', text: "The code? Oh, right. Is it... 'Fog City Rocker'? Or maybe 'Gold and Blue'?" },
-            { speaker: 'Bouncer', text: "Pathetic. You're just throwing words at the wall hoping one sticks. You look like you don't even know what district you're standing in." },
-            { speaker: 'Player', text: "Can't we just work something out? I've got a guitar and a dream, man." },
-            { speaker: 'Bouncer', text: "Everyone in this city has a guitar and a dream. I need a code. No code, no entry. Now beat it before I lose my professional patience." }
-        ];
-
-
-        const cool_bouncer_help_dialogue_data2 = [
-            { speaker: 'Bouncer', text: "Whoa there, rockstar. Hold the line. I can’t let you in looking like a catalog for a 'Standard Human' convention." },
-            { speaker: 'Player', text: "Is there a problem?" },
-            { speaker: 'Bouncer', text: "This is Lagunitas. We have a lineage of fog and absolute defiance." },
-            { speaker: 'Player', text: "I'm wearing a shirt and jeans. It's classic. What's missing?" },
-            { speaker: 'Bouncer', text: "It’s missing the spirit. Where’s the biodegradable shimmer? The thrifted grit? The 'I-found-this-in-a-bin' energy? You’re giving me 'Mid-Market Tech Bro'." },
-            { speaker: 'Player', text: "So I'm not... Bay Area enough?" },
-            { speaker: 'Bouncer', text: "You look like you've never thought about gluten-free sourdough. Your entry is pending a vibe-check. Come back when your outfit screams San Francisco, not 'Silicon Valley." },
-            { speaker: 'Player', text: "Fine..."}
-        ];
 
         const bouncer_help_dialogue_data = [
             {speaker: 'Player', text: "Excuse me, I need to get backstage. I'm here to talk to Bob Mould." },
@@ -3937,6 +3495,7 @@
 
         
     const actionRegistry = {
+        
        home: (name, data) => {
             currentContext = { name, data };
 
@@ -3969,7 +3528,7 @@
                 </div>
                 ` : ''}
 
-                 ${(game.kevind_buttons.chops && game.chapter === 1) ? `
+                ${game.kevind_buttons.chops ? `
                 <div class="flex justify-center mt-6">
                     <button onclick="checkChopMastery()" class="career-milestone-button px-10 py-5 rounded-xl border-4">
                         <div class="flex flex-col items-center">
@@ -3979,18 +3538,6 @@
                     </button>
                 </div>
                 ` : ''}
-
-
-                ${game.chapter === 2 ? `
-                <div class="flex justify-center mt-6">
-                    <button onclick="setPhase(21,'')" class="career-milestone-button px-10 py-5 rounded-xl border-4">
-                        <div class="flex flex-col items-center">
-                            <span class="text-xl font-black text-yellow-300">Check ScrapBook! ⚡</span>
-                        </div>
-                    </button>
-                </div>
-                ` : ''}
-
 
                 <!-- Dynamic Chop Practice Buttons -->
                 <div class="space-y-4 mt-4">
@@ -4045,47 +3592,6 @@
             `;
         },
 
-
-        lagunitas:  (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-    
-                </div>
-                <p class="text-normal text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                </p>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">${game.cool_bouncer_buttons.description}</p>
-                </div>
-
-
-                ${game.cool_bouncer_buttons.showHelpButton2 ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="cool_bouncer_request_help2()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
-                    </button>
-                </div>
-                ` : ''}
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Interact with ${data.character} </span>
-                            </button>
-                        </div>
-                </div>
-
-            `;
-               
-
-        },
-
         oracle: (name, data) => {
             currentContext = { name, data };
 
@@ -4134,14 +3640,6 @@
 
             
 
-                ${game.rick_buttons.request_help ? `
-                    <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="rick_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
-                    </button>
-                </div>
-                ` : ''}
-
                 <div id="main-action-buttons" class="flex flex-col items-center">
                         <div class="flex justify-center mt-4 w-full">
                             <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
@@ -4175,20 +3673,10 @@
                 ${game.mama_buttons.showHelpButton ? `
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
                     <button onclick="mama_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
+                        <span class="text-sm font-bold text-yellow-300">Greed ${data.character}</span>
                     </button>
                 </div>
                 ` : ''}
-
-
-                 ${(game.mama_buttons.showHelpButton2  && game.chapter === 2) ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="mama_request_help2()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
-                    </button>
-                </div>
-                ` : ''}
-
 
                 <div id="main-action-buttons" class="flex flex-col items-center">
                         <div class="flex justify-center mt-4 w-full">
@@ -4403,15 +3891,6 @@
                         </div>
                 </div>
 
-                 <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="handleClick('Castro')" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">back to Castro </span>
-                            </button>
-                        </div>
-                </div>
-
             `;
                
 
@@ -4457,55 +3936,6 @@
                             <!-- Button to switch to the Question Grid view -->
                             <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
                                 <span class="text-sm font-bold">Interact with Dj Robbie </span>
-                            </button>
-                        </div>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="handleClick('Castro')" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">back to Castro </span>
-                            </button>
-                        </div>
-                </div>
-
-            `;
-               
-
-        },
-
-        gamh_: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-    
-                </div>
-                <p class="text-normal text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                </p>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">${game.bouncer_buttons.description}</p>
-                </div>
-
-
-                ${game.bouncer_buttons.showHelpButton2 ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="bouncer_request_help2()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
-                    </button>
-                </div>
-                ` : ''}
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Interact with ${data.character} </span>
                             </button>
                         </div>
                 </div>
@@ -4603,7 +4033,6 @@
         },
 
 
-
         cliffs: (name, data) => {
             currentContext = { name, data };
 
@@ -4638,15 +4067,6 @@
                         </div>
                 </div>
 
-
-                 <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="handleClick('Castro')" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">back to Castro </span>
-                            </button>
-                        </div>
-                </div>
 
             `;
                
@@ -4724,53 +4144,10 @@
                
         },
 
-
-         bitter_end: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-    
-                </div>
-                <p class="text-normal text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                </p>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">${game.cool_bouncer_buttons.description}</p>
-                </div>
-
-
-                ${game.cool_bouncer_buttons.showHelpButton ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="cool_bouncer_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
-                    </button>
-                </div>
-                ` : ''}
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Interact with ${data.character} </span>
-                            </button>
-                        </div>
-                </div>
-
-            `;
-               
-
-        },
-
-
-
         sids: (name, data) => {
             currentContext = { name, data };
 
-            const noActionsAvailable =  !game.sids_buttons.showCheerButton && !game.sids_buttons.showHelpButton && !game.sids_buttons.helpChapter2;
+            const noActionsAvailable =  !game.sids_buttons.showCheerButton && !game.sids_buttons.showHelpButton;
             return `
                 <div class="mb-8">
                     <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
@@ -5169,35 +4546,6 @@
         };
 
 
-
-    function rick_request_help(){
-            game.currentLocationId = 'Wrestling Club';
-            game.dialogueData = rick_help_dialogue_data;
-            game.activeCharacter = "Rick";
-            game.dialogueIndex = 0;
-            game.rick_buttons.request_help = false;
-            game.rick_buttons.tape = true;
-            addMission('rick', 'Rick\'s mats are tearing apart. Find some material to fix it');
-            const dialogueHtml = renderDialogue(rick_help_dialogue_data, "Rick");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-
-
-        }
-
-    const rick_help_dialogue_data = [
-            { speaker: 'Player', text: "Hey Rick, how are you? The club looks... quieter than usual. Where are the rest of the boys?" },
-            { speaker: 'BESTIE', text: "Quiet? It's a tragedy, kid! Look at the main ring—the canvas is shredded. Some amateur tried a springboard and tore a hole right through the heart of the club." },
-            { speaker: 'Player', text: "Man, that looks rough. Can't you just patch it up?" },
-            { speaker: 'BESTIE', text: "With what? My hopes and dreams? No mat means no wrestling. No wrestling means no trash-talk therapy for me." },
-            { speaker: 'Player', text: "I didn't realize it was that serious. You really need this fixed to keep the sessions going?" },
-            { speaker: 'BESTIE', text: "Of course! I'm stuck here watching these guys do push-ups on concrete..." },
-            { speaker: 'Player', text: "Say no more, Rick.I'll find what you need and get this ring back in fighting shape." },
-            { speaker: 'BESTIE', text: "That's the spirit! Now get moving—the air in here is getting too polite, and it’s making me sick!" }
-        ];
-
-
-
         function bouncer_request_help(){
             game.currentLocationId = 'The Fillmore';
             game.pendingAcquisition.topic = 'Accreditation Required';
@@ -5210,51 +4558,6 @@
             switchToView(contentDiv);
         }
 
-        function bouncer_request_help2(){
-            game.currentLocationId = 'GAMH ';
-            game.activeCharacter = "Intimidating Bouncer";
-
-            iphoneNotifications = appendNotification(iphoneNotifications,'Bridget', 'Forgot to mention... They implemented a security word code for visitors to access backstage based on this document. I wish I knew what it means...' , '💬', '','Secret Code');
-
-            game.dialogueIndex = 0;
-            addMission('bouncer', 'Get access to the GAMH by deciphering the 5-letter word code');
-            const dialogueHtml = renderDialogue(bouncer_help_dialogue_data2, "Intimidating Bouncer");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
-
-    
-
-         function cool_bouncer_request_help(){
-            game.currentLocationId = 'BITTER END ';
-            game.activeCharacter = "Cool Bouncer";
-            game.dialogueIndex = 0;
-            const dialogueHtml = renderDialogue(cool_bouncer_help_dialogue_data, "Cool Bouncer");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
-
-         function cool_bouncer_request_help2(){
-            game.currentLocationId = 'Lagunitas⬆️ ';
-            game.activeCharacter = "Cool Bouncer";
-            game.dialogueIndex = 0;
-            game.pendingAcquisition.topic = "San Francisco Attire";
-            const dialogueHtml = renderDialogue(cool_bouncer_help_dialogue_data2, "Cool Bouncer");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);function bouncer_request_help(){
-            game.currentLocationId = 'The Fillmore';
-            game.pendingAcquisition.topic = 'Accreditation Required';
-            game.dialogueData = bouncer_help_dialogue_data;
-            game.activeCharacter = "Intimidating Bouncer";
-            game.dialogueIndex = 0;
-            addMission('bouncer', 'The Fillmore bouncer won\'t let me access. I need to secure an official Accreditation 🛂 to get past his glare.');
-            const dialogueHtml = renderDialogue(bouncer_help_dialogue_data, "Intimidating Bouncer");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
-        }
-
-
         function mama_request_help(){
             game.currentLocationId = 'Mama⬇️';
             game.dialogueData = mama_help_dialogue_data;
@@ -5265,23 +4568,6 @@
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
         }
-
-        function mama_request_help2(){
-            game.currentLocationId = 'Mama⬇️';
-            game.activeCharacter = "Mama";
-            game.pendingAcquisition.item = 'Scrapbook';
-            addMission('mama2', 'I need to guess the landmarks and take new photos for mama\'s damaged scrapbook');
-
-            iphoneNotifications = appendNotification(iphoneNotifications,game.names.bestie2, 'Do you want to join me at the Castro gym?','💬',  'Castro Gym');
-
-            game.dialogueIndex = 0;
-            game.mama_buttons.camera = true;
-            game.mama_buttons.showHelpButton2 = false;
-            const dialogueHtml = renderDialogue(mama_help_dialogue_data2, "Mama");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
-
 
         function crazy_request_help(){
             game.currentLocationId = 'Crazy K';
@@ -5320,35 +4606,14 @@
 
         function mama_action2(){
             game.secrets +=1;
-            playMovie('./videos/mama-cd.mp4','Still know how to shake it, habibi! So much fun! (Easter Egg found!)' );
+            playMovie('./videos/mama-cd.mp4','Still know how to shake it, habibi! So much fun! (Eastern Egg found!)' );
         }
 
         function mama_action3(){
             game.secrets +=1;
             game.fans +=1
-            playMovie('./videos/mama-guitar.mp4','This is so much fun, habibi! You are my favorite son! (One more fan, Easter Egg found!)' );
+            playMovie('./videos/mama-guitar.mp4','This is so much fun, habibi! You are my favorite son! (One more fan, Eastern Egg found!)' );
         }
-
-        function cool_bouncer_action1(){
-            game.cool_bouncer_buttons.showHelpButton = false;
-            game.previousPhase =5;
-            game.currentLocationId = 'BITTER END';
-            toggleLandmarkVisibilityByName('BITTER END ', true);
-            toggleLandmarkVisibilityByName('BITTER END', false);
-            game.cool_bouncer_buttons.description = 'You found {game.names.bestie3} inside!';
-            playMovie('./videos/cool_bouncer.mp4','"Wow! You\'re actually younger than 50... Come on in, sir!"' );
-        }
-        
-        function cool_bouncer_action2(){
-            game.cool_bouncer_buttons.showHelpButton = false;
-            game.previousPhase =5;
-            game.currentLocationId = 'Lagunitas⬆️';
-            toggleLandmarkVisibilityByName('Lagunitas⬆️ ', true);
-            toggleLandmarkVisibilityByName('Lagunitas⬆️', false);
-            game.cool_bouncer_buttons.description = 'You found {game.names.bestie3} inside!';
-            playMovie('./videos/cool_bouncer2.mp4','"Wow! You\'re actually a real San Franciscan! ... Come on in, sir!"' );
-        }
-
 
         function bouncer_action1(){
             game.currentLocationId = 'The Fillmore';
@@ -5481,7 +4746,7 @@
             toggleMission('bestie2');
             playMovie('./videos/kevin-book.mp4','WoW This is amazing! Let me thank you. I have an extra ticket for a movie in the Iraqi Festival. I am also ready to help you on your music endevour');
             iphoneNotifications = iphoneNotifications.slice(1);            
-            iphoneNotifications = appendNotification(iphoneNotifications,'MeetFighters', '-IBEARIAN- Hope to wrestle you some day, sexy! Let\’s stay in touch!', '🤼', '');
+            iphoneNotifications = appendNotification(iphoneNotifications,'MeetFighters', '<IBEARIAN> Hope to wrestle you some day, sexy! Let\’s stay in touch!', '🤼', '');
 
             const output = document.getElementById(MAIN_OUTPUT_ID);
             if (output) {
@@ -5492,13 +4757,13 @@
 
         function bestie2_action3(){
             game.secrets +=1;
-            playMovie('./videos/peets-quixote.mp4','This was great but already read it! Next! (Easter Egg found!)' );
+            playMovie('./videos/peets-quixote.mp4','This was great but already read it! Next! (Eastern Egg found!)' );
 
         }
         
         function bestie2_action4(){
             game.secrets +=1;
-            playMovie('./videos/bestie2-guitar.mp4', game.names.bestie2+ 'is loving it! You just gained another fan! (Easter Egg found!)');
+            playMovie('./videos/bestie2-guitar.mp4', game.names.bestie2+ 'is loving it! You just gained another fan! (Eastern Egg found!)');
         }
 
         function bob_chops(){
@@ -5815,6 +5080,7 @@
                 'BESTIE': './faces/sid.png',
             };
 
+            // Determine portrait URL using the same logic as renderDialogue
             let portraitUrl = characterPortraits[characterName] || locationPortraits[currentLocationId]  
             const icon = item.icon || (isItem ? '📦' : '🗣️');
 
@@ -5914,7 +5180,6 @@
                 .map(item => ({
                     name: item.name,
                     icon: item.icon,
-                    image: item.image,
                     type: 'item',
                     isAsked: isAlreadyAsked(item.name)
                 }));
@@ -5924,7 +5189,6 @@
                 .map(topic => ({
                     name: topic.name,
                     icon: topic.icon,
-                    image: topic.image,
                     type: 'topic',
                     isAsked: isAlreadyAsked(topic.name)
                 }));
@@ -5959,40 +5223,26 @@
             const gridContainer = createElement('div', 'flex flex-col space-y-8 w-full max-w-4xl p-4');
 
             const renderSection = (title, dataList, colorClass, borderColor) => {
-                    const section = createElement('div', `grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-800/50 rounded-xl border ${borderColor}`);
-                    section.innerHTML = `<h4 class="col-span-full text-xl font-bold ${colorClass} mb-2 border-b border-white/10 pb-1 uppercase tracking-tighter">${title}</h4>`;
+                const section = createElement('div', `grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-800/50 rounded-xl border ${borderColor}`);
+                section.innerHTML = `<h4 class="col-span-full text-xl font-bold ${colorClass} mb-2 border-b border-white/10 pb-1 uppercase tracking-tighter">${title}</h4>`;
 
-                    dataList.forEach(data => {
-                        const disabledClasses = data.isAsked 
-                            ? 'opacity-40 grayscale cursor-not-allowed pointer-events-none' 
-                            : 'cursor-pointer hover:scale-[1.03] hover:bg-gray-700/50';
-                        
-                        // Visual Logic: Image takes priority, fallback to icon
-                        let visualHtml = '';
-                        if (data.image) {
-                            visualHtml = `
-                                <div class="w-12 h-12 mb-2 flex items-center justify-center">
-                                    <img src="${data.image}" 
-                                         class="max-w-full max-h-full object-contain pixel-image filter drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)]"
-                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                    <span class="hidden text-4xl">${data.icon || '❓'}</span>
-                                </div>`;
-                        } else {
-                            visualHtml = `<span class="text-4xl mb-1">${data.icon || '❓'}</span>`;
-                        }
-                        
-                        const card = createElement('div', `metal-button p-3 flex flex-col items-center justify-center text-center transition-all shadow-lg min-h-[120px] ${disabledClasses}`,
-                            `${visualHtml}
-                             <span class="text-[10px] font-bold uppercase ${colorClass} leading-tight">${data.name}</span>`
-                        );
+                dataList.forEach(data => {
+                    const disabledClasses = data.isAsked 
+                        ? 'opacity-40 grayscale cursor-not-allowed pointer-events-none' 
+                        : 'cursor-pointer hover:scale-[1.03] hover:bg-gray-700/50';
+                    
+                    const card = createElement('div', `metal-button p-3 flex flex-col items-center justify-center text-center transition-all shadow-lg min-h-[100px] ${disabledClasses}`,
+                        `<span class="text-4xl mb-1">${data.icon}</span>
+                         <span class="text-[10px] font-bold uppercase ${colorClass}">${data.name}</span>`
+                    );
 
-                        if (!data.isAsked) {
-                            card.onclick = () => handleCardClick(card, data);
-                        }
-                        section.appendChild(card);
-                    });
-                    return section;
-                };
+                    if (!data.isAsked) {
+                        card.onclick = () => handleCardClick(card, data);
+                    }
+                    section.appendChild(card);
+                });
+                return section;
+            };
 
             if (topicData.length > 0) {
                 gridContainer.appendChild(renderSection('Conversation Topics', topicData, 'text-teal-400', 'border-teal-700/50'));
@@ -6615,7 +5865,7 @@
                 
                  const buttons = [
                     { text: 'NEW JOURNEY', icon: '🎸', action: () => { game.phase = 18; renderGame(); } },
-                    { text: 'RESTORE SESSION', icon: '📂', action: () => { storageMode = 'restore'; setPhase(6); } },
+                    { text: 'RESTORE SESSION (WIP)', icon: '📂', action: loadGame , disabled: true},
                     { text: 'CHOP GALLERY', icon: '🏆', action: () => showGameMessage("Locked until Chapter 2") },
                     //{ text: 'CHOP GALLERY1', icon: '🏆', action: () => debugUnlockAll()},
                     { text: 'OPTIONS (disabled)', icon: '⚙️', action: () => setPhase(0, '') }
@@ -6735,7 +5985,93 @@
         }
 
 
-       
+         async function saveGame() {
+            // 1. Define which keys we want to EXCLUDE from the save file
+            const keysToExclude = ['synth', 'leadSynth', 'musicTransport', 'musicLoop', 'timerInterval'];
+
+            // 2. Create a sanitized copy of the game object
+            const sanitizedGame = {};
+            Object.keys(game).forEach(key => {
+                if (!keysToExclude.includes(key)) {
+                    sanitizedGame[key] = game[key];
+                }
+            });
+
+            // 3. Prepare the final save structure
+            const saveState = {
+                game: sanitizedGame,
+                landmarkData: landmarkData,
+                iphoneNotifications: iphoneNotifications,
+                timestamp: new Date().toISOString(),
+                version: "1.0"
+            };
+
+            const savePath = `./saves/guitar_hero_save_${game.names.main}.json`;
+
+            try {
+                // To save "automatically" to a folder without a UI picker, 
+                // we send a POST request to a local handler/server.
+                // If running in a standard browser environment, this expects a backend at the relative path.
+                const response = await fetch(savePath, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(saveState, null, 2)
+                });
+
+                if (response.ok) {
+                    showGameMessage("Game Saved Successfully", "success");
+                    console.log("Saved to:", savePath);
+                } else {
+                    // If the path isn't writable via POST (standard browser behavior without a backend),
+                    // we log the error. Silent saving to specific local folders requires an active 
+                    // filesystem handler or a local server.
+                    throw new Error("Local filesystem path not writable via direct POST.");
+                }
+            } catch (err) {
+                console.error("Silent save failed:", err);
+                // Providing a fallback message indicating that automated folder access is blocked
+                showGameMessage("Save Error: Directory './saves/' is not writable.", "error");
+            }
+        }
+        
+        
+
+        async function loadGame() {
+            const savePath = `./saves/guitar_hero_save_${game.names.main}.json`;
+            
+            try {
+                // We use fetch to automatically look for the file in the specified folder
+                const response = await fetch(savePath);
+                
+                if (!response.ok) {
+                    // If response is not 200 (e.g. 404), no game has been saved yet
+                    showGameMessage("No game has been saved yet.", "error");
+                    return;
+                }
+
+                const loadedData = await response.json();
+
+                // Restore State Variables
+                if (loadedData.game) Object.assign(game, loadedData.game);
+                if (loadedData.landmarkData) Object.assign(landmarkData, loadedData.landmarkData);
+                
+                // Clear and refill notifications array
+                if (loadedData.iphoneNotifications) {
+                    iphoneNotifications.length = 0;
+                    loadedData.iphoneNotifications.forEach(n => iphoneNotifications.push(n));
+                }
+
+                showGameMessage("Game Restored Successfully!", "success");
+                renderGame(); // Refresh the UI with new data
+
+            } catch (err) {
+                // This catch block handles network errors or JSON parsing errors
+                showGameMessage("Error: No saved game found or file is inaccessible.", "error");
+                console.error("Load error:", err);
+            }
+        }
 
         function showGameMessage(text, type) {
             const msgBox = createElement('div', 'fixed bottom-4 left-1/2 -translate-x-1/2 px-6 py-2 rounded-lg border-2 z-[2000] title-font font-bold text-sm tracking-widest animate-bounce');
@@ -6952,7 +6288,7 @@
             updateState({ selectedAnswer: answer });
 
             if (isCorrect) {
-                newScore += updateChopScore('Backstage Blueprint', 30);
+                newScore += updateChopScore('Backstage Blueprint', 20);
                 feedback = 'Bravo! +20 Backstage Blueprint XP.';
                 showSuccessAnimation();
 
@@ -7169,27 +6505,24 @@
 
             const persistenceRow = createElement('div', 'w-full flex justify-center gap-6 py-4 border-t border-white/10  ');
 
-           const saveBtn = createElement('button', 
-                'aspect-square w-24 flex flex-col items-center justify-center bg-zinc-800 rounded-2xl border-2 border-white/5 hover:border-pink-500 hover:scale-105 transition-all shadow-xl', 
-                `<span class="text-2xl mb-1">💾</span><span class="text-[10px] font-black text-gray-300 uppercase">Save</span>`
+            const saveBtn = createElement('button', 
+                'aspect-square w-20 flex flex-col items-center justify-center bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-amber-500 hover:scale-105 transition-all shadow-xl', 
+                `<span class="text-xl mb-1">💾</span><span class="text-[8px] font-black text-gray-300 uppercase">Save (WIP)</span>`
             );
-            saveBtn.onclick = () => { storageMode = 'save'; setPhase(6); };
+            saveBtn.onclick = saveGame;
 
             const loadBtn = createElement('button', 
-                'aspect-square w-24 flex flex-col items-center justify-center bg-zinc-800 rounded-2xl border-2 border-white/5 hover:border-cyan-500 hover:scale-105 transition-all shadow-xl', 
-                `<span class="text-2xl mb-1">📂</span><span class="text-[10px] font-black text-gray-300 uppercase">Load</span>`
+                'aspect-square w-20 flex flex-col items-center justify-center bg-gray-800 rounded-2xl border-2 border-white/10 hover:border-amber-500 hover:scale-105 transition-all shadow-xl', 
+                `<span class="text-xl mb-1">📂</span><span class="text-[8px] font-black text-gray-300 uppercase">Load (WIP)</span>`
             );
-            loadBtn.onclick = () => { storageMode = 'load'; setPhase(6); };
-
-
-          
+            loadBtn.onclick = loadGame;
 
             persistenceRow.append(saveBtn, loadBtn);
 
           const assetsContainer = createElement('div', 'w-full flex flex-col space-y-6 px-4 py-4 bg-[#2a2a3e] rounded-xl border-4 border-[#1a1a2e]');
 
-            const acquiredItems = game.inventory_items.filter(item => item && item.acquired);
-            const acquiredTopics = game.conversation_topics.unlocked.filter(item => item && item.acquired);
+            const acquiredItems = game.inventory_items.filter(item => item.acquired);
+            const acquiredTopics = game.conversation_topics.unlocked.filter(item => item.acquired);
 
             const renderAssetRow = (label, items) => `
                 <div class="w-full">
@@ -7300,7 +6633,6 @@
                 { title: 'FEUD', action: () => setPhase(11, ''), iconEmoji: '📊' },
                 { title: 'FORCE', action: () => cheat(), iconEmoji: '🤘' },
                 { title: 'MIXER', action: () => setPhase(13,''), iconEmoji: '🎛️' },
-                { title: 'CH2', action: () => StartChapter2(), iconEmoji: '👨‍👩‍👧‍👦' },
             ];
 
             menubuttons.forEach(btn => {
@@ -7323,7 +6655,7 @@
 
            // menuContent.append(titleRow, iconRow, persistenceRow, statsSection, debugWrapper);
 
-            menuContent.append(titleRow, iconRow, persistenceRow, debugWrapper);
+            menuContent.append(titleRow, iconRow, debugWrapper);
 
             //if (!game.radio.isInitialized) {
             //    const powerBtn = document.createElement('button');
@@ -7425,7 +6757,7 @@
             return instructionsContent;
         }
 
-        function appendNotification(notifications, appName, fullText, emoji = '🔔', location, item) {
+        function appendNotification(notifications, appName, fullText, emoji = '🔔', location) {
             const maxId = notifications.reduce((max, notification) => Math.max(max, notification.id), 0);
             const newId = maxId + 1;
 
@@ -7440,7 +6772,6 @@
                 summary: summaryText,
                 fullContent: fullText,
                 location: location,
-                item: item,
                 unread: true // Always set to true
             };
 
@@ -7612,21 +6943,9 @@
         ];
 
         let inventoryItem = game.inventory_items.find(i => i.name === 'Galactic Silver glitter');
-        if (!game.dj_buttons.cliff && !inventoryItem.given && game.chapter===1){
+        if (!game.dj_buttons.cliff && !inventoryItem.given){
 
             shopData.push({ name: 'Galactic Silver glitter', price: 25, icon: '✨', desc: 'Robbie seems to like this glitter brand' },);
-        }
-
-
-        if (game.rick_buttons.tape){
-
-            shopData.push({ name: 'Gaffer Tape', icon: '🩹', desc: 'Ideal to fix gear, ring tears', price: 10 });
-
-        }
-
-         if (game.mama_buttons.camera){
-
-            shopData.push({ name: 'Polaroid', icon: '📷', desc: 'Polaroid camera', price: 150 });
         }
 
         const shopContent = createElement('div', 'flex flex-col items-center h-full p-6 rock-card shadow-2xl');
@@ -7821,7 +7140,7 @@
 
                 if (guess === targetWord) {
                     gameStatus = 'win';
-                    let scoreIncrease = 50;
+                    let scoreIncrease = 50 - (guesses.length * 10); // Better score for fewer guesses
                     let chop = game.chops.find(i => i.name === 'Social Influence');
 
                     chop.points += updateChopScore('Social Influence', scoreIncrease);
@@ -8277,9 +7596,7 @@
                 game.musicPart.start(0); // Start the part at transport position 0
 
                 // 6. Start the Transport
-                //game.musicTransport.start();
-
-                Tone.Transport.start();
+                game.musicTransport.start();
 
                 updateState({ message: `Streaming LIVE: ${game.currentSong}`, isLoading: false });
 
@@ -8302,23 +7619,20 @@
                 game.musicTransport.stop();
                 game.musicTransport.cancel(0); // Clear all scheduled events
             }
-            const now = Tone.now() + 0.1;
-            if (game.leadSynth && typeof game.leadSynth.releaseAll === 'function') {
+            if (game.leadSynth) {
                 try {
-                    game.leadSynth.releaseAll(now); 
-                    Tone.Transport.stop();
-                    Tone.Transport.cancel(); //
+                    game.leadSynth.releaseAll(); 
                 } catch (e) {
                     console.warn("Synth releaseAll failed:", e);
                 }
             }
 
             // 3. Dispose of the specific Part (the MIDI sequence)
-            //if (game.musicPart) {
-            //    game.musicPart.stop();
-            //    game.musicPart.dispose();
-            //    game.musicPart = null;
-            //}
+            if (game.musicPart) {
+                game.musicPart.stop();
+                game.musicPart.dispose();
+                game.musicPart = null;
+            }
 
             if (game.musicLoop) {
                 game.musicLoop.dispose();
@@ -8810,7 +8124,6 @@
 
           const characterPortraits = {
             'Player' : './faces/habibi.jpg',
-            'Cool Bouncer' : './faces/cool_bouncer.jpg',
             'DJ Robbie' : './faces/dj.jpg',
             'Crazy K' : './faces/crazyk.png',
             'Pop-up Clerk' : './faces/popup.png',
@@ -8818,8 +8131,6 @@
             'Intimidating Bouncer' : './faces/bouncer.png',
             'Bob Mould' : './faces/bob.png',
             'Mama' : './faces/mama.png',
-            'Rick' : './faces/rick.png'
-
 
         };
 
@@ -8829,7 +8140,6 @@
             "SF Fitness": './sprites/kevind-bar.jpg',
             "BESTIE": './sprites/sids.jpg',
             "BITTER END": "./sprites/kevind-bar.jpg",
-            "BITTER END ": "./sprites/bitter.jpg",
             "Metallica Pop-up Store":  "./sprites/popup.jpg",
             "Castro": "./sprites/castro.jpg",
             "Peets" : "./sprites/peets.jpg",
@@ -8842,10 +8152,7 @@
             "Crazy K" : "./sprites/crazy.jpg",
             "Home" : "./sprites/home.jpg",
             "Mama⬇️" : "./sprites/mama.jpg",
-            "Oracle Park" : "./sprites/habibi-oracle.jpg",
-            "Wrestling Club" : "./sprites/grapplersclub.jpg",
-            "GAMH " : "./sprites/gamh.jpg",
-            "GAMH" : "./sprites/gamh-in.jpg"
+            "Oracle Park" : "./sprites/habibi-oracle.jpg"
 
         };
 
@@ -9131,8 +8438,6 @@
         }
     
     function handleClick(name) {
-        
-
         if (!name) return;
         game.currentLocationId = name;
         setPhase(5, '');
@@ -9709,111 +9014,6 @@
             return radioWrapper;
         }
 
-
-         function checkGuess(index, val) {
-            const loc = game.locations[index];
-            const normalizedInput = val.trim().toLowerCase();
-            const normalizedName = loc.name.toLowerCase();
-            
-            // Loose matching: allows "The Painted Ladies" or "Painted Ladies"
-            if (normalizedInput === normalizedName || (normalizedName.includes(normalizedInput) && normalizedInput.length > 5)) {
-                game.solvedLocations.add(index);
-                console.log(loc.id);
-                displayNewLocationAcquired(loc.id);
-                renderGame();
-            }
-        }
-
-        function renderScrapbook() {
-            const scrapbook = createElement('div', 'scrapbook-page p-6 md:p-10 min-h-[600px] flex flex-col relative');
-            
-            // Add decorative water stains
-            scrapbook.appendChild(createElement('div', 'water-stain w-32 h-32 top-10 -left-10'));
-            scrapbook.appendChild(createElement('div', 'water-stain w-48 h-48 bottom-20 -right-10'));
-
-            // Header
-            const header = createElement('div', 'text-center mb-8 border-b border-[#a39476] pb-4');
-            header.innerHTML = `
-                <h2 class="font-handwriting text-3xl text-[#5d4037]">Mama's Scrapbook</h2>
-                <p class="font-handwriting text-sm text-[#8d6e63] mt-1">Memories from San Francisco</p>
-            `;
-            scrapbook.appendChild(header);
-
-            // Photos Grid
-            const grid = createElement('div', 'flex-1 grid grid-cols-1 md:grid-cols-2 gap-10');
-            const startIndex = game.scrapbookPage * 2;
-            const pageItems = game.locations.slice(startIndex, startIndex + 2);
-
-            pageItems.forEach((loc, i) => {
-                const globalIndex = startIndex + i;
-                const isSolved = game.solvedLocations.has(globalIndex);
-                
-                const itemWrapper = createElement('div', 'flex flex-col space-y-4');
-                
-                // Input Field
-                const inputWrapper = createElement('div', 'w-full');
-                if (!isSolved) {
-                    const input = createElement('input', 'w-full bg-transparent border-b-2 border-[#a39476] font-handwriting text-lg focus:outline-none focus:border-[#5d4037] placeholder:text-[#a39476]/50');
-                    input.placeholder = "Write location name...";
-                    input.oninput = (e) => checkGuess(globalIndex, e.target.value);
-                    inputWrapper.appendChild(input);
-                } else {
-                    inputWrapper.innerHTML = `<p class="font-handwriting text-xl text-green-800 flex items-center">✓ ${loc.name}</p>`;
-                }
-
-                // Photo Area
-                const photoSlot = createElement('div', `photo-slot ${isSolved ? 'photo-revealed' : ''}`);
-                if (isSolved) {
-                    photoSlot.innerHTML = `
-                        <div class="text-center">
-                            <span class="check-mark">✓</span>
-                            <p class="font-handwriting font-bold text-[#5d4037] mt-2">${loc.name}</p>
-                        </div>
-                    `;
-                } else {
-                    photoSlot.innerHTML = `<span class="font-handwriting text-[#a39476] text-xs uppercase tracking-widest">Image Missing</span>`;
-                }
-
-                // Description
-                const desc = createElement('div', 'space-y-2');
-                desc.innerHTML = `
-                    <p class="font-handwriting text-sm italic leading-relaxed text-[#5d4037]">"${loc.visual}"</p>
-                    <p class="font-handwriting text-sm italic text-[#6d4c41] mt-2">${loc.sensory}</p>
-                `;
-
-                itemWrapper.appendChild(inputWrapper);
-                itemWrapper.appendChild(photoSlot);
-                itemWrapper.appendChild(desc);
-                grid.appendChild(itemWrapper);
-            });
-
-            scrapbook.appendChild(grid);
-
-            // Pagination Controls
-            const controls = createElement('div', 'mt-10 pt-6 border-t border-[#a39476] flex justify-between items-center');
-            
-            const prevBtn = createElement('button', 'metal-button text-xs', '← Prev');
-            prevBtn.disabled = game.scrapbookPage === 0;
-            prevBtn.style.opacity = game.scrapbookPage === 0 ? '0.3' : '1';
-            prevBtn.onclick = () => { game.scrapbookPage--; renderGame(); };
-
-            const closeBtn = createElement('button', 'metal-button text-xs', 'Close Book');
-            closeBtn.onclick = () => { game.phase = 1; renderGame(); };
-
-            const nextBtn = createElement('button', 'metal-button text-xs', 'Next →');
-            nextBtn.disabled = startIndex + 2 >= game.locations.length;
-            nextBtn.style.opacity = (startIndex + 2 >= game.locations.length) ? '0.3' : '1';
-            nextBtn.onclick = () => { game.scrapbookPage++; renderGame(); };
-
-            controls.appendChild(prevBtn);
-            controls.appendChild(closeBtn);
-            controls.appendChild(nextBtn);
-            scrapbook.appendChild(controls);
-
-            return scrapbook;
-        }
-
-
         function startChapterOne() {
             document.getElementById('app').style.display = 'none';
             document.getElementById('chapterOneView').style.display = 'flex';
@@ -9844,7 +9044,7 @@
 
                         <div class="w-full space-y-4 mb-10">
                             <div class="stat-box p-4 flex justify-between items-center group">
-                                <span class="font-black uppercase tracking-widest text-xs">Easter Eggs Found</span>
+                                <span class="font-black uppercase tracking-widest text-xs">Eastern Eggs Found</span>
                                 <span class="text-2xl font-black italic group-hover:scale-110 transition">${game.secrets}/12</span>
                             </div>
                             <div class="stat-box p-4 flex justify-between items-center group" style="border-color: var(--punk-magenta)">
@@ -10214,21 +9414,25 @@
         };
 
 
-         function renderInventory() {
+        function renderInventory() {
+
+            //addMission(1, 'Testing', true); 
+            //toggleMission(1);
+
             // Main container with the classic dark palette background
-            const inventoryContent = createElement('div', 'flex flex-col items-center h-full p-8 space-y-12 bg-[#1a1a2e] overflow-y-auto');
+            const inventoryContent = createElement('div', 'flex flex-col items-center h-full p-8 space-y-12 bg-[#1a1a2e]');
 
             // Stylized Header
             const title = createElement('h3', 'text-5xl font-black italic text-[#94a3b8] tracking-widest uppercase mb-4', 'INVENTORY');
             title.style.textShadow = '4px 4px 0px rgba(0,0,0,0.5)';
             inventoryContent.appendChild(title);
 
-            const hint = createElement('div', 'text-[10px] text-indigo-400/80 font-mono tracking-[0.2em] uppercase animate-pulse mb-4 flex items-center');
+             const hint = createElement('div', 'text-[10px] text-indigo-400/80 font-mono tracking-[0.2em] uppercase animate-pulse mb-4 flex items-center');
             hint.innerHTML = `<span class="mr-2">▶</span> Select an icon for details <span class="ml-2">◀</span>`;
             inventoryContent.appendChild(hint);
 
             const createClassicGrid = (label, items, onClickAction) => {
-                const wrapper = createElement('div', 'w-full max-w-2xl flex flex-col mb-8');
+                const wrapper = createElement('div', 'w-full max-w-2xl flex flex-col');
                 
                 // Category Label
                 const labelEl = createElement('span', 'text-xs font-bold text-[#64748b] uppercase mb-3 px-1 tracking-[0.2em]', label);
@@ -10237,35 +9441,18 @@
                 // The Grid Container
                 const gridContainer = createElement('div', 'grid grid-cols-4 md:grid-cols-6 gap-1 p-1 bg-[#0f172a] border-4 border-[#334155] shadow-[inset_0_4px_12px_rgba(0,0,0,0.8)]');
 
-                // Render acquired items
+                // Render acquired items or empty slots
                 if (items.length > 0) {
                     items.forEach(item => {
-                        const slot = createElement('div', 'aspect-square flex items-center justify-center bg-[#334155] border-2 border-[#1e293b] shadow-[inset_2px_2px_0px_rgba(255,255,255,0.05),_inset_-2px_-2px_0px_rgba(0,0,0,0.3)] hover:bg-[#475569] active:translate-y-0.5 transition-all cursor-pointer group relative overflow-hidden');
+                        const slot = createElement('div', 'aspect-square flex items-center justify-center bg-[#334155] border-2 border-[#1e293b] shadow-[inset_2px_2px_0px_rgba(255,255,255,0.05),_inset_-2px_-2px_0px_rgba(0,0,0,0.3)] hover:bg-[#475569] active:translate-y-0.5 transition-all cursor-pointer group relative');
                         
                         slot.onclick = () => onClickAction(item);
                         
-                        // Visual Logic: Prefer Image, Fallback to Icon/Emoji
-                        let visualContent = '';
-                        if (item.image) {
-                            visualContent = `
-                                <img src="${item.image}" 
-                                     alt="${item.name}" 
-                                     class="w-4/5 h-4/5 object-contain pixel-image filter drop-shadow-[2px_2px_2px_rgba(0,0,0,0.8)] transform group-hover:scale-110 transition-transform"
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                <div class="hidden text-4xl filter drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transform group-hover:scale-110 transition-transform">
-                                    ${item.icon || (label.includes('TOPIC') ? '💬' : '📦')}
-                                </div>
-                            `;
-                        } else {
-                            visualContent = `
-                                <div class="text-4xl filter drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transform group-hover:scale-110 transition-transform">
-                                    ${item.icon || (label.includes('TOPIC') ? '💬' : '📦')}
-                                </div>
-                            `;
-                        }
-
+                        // Icon with classic drop shadow
                         slot.innerHTML = `
-                            ${visualContent}
+                            <div class="text-4xl filter drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transform group-hover:scale-110 transition-transform">
+                                ${item.icon || (label.includes('TOPIC') ? '💬' : '📦')}
+                            </div>
                             <!-- Decorative Corner Brackets -->
                             <div class="absolute top-0 left-0 w-1 h-1 border-t border-l border-white/10"></div>
                             <div class="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-black/20"></div>
@@ -10273,14 +9460,15 @@
                         gridContainer.appendChild(slot);
                     });
 
-                    // Fill remaining space
-                    const remaining = items.length % 6 === 0 ? 0 : 6 - (items.length % 6);
+                    // Fill remaining space to make a full row of 4/6 (Optional aesthetic choice)
+                    const remaining = items.length % 4 === 0 ? 0 : 4 - (items.length % 4);
                     for(let i = 0; i < remaining; i++) {
                         const empty = createElement('div', 'aspect-square bg-[#1e293b]/30 border-2 border-[#0f172a] shadow-inner opacity-20');
                         gridContainer.appendChild(empty);
                     }
                 } else {
-                    for(let i = 0; i < 6; i++) {
+                    // Full empty state
+                    for(let i = 0; i < 4; i++) {
                         const empty = createElement('div', 'aspect-square bg-[#1e293b]/30 border-2 border-[#0f172a] shadow-inner opacity-20');
                         gridContainer.appendChild(empty);
                     }
@@ -10293,8 +9481,8 @@
             // --- SECTION 1: PHYSICAL ITEMS ---
             const acquiredItems = game.inventory_items.filter(item => item.acquired);
             const itemGrid = createClassicGrid('Physical Assets', acquiredItems, (item) => {
-                const targetPhase = (item.name === 'Chops list') ? 17 : (item.name === 'Scrapbook') ? 21 : 15;
-                setPhase(targetPhase, '', item);
+                const targetPhase = (item.name === 'Chops list') ? 17 : 15;
+                setPhase(targetPhase, '', item); // Fix: Passes 'item' so the view updates
             });
 
             // --- SECTION 2: CONVERSATION TOPICS ---
@@ -10303,7 +9491,6 @@
                 setPhase(15, '', topic);
             });
 
-            // --- SECTION 3: MEMORIES ---
             const memoryItems = Object.entries(game.memories)
                 .filter(([type, count]) => count > 0)
                 .map(([type, count]) => {
@@ -10321,15 +9508,23 @@
             inventoryContent.appendChild(topicGrid);
             inventoryContent.appendChild(itemGrid);
 
+            // Only append if there's at least one memory discovered
             if (memoryItems.length > 0) {
                 const memoryGrid = createClassicGrid('Soul Memories', memoryItems, (memory) => {
+                    // Optional: Define a phase or a specific modal for viewing memory details
                     setPhase(15, '', memory); 
                 });
                 inventoryContent.appendChild(memoryGrid);
             }
 
+            // --- BACK BUTTON ---
+            //const backButton = createElement('button', 'px-10 py-3 text-lg font-bold bg-[#475569] text-white border-b-4 border-[#1e293b] hover:bg-[#64748b] active:border-b-0 active:translate-y-1 transition-all uppercase tracking-widest mt-12', 'CLOSE');
+            //backButton.onclick = () => setPhase(0, '');
+            //inventoryContent.appendChild(backButton);
+
             return inventoryContent;
         }
+
         // --- PHASE 12: ITEM INSPECTION VIEW ---
 
         function renderItem() {
@@ -10512,15 +9707,6 @@
                 }          
             }
 
-            if (notification.item) {
-
-                const newItem = game.inventory_items.find(i => i.name === notification.item);
-
-                if (!newItem.acquired){
-                    game.pendingAcquisition.item = notification.item;
-                } 
-            }
-
             if (notification.topic)  {
 
                 const newTopic = game.conversation_topics.unlocked.find(i => i.name === notification.topic);
@@ -10606,7 +9792,7 @@
                 displayNewTopicAcquired(game.pendingAcquisition.topic);
             } else if (game.pendingAcquisition.item) {
                 // New Topic found, display the topic screen
-                displayNewItemAcquired(game.pendingAcquisition.item);
+                displayNewItemcAcquired(game.pendingAcquisition.topic);
             } else if (game.pendingAcquisition.chop) {
                 // New Topic found, display the topic screen
                 showChopMasteryWindow(game.pendingAcquisition.chop);
@@ -10953,189 +10139,6 @@
 
 
 
-    function StartChapter2() {
-        // 1. Reset Global Game Object
-           Object.assign(game, {
-        score: 100,
-        level: 1,
-        chapter:2,
-        isLLMLoaded: false,
-        secrets: 0,
-        isLoading: false,
-        topics: [],
-        selectedItem: null,
-        alltopics: [],
-        words: [],
-        midis: [],
-        fans: 50,
-        dialogueIndex: 0,
-        dialogueData: '',
-        activeCharacter: '',
-        iPhoneMessage: false,
-        isFanPanelVisible: true,
-        currentTopic: '',
-        questionData: null,
-        questionsData: [],
-        selectedAnswer: null,
-        artists: [
-            'ABBA', 'Backstreet Boys', 'Bruce Springsteen', 'Fleetwood Mac', 'Foo Fighters',
-            'Green Day', 'JanetJackson', 'Journey', 'Led Zeppelin', 'Madonna',
-            'Metallica', 'Michael Jackson', 'Nine Inch Nails', 'Nirvana', 'Pearl Jam',
-            'Phil Collins', 'Pink Floyd', 'Prince', 'R.E.M', 'Radiohead',
-            'Red Hot Chili Peppers', 'Santana', 'Spice Girls', 'The Beatles',
-            'The Police', 'The Smashing Pumpkins', 'Tool', 'U2', 'Van Halen'
-        ],
-        artists_bought: [],
-        message: '',
-        currentBand: '',
-        currentSong: '',
-        timer: 40,
-        timerInterval: null,
-        synth: null,
-        error: null,
-        leadSynth: null,
-        musicTransport: null,
-        musicLoop: null,
-        names: {
-            main: 'Hassan',
-            bestie: 'Sid',
-            bestie2: 'Kevin W',
-            bestie3: 'Kevin D',
-            partner: 'Fran',
-        },
-        paigow: null,
-        familyFeud: {
-            Challenges: [],
-            currentChallenge: null,
-            revealedAnswers: [],
-            strikes: 0,
-            roundPoints: 0,
-            isRoundActive: false,
-            totalPointsScored: 0,
-        },
-        rank: 'Aspiring Artist',
-        totalXP: 0,
-        songCounts: 0,
-        chops: [
-            { name: "Social Influence", points: 0, level: 1, isUnlocked: true, icon: '📣' },
-            { name: "Instrument Synergy", points: 0, level: 1, isUnlocked: true, icon: '🎸' },
-            { name: "Rhythm Mastery", points: 0, level: 1, isUnlocked: true, icon: '🎼' },
-            { name: "Lyrical Flow", points: 0, level: 1, isUnlocked: true, icon: '🖋️' },
-            { name: "Backstage Blueprint", points: 0, level: 1, isUnlocked: true, icon: '📜' },
-            { name: "Stage Presence", points: 0, level: 1, isUnlocked: true, icon: '🎤' }
-        ],
-        chopsDiscovered: true,
-        memories: {
-            Awe: 0, Motivation: 0, Anger: 0, Happiness: 1, Love: 0,
-            Identity: 0, Nostalgia: 0, Freedom: 0, Gratitude: 0, Resilience: 0,
-        },
-        radio: {
-            currentStation: (typeof STATIONS !== 'undefined') ? STATIONS[0] : null,
-            currentTrackIndex: 0,
-            isPlaying: false,
-            volume: -12,
-            player: null
-        },
-        songRecipes: (typeof songRecipesData !== 'undefined') ? songRecipesData : {},
-        mixedScore: { grit: 0, soul: 0, depth: 0 },
-        mixingBoard: [],
-        cinematicData: { videoPath: '', cinematicText: '' },
-        sids_buttons: { showCheerButton: false, showHelpButton: false, money: false , helpChapter2: true},
-        kevind_buttons: { chops: false, practiceChop: false, guitar: false },
-        bridget_buttons: { showHelpButton: false, photo: false, trivia: false, action2: false },
-        crazy_buttons: { showHelpButton: false, showLibrary: false, showPoker: false },
-        cliffs_buttons: { showHelpButton: false },
-        work_buttons: { badge: true },
-        mama_buttons: { showHelpButton: false , showHelpButton2: true, camera:false},
-        home_buttons: { showHelpButton: false, musician: true },
-        bouncer_buttons: { showHelpButton: false, description: 'A giant gorilla is guarding the entrance' , showHelpButton2: true},
-        bob_buttons: { showHelpButton: false, guitar: false, amoeba: false },
-        dj_buttons: { showHelpButton: false, showCD: false, cliffs: false },
-        bestie2_buttons: { showHelpButton: false, practiceChop: false, arn: false },
-        popup_buttons: { tour: false },
-        cool_bouncer_buttons:{showHelpButton2:true},
-        metallica_buttons: { raffle: false },
-        iphoneState: { view: 'notifications', selectedMessageIndex: null },
-        pendingAcquisition: { location: null, topic: null, item: null, chop: null },
-        currentBuildingName: 'Home',
-        currentLocationId: 'Home',
-    });
-
-
-        // 2. Reset Conversation Topics
-        if (game.conversation_topics && game.conversation_topics.unlocked) {
-            game.conversation_topics.unlocked.forEach(topic => {
-                topic.acquired = false;
-            });
-        }
-
-        // 3. Reset Inventory Items
-        if (game.inventory_items) {
-            game.inventory_items.forEach(item => {
-                item.acquired = false;
-            });
-        }
-
-
-        game.kevind_buttons.chops = true
-
-        let inventoryItem = game.inventory_items.find(i => i.name === 'Fender Squier Stratocaster');
-        inventoryItem.acquired = true
-        inventoryItem = game.inventory_items.find(i => i.name === 'Driver\'s License ID');
-        inventoryItem.acquired = true
-        inventoryItem = game.inventory_items.find(i => i.name === 'Cash');
-        inventoryItem.acquired = true
-        inventoryItem = game.inventory_items.find(i => i.name === 'Apex Badge');
-        inventoryItem.acquired = true
-        
-        let topic = game.conversation_topics.unlocked.find(i => i.name === 'Song Writing');
-        topic.acquired = true;
-
-        // 6. Reset Landmark Visibility
-        if (typeof landmarkData !== 'undefined') {
-            Object.keys(landmarkData).forEach(key => {
-                landmarkData[key].hidden = true;
-            });
-        }
-
-        landmarkData['Cliff\'s Variety'].found = true;
-        landmarkData['Cliff\'s Variety'].hidden = true;
-        landmarkData['Castro'].hidden = false;
-        landmarkData['BESTIE'].hidden = false;
-        landmarkData['Mama⬇️'].hidden = false;
-
-        // 4. Initialize Phone Notifications
-        iphoneNotifications = [
-            { 
-                id: 3, 
-                app: game.names.bestie, 
-                emoji: '💬', 
-                summary: 'New message', 
-                fullContent: "Hey mister moves! Let's meet at my place. Testing this message!", 
-                unread: true, 
-                location: 'BESTIE', 
-                topic: null 
-            }
-        ];
-
-         iphoneNotifications = [
-        { id: 4, app: 'Bridget', emoji: '💬', summary: 'New Message', fullContent: "I will be at the Great American Music Hall (GAMH) today if you need me.", unread: true, location: 'GAMH '},
-        {id: 2,app: 'Rick', emoji: '🤼', summary: 'MeetFighters', fullContent: 'Don\’t forget we have training at the Grapplers\' club today!', unread:true, location: 'Wrestling Club', topic:null},
-        { id: 4, app: game.names.bestie3, emoji: '💬', summary: 'New Message', fullContent: "Come meet me at the Lagunitas Brewery! Free beer samplings!", unread: true, location: 'Lagunitas⬆️ '},
-        { id: 3, app: 'Oasis Club', emoji: '📧', summary: 'ASHEq party!', fullContent: "Check out ASHEQ! The Middle East/North African LGBTQ+ Dance Party at OASIS tonight! ", unread: true, location: 'Oasis'},
-        ]
-
-
-        // 5. Initialize Missions
-        missions = [
-            { id: 'music', text: 'Learn how to write a song!', completed: false, urgent: true },
-        ];
-        
-        console.log("Chapter 2 Setup Complete.");
-        handleClick('Home');
-
-    }
-
 
     const container = document.getElementById('game-container');
    
@@ -11162,7 +10165,6 @@
             case 3: contentElement = renderPhase3(); break;
             case 4: contentElement = renderAmoeba(); break;
             case 5: contentElement = renderLocation();break;
-            case 6: contentElement = renderConfig(); break;
             case 7: contentElement = renderPhase7(); break;
             case 8: contentElement = renderPhase8(); break;
             case 9: contentElement = renderPhase9(); break;
@@ -11177,7 +10179,6 @@
             case 18: contentElement = renderPhase_setup(); break;
             case 19: contentElement = renderCliffs(); break;
             case 20: contentElement = renderPoker(); break;
-            case 21: contentElement = renderScrapbook(); break;
             case 99: contentElement = renderCinematic(); break;
             case 100: contentElement = startCinematic(); break;
             default:
@@ -11229,7 +10230,7 @@
     }
 
 
-   // Initialize the game when the window loads
+    // Initialize the game when the window loads
     window.onload = () => {
             renderGame();
         };
@@ -11271,7 +10272,6 @@
     window.bridget_action3 = bridget_action3;
     window.bridget_action4 = bridget_action4;
     window.bridget_action5 = bridget_action5;
-    window.cool_bouncer_action1 = bouncer_action1;
     window.bouncer_action1 = bouncer_action1;
     window.bouncer_action2 = bouncer_action2;
     window.bestie2_action1 = bestie2_action1;
@@ -11296,18 +10296,13 @@
     window.get_book = get_book;
     window.crazy_book = crazy_book;
     window.home_action1 = home_action1;
-    window.rick_request_help = rick_request_help;
-    window.rick_action1 = rick_action1;
     window.bestie2_request_help = bestie2_request_help;
     window.bestie2_chops = bestie2_chops;
     window.bob_request_help = bob_request_help;
     window.crazy_request_help = crazy_request_help;
     window.bouncer_request_help = bouncer_request_help;
-    window.bouncer_request_help2 = bouncer_request_help2;
-    window.cool_bouncer_request_help = cool_bouncer_request_help;
     window.sids_request_help = sids_request_help;
     window.mama_request_help = mama_request_help;
-    window.mama_request_help2 = mama_request_help2;
     window.bridget_request_help = bridget_request_help;
     window.dj_request_help = dj_request_help;
     window.dj_action1 = dj_action1;
@@ -11322,7 +10317,6 @@
     window.exitChapterOne = exitChapterOne;
     window.closeCelebration = closeCelebration;
     window.checkChopMastery = checkChopMastery;
-    window.renderScrapbook = renderScrapbook;
     window.cheat = cheat;
     window.resumeContext = resumeContext;
     window.stopRadio = stopRadio;
