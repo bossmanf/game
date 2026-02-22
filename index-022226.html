@@ -1902,6 +1902,7 @@
                     });
                 }
             });
+            console.log(library);
             return library;
         }
 
@@ -2168,8 +2169,7 @@
             },
             fishermans_buttons:{
                 food:false,
-                drink:false,
-                first:true
+                drink:false
             },
             cool_bouncer_buttons:
             {
@@ -2190,8 +2190,7 @@
             tom_buttons:
             {
                 call:false,
-                cry:true,
-                copies:false
+                cry:true
             },
             bob_buttons:
             {
@@ -3074,7 +3073,7 @@
 
             "Sage & Drifter": { X: 220, Y: 410, W: 60, H: 40, category: "sagebar", emoji: "🍺", actionKey: "sagebar", hidden: true , description: "Neighborhood hangout offering cocktails, craft beers, and happy hours", character: 'Bobby'},
 
-             "Presidio": { X: 310, Y: 220, W: 50, H: 40, category: "presidio", emoji: "🚲", actionKey: "presidio", description: "Park and former U.S. Army post on the northern tip of the San Francisco", hidden: true, character: 'Matt' },
+             "Presidio": { X: 298, Y: 220, W: 50, H: 40, category: "presidio", emoji: "🚲", actionKey: "presidio", description: "Park and former U.S. Army post on the northern tip of the San Francisco", hidden: true, character: 'Matt' },
 
 
 
@@ -3258,6 +3257,7 @@
             iphoneNotifications = iphoneNotifications.slice(1);            
             iphoneNotifications = appendNotification(iphoneNotifications,'Bobby', 'Hey habibi! I am hosting a fundraising event at the Sage & Drifter Bar. Wanna pass by?', '💬', 'Sage & Drifter');
             playMovie('./videos/lombard-video.mp4', 'You bring mama and visit together Lombard Street!');
+            console.log(game.mama_buttons.photos);
             if (game.mama_buttons.photos === 6){
                 let inventoryItem = game.inventory_items.find(i => i.name === 'Completed Scrapbook');
                 inventoryItem.acquired = true;
@@ -3380,7 +3380,7 @@
             game.tom_buttons.cry = false;
             landmarkImageRegistry["APEX Office "] = './sprites/tom-no-cry.jpeg';
             characterPortraits["Tom"] = './faces/tom.jpg';
-            iphoneNotifications = appendNotification(iphoneNotifications,'Tom', 'WoW I have a date! Thanks so much! Is there anything I can do for you? Nutritional advice? Corporate printing?','💬',  '');
+            iphoneNotifications = appendNotification(iphoneNotifications,'Tom', 'WoW I have a date! Thanks so much! Let me help you with those copies of your completed sign!','💬',  '');
             const dialogueHtml = renderDialogue(tom_wingman_dialogue , "Woman");
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
@@ -3432,9 +3432,8 @@
 
         function home_action1(){
             game.home_buttons.showHelpButton = false;
-            //let topic = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
-            //topic.acquired = true;
-            game.pendingAcquisition.topic = 'Musician Career'
+            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
+            topic.acquired = true;
             const dialogueHtml = renderDialogue(intro_dialogue_data , game.names.main);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
@@ -3923,10 +3922,7 @@
 
             }
             else{
-                let inventoryItem = game.inventory_items.find(i => i.name === 'Complete Gig Sign');
-                inventoryItem.acquired = false;
                 game.pendingAcquisition.item = 'Gig Sign Copies';
-                game.tom_buttons.copies = true;
                 playMovie('./videos/tom-copies.mp4', 'Tom makes multiple copies for you! Now you are ready to use them to promote the gig!');
             }
 
@@ -3996,7 +3992,7 @@
                     game.kevind_buttons.camera = true;
                 }
 
-            addMission('lagunitas', 'Create a sign with '+game.names.bestie3+' and a camera, add text, make copies, and post it everywhere!');
+            addMission('lagunitas', 'Play at Lagunitas by fulfilling all the requirements')
             const dialogueHtml = renderDialogue(kevind_sign_dialogue_data, game.names.bestie3);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv); 
@@ -4008,6 +4004,7 @@
         function lagunitas_sign_photo(){
             game.currentLocationId = 'Lagunitas⬆️';
             game.pendingAcquisition.item = 'Gig Sign';
+            addMission('sign','Create a sign with '+game.names.bestie3+', add text, make copies, and post it everywhere!')
             playMovie('./videos/lagunitas-sign-photo.mp4', 'The photo session is a success! You have a great sign that needs a good message'); 
 
 
@@ -5146,19 +5143,6 @@
                         </div>
                 </div>
                 
-                 <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="fisherman_songwriting()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Greet ${data.character} </span>
-                            </button>
-                        </div>
-                </div>
-
-                f
-
-
-
                  ${(game.mama_buttons.polaroid  && game.mama_buttons.fisherman_taken) ? `
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
                     <button onclick="fishermans_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
@@ -5172,6 +5156,7 @@
 
         lands: (name, data) => {
             currentContext = { name, data };
+            console.log(game.mama_buttons.polaroid, game.mama_buttons.lands_taken);
             return `
                     <div class="mb-8">
                     <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
@@ -5203,16 +5188,6 @@
                     </button>
                 </div>
                 ` : ''}
-
-
-                   ${game.tom_buttons.copies ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="landsend_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Post your gig poster</span>
-                    </button>
-                </div>
-                ` : ''}
-
             `;               
         },
 
@@ -7224,6 +7199,7 @@
             const line = dialogueData[currentIndex];
             game.dialogueData = dialogueData;
             game.activeCharacter = characterName;
+            console.log('Dialogue:', dialogueData);
             if (!line) {
                 game.dialogueData = null;
                 screen_return();
@@ -7247,6 +7223,7 @@
                 characterPortraitName = characterPortraits[characterName];
             }
             
+            console.log('Line:', line)
             const isPlayer = line.speaker === 'Player';
             const speakerDisplayName = isPlayer ? game.names.main : characterName;
             const portraitUrl = isPlayer ? characterPortraits['Player'] : characterPortraitName;
@@ -7317,7 +7294,6 @@
 
         function addChopAvailable(chopName) {
             const chop = game.chops.find(c => c.name.toLowerCase() === chopName.toLowerCase());
-
 
             if (chop) {
                 chop.available += 1;
@@ -7452,28 +7428,24 @@
         }
 
         function fisherman_songwriting(){
-
-            if (game.fishermans_buttons.first){
-                game.fishermans_buttons.first = false;
-                game.currentLocationId = 'Fisherman\'s Wharf';
-                const musician_dialogue = [
-                    { speaker: 'Player', text: "I've walked this Wharf a thousand times, but I've never heard anyone play like you! 🎸✨" },
-                    { speaker: 'BESTIE', text: "Most people just hear the noise; it’s nice to meet a pair of ears that hear the truth, sugar 🌊🎶" },
-                    { speaker: 'Player', text: "Are those... songbooks in your crate? There must be fifty of them! All hand-written?" },
-                    { speaker: 'BESTIE', text: "Every frequency the city has hummed since the Summer of Love is in those pages. They’re my archives. My legacy. My retirement plan, if the birds ever start paying rent. 📖🐦" },
-                    { speaker: 'Player', text: "I'm trying to find my own voice in this city. I need to learn more lyric structures. Would you be willing to lend me one?" },
-                    { speaker: 'BESTIE', text: "I don't sell the soul for cash. But look at poor Jimi—he’s a growing boy, and this city’s trash-can diet is doing nothing for his spirit or mine. 🐶" },
-                    { speaker: 'Player', text: "You need real sustenance. Not the processed stuff the tourists leave behind." },
-                    { speaker: 'BESTIE', text: "Exactly. If you can find him some real USDA biodynamic, pasture-raised, Organic fuel—both fluids and solid nutrients, I’ll let you have one of my song books" },
-                    { speaker: 'Player', text: "Don't let that melody slip away while I'm gone!" }
-                ];
-                addMission('dog', 'Find Jimi the dog 🐶 some USDA organic fluid and solid food');
-                game.pendingAcquisition.topic = 'Organic Food';
-                const dialogueHtml = renderDialogue(musician_dialogue, 'Musician');
-                const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-                switchToView(contentDiv);
-
-            }
+            game.currentLocationId = 'Fisherman\'s Wharf';
+            const musician_dialogue = [
+                { speaker: 'Player', text: "I've walked this Wharf a thousand times, but I've never heard anyone play like you! 🎸✨" },
+                { speaker: 'BESTIE', text: "Most people just hear the noise; it’s nice to meet a pair of ears that hear the truth, sugar 🌊🎶" },
+                { speaker: 'Player', text: "Are those... songbooks in your crate? There must be fifty of them! All hand-written?" },
+                { speaker: 'BESTIE', text: "Every frequency the city has hummed since the Summer of Love is in those pages. They’re my archives. My legacy. My retirement plan, if the birds ever start paying rent. 📖🐦" },
+                { speaker: 'Player', text: "I'm trying to find my own voice in this city. I need to learn more lyric structures. Would you be willing to lend me one?" },
+                { speaker: 'BESTIE', text: "I don't sell the soul for cash. But look at poor Jimi—he’s a growing boy, and this city’s trash-can diet is doing nothing for his spirit or mine. 🐶" },
+                { speaker: 'Player', text: "You need real sustenance. Not the processed stuff the tourists leave behind." },
+                { speaker: 'BESTIE', text: "Exactly. If you can find him some real USDA biodynamic, pasture-raised, Organic fuel—both fluids and solid nutrients, I’ll let you have one of my song books" },
+                { speaker: 'Player', text: "Don't let that melody slip away while I'm gone!" }
+            ];
+            addMission('dog', 'Find Jimi the dog 🐶 some USDA organic fluid and solid food')
+            game.pendingAcquisition.topic('Organic Food')
+            const dialogueHtml = renderDialogue(musician_dialogue, 'Musician');
+            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
+            switchToView(contentDiv);
+            addMission('Find organic food for the musician at Fisherman’s Wharf');
 
         }
 
@@ -8237,6 +8209,7 @@
             }
 
             const statusBar = document.getElementById('status-bar-output');
+                console.log('statusBar', statusBar)
             if (statusBar) {
                 statusBar.innerHTML = message;
                 statusBar.classList.add('border-emerald-500', 'animate-pulse-quick');
@@ -8488,6 +8461,7 @@
             // Background click to close
             overlay.onclick = () => closeSequence();
 
+            console.log(`Topic Unlocked: ${topicName}`);
         }
 
        function displayNewLocationAcquired(locationName) {
@@ -8500,6 +8474,7 @@
 
             // If it's already found, we don't show the big celebratory window
             if (!newlocation.hidden) {
+                console.log(`${locationName} already found.`);
                 return;
             }
 
@@ -8982,12 +8957,10 @@
 
                 const response = await fetch('./trivia-questions.txt');
                 game.questionsData = await response.json();
-                if (game.chapter ===1){
-                    game.score = 50; 
-                }
-                else{
-                    game.score = 300;
-                }
+
+                game.score = 50; // Reset score for initial display
+                // Set initial chops values for display test (sum is 371)
+               
 
                 // Fetch, split, trim, and filter in one chain
                 game.words = (await read_wordle.text())
@@ -9372,6 +9345,7 @@
             try {
                 const parsed = loadTriviaQuestion(topic);
 
+                console.log(parsed);
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
                         questionData: parsed,
@@ -9398,6 +9372,7 @@
         function handleAnswerSelect(answer) {
             if (game.selectedAnswer !== null || game.isLoading) return; 
 
+            console.log(game.questionData);
             if (game.selectedAnswer !== null || game.isLoading) return; 
 
             let newScore = game.chops["Backstage Blueprint"];
@@ -9817,6 +9792,7 @@
          function renderPhase_setup() {
 
             const station = STATIONS.find(s => s.id === 'rock');
+            
             game.radio.currentStation = station;
             game.radio.currentTrackIndex = 0;
             game.radio.errorState = false;
@@ -10864,9 +10840,7 @@
 
         function startPhase8Challenge() {
             stopRadio();
-
             if (!game.selectedPracticeArtist) return;
-
 
             // 1. Normalize the selected artist name
             const normalizedArtist = game.selectedPracticeArtist.toLowerCase().replace(/ /g, '_');
@@ -10876,7 +10850,6 @@
                 midiPath.toLowerCase().startsWith(normalizedArtist + '/')
             );
 
-
             if (artistPool.length === 0) {
                 // Use custom message instead of alert
                 updateState({ message: `No songs found for ${game.selectedPracticeArtist}!` });
@@ -10885,7 +10858,8 @@
 
             // 3. Pick a random MIDI
             const rawMidi = artistPool[Math.floor(Math.random() * artistPool.length)];
-            console.log(rawMidi);
+
+            // PREPARE STATE BEFORE RENDER
             const parts = rawMidi.split('/');
             const bandRaw = parts[0];
             const songRaw = parts[1].replace(/\.midi?$/i, '');
@@ -10899,11 +10873,14 @@
             playMusicChallenge('./midis/' + rawMidi);
             startTimer();
 
+            // 5. CRITICAL: Update state and force phase 8 re-render
+            // We pass phase: 8 to ensure the router picks the "Challenge Active" branch of renderPhase8
             updateState({ 
                 message: `Now streaming: ${game.currentSong}. GUESS THE SONG (do not write special characters!`, 
                 phase: 8 
             });
 
+            // Manual DOM refresh to be safe
             setPhase(8, `Guessing: ${game.currentSong}`);
         }
 
@@ -11207,7 +11184,7 @@
                     <!-- Header -->
                     <div class="text-center mb-6">
                         <h1 class="text-3xl font-bold title-font text-electric-cyan">MUSIC FEUD</h1>
-                        <p class="text-[10px] font-mono text-gray-400 mt-1 tracking-[0.2em]">Guess 3 out of the top 5 answers</p>
+                        <p class="text-[10px] font-mono text-gray-400 mt-1 tracking-[0.2em]">Guess the top 5 answers</p>
                     </div>
 
                     <!-- Question Box -->
@@ -11966,7 +11943,7 @@
                     game.radio.isPlaying = true;
                     game.radio.errorState = false;
                     // Ensure UI reflects active state
-                    //setTimeout(renderGame, 50);
+                    setTimeout(renderGame, 50);
                 },
                 onerror: (err) => {
 
@@ -12547,9 +12524,8 @@
         function exitChapterOne() {
             document.getElementById('chapterOneView').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
-            handleClick('Home');
-            home_action1();
-            //displayNewTopicAcquired('Musician Career');
+
+            displayNewTopicAcquired('Musician Career');
 
            // setPhase(10, 'Start the day');
            // handleClick(game.currentLocationId);
@@ -13814,7 +13790,7 @@
             'Red Hot Chili Peppers', 'Santana', 'Spice Girls', 'The Beatles',
             'The Police', 'The Smashing Pumpkins', 'Tool', 'U2', 'Van Halen'
         ],
-        artists_bought: ['Metallica', 'U2', 'Prince', 'The Smashing Pumpkins', 'Madonna', 'Nirvana'],
+        artists_bought: [],
         message: '',
         currentBand: '',
         currentSong: '',
@@ -13846,12 +13822,12 @@
         totalXP: 0,
         songCounts: 0,
         chops: [
-            { name: "Social Influence", points: 0, level: 1, available:0, isUnlocked: true, icon: '📣' },
-            { name: "Instrument Synergy", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🎸' },
-            { name: "Rhythm Mastery", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🎼' },
-            { name: "Lyrical Flow", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🖋️' },
-            { name: "Backstage Blueprint", points: 0, level: 1,  available:0, isUnlocked: true, icon: '📜' },
-            { name: "Stage Presence", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🎤' }
+            { name: "Social Influence", points: 0, level: 1, isUnlocked: true, icon: '📣' },
+            { name: "Instrument Synergy", points: 0, level: 1, isUnlocked: true, icon: '🎸' },
+            { name: "Rhythm Mastery", points: 0, level: 1, isUnlocked: true, icon: '🎼' },
+            { name: "Lyrical Flow", points: 0, level: 1, isUnlocked: true, icon: '🖋️' },
+            { name: "Backstage Blueprint", points: 0, level: 1, isUnlocked: true, icon: '📜' },
+            { name: "Stage Presence", points: 0, level: 1, isUnlocked: true, icon: '🎤' }
         ],
         chopsDiscovered: true,
         memories: {
@@ -13961,17 +13937,7 @@
             { id: 'gig', text: 'I need to learn how to secure some gigs!', completed: false, urgent: true },
         ];
 
-        const station = STATIONS.find(s => s.id === 'rock');
-        game.radio.currentStation = station;
-        game.radio.currentTrackIndex = 0;
-        game.radio.errorState = false;
-        if (!game.radio.isPlaying)  { 
-            playTrack();
-            game.radio.isPlaying=true;
-        }
-
-        initializeGame();
-
+        
         console.log("Chapter 2 Setup Complete.");
         handleClick('Home');
 

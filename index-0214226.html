@@ -1688,7 +1688,6 @@
                     missions, 
                     LEVEL_CONFIG, 
                     landmarkData, 
-                    songRecipes,
                     timestamp: new Date().toISOString() 
                 };
 
@@ -1829,25 +1828,17 @@
 
 
 
-
         const songRecipesData = [
-
-            { id: 1, title: 'Validation Rules', type: 'Self-Acceptance', required: ['Identity', 'Happiness'], mix: { grit: 0, soul: 4, depth: 2 }, target: 'High Soul Req', found: false ,  available: true},
-            { id: 2, title: 'No More Clocks', type: 'Uptempo Punk', required: ['Freedom', 'Happiness'], mix: { grit: 1, soul: 1, depth: 2 }, target: 'Simple, energetic', found: false ,  available: true},
-
-            { id: 3, title: 'Fade To White', type: 'Jazzy Fusion', required: ['Awe', 'Identity'], mix: { grit: 0, soul: 3, depth: 4 }, target: 'Deep and Jazzy', found: false , available: false},
-            { id: 4, title: 'Imagine all', type: 'Rock Hythm', required: ['Resilience', 'Love'], mix: { grit: 2, soul: 2, depth: 2 }, target: 'Balanced Mix Req', found: false,  available: false },
-            { id: 5, title: 'Endless Road', type: 'Road Trip Rock', required: ['Freedom', 'Awe'], mix: { grit: 0, soul: 2, depth: 4 }, target: 'High Flow Req', found: false ,  available: false},
-      
-            { id: 6, title: 'See You In Nothing', type: 'Punk Anthem', required: ['Freedom', 'Resilience'], mix: { grit: 4, soul: 0, depth: 2 }, target: 'High Grit Req', found: false ,  available: false},
-            { id: 7, title: 'Ajekbek Kulish', type: 'Power Ballad', required: ['Love', 'Happiness'], mix: { grit: -2, soul: 5, depth: 2 }, target: 'Deep Joy', found: false ,  available: false}
-
-          //  { id: 5, title: 'Six Strings Away', type: 'Blues Rock', required: ['Nostalgia', 'Anger'], mix: { grit: 3, soul: 0, depth: 3 }, target: "Slim's (Mid Grit, Mid Flow)", found: false ,  available: false},
-           // { id: 6, title: 'The Second Act', type: 'Motivational', required: ['Motivation', 'Gratitude'], mix: { grit: 1, soul: 2, depth: 3 }, target: 'General Use (Good Flow/Soul)', found: false,  available: false },
-           // { id: 7, title: 'Golden Compass', type: 'Inspiration', required: ['Awe', 'Motivation'], mix: { grit: 0, soul: 1, depth: 5 }, target: 'City Lights Bookstore interaction', found: false ,  available: false},
-
-            //{ id: 9, title: 'Anchor Song', type: 'Slow Jam', required: ['Love', 'Gratitude'], mix: { grit: -1, soul: 5, depth: 2 }, target: "Mama's House interaction", found: false ,  available: false},
-            //{ id: 10, title: 'Black and Blue', type: 'Heavy Blues', required: ['Freedom', 'Anger'], mix: { grit: 3, soul: 0, depth: 2 }, target: 'Fillmore (Requires higher Flow)', found: false ,  available: false},
+            { id: 1, title: 'Concrete Heart', type: 'Punk Anthem', required: ['Resilience', 'Anger'], mix: { grit: 5, soul: -2, depth: 2 }, target: 'Bottom of the Hill (High Grit Req)', found: false , available: true},
+            { id: 2, title: 'Fuzz & Flowers', type: 'Power Ballad', required: ['Resilience', 'Love'], mix: { grit: 2, soul: 2, depth: 2 }, target: 'The Chapel (Balanced Mix Req)', found: false,  available: false },
+            { id: 3, title: 'Endless Road', type: 'Road Trip Rock', required: ['Freedom', 'Awe'], mix: { grit: 0, soul: 2, depth: 4 }, target: 'Unlocks travel to SoCal (High Flow Req)', found: false ,  available: false},
+            { id: 4, title: 'Mirror Smile', type: 'Self-Acceptance', required: ['Identity', 'Happiness'], mix: { grit: 0, soul: 4, depth: 2 }, target: 'Castro Theater (High Soul Req)', found: false ,  available: true},
+            { id: 5, title: 'Six Strings Away', type: 'Blues Rock', required: ['Nostalgia', 'Anger'], mix: { grit: 3, soul: 0, depth: 3 }, target: "Slim's (Mid Grit, Mid Flow)", found: false ,  available: false},
+            { id: 6, title: 'The Second Act', type: 'Motivational', required: ['Motivation', 'Gratitude'], mix: { grit: 1, soul: 2, depth: 3 }, target: 'General Use (Good Flow/Soul)', found: false,  available: false },
+            { id: 7, title: 'Golden Compass', type: 'Inspiration', required: ['Awe', 'Motivation'], mix: { grit: 0, soul: 1, depth: 5 }, target: 'City Lights Bookstore interaction', found: false ,  available: false},
+            { id: 8, title: 'No More Clocks', type: 'Uptempo Punk', required: ['Freedom', 'Happiness'], mix: { grit: 0, soul: 3, depth: 2 }, target: 'Dali City Garage (Simple, energetic)', found: false ,  available: false},
+            { id: 9, title: 'Anchor Song', type: 'Slow Jam', required: ['Love', 'Gratitude'], mix: { grit: -1, soul: 5, depth: 2 }, target: "Mama's House interaction", found: false ,  available: false},
+            { id: 10, title: 'Black and Blue', type: 'Heavy Blues', required: ['Freedom', 'Anger'], mix: { grit: 3, soul: 0, depth: 2 }, target: 'Fillmore (Requires higher Flow)', found: false ,  available: false},
         ];
 
         const RAW_SONGS_DATA = `
@@ -1902,6 +1893,7 @@
                     });
                 }
             });
+            console.log(library);
             return library;
         }
 
@@ -1933,10 +1925,6 @@
             midis: [],
             fans: 0,
             hype: 0,
-            songs: 0,
-            candy: 0,
-            musician: 0,
-            dancers: 0,
             musicPart: {},
             dialogueIndex: 0,
             dialogueData: '', 
@@ -2050,12 +2038,12 @@
             songCounts: 0,
             // Musician Chop Skills (XP values)
             chops: [
-                { name: "Social Influence", points: 0, level: 0, available:0, isUnlocked: false, icon: '📣' },
-                { name: "Instrument Synergy", points: 0, level: 0, available:0, isUnlocked: false, icon: '🎸' },
-                { name: "Rhythm Mastery", points: 0, level: 0, available:0, isUnlocked: false, icon: '🎼' },
-                { name: "Lyrical Flow", points: 0, level: 0, available:0, isUnlocked: false, icon: '🖋️' },
-                { name: "Backstage Blueprint", points: 0, level: 0, available:0, isUnlocked: false, icon: '📜' },
-                { name: "Stage Presence", points: 0, level: 0, available:0, isUnlocked: false, icon: '🎤' }
+                { name: "Social Influence", points: 0, level: 0, isUnlocked: false, icon: '📣' },
+                { name: "Instrument Synergy", points: 0, level: 0, isUnlocked: false, icon: '🎸' },
+                { name: "Rhythm Mastery", points: 0, level: 0, isUnlocked: false, icon: '🎼' },
+                { name: "Lyrical Flow", points: 0, level: 0, isUnlocked: false, icon: '🖋️' },
+                { name: "Backstage Blueprint", points: 0, level: 0, isUnlocked: false, icon: '📜' },
+                { name: "Stage Presence", points: 0, level: 0, isUnlocked: false, icon: '🎤' }
             ],
 
             chopsDiscovered : false,
@@ -2096,8 +2084,7 @@
             {
                 chops:false,
                 practiceChop: false,
-                guitar: false,
-                lagunitas: false
+                guitar: false
             },
             rick_buttons:
             {
@@ -2113,8 +2100,7 @@
                 photo: false,
                 trivia: false,
                 action2: true,
-                gig: false,
-                unlock:false
+                gig: false
             },
             crazy_buttons:
             {
@@ -2127,49 +2113,17 @@
                 showHelpButton:true
 
             },
-            bobby_buttons:
-            {
-                showHelpButton:true,
-                showBike :false, 
-                bike:false
-
-            },
-            presidio_buttons:
-            {
-                race:false
-            },
-            matt_buttons:
-            {
-
-                showHelpButton:true
-    
-            },
-            
             work_buttons:{
 
                 badge: true
             },
             mama_buttons:{
                 showHelpButton:true,
-                showHelpButton2:true,
-                polaroid:false,
-                camera:false,
-                photos: 0,
-                coit_taken : true,
-                lombard_taken : true,
-                lands_taken : true,
-                fisherman_taken : true,
-                alcatraz_taken : true,
-                painted_taken : true
+                showHelpButton2:true
             },
             home_buttons:{
                 showHelpButton: true,
                 musician: true
-            },
-            fishermans_buttons:{
-                food:false,
-                drink:false,
-                first:true
             },
             cool_bouncer_buttons:
             {
@@ -2190,8 +2144,7 @@
             tom_buttons:
             {
                 call:false,
-                cry:true,
-                copies:false
+                cry:true
             },
             bob_buttons:
             {
@@ -2338,10 +2291,20 @@
                         'Wrestling Club' : 'Training camp is over when this list is finished.'
                     }},
 
+                    {name: 'San Francisco Attire', icon: '👕', acquired: false, desc: 'I need to dress like a Bay Area person to get access to Lagunitas...', image: './sprites/sf-attire.jpg',
+                        actions : {'BESTIE': 'sid_action6' 
+                                   
+                                },
+                    messages: {
+                        
+                        'Lagunitas⬆️ ' : 'Exactly. You do not look like an authentic San Franciscan',
+                        'Mama⬇️': 'Do you need me to go to the store for you, habibi?',
+                        'Wrestling Club' : 'A singlet is always the answer!'
+                    }},
 
 
                     {name: 'Song Writing', icon:'📑', acquired: false, desc: 'I need to learn how to write songs!', image: './sprites/songwriting.jpg',
-                        actions : {'Castro Gym': 'bestie2_action7' , 'Fisherman\'s Wharf': 'fisherman_songwriting'
+                        actions : {'Castro Gym': 'bestie2_action7' 
                                    
                                 },
                     messages: {
@@ -2373,20 +2336,8 @@
                     }},
 
 
-
-                    {name: 'San Francisco Attire', icon: '👕', acquired: false, desc: 'I need to dress like a Bay Area person to get access to Lagunitas...', image: './sprites/sf-attire.jpg',
-                        actions : {'BESTIE': 'sid_action6' 
-                                   
-                                },
-                    messages: {
-                        
-                        'Lagunitas⬆️ ' : 'Exactly. You do not look like an authentic San Franciscan',
-                        'Mama⬇️': 'Do you need me to go to the store for you, habibi?',
-                        'Wrestling Club' : 'A singlet is always the answer!'
-                    }},
-
-                    {name: 'Tom\'s Passion', icon:'👳‍♂️', acquired: false, image: './sprites/Tom_love.png', desc: 'Tom wants to date Asian Women', 
-                        actions : {'Lands End':'landsend_woman'},
+                    {name: 'Tom\'s passion', icon:'👳‍♂️', acquired: false, image: './sprites/Tom_love.png', desc: 'Tom wants to date Asian Women', 
+                        actions : {},
                     messages: {
                         'BITTER END': '',
                         'Mama⬇️': '',
@@ -2408,23 +2359,6 @@
                         'Mama⬇️': '',
                         'Wrestling Club' : ''
                     }},
-
-                     {name: 'Matt\'s sauces', icon:'🥫', acquired: false, image: './sprites/matt-sauces.png', desc: 'Matt is obsessed with extravagant sauces and will not accept cash', 
-                        actions : {},
-                    messages: {
-                        'BITTER END': '',
-                        'Mama⬇️': '',
-                        'Wrestling Club' : ''
-                    }},
-
-                     {name: 'Organic Food', icon:'🦴', acquired: false, image: './sprites/dog-food.png', desc: 'Jimi the dog needs organic liquid and solid food', 
-                        actions : {'Lands End':'landsend_food', 'APEX Office ':'tom_food', 'BESTIE': 'sid_food'},
-                    messages: {
-                        'BITTER END': '',
-                        'Mama⬇️': '',
-                        'Wrestling Club' : ''
-                    }},
-                    
 
                 ],
                 newTopicA: null, // Will hold the latest acquired topic string
@@ -2464,7 +2398,7 @@
                     }},
 
 
-                    { name: "Cash", icon: '💵', acquired: true, image: './sprites/cash.jpg', desc: 'Money, money! Essential for street purchases, bribes, and late-night eats!' ,  actions: {'Metallica Pop-up Store': 'handleRaffleEntry', 'Sage & Drifter': 'bobby_action1'},
+                    { name: "Cash", icon: '💵', acquired: true, image: './sprites/cash.jpg', desc: 'Money, money! Essential for street purchases, bribes, and late-night eats!' ,  actions: {'Metallica Pop-up Store': 'handleRaffleEntry'},
                     messages: 
                         { 'BESTIE': 'You are giving ME money... Really?',
                         'BITTER END': 'Do you want to buy another round?',
@@ -2477,8 +2411,7 @@
                         'Mama⬇️': 'Oh, buy yourself a nice sweater, dear. It gets so chilly in the city.',
                         'The Fillmore ': 'Enough for a coffee and a pack of strings. Don\'t let the label see you have it.',
                         'Wrestling Club' : 'Dusty Rhodes used to say cash is king, but the belt is God. Keep the green stuff.',
-                        'BITTER END ' : 'Using physical currency is so... aggressively tactile. I haven\'t touched a \'bill\' since I switched to my biometric-scan payment ring.',
-                        'Lands End' : 'Do you think I offer some type of services...?'
+                        'BITTER END ' : 'Using physical currency is so... aggressively tactile. I haven\'t touched a \'bill\' since I switched to my biometric-scan payment ring.'
                     }},
 
                      { name: 'Fender Squier Stratocaster', acquired: true, image: './sprites/guitar.png', icon: '🎸', desc: 'My first guitar! Humble beginnings with a classic sound.' ,actions: { 'Crazy K': 'crazy_action2', 'The Fillmore ':'bob_action4' , 'BITTER END': 'kevind_action6', 'Metallica Pop-up Store':'popup_action2','BESTIE':'sid_action3','HSB Festival':'bridget_action5','The 440':'dj_action4', 'Peets':'bestie2_action4','Mama⬇️':'mama_action3'} ,
@@ -2818,19 +2751,8 @@
                     }
                 },
 
-                 { name: 'Scrapbook', acquired: false, image:'./sprites/scrapbook.png', price: '', icon: '📖', desc: 'Mama\'s damaged scrapbook',
+                 { name: 'Scrapbook', acquired: false, image:'./sprites/scrapbook.png', price: '', icon: '📖', desc: 'Mama\s damaged scrapbook',
                     actions : {},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-                { name: 'Completed Scrapbook', acquired: false, image:'./sprites/scrapbook_completed.png', price: '', icon: '📖', desc: 'Mama\'s scrapbook with new photos, ready to give her back',
-                    actions : {'Mama⬇️':'mama_action5'},
                     messages: {
                     'BITTER END': ' ',
                     'BESTIE': '',
@@ -2874,7 +2796,7 @@
                 },
 
                  { name: 'Complete Gig Sign', acquired: false, image: './sprites/complete-sign.png', price: '', icon: '🔐', desc: 'An exciting gig sign! Now we need many copies!',
-                    actions : { 'APEX Office ':'tom_copies'},
+                    actions : { 'Apex Office ':'tom_copies'},
                     messages: {
                     'BITTER END': ' ',
                     'BESTIE': '',
@@ -2885,7 +2807,7 @@
                 },
 
                 { name: 'Gig Sign Copies', acquired: false, image: './sprites/complete-sign-copies.jpg', price: '', icon: '🔐', desc: 'Many copies of your gig sign! Now you are ready to use them to promote your gig!',
-                    actions : {'Coit Tower':'coit_sign' , 'Painted Ladies':'painted_sign', 'Lands End': 'lands_sign', 'Cliff\'s Variety':'cliffs_sign'},
+                    actions : {},
                     messages: {
                     'BITTER END': ' ',
                     'BESTIE': '',
@@ -2919,64 +2841,9 @@
                     }
                 },
 
-                { name: 'Full Cycling Bottle', acquired: false, image: './sprites/cycling-botle-full.png', price: '', icon: '🔐', desc: 'A full cycling bottle, filled with organic fluids',
-                    actions : {'Fisherman\'s Wharf':'fishermans_drink'},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
 
-
-                 { name: 'Revolution Bike', acquired: false, image: './sprites/bike.png', price: '', icon: '🔐', desc: 'The Ultimate Revolution Bike!',
-                    actions : {'':''},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-                { name: 'Organic Burger', acquired: false, image: './sprites/organic-burger.png', price: '', icon: '🍔', desc: 'An organic (and freaking expensive) burger!',
-                    actions : {'Fisherman\'s Wharf':'fishermans_food'},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-                 { name: 'Sauce Packets', acquired: false, image: './sprites/sauce-packets.jpg', price: '', icon: '🍔', desc: 'A mix of organic sauce packets',
-                    actions : {'Presidio':'presidio_action2', 'Mama⬇️':'mama_action6'},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-                  { name: 'Exotic Sauce', acquired: false, image: './sprites/arabic-sauce.jpg', price: '', icon: '🍔', desc: 'An exotic blend of sauces',
-                    actions : {'Presidio':'presidio_action3'},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
                 
-                { name: 'Song Book 1', icon: '📘', acquired: false, desc: 'A book with multiple songs. It can definitely give me ideas.', price: 50 },
-                { name: 'Song Book 2', icon: '📕', acquired: false, desc: 'A book with multiple songs - Volume 2. It can definitely give me ideas.', price: 50 },
+
                 { name: 'Chicken Pho', icon: '🍜', acquired: false, desc: 'Restores maximum health and focus.', price: 100 },
                 { name: 'Magic Zataar Spices', icon: '🌶️', acquired: false,desc: 'Boosts your focus and gives charisma.', price: 50 },
                  {name: 'Luxury Copper Cookware Set', price: 2000, icon:'🍳',  acquired: false, desc: 'Best set for a culinary quest'},
@@ -3040,7 +2907,7 @@
 
       const landmarkData = {
 
-            "Home": { X: 270, Y: 455, W: 60, H: 40, category: "home", emoji: "🏠", actionKey: "home", hidden: false , description: "An amazing place to live. Not just an apartment, but a sanctuary of sound.", character: 'game.names.main'},
+            "Home": { X: 270, Y: 450, W: 60, H: 40, category: "home", emoji: "🏠", actionKey: "home", hidden: false , description: "An amazing place to live. Not just an apartment, but a sanctuary of sound.", character: 'game.names.main'},
 
             "BITTER END": { X: 310, Y: 325, W: 50, H: 40, category: "bar", emoji: "🍻", actionKey: "bar", description: "A legendary Richmond dive where the air is thick with the smell of stale beer and history.", hidden: true, character: game.names.bestie3},
 
@@ -3048,7 +2915,7 @@
 
             "Metallica Pop-up Store": { X: 580, Y: 510, W: 40, H: 30, category: "popup", emoji: "🛍️", actionKey: "popup", description: "A temporary shrine to the gods of metal. Amidst the limited-edition vinyl and black denim, you can feel the heavy-metal heartbeat of the city pulsing louder than the Apex algorithms.", hidden: true , character: 'Pop-up Clerk'},
 
-            "BESTIE": { X: 650, Y: 350, W: 40, H: 40, category: "sids", emoji: "👠", actionKey: "sids",  description:"A high-rise haven, the perfect host’s sanctuary for entertainment.",  hidden: true , character: game.names.bestie },
+            "BESTIE": { X: 640, Y: 350, W: 40, H: 40, category: "sids", emoji: "👠", actionKey: "sids",  description:"A high-rise haven, the perfect host’s sanctuary for entertainment.",  hidden: true , character: game.names.bestie },
 
             "Castro": { X: 410, Y: 440, W: 60, H: 40, category: "castro", emoji: "🏳️‍🌈", actionKey: "castro", description: "The neon-lit, beating heart of SF’s soul. A district built on rebellion and being yourself—the perfect place to find the courage to play your own melody.", hidden: false , character: 'Character X'},
 
@@ -3072,15 +2939,9 @@
 
             "Oracle Park": { X: 700, Y: 390, W: 40, H: 30, category: "oracle", emoji: "⚾", actionKey: "oracle", description: "The Lion’s Den. A massive, modern colossus on the water. Modern home of the San Francisco Giants.", hidden: true, character: game.names.main },
 
-            "Sage & Drifter": { X: 220, Y: 410, W: 60, H: 40, category: "sagebar", emoji: "🍺", actionKey: "sagebar", hidden: true , description: "Neighborhood hangout offering cocktails, craft beers, and happy hours", character: 'Bobby'},
+             "APEX Office": { X: 640, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "work", description: "A towering monolith of glass and surveillance overlooking the Bay. Inside, the air is filtered, the lighting is 'optimized' for maximum productivity, and the silence is heavy. This isn't a workplace; it’s a high-frequency hive where human creativity is harvested by the Omni-Sync algorithm. Every cubicle is a cage, and every badge-swipe is a data point. To the world, it’s the pinnacle of tech success; to you, it’s the place where music goes to die.", hidden: true , character: 'APEX'},
 
-             "Presidio": { X: 310, Y: 220, W: 50, H: 40, category: "presidio", emoji: "🚲", actionKey: "presidio", description: "Park and former U.S. Army post on the northern tip of the San Francisco", hidden: true, character: 'Matt' },
-
-
-
-             "APEX Office": { X: 650, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "work", description: "A towering monolith of glass and surveillance overlooking the Bay. Inside, the air is filtered, the lighting is 'optimized' for maximum productivity, and the silence is heavy. This isn't a workplace; it’s a high-frequency hive where human creativity is harvested by the Omni-Sync algorithm. Every cubicle is a cage, and every badge-swipe is a data point. To the world, it’s the pinnacle of tech success; to you, it’s the place where music goes to die.", hidden: true , character: 'Tom'},
-
-            "APEX Office ": { X: 640, Y: 280, W: 30, H: 30, category: "tom", emoji: "🏙️", actionKey: "tom", description: "A towering monolith of glass and surveillance overlooking the Bay.", hidden: true , character: 'Tom'},
+            "APEX Office ": { X: 640, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "tom", description: "A towering monolith of glass and surveillance overlooking the Bay.", hidden: true , character: 'Tom'},
 
              "Wrestling Club": { X: 510, Y: 420, W: 40, H: 30, category: "wrestling_club", emoji: "🤼", actionKey: "wrestling_club", description: "The Grappling Club where wrestling buddies meet weekly. It smells of wintergreen liniment, old canvas, and pure adrenaline.", hidden: true , character: 'Rick'},
 
@@ -3095,8 +2956,8 @@
             "Public Library": { X: 580, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "📖", actionKey: "venue", description: "Historic theater in Mid-Market.", hidden: true, character: 'Character X'},
             "Dolores Park": { X: 480, Y: 458, W: 40, H: 40, category: "Park/Nature", emoji: "🏞️", actionKey: "dolores", description: "Popular spot in the Mission District with a great skyline view.", hidden: true, character: 'Character X' },
             "Lombard Street": { X: 530, Y: 195, W: 40, H: 40, category: "Park/Nature", emoji: "⌇", actionKey: "lombard", description: "Popular street, famous for a steep, one-block section with eight hairpin turns",hidden:true, character: ''},
-             "Coit Tower": { X: 625, Y: 180, W: 40, H: 40, category: "Park/Nature", emoji: "♜", actionKey: "coit", description: "rising from the top of Telegraph Hill, has been an emblem of San Francisco's skyline ",hidden:true, character: ''},
-            "Lands End": { X: 90, Y: 270, W: 60, H: 40, category: "lands", emoji: "🌊", actionKey: "lands", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: true, character: 'Woman' },
+             "Coit Tower": { X: 640, Y: 180, W: 40, H: 40, category: "Park/Nature", emoji: "♜", actionKey: "coit", description: "rising from the top of Telegraph Hill, has been an emblem of San Francisco's skyline ",hidden:true, character: ''},
+            "Lands End": { X: 90, Y: 270, W: 60, H: 40, category: "Park/Nature", emoji: "🌊", actionKey: "lands", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: true, character: 'Character X' },
             "Painted Ladies": { X: 450, Y: 360, W: 50, H: 40, category: "Cultural", emoji: "🎨", actionKey: "painted", description: "Iconic Victorian and Edwardian houses near Alamo Square.", hidden: true, character: 'Character X' },
             "Karaoke": { X: 450, Y: 320, W: 50, H: 40, category: "Cultural", emoji: "🎤", actionKey: "cultural", description: "Iconic Victorian and Edwardian houses near Alamo Square.", hidden: true, character: 'Character X' },
             "Golden Gate Bridge": { X: 200, Y: 150, W: 50, H: 50, category: "Infrastructure", emoji: "🌉", actionKey: "infrastructure", description: "Iconic suspension bridge.", hidden: true, character: 'Character X' },
@@ -3104,19 +2965,19 @@
             "Lagunitas⬆️": { X: 370, Y: 30, W: 30, H: 30, category: "lagunitas", emoji: "🍺", actionKey: "lagunitas", description: "Lively taproom offering beer tastings", hidden: true, character: game.names.bestie3},
             "Lagunitas⬆️ ": { X: 370, Y: 30, W: 30, H: 30, category: "lagunitas_", emoji: "🍺", actionKey: "lagunitas_", description: "Lively taproom offering beer tastings", hidden: true, character: 'Cool Bouncer'},
             "SFO Airport⬇️": { X: 690, Y: 750, W: 60, H: 40, category: "Infrastructure", emoji: "✈️", actionKey: "infrastructure", description: "Major international airport.", hidden: true, character: 'Character X' },
-            "Fisherman\'s Wharf": { X: 550, Y: 155, W: 40, H: 30, category: "fishermans", emoji: "🦀", actionKey: "fishermans", description: "Tourist hub with Pier 39.", hidden: true, character: 'Musician' },
+            "Fisherman\'s Wharf": { X: 550, Y: 155, W: 40, H: 30, category: "Commercial", emoji: "🦀", actionKey: "fishermans", description: "Tourist hub with Pier 39.", hidden: true, character: 'Musician' },
             "Open Mic Bar": { X: 120, Y: 600, W: 60, H: 40, category: "Park/Nature", emoji: "🎤", actionKey: "nature", description: "Rugged coastal trail at the northwestern tip of SF.", hidden: true, character: 'Character X' },
             "The Chapel": { X: 520, Y: 480, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "chapel", description: "Mid-sized venue in the Mission District.", hidden: true, character: 'Character X' },
-            "The GAMH ": { X: 540, Y: 270, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "gamh_in", description: "Elegant, historic hall.", hidden: true, character: 'Bridget' },
-            "The GAMH": { X: 540, Y: 280, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "gamh", description: "Elegant, historic hall.", hidden: true, character: 'Intimidating Bouncer' },
-            "The Warfield": { X: 580, Y: 320, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "warfield", description: "Historic theater in Mid-Market.", hidden: true, character: 'Character X' },
+            "The GAMH ": { X: 540, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "gamh_in", description: "Elegant, historic hall.", hidden: true, character: 'Bridget' },
+            "The GAMH": { X: 540, Y: 300, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "gamh", description: "Elegant, historic hall.", hidden: true, character: 'Intimidating Bouncer' },
+            "The Warfield": { X: 590, Y: 320, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "warfield", description: "Historic theater in Mid-Market.", hidden: true, character: 'Character X' },
             // --- NEW LOCATION: Venue ---
-            "Slim's": { X: 580, Y: 380, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "slims", description: "Iconic music venue in SOMA.", hidden: true, character: 'Character X' },
+            "Slim's": { X: 580, Y: 380, W: 30, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "slims", description: "Closed but iconic former music venue in SOMA.", hidden: true, character: 'Character X' },
             "Bottom of the Hill": { X: 620, Y: 520, W: 40, H: 30, category: "Music Venue", emoji: "🎵", actionKey: "bottom", description: "Long-standing venue in the Potrero Hill/Dogpatch area.", hidden: true, character: 'Character X' },
             "Chase Center": { X: 690, Y: 440, W: 40, H: 30, category: "Sports/Venue", emoji: "🏀", actionKey: "sports", description: "Modern home of the Golden State Warriors.", hidden: true, character: 'Character X' },
             "Berkeley": { X: 900, Y: 150, W: 50, H: 40, category: "Academic", emoji: "🎓", actionKey: "academic", description: "East Bay academic zone.", hidden: true, character: 'Character X' },
             "Daly Shitty Underground Club⬇️": { X: 220, Y: 750, W: 50, H: 40, category: "City", emoji: "🌉", actionKey: "transit", description: "The gateway city immediately south of San Francisco.", hidden: true, character: 'Character X' },
-            "Out & In": { X: 340, Y: 750, W: 50, H: 40, category: "out&in", emoji: "🍔", actionKey: "outin", description: "Supposedly a well-know chain for organic food", hidden: true, character: 'Character X' },
+            "In-N-Out⬇️": { X: 340, Y: 750, W: 50, H: 40, category: "City", emoji: "🍔", actionKey: "transit", description: "The gateway city immediately south of San Francisco.", hidden: true, character: 'Character X' },
 
         };
 
@@ -3185,8 +3046,7 @@
             game.previousPhase = 5;
             toggleMission('rick');
             game.rick_buttons_challenge = true;
-            iphoneNotifications = iphoneNotifications.slice(1);            
-            iphoneNotifications = appendNotification(iphoneNotifications,'Tom', 'Hey buddy, I miss you in the office. I can\'t get over my breakup... Can you come to the office and cry with me?','💬',  'APEX Office ');
+            iphoneNotifications = appendNotification(iphoneNotifications,'Tom', 'Hey buddy, I miss you in the office. I can\'t get over my breakup... Can you come to the office and cry with me?','💬',  '');
             game.tom_buttons.call = true;
 
             playMovie('./videos/rick-tape.mp4', 'You helped Rick fix the mat. Now you can wrestle!!');
@@ -3244,197 +3104,17 @@
         }
 
          function rick_action3(video){
+            
             game.pendingAcquisition.item = 'Cycling Bottle';
             game.rick_buttons.bottle = false;
             playMovie('./videos/grapplers-bottle.mp4', 'You found a cycling water bottle and are head over heels!');
-        }
-
-        function lombard_photo(){
-            game.mama_buttons.photos +=1;
-            game.pendingAcquisition.photo = './sprites/lombard-selfie.jpg';
-            unlockScrapbookPhoto(2,'./sprites/lombard-selfie.jpg');
-            toggleLandmarkVisibilityByName('Lombard Street', true);
-            game.mama_buttons.lombard_taken = false;
-            iphoneNotifications = iphoneNotifications.slice(1);            
-            iphoneNotifications = appendNotification(iphoneNotifications,'Bobby', 'Hey habibi! I am hosting a fundraising event at the Sage & Drifter Bar. Wanna pass by?', '💬', 'Sage & Drifter');
-            playMovie('./videos/lombard-video.mp4', 'You bring mama and visit together Lombard Street!');
-            if (game.mama_buttons.photos === 6){
-                let inventoryItem = game.inventory_items.find(i => i.name === 'Completed Scrapbook');
-                inventoryItem.acquired = true;
-                inventoryItem = game.inventory_items.find(i => i.name === 'Scrapbook');
-                inventoryItem.acquired = false;
-
-            }
-        }
-
-        function alcatraz_photo(){
-            game.mama_buttons.photos +=1;
-            game.pendingAcquisition.photo = './sprites/alcatraz-selfie.png';
-            unlockScrapbookPhoto(4,'./sprites/alcatraz-selfie.png');
-            game.mama_buttons.alcatraz_taken = false;
-            playMovie('./videos/alcatraz-video.mp4', 'You bring mama and visit together Alcatraz!');
-            toggleLandmarkVisibilityByName('Alcatraz', true);
-            if (game.mama_buttons.photos === 6){
-                let inventoryItem = game.inventory_items.find(i => i.name === 'Completed Scrapbook');
-                inventoryItem.acquired = true;
-                inventoryItem = game.inventory_items.find(i => i.name === 'Scrapbook');
-                inventoryItem.acquired = false;
-
-            }
-        }
-
-        function painted_photo(){
-            game.mama_buttons.photos +=1;
-            game.pendingAcquisition.photo = './sprites/painted-selfie.jpg';
-            unlockScrapbookPhoto(1,'./sprites/painted-selfie.jpg');
-            game.mama_buttons.painted_taken = false;
-            playMovie('./videos/painted-video.mp4', 'You bring mama and visit together the Painted Ladies!');
-            if (game.mama_buttons.photos === 6){
-                let inventoryItem = game.inventory_items.find(i => i.name === 'Completed Scrapbook');
-                inventoryItem.acquired = true;
-                inventoryItem = game.inventory_items.find(i => i.name === 'Scrapbook');
-                inventoryItem.acquired = false;
-
-
-            }
-        }
-
-        function coit_photo(){
-            game.mama_buttons.photos +=1;
-            game.pendingAcquisition.photo = './sprites/coit-selfie.png';
-            unlockScrapbookPhoto(0,'./sprites/coit-selfie.png');
-            playMovie('./videos/coit-video.mp4', 'You bring mama and visit the Coit Tower!');
-            game.mama_buttons.coit_taken = false;
-            if (game.mama_buttons.photos === 6){
-                let inventoryItem = game.inventory_items.find(i => i.name === 'Completed Scrapbook');
-                inventoryItem.acquired = true;
-                inventoryItem = game.inventory_items.find(i => i.name === 'Scrapbook');
-                inventoryItem.acquired = false;
-
-
-            }
-        }
-
-        function coit_sign(){
-            game.hype +=50;
-            playMovie('./videos/coit-sign.mp4', 'You gained +50 Hype!');
 
         }
-
-        function cliffs_sign(){
-            game.hype +=50;
-            playMovie('./videos/cliffs-sign.mp4', 'You gained +50 Hype!');
-
-        }
-
-        function fishermans_photo(){
-            game.mama_buttons.photos +=1;
-            game.pendingAcquisition.photo = './sprites/fisherman-selfie.jpg';
-            unlockScrapbookPhoto(3,'./sprites/fisherman-selfie.jpg');
-            game.mama_buttons.fisherman_taken = false;
-            playMovie('./videos/fisherman-video.mp4', 'You bring mama to visit Fisherman\'s Wharf!');
-            if (game.mama_buttons.photos === 6){
-                let inventoryItem = game.inventory_items.find(i => i.name === 'Completed Scrapbook');
-                inventoryItem.acquired = true;
-                inventoryItem = game.inventory_items.find(i => i.name === 'Scrapbook');
-                inventoryItem.acquired = false;
-
-
-            }
-        }
-
-        function landsend_photo(){
-            game.mama_buttons.photos +=1;
-            game.pendingAcquisition.photo = './sprites/landsend-selfie.jpg';
-            unlockScrapbookPhoto(5,'./sprites/landsend-selfie.jpg');
-            game.mama_buttons.landsend_taken = false;
-            playMovie('./videos/landsend-video.mp4', 'You bring mama to Lands End!');
-
-            if (game.mama_buttons.photos === 6){
-                let inventoryItem = game.inventory_items.find(i => i.name === 'Completed Scrapbook');
-                inventoryItem.acquired = true;
-                inventoryItem = game.inventory_items.find(i => i.name === 'Scrapbook');
-                inventoryItem.acquired = false;
-
-            }
-
-        }
-
-        function landsend_woman(){
-            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Tom\'s Passion');
-            topic.acquired = false;
-            toggleMission('tom');
-
-            const tom_wingman_dialogue = [
-                { speaker: 'Player', text: "Excuse me! I don't mean to interrupt your rhythm, but that’s an incredible pace you’re keeping up these hills. Training for any marathon?" },
-                { speaker: 'BESTIE', text: "The Escape from Alcatraz triathlon, actually. And trust me, the hills are the easy part compared to the swim. Do you always scout athletes on your morning walk? " },
-                { speaker: 'Player', text: "Not usually, but you actually remind me of a good buddy of mine. He’s an ex-military guy, obsessed with fitness—he’s usually out here, but he’s been a bit down lately." },
-                { speaker: 'BESTIE', text: "Military, huh? That explains the intensity. Why is he down? Did he lose his favorite pair of running shoes? 👟" },
-                { speaker: 'Player', text: "Worse. A bad breakup. He’s a great guy—blonde, mature, in better shape than most twenty-year-olds. Here, look at this photo of us 📸" },
-                { speaker: 'BESTIE', text: "Wait... that's him? The blonde one with the 'thousand-yard stare' and the ridiculous deltoids? He’s actually... quite handsome. In a rugged, disciplined sort of way. 😍🦾" },
-                { speaker: 'Player', text: "That’s Tom. He’s a bit of a dork about his tactical gear, but he’s got a heart of gold. He’s been looking for someone who actually understands the 'grind.'" },
-                { speaker: 'BESTIE', text: "Well, I could use a training partner who won't complain about a 5 AM start time. Does this 'disciplined dork' have a phone number, or do I have to send a signal flare? 📱✨" },
-                { speaker: 'Player', text: "Haha, here’s his digits. Tell him the 'Rocking Habibi' sent you. You’re doing a huge favor for a guy who really needs a win right now." },
-                { speaker: 'BESTIE', text: "Consider it done. I'll text him. If he can keep up with me to the Mile Rock Beach stairs, he might have a chance. See ya! ✌️🏁" },
-            ];
-            game.tom_buttons.cry = false;
-            landmarkImageRegistry["APEX Office "] = './sprites/tom-no-cry.jpeg';
-            characterPortraits["Tom"] = './faces/tom.jpg';
-            iphoneNotifications = appendNotification(iphoneNotifications,'Tom', 'WoW I have a date! Thanks so much! Is there anything I can do for you? Nutritional advice? Corporate printing?','💬',  '');
-            const dialogueHtml = renderDialogue(tom_wingman_dialogue , "Woman");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-
-        }
-
-        function landsend_sign(){
-            game.hype +=50;
-            playMovie('./videos/landsend-sign.mp4', 'You gained +50 Hype!');
-
-        }
-
-        function painted_sign(){
-            game.hype +=50;
-            playMovie('./videos/painted-sign.mp4', 'You gained +50 Hype!');
-
-
-        }
-
-        function landsend_food(){
-            const organic_food_dialogue = [
-                { speaker: 'Player', text: "Sorry to bother you again, maybe you can help me... I'm looking for the real deal. I need USDA biodynamic, pasture-raised, 100% organic sustenance. Not just the stuff with a sticker—the actual high-frequency fuel. 💎🌿" },
-                { speaker: 'Hana', text: "Biodynamic? Wow, you aren't messing around. Most people in this city think 'organic' just means it was in a bin near a tree once. 🙄" },
-                { speaker: 'Player', text: "I'm trying to help someone—and her puppy—who really need to get their spirit back. Do you know where I can find that level of quality?" },
-                { speaker: 'Hana', text: "In the Mission? Forget it. You need to head to the south of the city, near the industrial docks. There’s a place called 'Out & In.'" },
-                { speaker: 'Player', text: "Thank you! You’re a lifesaver." }
-            ];
-            game.pendingAcquisition.location = 'Out & In';
-            const dialogueHtml = renderDialogue(organic_food_dialogue, "Woman");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
-
-
-        function tom_food(){
-            const organic_food_dialogue = [
-                { speaker: 'Player', text: "Hi! Maybe you can help me... I'm looking for the real deal. I need USDA biodynamic, pasture-raised, 100% organic sustenance. Not just the stuff with a sticker—the actual high-frequency fuel. 💎🌿" },
-                { speaker: 'Hana', text: "Biodynamic? Wow, you aren't messing around. Most people in this city think 'organic' just means it was in a bin near a tree once. 🙄" },
-                { speaker: 'Player', text: "I'm trying to help someone—and her puppy—who really need to get their spirit back. Do you know where I can find that level of quality?" },
-                { speaker: 'Hana', text: "In the Mission? Forget it. You need to head to the south of the city, near the industrial docks. There’s a place called 'Out & In.'" },
-                { speaker: 'Player', text: "Thank you! You’re a lifesaver." }
-            ];
-            game.pendingAcquisition.location = 'Out & In';
-            const dialogueHtml = renderDialogue(organic_food_dialogue , "Tom");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
-
 
         function home_action1(){
             game.home_buttons.showHelpButton = false;
-            //let topic = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
-            //topic.acquired = true;
-            game.pendingAcquisition.topic = 'Musician Career'
+            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
+            topic.acquired = true;
             const dialogueHtml = renderDialogue(intro_dialogue_data , game.names.main);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
@@ -3694,7 +3374,6 @@
                 { speaker: 'BESTIE', text: "I’m counting on you! I’ll be here practicing my 'Asheq' eyeliner until you return. Don't fail me! 👁️💄" }
             ];
             game.currentLocationId = 'BESTIE';
-            addMission('sid-asheq', 'Find an adequate attire for '+game.names.bestie+' to attend Asheq!');
             game.dialogueIndex = 0;
             const dialogueHtml = renderDialogue(asheq_sid_invitation_dialogue, game.names.bestie);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
@@ -3706,18 +3385,12 @@
             game.currentLocationId = 'BESTIE';
             playMovie('./videos/sid-arabic.mp4', 'The perfect attire for ASHEQ!'); 
             game.sids_buttons.oasis = true;
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Arabic Dress');
-            inventoryItem.acquired = false;
-            
-            toggleMission('sid-asheq');
 
         }
 
          function sid_action6(){
             game.currentLocationId = 'BESTIE';
-            game.pendingAcquisition.item = 'SF attire';
-            let topic = game.conversation_topics.unlocked.find(i => i.name === 'San Francisco Attire');
-            topic.acquired = false;
+            game.pendingAcquisition.item = 'SF attire'
             playMovie('./videos/sid-sf-attire.mp4', 'The perfect San Francisco attire!'); 
             game.sids_buttons.sf_attire = false;
 
@@ -3732,19 +3405,6 @@
 
         }
 
-        function sid_food(){
-            const organic_food_dialogue = [
-                { speaker: 'Player', text: "Hi! Maybe you can help me... I'm looking for the real deal. I need USDA biodynamic, pasture-raised, 100% organic sustenance. Not just the stuff with a sticker—the actual high-frequency fuel. 💎🌿" },
-                { speaker: 'Hana', text: "Biodynamic? Wow, you aren't messing around. Most people in this city think 'organic' just means it was in a bin near a tree once. 🙄" },
-                { speaker: 'Player', text: "I'm trying to help someone—and her puppy—who really need to get their spirit back. Do you know where I can find that level of quality?" },
-                { speaker: 'Hana', text: "In the Mission? Forget it. You need to head to the south of the city, near the industrial docks. There’s a place called 'Out & In.'" },
-                { speaker: 'Player', text: "Thank you! You’re a lifesaver." }
-            ];
-            game.pendingAcquisition.location = 'Out & In';
-            const dialogueHtml = renderDialogue(organic_food_dialogue , game.names.bestie);
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
 
         function sid_money_action() {
             // Simulate giving the player money or a resource
@@ -3813,87 +3473,13 @@
             toggleLandmarkVisibilityByName('Lagunitas⬆️', false);
             toggleLandmarkVisibilityByName('Lagunitas⬆️ ', true);
             game.currentPhase = 5;
-            iphoneNotifications = iphoneNotifications.slice(1);            
-            iphoneNotifications = appendNotification(iphoneNotifications,'SFGATE', 'Don\'t let the fog leave you behind! Experience the ultimate San Francisco cycling race at the Fog-Cutter Classic. Claim your legacy and register now at El Presidio.', '📰', 'Presidio');
             playMovie('./videos/lagunitas-attire.mp4', 'Yes! Look at me now! Authentic San Franciscan!');
-
-
             
 
         }
-
-        function bobby_request_help(){
-
-            const bobby_fundraising_dialogue = [
-                { speaker: 'Player', text: "Bobby! I could hear the Prince tracks from three blocks away!" },
-                { speaker: 'BESTIE', text: "There you are! We are broadcasting the frequency of generosity! I’m raising funds for the Family House Charity—those kids need help and love 💜✨" },
-                { speaker: 'Player', text: "That’s a beautiful thing, man. And wait... is that the 'Revolution' bike I see on the display stand? The custom racing frame?" },
-                { speaker: 'BESTIE', text: "She’s a purple masterpiece, isn't she? Titanium, carbon fiber, and pure funk. " },
-                { speaker: 'Player', text: "How do I get my name on that title?" },
-                { speaker: 'BESTIE', text: "We’re giving her away to the soul who makes the biggest impact on the charity. 🚲👑 Right now, some tech-exec from APEX has put down $3,000 to look like a hero. You’d have to beat that to take her home. 💰📉" },
-                { speaker: 'Player', text: "Three thousand dollars?! That’s a lot of busking sets. I really want to help those kids, so I will start working on my fundraising." },
-                { speaker: 'BESTIE', text: "That’s the spirit! Now I'm off to look for the purple banana until they put me in the truck!" }
-            ];
-
-            const dialogueHtml = renderDialogue(bobby_fundraising_dialogue , 'Bobby');
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-            game.bobby_buttons.showHelpButton = false;
-            game.bobby_buttons.showBike = true;
-            addMission('bobby', 'Donate $3001 to Bobby\'s Children charity fundraiser');
-
-        }
-
-        function matt_request_help(){
-
-            const matt_dialogue = [
-                { speaker: 'Player', text: "Hey Matt, nice hit out there! You really sent that ball into the palm trees. ⚾🌴" },
-                { speaker: 'BESTIE', text: "Shh! Keep your voice down, Baghdaddy! Did you see that guy by the bike rack? He’s wearing sunglasses. In the shade. That’s a fed, man. I know it. 🕶️🕵️‍♂️" },
-                { speaker: 'Player', text: "Relax, Matt. It’s just a tourist trying to figure out a map. I heard you’ve got some new 'Candy' for the bikers tonight. What’s the price?" },
-                { speaker: 'BESTIE', text: "Price? Look at my cleats, man—they cost more than your guitar. I don't want your money. I’m rich, bored, and my palate is completely dead. 🤑" },
-                { speaker: 'Player', text: "So if you don't want cash, what are you looking for?" },
-                { speaker: 'BESTIE', text: "Flavor. Real, extravagant, soul-shaking sauce. Doesn't your family has a special blend that makes people see God? 🥣🔥" },
-                { speaker: 'Player', text: "That's a closely guarded secret. You’re asking for a lot." },
-                { speaker: 'BESTIE', text: "And I’m giving you a ticket to the moon! Bring me a jar of something unique—something extravagant—and the samples are yours. No sauce, no 'Candy.'" },
-                { speaker: 'Player', text: "Fine. I'll search the city for something that’ll wake up your taste buds." }
-            ];
-
-            game.matt_buttons.showHelpButton = false;
-            game.pendingAcquisition.topic = 'Matt\'s sauces';
-            addMission('Creates a special sauce for Matt to obtain \'candy\'');
-            const dialogueHtml = renderDialogue(matt_dialogue , 'Matt');
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-            
-        }
-
-        function bobby_action1(){
-             if(!game.score > 3001){
-
-                    // --- HELP / LEARN LOGIC ---
-                    game.score -= 3001;
-                    game.pendingAcquisition.item = 'Revolution Bike';
-                    game.bobby_buttons.bike = true;
-                    playMovie('./videos/bobby-cash.mp4', 'You are the biggest donor and win the Revolution Bike!');
-
-                    toggleMission('bobby');
-                }
-                else{
-                    const notnow_dialogue_data = [
-                    { speaker: 'Bestie', text: "You are not the biggest donor. You need at least $3001" }];
-                    const dialogueHtml = renderDialogue(notnow_dialogue_data , 'Bobby');
-                    const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-                    switchToView(contentDiv);
-
-                }
-
-
-        }
-
 
         function tom_request_help(){
-          //  game.currentLocationId = 'Apex Office ';
-          //  game.currentPhase = 5;
+            game.currentLocationId = 'Apex Office ';
             const tom_breakup_dialogue_data = [
             { speaker: 'Player', text: "Tom? Hey man, are you actually crying? What happened?" },
             { speaker: 'Tom', text: "It’s over, man. She left me. My soul is in a full tactical retreat and I don't think I can hold the line anymore. 😭💔" },
@@ -3902,80 +3488,20 @@
             { speaker: 'Player', text: "You’re spiraling. You need to move on, man" },
             { speaker: 'Tom', text: "Sorry, I do not think I can function anymore..." }
             ];
-            game.pendingAcquisition.topic = 'Tom\'s Passion';
-            addMission('tom', 'Help Tom move on with his breakup');
-
             const dialogueHtml = renderDialogue(tom_breakup_dialogue_data , 'Tom');
                 const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
                 switchToView(contentDiv);
-           
+            game.pendingAcquisition.topic = 'Tom\'s passion';
+
 
         }
 
         function tom_copies(){
-            game.currentLocationId = 'APEX Office ';
-            if (game.tom_buttons.cry){
-                 const notnow_dialogue_data = [
-                    { speaker: 'Bestie', text: "I need to get my shit together before I can help you!" }];
-                    const dialogueHtml = renderDialogue(notnow_dialogue_data , 'Tom');
-                    const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-                    switchToView(contentDiv);
-
-            }
-            else{
-                let inventoryItem = game.inventory_items.find(i => i.name === 'Complete Gig Sign');
-                inventoryItem.acquired = false;
-                game.pendingAcquisition.item = 'Gig Sign Copies';
-                game.tom_buttons.copies = true;
-                playMovie('./videos/tom-copies.mp4', 'Tom makes multiple copies for you! Now you are ready to use them to promote the gig!');
-            }
-
+            game.currentLocationId = 'Apex Office ';
+            game.pendingAcquisition.item = 'Gig Sign Copies';
+            playMovie('./videos/tom-copies.mp4', 'Tom makes multiple copies for you! Now you are ready to use them to promote the gig!');
 
         }
-
-        function presidio_action1(){
-
-            game.currentLocationId = 'Presidio';
-            if (game.bobby_buttons.bike){
-                game.presidio_buttons.race = true;
-                playMovie('./videos/presidio-register.mp4', 'You register for the race!');
-
-            }
-            else{
-                 const notnow_dialogue_data = [
-                    { speaker: 'Bestie', text: "You need a bike to register first, buddy!" }];
-                    const dialogueHtml = renderDialogue(notnow_dialogue_data , 'Matt');
-                    const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-                    switchToView(contentDiv);
-            }
-        }
-
-        function presidio_action2(){
-             playMovie('./videos/matt-reject.mp4', 'This is too basic for Matt. He needs some exotic added flavour...');
-        }
-
-        function presidio_action3(){
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Exotic Sauce');
-            inventoryItem.acquired = false;
-            game.pendingAcquisition.item = 'Candy';
-            game.candy = true;
-            playMovie('./videos/matt-accept.mp4', 'OMG! This sauce is the best ultimate flavour of my life. Take the candy!');
-
-        }
-
-        function presidio_race(){
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Revolution Bike');
-            inventoryItem.acquired = false;
-            game.presidio_buttons.race = false;
-            game.pendingAcquisition.memory = 'awe';
-            game.pendingAcquisition.memory_text = 'Awe feeling crossing the Golden Gate Bridge!';
-
-            playMovie('./videos/presidio-race.mp4', 'Cycling through the Golden Gate bridge is such an awesome experience!');
-
-
-        }
-        
-        
 
         function lagunitas_sign(){
             game.currentLocationId = 'Lagunitas⬆️';
@@ -3990,13 +3516,13 @@
                 { speaker: 'Player', text: "A real camera... I'll be back as soon as I find one!" },
                 { speaker: 'BESTIE', text: "Make it snappy! Every minute we wait is a minute the beer stays cold and the stage stays empty." }
             ];
-            game.kevind_buttons.lagunitas = true;
+
             let inventoryItem = game.inventory_items.find(i => i.name === 'Polaroid');
                 if (!inventoryItem.acquired){
                     game.kevind_buttons.camera = true;
                 }
 
-            addMission('lagunitas', 'Create a sign with '+game.names.bestie3+' and a camera, add text, make copies, and post it everywhere!');
+            addMission('lagunitas', 'I need two songs, two successfull chop games, and a hype of 100 people to play at Lagunitas')
             const dialogueHtml = renderDialogue(kevind_sign_dialogue_data, game.names.bestie3);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv); 
@@ -4136,24 +3662,6 @@
         function kevind_action7(){
             game.secrets +=1;
             playMovie('./videos/kevind-aa.mp4','Alcoholics Anonymous? NOOOO!!! I swear I am good, buddy! (Easter Egg found!)' );
-        }
-
-        function inout_action1(){
-            game.pendingAcquisition.item = 'Full Cycling Bottle';
-             playMovie('./videos/outin-drink.mp4','Excellent! This is supposed to be a bio-organic drink!' );        
-
-        }
-
-        function inout_action2(){
-            game.pendingAcquisition.item = 'Organic Burger';
-            playMovie('./videos/outin-burger.mp4','That was quick! You also got sauces! They do not provide cups so you will need to use your own container for the drink' );        
-
-        }
-
-        function inout_action3(){
-            game.pendingAcquisition.item = 'Sauce Packets';
-            playMovie('./videos/outin-packets.mp4','This is an interesting mix of organic sauce packets...' );        
-
         }
 
         function dj_action1(){
@@ -4375,29 +3883,20 @@
         }
 
         function bridget_action6(){
-            game.currentPhase = 10;
+            game.currentLocationId = 'The GAMH ';
             game.dialogueIndex = 0;
             const dialogueHtml = renderDialogue(bridget_gig_data, "Bridget");
-       //     toggleLandmarkVisibilityByName('The Fillmore', false);
-       //     toggleLandmarkVisibilityByName('The Chapel', false);
+            toggleLandmarkVisibilityByName('The Fillmore', false);
+            toggleLandmarkVisibilityByName('The Chapel', false);
             //toggleLandmarkVisibilityByName('Slim\'s', false);
-         //   toggleLandmarkVisibilityByName('Bottom of the Hill', false);
-       //     toggleLandmarkVisibilityByName('The Fillmore', false);
-           // toggleLandmarkVisibilityByName('The Warfield', false);
-            toggleLandmarkVisibilityByName('The GAMH', true);
-            toggleLandmarkVisibilityByName('The GAMH ', true);
-            game.pendingAcquisition.location = 'Bottom of the Hill';
-            landmarkImageRegistry["The GAMH"] = "./sprites/gamh-empty.jpg";
-            landmarkImageRegistry["The Fillmore"] = "./sprites/fillmore-empty.jpg";
-            game.bouncer_buttons.description = '';
-            game.bridget_buttons.unlock = true;
-            addMission('bottom', 'Play at the Bottom of the Hill!');
-         //   addMission('chapel', 'Play at The Chapel!');
-         //   addMission('slims', 'Play at Slim\'s!');
-         //   addMission('gams', 'Play at the GAMH!');
-         //   addMission('fillmore', 'Play at The Fillmore!');
-         //   addMission('warfield', 'Play at the Warfield!');
-            toggleMission('gig');
+            toggleLandmarkVisibilityByName('Bottom of the Hill', false);
+            toggleLandmarkVisibilityByName('The Fillmore', false);
+            toggleLandmarkVisibilityByName('The Warfield', false);
+            game.pendingAcquisition.location = 'Slim\'s';
+
+
+       
+
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);  
 
@@ -4413,21 +3912,10 @@
             'sid_action6'   : sid_action6,
             'sid_oasis'     : sid_oasis,
             'sid_chops'     : sid_chops,
-            'sid_food'      : sid_food,
-            'fisherman_songwriting' : fisherman_songwriting,
-            'fisherman_food' : fishermans_food,
-            'fisherman_drink' : fishermans_drink,
             'lagunitas_action1' : lagunitas_action1,
             'lagunitas_sign': lagunitas_sign,
             'tom_copies' : tom_copies,
-            'tom_food'  : tom_food,
             'tom_request_help' : tom_request_help,
-            'coit_sign' : coit_sign,
-            'cliffs_sign' : cliffs_sign,
-            'landsend_sign' : landsend_sign,
-            'landsend_food' : landsend_food,
-            'painted_sign' : painted_sign,
-            'bobby_action1' : bobby_action1,
             'lagunitas_sign_photo': lagunitas_sign_photo,
             'crazy_action1' : crazy_action1,
             'crazy_action2' : crazy_action2,
@@ -4440,8 +3928,6 @@
             'mama_action2'  : mama_action2,
             'mama_action3'  : mama_action3,
             'mama_action4'  : mama_action4,
-            'mama_action5'  : mama_action5,
-            'mama_action6'  : mama_action6,
             'kevind_action1': kevind_action1,
             'kevind_action2': kevind_action2,
             'kevind_action3': kevind_action3,
@@ -4453,7 +3939,6 @@
             'popup_action2' : popup_action2,
             'popup_photobooth' : popup_photobooth,
             'handleRaffleEntry' : handleRaffleEntry,
-            'landsend_woman' : landsend_woman,
             'dj_action1' : dj_action1,
             'dj_action2' : dj_action2,
             'dj_action3' : dj_action3,
@@ -4467,7 +3952,6 @@
             'bridget_action5' : bridget_action5,
             'bridget_action6' : bridget_action6,
             'bridget_chops'   : bridget_chops,
-          //  'tom_action1'     : tom_action1,
             'cool_bouncer_action1': cool_bouncer_action1,
             'cool_bouncer_action2': cool_bouncer_action2,
             'bouncer_action1' : bouncer_action1,
@@ -4590,15 +4074,15 @@
 
 
         const bridget_gig_data = [
-            { speaker: 'Player', text: "Bridget! I am ready to play. Can you get me a gig?" },
+            { speaker: 'Player', text: "Bridget! I’ve got the guitar, the callouses, and the quitting-my-job energy. Let’s book the GAMH for tomorrow night! 🎸🔥" },
             { speaker: 'BESTIE', text: "Slow down, superstar. This is San Francisco. Every venue has a 'Vibe Check' quota. We’re talking minimum songs, a fan count that doesn't include your mom, and specific Chop stats. 📈" },
-            { speaker: 'BESTIE', text: "For the small joints like Bottom of the Hill, you need at least 3 songs and 150 fans. But as you climb to the GAMH or the Fillmore, you’re looking at 5-6 songs and 150+ fans. 🎤🤳" },
+            { speaker: 'BESTIE', text: "For the small joints like Bottom of the Hill, you need at least 2 songs and 50 fans. But as you climb to the GAMH or the Fillmore, you’re looking at 5-6 songs and 150+ fans. 🎤🤳" },
             { speaker: 'Player', text: "Songs and fans, I can do. What about the 'Chops'? I've been practicing my tapping until my fingers bled!" },
             { speaker: 'BESTIE', text: "Tapping is great for the tech-metal nerds at Slim's, but the Chapel wants Stage Presence (Purple), and the Independent is all about that Social Amplifier. You gotta match the Chop to the room. 🧩" },
-            { speaker: 'Player', text: "I am loving this! What else do you suggest?" },
-            { speaker: 'BESTIE', text: "Go find some fans, maybe you can play at Lagunitas as a starting point, and maybe do some advertising around the city too, because right now your 'influence' is non-existant..." },
-            { speaker: 'BESTIE', text: "I can secure you a gig at Bottom of the Hill as long as you fulfill the requirements. I need to get back to work. I am SO BUSY! I will reach you next time I have news about other venues"},
-            { speaker: 'Player', text: "Thanks, Bridget!" }
+            { speaker: 'Player', text: "So it's like a puzzle, but with more feedback and sweat. I am loving this! What else do you suggest?" },
+            { speaker: 'BESTIE', text: "That’s the spirit. Now go find some fans, maybe you can find an open-mic as a starting point, and maybe do some advertising around the city too, because right now your 'influence' is non-existant..." },
+            { speaker: 'BESTIE', text: "OK. That is enough for you. I need to get back to work. I am SO BUSY! I will not be available for the rest of the day "},
+            { speaker: 'Player', text: "Thanks for unlocking so many venues, Bridget!" }
         ];
 
 
@@ -4882,6 +4366,16 @@
                     ` : ''}
 
 
+                ${game.chapter === 2 ? `
+                <div class="flex justify-center mt-6">
+                    <button onclick="setPhase(21,'')" class="career-milestone-button px-10 py-5 rounded-xl border-4">
+                        <div class="flex flex-col items-center">
+                            <span class="text-xl font-black text-yellow-300">Check ScrapBook! ⚡</span>
+                        </div>
+                    </button>
+                </div>
+                ` : ''}
+
 
                 <!-- Dynamic Chop Practice Buttons -->
                 <div class="space-y-4 mt-4">
@@ -4980,41 +4474,6 @@
         lagunitas:  (name, data) => {
             currentContext = { name, data };
 
-             const getChopVal = (emoji) => {
-                const chop = game.chops?.find(c => c.icon === emoji);
-                return chop ? (chop.available || 0) : 0;
-            };
-
-            // 1. Define granular requirements
-            const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 60, icon: '🔥' },
-                { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 2, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 50, icon: '👥' },
-                { id: 'social', label: 'Social Influence', current: getChopVal('📣'), target: 1, icon: '📣' },
-                { id: 'guitar', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 1, icon: '🎸' },
-                { id: 'rhythm', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 1, icon: '🎼' }
-            ];
-
-            const allMet = reqs.every(r => r.current >= r.target);
-
-            // Helper for requirement item styling
-            const renderReq = (req) => {
-                const met = req.current >= req.target;
-                return `
-                    <div class="flex items-center justify-between p-2 rounded ${met ? 'bg-green-900/20 border border-green-500/30' : 'bg-gray-900/40 border border-gray-700'}">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xl">${req.icon}</span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest ${met ? 'text-green-400' : 'text-gray-400'}">${req.label}</span>
-                        </div>
-                        <div class="font-mono text-sm ${met ? 'text-green-400' : 'text-amber-500'}">
-                            ${req.current} / ${req.target}
-                            ${met ? ' <span class="text-green-500">✓</span>' : ''}
-                        </div>
-                    </div>
-                `;
-            };
-
-
             return `
                 <div class="mb-8">
                     <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
@@ -5039,793 +4498,10 @@
                         </div>
                 </div>
 
-                ${game.kevind_buttons.lagunitas ? `
-                    <br>
-                <!-- Requirement Panel -->
-                <div class="bg-black/40 border-2 ${allMet ? 'border-green-500/50' : 'border-amber-500/20'} rounded-xl p-6 mb-8 backdrop-blur-sm">
-                    <h4 class="text-xs font-black text-amber-500 uppercase tracking-[0.3em] mb-4 text-center">
-                        ${allMet ? 'Gig Requirements Cleared' : 'Pre-Performance Checklist'}
-                    </h4>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2 ${allMet ? 'opacity-50 grayscale-[0.5]' : ''}">
-                        ${reqs.map(r => renderReq(r)).join('')}
-                    </div>
-
-                    ${!allMet ? `
-                        <p class="text-[10px] text-center text-gray-500 mt-4 italic uppercase">
-                            The venue manager requires specific skills and hype before you take the stage.
-                        </p>
-                    ` : ''}
-                </div>
-
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">
-                        ${allMet 
-                            ? "The soundcheck is perfect. The line is around the block. It's time." 
-                            : "Massive crowds are thrilled about the concert. Are you ready for this?"}
-                    </p>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                    <div class="flex justify-center mt-6 w-full">
-                        ${allMet ? `
-                            <button onclick="startFinalGig()" class="metal-button px-10 py-4 w-full sm:w-3/4 border-green-500 bg-green-900/20 hover:bg-green-600 group transition-all">
-                                <span class="text-xl font-black text-white group-hover:scale-110 block">
-                                    🔥 EVERYTHING ACCOMPLISHED. SHOWTIME! 🔥
-                                </span>
-                            </button>
-                        ` : `
-                            <button onclick="showMetallica()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2 opacity-80 pointer-events-none grayscale">
-                                <span class="text-sm font-bold text-gray-500">LOCKED: COMPLETE CHECKLIST</span>
-                            </button>
-                        `}
-                    </div>
-                </div>
-                ` : ''}
-
             `;
                
 
         },
-
-        coit: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                
-                 ${(game.mama_buttons.polaroid  && game.mama_buttons.coit_taken) ? `
-
-            
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="coit_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Take a photo with mama!</span>
-                    </button>
-                </div>
-                ` : ''}
-
-                
-
-            `;
-               
-        },
-
-        fishermans: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                    </div>
-
-                    <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                        <p class="italic">You approach the famous sign. A happy musician is performing in the street with a cute puppy.</p>
-                    </div>
-
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Interact with ${data.character} </span>
-                            </button>
-                        </div>
-                </div>
-                
-                 <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="fisherman_songwriting()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Greet ${data.character} </span>
-                            </button>
-                        </div>
-                </div>
-
-                f
-
-
-
-                 ${(game.mama_buttons.polaroid  && game.mama_buttons.fisherman_taken) ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="fishermans_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Take a photo with mama!</span>
-                    </button>
-                </div>
-                ` : ''}
-            `;               
-        },
-
-
-        lands: (name, data) => {
-            currentContext = { name, data };
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-
-                 <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                        <p class="italic">You reach an amazing view point. An Asian fit woman is exercising next to an empty board</p>
-                    </div>
-
-                 <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Interact with ${data.character} </span>
-                            </button>
-                        </div>
-                </div>
-
-                ${(game.mama_buttons.polaroid  && game.mama_buttons.lands_taken) ? `
-
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="landsend_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Take a photo with mama!</span>
-                    </button>
-                </div>
-                ` : ''}
-
-
-                   ${game.tom_buttons.copies ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="landsend_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Post your gig poster</span>
-                    </button>
-                </div>
-                ` : ''}
-
-            `;               
-        },
-
-
-
-        alcatraz: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                
-
-                ${(game.mama_buttons.polaroid  && game.mama_buttons.alcatraz_taken) ? `
-
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="alcatraz_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Take a photo with mama!</span>
-                    </button>
-                </div>
-                ` : ''}
-
-                   <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="playMovie('So excited to ride the cable car for a while')" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Ride the Cable car</span>
-                            </button>
-                        </div>
-                </div>
-
-            `;               
-        },
-
-
-        lombard: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                ${(game.mama_buttons.polaroid  && game.mama_buttons.lombard_taken) ? `
-
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="lombard_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Take a photo with mama!</span>
-                    </button>
-                </div>
-                ` : ''}
-            `;               
-        },
-
-
-        painted: (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                
-                ${(game.mama_buttons.polaroid  && game.mama_buttons.painted_taken) ? `
-
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="painted_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Take a photo with mama!</span>
-                    </button>
-                </div>
-                ` : ''}
-            `;               
-        },
-
-
-        bottom: (name, data) => {
-            // Helper to find specific chop values by emoji
-            const getChopVal = (emoji) => {
-                const chop = game.chops?.find(c => c.icon === emoji);
-                return chop ? (chop.available || 0) : 0;
-            };
-
-
-            // 1. Define granular requirements
-            const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 90, icon: '🔥' },
-                { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 3, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 150, icon: '👥' },
-                { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 1, icon: '🖋️' },
-                { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 1, icon: '📜' },
-                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 1, icon: '🎤' }
-            ];
-
-            const allMet = reqs.every(r => r.current >= r.target);
-
-            // Helper for requirement item styling
-            const renderReq = (req) => {
-                const met = req.current >= req.target;
-                return `
-                    <div class="flex items-center justify-between p-2 rounded ${met ? 'bg-green-900/20 border border-green-500/30' : 'bg-gray-900/40 border border-gray-700'}">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xl">${req.icon}</span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest ${met ? 'text-green-400' : 'text-gray-400'}">${req.label}</span>
-                        </div>
-                        <div class="font-mono text-sm ${met ? 'text-green-400' : 'text-amber-500'}">
-                            ${req.current} / ${req.target}
-                            ${met ? ' <span class="text-green-500">✓</span>' : ''}
-                        </div>
-                    </div>
-                `;
-            };
-
-            return `
-                <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-
-                <!-- Requirement Panel -->
-                <div class="bg-black/40 border-2 ${allMet ? 'border-green-500/50' : 'border-amber-500/20'} rounded-xl p-6 mb-8 backdrop-blur-sm">
-                    <h4 class="text-xs font-black text-amber-500 uppercase tracking-[0.3em] mb-4 text-center">
-                        ${allMet ? 'Gig Requirements Cleared' : 'Pre-Performance Checklist'}
-                    </h4>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2 ${allMet ? 'opacity-50 grayscale-[0.5]' : ''}">
-                        ${reqs.map(r => renderReq(r)).join('')}
-                    </div>
-
-                    ${!allMet ? `
-                        <p class="text-[10px] text-center text-gray-500 mt-4 italic uppercase">
-                            The venue manager requires specific skills and hype before you take the stage.
-                        </p>
-                    ` : ''}
-                </div>
-
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">
-                        ${allMet 
-                            ? "The soundcheck is perfect. The line is around the block. It's time." 
-                            : "Massive crowds are thrilled about the concert. Are you ready for this?"}
-                    </p>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                    <div class="flex justify-center mt-6 w-full">
-                        ${allMet ? `
-                            <button onclick="startFinalGig()" class="metal-button px-10 py-4 w-full sm:w-3/4 border-green-500 bg-green-900/20 hover:bg-green-600 group transition-all">
-                                <span class="text-xl font-black text-white group-hover:scale-110 block">
-                                    🔥 EVERYTHING ACCOMPLISHED. SHOWTIME! 🔥
-                                </span>
-                            </button>
-                        ` : `
-                            <button onclick="showMetallica()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2 opacity-80 pointer-events-none grayscale">
-                                <span class="text-sm font-bold text-gray-500">LOCKED: COMPLETE CHECKLIST</span>
-                            </button>
-                        `}
-                    </div>
-                </div>
-            `;
-        },
-
-
-          chapel: (name, data) => {
-            // Helper to find specific chop values by emoji
-            const getChopVal = (emoji) => {
-                const chop = game.chops?.find(c => c.icon === emoji);
-                return chop ? (chop.available || 0) : 0;
-            };
-
-
-            // 1. Define granular requirements
-            const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 110, icon: '🔥' },
-                { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 4, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 170, icon: '👥' },
-                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 1, icon: '📣' },
-                { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 1, icon: '🎼' },
-                { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 1, icon: '🖋️' },
-                { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 1, icon: '📜' },
-                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 1, icon: '🎤' }
-            ];
-
-            const allMet = reqs.every(r => r.current >= r.target);
-
-            // Helper for requirement item styling
-            const renderReq = (req) => {
-                const met = req.current >= req.target;
-                return `
-                    <div class="flex items-center justify-between p-2 rounded ${met ? 'bg-green-900/20 border border-green-500/30' : 'bg-gray-900/40 border border-gray-700'}">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xl">${req.icon}</span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest ${met ? 'text-green-400' : 'text-gray-400'}">${req.label}</span>
-                        </div>
-                        <div class="font-mono text-sm ${met ? 'text-green-400' : 'text-amber-500'}">
-                            ${req.current} / ${req.target}
-                            ${met ? ' <span class="text-green-500">✓</span>' : ''}
-                        </div>
-                    </div>
-                `;
-            };
-
-            return `
-                <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-
-                <!-- Requirement Panel -->
-                <div class="bg-black/40 border-2 ${allMet ? 'border-green-500/50' : 'border-amber-500/20'} rounded-xl p-6 mb-8 backdrop-blur-sm">
-                    <h4 class="text-xs font-black text-amber-500 uppercase tracking-[0.3em] mb-4 text-center">
-                        ${allMet ? 'Gig Requirements Cleared' : 'Pre-Performance Checklist'}
-                    </h4>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2 ${allMet ? 'opacity-50 grayscale-[0.5]' : ''}">
-                        ${reqs.map(r => renderReq(r)).join('')}
-                    </div>
-
-                    ${!allMet ? `
-                        <p class="text-[10px] text-center text-gray-500 mt-4 italic uppercase">
-                            The venue manager requires specific skills and hype before you take the stage.
-                        </p>
-                    ` : ''}
-                </div>
-
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">
-                        ${allMet 
-                            ? "The soundcheck is perfect. The line is around the block. It's time." 
-                            : "Massive crowds are thrilled about the concert. Are you ready for this?"}
-                    </p>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                    <div class="flex justify-center mt-6 w-full">
-                        ${allMet ? `
-                            <button onclick="startFinalGig()" class="metal-button px-10 py-4 w-full sm:w-3/4 border-green-500 bg-green-900/20 hover:bg-green-600 group transition-all">
-                                <span class="text-xl font-black text-white group-hover:scale-110 block">
-                                    🔥 EVERYTHING ACCOMPLISHED. SHOWTIME! 🔥
-                                </span>
-                            </button>
-                        ` : `
-                            <button onclick="showMetallica()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2 opacity-80 pointer-events-none grayscale">
-                                <span class="text-sm font-bold text-gray-500">LOCKED: COMPLETE CHECKLIST</span>
-                            </button>
-                        `}
-                    </div>
-                </div>
-            `;
-        },
-
-           slims: (name, data) => {
-            // Helper to find specific chop values by emoji
-            const getChopVal = (emoji) => {
-                const chop = game.chops?.find(c => c.icon === emoji);
-                return chop ? (chop.available || 0) : 0;
-            };
-
-
-            // 1. Define granular requirements
-            const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 120, icon: '🔥' },
-                { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 5, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 200, icon: '👥' },
-                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 1, icon: '📣' },
-                { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 1, icon: '🎼' },
-                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 1, icon: '🎸' },
-                { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 1, icon: '🖋️' },
-                { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 1, icon: '📜' },
-                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 1, icon: '🎤' }
-            ];
-
-            const allMet = reqs.every(r => r.current >= r.target);
-
-            // Helper for requirement item styling
-            const renderReq = (req) => {
-                const met = req.current >= req.target;
-                return `
-                    <div class="flex items-center justify-between p-2 rounded ${met ? 'bg-green-900/20 border border-green-500/30' : 'bg-gray-900/40 border border-gray-700'}">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xl">${req.icon}</span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest ${met ? 'text-green-400' : 'text-gray-400'}">${req.label}</span>
-                        </div>
-                        <div class="font-mono text-sm ${met ? 'text-green-400' : 'text-amber-500'}">
-                            ${req.current} / ${req.target}
-                            ${met ? ' <span class="text-green-500">✓</span>' : ''}
-                        </div>
-                    </div>
-                `;
-            };
-
-            return `
-                <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-
-                <!-- Requirement Panel -->
-                <div class="bg-black/40 border-2 ${allMet ? 'border-green-500/50' : 'border-amber-500/20'} rounded-xl p-6 mb-8 backdrop-blur-sm">
-                    <h4 class="text-xs font-black text-amber-500 uppercase tracking-[0.3em] mb-4 text-center">
-                        ${allMet ? 'Gig Requirements Cleared' : 'Pre-Performance Checklist'}
-                    </h4>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2 ${allMet ? 'opacity-50 grayscale-[0.5]' : ''}">
-                        ${reqs.map(r => renderReq(r)).join('')}
-                    </div>
-
-                    ${!allMet ? `
-                        <p class="text-[10px] text-center text-gray-500 mt-4 italic uppercase">
-                            The venue manager requires specific skills and hype before you take the stage.
-                        </p>
-                    ` : ''}
-                </div>
-
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">
-                        ${allMet 
-                            ? "The soundcheck is perfect. The line is around the block. It's time." 
-                            : "Massive crowds are thrilled about the concert. Are you ready for this?"}
-                    </p>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                    <div class="flex justify-center mt-6 w-full">
-                        ${allMet ? `
-                            <button onclick="startFinalGig()" class="metal-button px-10 py-4 w-full sm:w-3/4 border-green-500 bg-green-900/20 hover:bg-green-600 group transition-all">
-                                <span class="text-xl font-black text-white group-hover:scale-110 block">
-                                    🔥 EVERYTHING ACCOMPLISHED. SHOWTIME! 🔥
-                                </span>
-                            </button>
-                        ` : `
-                            <button onclick="showMetallica()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2 opacity-80 pointer-events-none grayscale">
-                                <span class="text-sm font-bold text-gray-500">LOCKED: COMPLETE CHECKLIST</span>
-                            </button>
-                        `}
-                    </div>
-                </div>
-            `;
-        },
-
-           warfield: (name, data) => {
-            // Helper to find specific chop values by emoji
-            const getChopVal = (emoji) => {
-                const chop = game.chops?.find(c => c.icon === emoji);
-                return chop ? (chop.available || 0) : 0;
-            };
-
-
-            // 1. Define granular requirements
-            const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 180, icon: '🔥' },
-                { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 6, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 500, icon: '👥' },
-                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 1, icon: '📣' },
-                { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 1, icon: '🎼' },
-                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 1, icon: '🎸' },
-                { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 2, icon: '🖋️' },
-                { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 1, icon: '📜' },
-                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 2, icon: '🎤' },
-                { id: 'candy', label: 'candy', current: game.candy, target: 1, icon: '🍬' }
-            ];
-
-            const allMet = reqs.every(r => r.current >= r.target);
-
-            // Helper for requirement item styling
-            const renderReq = (req) => {
-                const met = req.current >= req.target;
-                return `
-                    <div class="flex items-center justify-between p-2 rounded ${met ? 'bg-green-900/20 border border-green-500/30' : 'bg-gray-900/40 border border-gray-700'}">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xl">${req.icon}</span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest ${met ? 'text-green-400' : 'text-gray-400'}">${req.label}</span>
-                        </div>
-                        <div class="font-mono text-sm ${met ? 'text-green-400' : 'text-amber-500'}">
-                            ${req.current} / ${req.target}
-                            ${met ? ' <span class="text-green-500">✓</span>' : ''}
-                        </div>
-                    </div>
-                `;
-            };
-
-            return `
-                <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-
-                <!-- Requirement Panel -->
-                <div class="bg-black/40 border-2 ${allMet ? 'border-green-500/50' : 'border-amber-500/20'} rounded-xl p-6 mb-8 backdrop-blur-sm">
-                    <h4 class="text-xs font-black text-amber-500 uppercase tracking-[0.3em] mb-4 text-center">
-                        ${allMet ? 'Gig Requirements Cleared' : 'Pre-Performance Checklist'}
-                    </h4>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2 ${allMet ? 'opacity-50 grayscale-[0.5]' : ''}">
-                        ${reqs.map(r => renderReq(r)).join('')}
-                    </div>
-
-                    ${!allMet ? `
-                        <p class="text-[10px] text-center text-gray-500 mt-4 italic uppercase">
-                            The venue manager requires specific skills and hype before you take the stage.
-                        </p>
-                    ` : ''}
-                </div>
-
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">
-                        ${allMet 
-                            ? "The soundcheck is perfect. The line is around the block. It's time." 
-                            : "Massive crowds are thrilled about the concert. Are you ready for this?"}
-                    </p>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                    <div class="flex justify-center mt-6 w-full">
-                        ${allMet ? `
-                            <button onclick="startFinalGig()" class="metal-button px-10 py-4 w-full sm:w-3/4 border-green-500 bg-green-900/20 hover:bg-green-600 group transition-all">
-                                <span class="text-xl font-black text-white group-hover:scale-110 block">
-                                    🔥 EVERYTHING ACCOMPLISHED. SHOWTIME! 🔥
-                                </span>
-                            </button>
-                        ` : `
-                            <button onclick="showMetallica()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2 opacity-80 pointer-events-none grayscale">
-                                <span class="text-sm font-bold text-gray-500">LOCKED: COMPLETE CHECKLIST</span>
-                            </button>
-                        `}
-                    </div>
-                </div>
-            `;
-        },
-
-        sagebar:  (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">Bobby is dancing and collecting donations for the fundraiser. He is happy to see you! </p>
-                </div>
-
-                  ${game.bobby_buttons.showHelpButton ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="bobby_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
-                    </button>
-                </div>
-                ` : ''}
-
-                 ${game.bobby_buttons.showBike ? `
-                     <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="playMovie('./videos/bobby-bike.mp4', 'You fall in love with the Revolution Bike! You need to get it!');" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Ask ${data.character} to show you the Revolution Bike Price</span>
-                    </button>
-                </div>
-                ` : ''}
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Interact with ${data.character} </span>
-                            </button>
-                        </div>
-                </div>
-
-            `;
-               
-        },
-
-
-         presidio:  (name, data) => {
-            currentContext = { name, data };
-
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">The registration tent for the race is open. Your softball buddy Mattt is surprisingly here with a suspicious stash...</p>
-                </div>
-
-
-                  ${game.bobby_buttons.bike ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="presidio_action1()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Register for the Race</span>
-                    </button>
-                </div>
-                ` : ''}
-
-               ${game.presidio_buttons.race ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="presidio_race()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Start race</span>
-                    </button>
-                </div>
-                ` : ''}
-
-
-
-
-                  ${game.matt_buttons.showHelpButton ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="matt_request_help()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
-                    </button>
-                </div>
-                ` : ''}
-
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Interact with ${data.character} </span>
-                            </button>
-                        </div>
-                </div>
-
-            `;
-               
-        },
-
-        outin:(name, data) => {
-            currentContext = { name, data };
-
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">This place seems utterly familiar... Food definitely smells good!</p>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-6 w-full">
-                            <button onclick="inout_action2()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Order Organic Food & Drink ($30)</span>
-                            </button>
-                        </div>
-                </div>
-
-                 <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-6 w-full">
-                            <button onclick="inout_action3()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Grab sauce packages</span>
-                            </button>
-                        </div>
-                </div>
-
-                  ${game.rick_buttons.bottle ? `
-                ` : `div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="inout_action1()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Fill Bottle at the fountain</span>
-                    </button>
-                </div>`}
-            `;
-               
-        },
-
 
 
         oracle: (name, data) => {
@@ -5891,6 +4567,7 @@
                 </div>
                 ` : ''}
 
+               
 
 
              ${game.rick_buttons.dave ? `
@@ -6279,46 +4956,6 @@
         gamh: (name, data) => {
             currentContext = { name, data };
 
-             // Helper to find specific chop values by emoji
-            const getChopVal = (emoji) => {
-                const chop = game.chops?.find(c => c.icon === emoji);
-                return chop ? (chop.available || 0) : 0;
-            };
-
-
-            // 1. Define granular requirements
-            const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 140, icon: '🔥' },
-                { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 5, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 220, icon: '👥' },
-                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 1, icon: '📣' },
-                { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 1, icon: '🎼' },
-                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 1, icon: '🎸' },
-                { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 1, icon: '🖋️' },
-                { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 1, icon: '📜' },
-                { id: 'rhythm', label: '', current: getChopVal('🎤'), target: 2, icon: '🎤' }
-            ];
-
-            const allMet = reqs.every(r => r.current >= r.target);
-
-            // Helper for requirement item styling
-            const renderReq = (req) => {
-                const met = req.current >= req.target;
-                return `
-                    <div class="flex items-center justify-between p-2 rounded ${met ? 'bg-green-900/20 border border-green-500/30' : 'bg-gray-900/40 border border-gray-700'}">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xl">${req.icon}</span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest ${met ? 'text-green-400' : 'text-gray-400'}">${req.label}</span>
-                        </div>
-                        <div class="font-mono text-sm ${met ? 'text-green-400' : 'text-amber-500'}">
-                            ${req.current} / ${req.target}
-                            ${met ? ' <span class="text-green-500">✓</span>' : ''}
-                        </div>
-                    </div>
-                `;
-            };
-
-
             return `
                 <div class="mb-8">
                     <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
@@ -6334,49 +4971,6 @@
                 </div>
 
 
-                ${game.bridget_buttons.unlock ? `
-                <!-- Requirement Panel -->
-                <div class="bg-black/40 border-2 ${allMet ? 'border-green-500/50' : 'border-amber-500/20'} rounded-xl p-6 mb-8 backdrop-blur-sm">
-                    <h4 class="text-xs font-black text-amber-500 uppercase tracking-[0.3em] mb-4 text-center">
-                        ${allMet ? 'Gig Requirements Cleared' : 'Pre-Performance Checklist'}
-                    </h4>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2 ${allMet ? 'opacity-50 grayscale-[0.5]' : ''}">
-                        ${reqs.map(r => renderReq(r)).join('')}
-                    </div>
-
-                    ${!allMet ? `
-                        <p class="text-[10px] text-center text-gray-500 mt-4 italic uppercase">
-                            The venue manager requires specific skills and hype before you take the stage.
-                        </p>
-                    ` : ''}
-                </div>
-
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">
-                        ${allMet 
-                            ? "The soundcheck is perfect. The line is around the block. It's time." 
-                            : "Massive crowds are thrilled about the concert. Are you ready for this?"}
-                    </p>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                    <div class="flex justify-center mt-6 w-full">
-                        ${allMet ? `
-                            <button onclick="startFinalGig()" class="metal-button px-10 py-4 w-full sm:w-3/4 border-green-500 bg-green-900/20 hover:bg-green-600 group transition-all">
-                                <span class="text-xl font-black text-white group-hover:scale-110 block">
-                                    🔥 EVERYTHING ACCOMPLISHED. SHOWTIME! 🔥
-                                </span>
-                            </button>
-                        ` : `
-                            <button onclick="showMetallica()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2 opacity-80 pointer-events-none grayscale">
-                                <span class="text-sm font-bold text-gray-500">LOCKED: COMPLETE CHECKLIST</span>
-                            </button>
-                        `}
-                    </div>
-                </div>
-                ` : 
-                `
 
                 ${game.bouncer_buttons.showHelpButton2 ? `
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
@@ -6402,11 +4996,6 @@
                             </button>
                         </div>
                 </div>
-
-                `
-
-            }
-
 
             `;
                
@@ -6459,50 +5048,6 @@
         fillmore: (name, data) => {
             currentContext = { name, data };
 
-
-             // Helper to find specific chop values by emoji
-            const getChopVal = (emoji) => {
-                const chop = game.chops?.find(c => c.icon === emoji);
-                return chop ? (chop.available || 0) : 0;
-            };
-
-
-            // 1. Define granular requirements
-            const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 140, icon: '🔥' },
-                { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 6, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 250, icon: '👥' },
-                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 1, icon: '📣' },
-                { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 1, icon: '🎼' },
-                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 2, icon: '🎸' },
-                { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 1, icon: '🖋️' },
-                { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 1, icon: '📜' },
-                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 2, icon: '🎤' },
-                { id: 'guitar', label: 'Musicians', current: game.musician, target: 2, icon: '👨‍🎤' },
-                { id: 'dancers', label: 'Dancers', current: game.dancers, target: 1, icon:'🕺🏿'}
-
-            ];
-
-            const allMet = reqs.every(r => r.current >= r.target);
-
-            // Helper for requirement item styling
-            const renderReq = (req) => {
-                const met = req.current >= req.target;
-                return `
-                    <div class="flex items-center justify-between p-2 rounded ${met ? 'bg-green-900/20 border border-green-500/30' : 'bg-gray-900/40 border border-gray-700'}">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xl">${req.icon}</span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest ${met ? 'text-green-400' : 'text-gray-400'}">${req.label}</span>
-                        </div>
-                        <div class="font-mono text-sm ${met ? 'text-green-400' : 'text-amber-500'}">
-                            ${req.current} / ${req.target}
-                            ${met ? ' <span class="text-green-500">✓</span>' : ''}
-                        </div>
-                    </div>
-                `;
-            };
-
-
             return `
                 <div class="mb-8">
                     <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
@@ -6517,52 +5062,6 @@
                     <p class="italic">${game.bouncer_buttons.description}</p>
                 </div>
 
-
-               
-
-
-                  ${game.bridget_buttons.unlock ? `
-                <!-- Requirement Panel -->
-                <div class="bg-black/40 border-2 ${allMet ? 'border-green-500/50' : 'border-amber-500/20'} rounded-xl p-6 mb-8 backdrop-blur-sm">
-                    <h4 class="text-xs font-black text-amber-500 uppercase tracking-[0.3em] mb-4 text-center">
-                        ${allMet ? 'Gig Requirements Cleared' : 'Pre-Performance Checklist'}
-                    </h4>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2 ${allMet ? 'opacity-50 grayscale-[0.5]' : ''}">
-                        ${reqs.map(r => renderReq(r)).join('')}
-                    </div>
-
-                    ${!allMet ? `
-                        <p class="text-[10px] text-center text-gray-500 mt-4 italic uppercase">
-                            The venue manager requires specific skills and hype before you take the stage.
-                        </p>
-                    ` : ''}
-                </div>
-
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">
-                        ${allMet 
-                            ? "The soundcheck is perfect. The line is around the block. It's time." 
-                            : "Massive crowds are thrilled about the concert. Are you ready for this?"}
-                    </p>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                    <div class="flex justify-center mt-6 w-full">
-                        ${allMet ? `
-                            <button onclick="startFinalGig()" class="metal-button px-10 py-4 w-full sm:w-3/4 border-green-500 bg-green-900/20 hover:bg-green-600 group transition-all">
-                                <span class="text-xl font-black text-white group-hover:scale-110 block">
-                                    🔥 EVERYTHING ACCOMPLISHED. SHOWTIME! 🔥
-                                </span>
-                            </button>
-                        ` : `
-                            <button onclick="showMetallica()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2 opacity-80 pointer-events-none grayscale">
-                                <span class="text-sm font-bold text-gray-500">LOCKED: COMPLETE CHECKLIST</span>
-                            </button>
-                        `}
-                    </div>
-                </div>
-                ` : `
 
                 ${game.bouncer_buttons.showHelpButton ? `
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
@@ -6581,13 +5080,10 @@
                         </div>
                 </div>
 
-                `}
-
             `;
-            
+               
 
         },
-
 
 
           gym: (name, data) => {
@@ -6612,14 +5108,6 @@
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
                     <button onclick="bestie2_gym_talk()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
                         <span class="text-sm font-bold text-yellow-300">Greet ${data.character}</span>
-                    </button>
-                </div>
-                ` : ''}
-
-                ${game.bestie2_buttons.songwriting ? `
-                     <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="playMovie('./videos/bestie2-songwriting.mp4', 'You learn that merging memories you can craft songs by matching the 3 song ingredients (grit, soul, depth) in songbooks');" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Ask ${data.character} about song writing again</span>
                     </button>
                 </div>
                 ` : ''}
@@ -6861,7 +5349,14 @@
 
 
     sids: (name, data) => {
+        // 1. Declare context properly
         const currentContext = { name, data }; 
+
+        // 2. Include 'oasis' in the check to prevent the "Barbados" message appearing while buttons exist
+        const noActionsAvailable =  
+                                   !game.sids_buttons.showHelpButton && 
+                                   !game.sids_buttons.sf_attire && 
+                                   !game.sids_buttons.oasisNeed;
 
         return `
             <div class="mb-8">
@@ -6873,8 +5368,6 @@
                 </p>
             </div>
             
-          
-
             <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
                 <p class="italic">${game.names.bestie} is happy to see you! He looks busy prepping for some party...</p>
             </div>
@@ -6895,15 +5388,18 @@
             </div>
             ` : ''}
 
+            ${noActionsAvailable ? `
+            <div class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
+                <p class="italic">${game.names.bestie} just went to Barbados!</p>
+            </div>
+            ` : `
             <div id="main-action-buttons" class="flex flex-col items-center">
                 <div class="flex justify-center mt-4 w-full">
                     <button onclick="showQuestionGrid()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
                         <span class="text-sm font-bold">Interact with ${game.names.bestie} </span>
                     </button>
                 </div>
-            </div>
-
-          
+            </div>`}
         `;
     },
 
@@ -6975,7 +5471,7 @@
 
                  ${game.tom_buttons.cry? `
             <div class="flex justify-center mt-4" id="sids-cheer-button-container">
-                <button onclick="tom_request_help();" class="metal-button px-6 py-2">
+                <button onclick="tom_action1();" class="metal-button px-6 py-2">
                     <span class="text-sm">Greet Tom</span>
                 </button>
             </div>
@@ -7224,6 +5720,7 @@
             const line = dialogueData[currentIndex];
             game.dialogueData = dialogueData;
             game.activeCharacter = characterName;
+            console.log('Dialogue:', dialogueData);
             if (!line) {
                 game.dialogueData = null;
                 screen_return();
@@ -7247,6 +5744,7 @@
                 characterPortraitName = characterPortraits[characterName];
             }
             
+            console.log('Line:', line)
             const isPlayer = line.speaker === 'Player';
             const speakerDisplayName = isPlayer ? game.names.main : characterName;
             const portraitUrl = isPlayer ? characterPortraits['Player'] : characterPortraitName;
@@ -7315,19 +5813,6 @@
 
 
 
-        function addChopAvailable(chopName) {
-            const chop = game.chops.find(c => c.name.toLowerCase() === chopName.toLowerCase());
-
-
-            if (chop) {
-                chop.available += 1;
-
-            } else {
-                console.error(`[Chop Error] No chop found with the name: "${chopName}"`);
-                return null;
-            }
-        }
-
     function rick_request_help(){
             game.currentLocationId = 'Wrestling Club';
             game.dialogueData = rick_help_dialogue_data;
@@ -7385,7 +5870,6 @@
                         game.bouncer_buttons.showHelpButton = false;
                         game.bouncer_buttons.code = false;
                         game.bridget_buttons.gig = true;
-                        toggleMission('code');
 
                         let inventoryItem = game.inventory_items.find(i => i.name === 'Secret Code');
                         inventoryItem.acquired = false;
@@ -7420,62 +5904,7 @@
             }
         }
 
-        function fishermans_food(){
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Organic Burger');
-            inventoryItem.acquired = false;
-            game.fishermans_buttons.food = true
-            if (game.fishermans_buttons.food & game.fishermans_buttons.drink){
-                pendingAcquisition.item = 'Song Book 2'
-                playMovie('./videos/fisherman-success1.mp4','Little Jimi devours the burger! You have fully satisfied the demands and the song book is yours!' );
-            }
-            else{
-                playMovie('./videos/fisherman-food.mp4','Little Jimi devours the burger! Now he needs some organic liquid' );
 
-            }
-
-        }
-
-        function fishermans_drink(){
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Full Cycling Bottle');
-            inventoryItem.acquired = false;
-            inventoryItem = game.inventory_items.find(i => i.name === 'Cycling Bottle');
-            inventoryItem.acquired = true;
-
-            game.fishermans_buttons.drink = true
-            if (game.fishermans_buttons.food & game.fishermans_buttons.drink){
-                 playMovie('./videos/fisherman-success2.mp4','Little Jimi drinks the whole thing! You have fully satisfied the demands and the song book is yours!' );
-            }
-            else{
-                playMovie('./videos/fisherman-drink.mp4','Little Jimi drinks the whole thing! Now he needs some organic food' );
-            }
-
-        }
-
-        function fisherman_songwriting(){
-
-            if (game.fishermans_buttons.first){
-                game.fishermans_buttons.first = false;
-                game.currentLocationId = 'Fisherman\'s Wharf';
-                const musician_dialogue = [
-                    { speaker: 'Player', text: "I've walked this Wharf a thousand times, but I've never heard anyone play like you! 🎸✨" },
-                    { speaker: 'BESTIE', text: "Most people just hear the noise; it’s nice to meet a pair of ears that hear the truth, sugar 🌊🎶" },
-                    { speaker: 'Player', text: "Are those... songbooks in your crate? There must be fifty of them! All hand-written?" },
-                    { speaker: 'BESTIE', text: "Every frequency the city has hummed since the Summer of Love is in those pages. They’re my archives. My legacy. My retirement plan, if the birds ever start paying rent. 📖🐦" },
-                    { speaker: 'Player', text: "I'm trying to find my own voice in this city. I need to learn more lyric structures. Would you be willing to lend me one?" },
-                    { speaker: 'BESTIE', text: "I don't sell the soul for cash. But look at poor Jimi—he’s a growing boy, and this city’s trash-can diet is doing nothing for his spirit or mine. 🐶" },
-                    { speaker: 'Player', text: "You need real sustenance. Not the processed stuff the tourists leave behind." },
-                    { speaker: 'BESTIE', text: "Exactly. If you can find him some real USDA biodynamic, pasture-raised, Organic fuel—both fluids and solid nutrients, I’ll let you have one of my song books" },
-                    { speaker: 'Player', text: "Don't let that melody slip away while I'm gone!" }
-                ];
-                addMission('dog', 'Find Jimi the dog 🐶 some USDA organic fluid and solid food');
-                game.pendingAcquisition.topic = 'Organic Food';
-                const dialogueHtml = renderDialogue(musician_dialogue, 'Musician');
-                const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-                switchToView(contentDiv);
-
-            }
-
-        }
 
         function bouncer_request_help2(){
             game.currentLocationId = 'The GAMH';
@@ -7485,7 +5914,7 @@
 
             game.bouncer_buttons.code = true;
             game.dialogueIndex = 0;
-            addMission('code', 'Get access to the GAMH by deciphering the 5-letter word code');
+            addMission('bouncer', 'Get access to the GAMH by deciphering the 5-letter word code');
             const dialogueHtml = renderDialogue(bouncer_help_dialogue_data2, "Intimidating Bouncer");
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
@@ -7538,7 +5967,7 @@
             game.currentLocationId = 'Mama⬇️';
             game.activeCharacter = "Mama";
             game.pendingAcquisition.item = 'Scrapbook';
-            addMission('scrapbook', 'Inspect mama\'s scrapbook, guess the landmarks, take photos there, and gave it back');
+            addMission('mama2', 'I need to guess the landmarks and take new photos for mama\'s damaged scrapbook');
 
            // iphoneNotifications = appendNotification(iphoneNotifications,game.names.bestie2, 'Do you want to join me at the Castro gym?','💬',  'Castro Gym');
             game.dialogueIndex = 0;
@@ -7617,26 +6046,6 @@
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
         }
-
-        function mama_action5(){
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Completed Scrapbook');
-            inventoryItem.acquired = false;
-            toggleMission('scrapbook');
-            game.currentLocationId = 'Mama⬇️';
-            game.pendingAcquisition.memory = 'Love';            
-            game.pendingAcquisition.memory_text = 'You feel your mom\'s love!';
-
-            playMovie('./videos/mama-scrapbook.mp4','Shukran, habibi! This is wonderful! Thanks for being the best son in the world. I love you very much' );
-        }
-
-        function mama_action6(){
-            game.currentLocationId = 'Mama⬇️';
-            game.pendingAcquisition.item = 'Exotic Sauce';
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Sauce Packets');
-            inventoryItem.acquired = false;
-            playMovie('./videos/mama-sauce.mp4','Mama is amazing! She just created the ultimate exotic blend of sauce flavors adding biryani, sumac, and zataar! 😋' );
-        }
-
 
         function cool_bouncer_action1(){
             game.cool_bouncer_buttons.showHelpButton = false;
@@ -7838,10 +6247,6 @@
             game.pendingAcquisition.topic = 'Secret Hold';
             game.currentLocationId = 'Castro Gym';
             game.bestie2_buttons.spine = true;
-        
-            const topic = game.conversation_topics.unlocked.find(i => i.name === 'Invincible Dave');
-            topic.acquired = false;
-
             playMovie('./videos/bestie2-spinebuster.mp4', game.names.bestie2+ ' taught you the legendary secret hold, the Spinebuster!)');
         }
 
@@ -7856,13 +6261,13 @@
             { speaker: 'Player', text: "Okay, professor. I’m listening. How do I actually build these 'balanced' songs?" },
             { speaker: 'BESTIE', text: "It’s a mix of your Life Memories. Each memory you collect—like 'Happiness' or 'Freedom'—carries its own weight in Grit, Soul, and Depth. To write a song, you have to fuse two memories so their combined sum matches the song's requirements. 🧬🧠" },
             { speaker: 'Player', text: "Wait, so I’m basically doing algebra on my own past? That sounds... heavy." },
-            { speaker: 'BESTIE', text: "It’s the Algebra of the Heart. Here—take this. It’s your first Songbook with a couple of songs to be crafted. You will have to find more song books 📖✨" },
+            { speaker: 'BESTIE', text: "It’s the Algebra of the Heart. Here—take this. It’s your first Songbook with a couple of songs to be crafted 📖✨" },
             { speaker: 'Player', text: "A Songbook... so I collect the memories around San Francisco, then go back home to 'craft' them into the setlist?" },
             { speaker: 'BESTIE', text: "Precisely. Match the sum to the template, and you’ll write a hit. Mess up the math, and you're just another tech-bro with a hobby. Now, give me a spot—I need some Grit to finish this set! 🏋️‍♀️🦾" }
             ];
             game.bestie2_buttons.songwriting = true
 
-            toggleMission('music');
+
             const dialogueHtml = renderDialogue(kevin_gym_song_dialogue_data, game.names.bestie2);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
@@ -8126,8 +6531,6 @@
             let item;
 
             const currentLocationId = game.currentLocationId;
-            currentContext.name = currentLocationId;
-
             const characterName = game.currentCharacter;
 
             if (isItem) {
@@ -8178,6 +6581,7 @@
                 }
             }
 
+
             const locationPortraits = {
                 'Home' : './faces/habibi.jpg',
                 'BITTER END': './faces/kevind.png',
@@ -8189,8 +6593,6 @@
 
             let portraitUrl = characterPortraits[characterName] || locationPortraits[currentLocationId]  
             const icon = item.icon || (isItem ? '📦' : '🗣️');
-
-
 
             // 4. Construct the HTML with Portrait + Dialogue Style
             const message = `
@@ -8230,8 +6632,6 @@
             const output = document.getElementById(MAIN_OUTPUT_ID);
             const actionFunc = actionRegistry[currentContext.data.actionKey];
 
-
-
             if (output && actionFunc) {
                 output.innerHTML = actionFunc(currentContext.name, currentContext.data);
             }
@@ -8255,7 +6655,6 @@
             // Get the current NPC name from the context
             const currentNpcName = currentContext.name || "Unknown";
 
-
             // Ensure the array for this specific NPC exists
             if (!game.asked_memory[currentNpcName]) {
                 game.asked_memory[currentNpcName] = [];
@@ -8268,9 +6667,7 @@
                     'BITTER END': ['Chops list'],
                     'The 440': ['Chops list'],
                     'HSB Festival': ['Chops list'],
-                    'The Fillmore': ['Chops list'],
-                    'APEX Office ': ['Complete Gig Sign'],
-                    'Sage & Drifter' : ['Cash']
+                    'The Fillmore': ['Chops list']
                 };
 
                 if (exceptions[currentNpcName]) {
@@ -8330,6 +6727,7 @@
                     cardElement.classList.add('scale-105');
                     setTimeout(() => cardElement.classList.remove('scale-105'), 200);
                 }
+                
                 askForDetails(data.name, data.type);
             };
 
@@ -8337,40 +6735,40 @@
             const gridContainer = createElement('div', 'flex flex-col space-y-8 w-full max-w-4xl p-4');
 
             const renderSection = (title, dataList, colorClass, borderColor) => {
-                const section = createElement('div', `grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-800/50 rounded-xl border ${borderColor}`);
-                section.innerHTML = `<h4 class="col-span-full text-xl font-bold ${colorClass} mb-2 border-b border-white/10 pb-1 uppercase tracking-tighter">${title}</h4>`;
+                    const section = createElement('div', `grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-800/50 rounded-xl border ${borderColor}`);
+                    section.innerHTML = `<h4 class="col-span-full text-xl font-bold ${colorClass} mb-2 border-b border-white/10 pb-1 uppercase tracking-tighter">${title}</h4>`;
 
-                dataList.forEach(data => {
-                    const disabledClasses = data.isAsked 
-                        ? 'opacity-40 grayscale cursor-not-allowed pointer-events-none' 
-                        : 'cursor-pointer hover:scale-[1.03] hover:bg-gray-700/50';
-                    
-                    // Visual Logic: Image takes priority, fallback to icon
-                    let visualHtml = '';
-                    if (data.image) {
-                        visualHtml = `
-                            <div class="w-12 h-12 mb-2 flex items-center justify-center">
-                                <img src="${data.image}" 
-                                     class="max-w-full max-h-full object-contain pixel-image filter drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)]"
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                <span class="hidden text-4xl">${data.icon || '❓'}</span>
-                            </div>`;
-                    } else {
-                        visualHtml = `<span class="text-4xl mb-1">${data.icon || '❓'}</span>`;
-                    }
-                    
-                    const card = createElement('div', `metal-button p-3 flex flex-col items-center justify-center text-center transition-all shadow-lg min-h-[120px] ${disabledClasses}`,
-                        `${visualHtml}
-                         <span class="text-[10px] font-bold uppercase ${colorClass} leading-tight">${data.name}</span>`
-                    );
+                    dataList.forEach(data => {
+                        const disabledClasses = data.isAsked 
+                            ? 'opacity-40 grayscale cursor-not-allowed pointer-events-none' 
+                            : 'cursor-pointer hover:scale-[1.03] hover:bg-gray-700/50';
+                        
+                        // Visual Logic: Image takes priority, fallback to icon
+                        let visualHtml = '';
+                        if (data.image) {
+                            visualHtml = `
+                                <div class="w-12 h-12 mb-2 flex items-center justify-center">
+                                    <img src="${data.image}" 
+                                         class="max-w-full max-h-full object-contain pixel-image filter drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)]"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                    <span class="hidden text-4xl">${data.icon || '❓'}</span>
+                                </div>`;
+                        } else {
+                            visualHtml = `<span class="text-4xl mb-1">${data.icon || '❓'}</span>`;
+                        }
+                        
+                        const card = createElement('div', `metal-button p-3 flex flex-col items-center justify-center text-center transition-all shadow-lg min-h-[120px] ${disabledClasses}`,
+                            `${visualHtml}
+                             <span class="text-[10px] font-bold uppercase ${colorClass} leading-tight">${data.name}</span>`
+                        );
 
-                    if (!data.isAsked) {
-                        card.onclick = () => handleCardClick(card, data);
-                    }
-                    section.appendChild(card);
-                });
-                return section;
-            };
+                        if (!data.isAsked) {
+                            card.onclick = () => handleCardClick(card, data);
+                        }
+                        section.appendChild(card);
+                    });
+                    return section;
+                };
 
             if (topicData.length > 0) {
                 gridContainer.appendChild(renderSection('Conversation Topics', topicData, 'text-teal-400', 'border-teal-700/50'));
@@ -8488,6 +6886,7 @@
             // Background click to close
             overlay.onclick = () => closeSequence();
 
+            console.log(`Topic Unlocked: ${topicName}`);
         }
 
        function displayNewLocationAcquired(locationName) {
@@ -8500,6 +6899,7 @@
 
             // If it's already found, we don't show the big celebratory window
             if (!newlocation.hidden) {
+                console.log(`${locationName} already found.`);
                 return;
             }
 
@@ -8982,12 +7382,10 @@
 
                 const response = await fetch('./trivia-questions.txt');
                 game.questionsData = await response.json();
-                if (game.chapter ===1){
-                    game.score = 50; 
-                }
-                else{
-                    game.score = 300;
-                }
+
+                game.score = 50; // Reset score for initial display
+                // Set initial chops values for display test (sum is 371)
+               
 
                 // Fetch, split, trim, and filter in one chain
                 game.words = (await read_wordle.text())
@@ -9182,7 +7580,7 @@
 
             // Footer note
             const footer = createElement('div', 'mt-8 pt-4 border-t border-black/20 text-xs italic opacity-70 text-black');
-            footer.innerHTML = `* Note: I need to buy labneh for breakfast. Don't forget!`;
+            footer.innerHTML = `* Note: I need to buy Zataar for breakfast. Don't forget!`;
             paper.appendChild(footer);
 
             missionWrapper.appendChild(paper);
@@ -9372,6 +7770,7 @@
             try {
                 const parsed = loadTriviaQuestion(topic);
 
+                console.log(parsed);
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
                         questionData: parsed,
@@ -9398,6 +7797,7 @@
         function handleAnswerSelect(answer) {
             if (game.selectedAnswer !== null || game.isLoading) return; 
 
+            console.log(game.questionData);
             if (game.selectedAnswer !== null || game.isLoading) return; 
 
             let newScore = game.chops["Backstage Blueprint"];
@@ -9409,7 +7809,6 @@
             if (isCorrect) {
                 newScore += updateChopScore('Backstage Blueprint', 30);
                 feedback = 'Bravo! +20 Backstage Blueprint XP.';
-                addChopAvailable('Backstage Blueprint');
                 showSuccessAnimation();
 
             } else {
@@ -9817,6 +8216,7 @@
          function renderPhase_setup() {
 
             const station = STATIONS.find(s => s.id === 'rock');
+            
             game.radio.currentStation = station;
             game.radio.currentTrackIndex = 0;
             game.radio.errorState = false;
@@ -9926,19 +8326,13 @@
         let shopData = [
             { name: 'Guitar Pick', price: 1, icon: '🔻', desc: 'A simple guitar pick' },
             { name: 'Black Magic Gummies', price: 20, icon: '🍬', desc: 'They are magic!' },
-            { name: 'Morello\'s Guitar', price: 1800, icon: '🎸', desc: 'Ultimate Rock Power-Up.' },
-            { name: 'Billie Eilish\ VIP concert ticket', price: 12600, icon: '🎟️', desc: 'A waste of money and time?' }
+            { name: 'Morello\'s Guitar', price: 1800, icon: '🎸', desc: 'Ultimate Rock Power-Up.' }
         ];
 
         let inventoryItem = game.inventory_items.find(i => i.name === 'Arn Anderson VHS');
 
-
         if (game.bestie2_buttons.arn && !inventoryItem.given) {
             shopData.push({ name: 'Arn Anderson VHS', price: 100, icon: '📼', desc: 'One of the best wrestling legends!' });
-        }
-
-        if (game.bestie2_buttons.songwriting){
-            shopData.push({ name: 'Song Book 1', price: 45, icon: '📖', desc: 'A book with multiple songs. It can definitely give me ideas' });
         }
 
         if (game.bob_buttons.amoeba) {
@@ -9951,13 +8345,6 @@
         
         if (game.dj_buttons.showCD) {
             shopData.push({ name: 'Artist CD', price: 10, icon: '💿', desc: 'CDs to master your rhythm.' });
-        }
-
-        inventoryItem = game.inventory_items.find(i => i.name === 'Song Book 1');
-        if (inventoryItem.acquired === true){
-            inventoryItem.acquired = false;
-            songRecipesData.forEach(song => { if ([3, 4].includes(song.id)) song.available = true; });
-
         }
 
         const shopContent = createElement('div', 'flex flex-col items-center h-full p-6 rock-card shadow-2xl relative');
@@ -10088,21 +8475,12 @@
     
 
      function renderCliffs() {
-
-
-        let inventoryItem = game.inventory_items.find(i => i.name === 'Polaroid');
-        if (inventoryItem.acquired){
-            game.mama_buttons.polaroid = true;
-            game.mama_buttons.camera = false;
-            game.kevind_buttons.camera = false;
-        } 
-
         const shopData = [
             
             { name: 'Luxury Copper Cookware Set', price: 2000, icon: '🍳', desc: 'Best set for a culinary quest' }
         ];
 
-        inventoryItem = game.inventory_items.find(i => i.name === 'Galactic Silver glitter');
+        let inventoryItem = game.inventory_items.find(i => i.name === 'Galactic Silver glitter');
         if (!game.dj_buttons.cliff && !inventoryItem.given && game.chapter===1){
 
             shopData.push({ name: 'Galactic Silver glitter', price: 25, icon: '✨', desc: 'Robbie seems to like this glitter brand' },);
@@ -10318,7 +8696,6 @@
                     chop.points += updateChopScore('Social Influence', scoreIncrease);
                     showSuccessAnimation();
                     localMessage = `WIN! ${targetWord} was the word. You earned ${scoreIncrease} Social Influence XP points! Returning to menu...`;
-                    addChopAvailable(chop.name);
                     updateUI(); // Update UI for next gue
                     setTimeout(returnToMainMenu, 3500);
                 } else if (guesses.length >= 6) {
@@ -10649,7 +9026,6 @@
                         showSuccessAnimation();
                         let chop = game.chops.find(i => i.name === 'Instrument Synergy');
                         chop.points += updateChopScore('Instrument Synergy',40);
-                        addChopAvailable(chop.name);
 
                     }
                     game.paigow = null;
@@ -10843,7 +9219,6 @@
                 chop.points += updateChopScore('Rhythm Mastery',40);
 
                 resultMessage = `CORRECT! +50 Rhythm mastery Points. Song: ${game.currentSong}.`;
-                addChopAvailable(chop.name);
                 showSuccessAnimation();
 
             } else {
@@ -10864,9 +9239,7 @@
 
         function startPhase8Challenge() {
             stopRadio();
-
             if (!game.selectedPracticeArtist) return;
-
 
             // 1. Normalize the selected artist name
             const normalizedArtist = game.selectedPracticeArtist.toLowerCase().replace(/ /g, '_');
@@ -10876,7 +9249,6 @@
                 midiPath.toLowerCase().startsWith(normalizedArtist + '/')
             );
 
-
             if (artistPool.length === 0) {
                 // Use custom message instead of alert
                 updateState({ message: `No songs found for ${game.selectedPracticeArtist}!` });
@@ -10885,7 +9257,8 @@
 
             // 3. Pick a random MIDI
             const rawMidi = artistPool[Math.floor(Math.random() * artistPool.length)];
-            console.log(rawMidi);
+
+            // PREPARE STATE BEFORE RENDER
             const parts = rawMidi.split('/');
             const bandRaw = parts[0];
             const songRaw = parts[1].replace(/\.midi?$/i, '');
@@ -10899,11 +9272,14 @@
             playMusicChallenge('./midis/' + rawMidi);
             startTimer();
 
+            // 5. CRITICAL: Update state and force phase 8 re-render
+            // We pass phase: 8 to ensure the router picks the "Challenge Active" branch of renderPhase8
             updateState({ 
                 message: `Now streaming: ${game.currentSong}. GUESS THE SONG (do not write special characters!`, 
                 phase: 8 
             });
 
+            // Manual DOM refresh to be safe
             setPhase(8, `Guessing: ${game.currentSong}`);
         }
 
@@ -11164,7 +9540,6 @@
                 game.familyFeud.totalPointsScored += game.familyFeud.roundPoints;
                 let chop = game.chops.find(i => i.name === 'Stage Presence');
                 chop.points += updateChopScore('Stage Presence',game.familyFeud.totalPointsScored); 
-                addChopAvailable(chop.name);
                 game.message = `ROUND WON! You scored ${game.familyFeud.roundPoints} Stage Presence points.`;
             } else {
                 game.chops["Stage Presence"] = Math.max(0, game.chops["Stage Presence"] );
@@ -11207,7 +9582,7 @@
                     <!-- Header -->
                     <div class="text-center mb-6">
                         <h1 class="text-3xl font-bold title-font text-electric-cyan">MUSIC FEUD</h1>
-                        <p class="text-[10px] font-mono text-gray-400 mt-1 tracking-[0.2em]">Guess 3 out of the top 5 answers</p>
+                        <p class="text-[10px] font-mono text-gray-400 mt-1 tracking-[0.2em]">Guess the top 5 answers</p>
                     </div>
 
                     <!-- Question Box -->
@@ -11313,11 +9688,8 @@
             'Bob Mould' : './faces/bob.png',
             'Mama' : './faces/mama.png',
             'Rick' : './faces/rick.png',
-            'Tom' : './faces/tom_cry.jpg',
-            'Musician' : './faces/musician.jpg',
-            'Woman' : './faces/woman.jpg',
-            'Bobby' : './faces/bobby.png',
-            'Matt'  : './faces/matt.jpg'
+            'Tom' : './faces/',
+            'Musician' : './faces/musician.jpg'
 
         };
 
@@ -11331,7 +9703,6 @@
             "BITTER END ": "./sprites/bitter.jpg",
             "Metallica Pop-up Store":  "./sprites/popup.jpg",
             "Castro": "./sprites/castro.jpg",
-            "Coit Tower" : "./sprites/coit.jpg",
             "Peets" : "./sprites/peets.jpg",
             "HSB Festival": "./sprites/hsb1.jpg",
             "The 440": "./sprites/djrobbie_bar.jpg",
@@ -11350,17 +9721,8 @@
             "Lagunitas⬆️" : "./sprites/lagunitas_kevin.jpg",
             "Castro Gym" : "./sprites/gym.jpg",
             "Alcatraz"  : "./sprites/alcatraz.jpg",
-            "Lands End" : "./sprites/landsend.jpg",
-            "Fisherman\'s Wharf" : "./sprites/fishermans.jpg",
-            "Lombard Street" : "./sprites/lombard.jpg",
-            "Painted Ladies" : "./sprites/painted.jpg",
-            "The Warfield" : "./sprites/warfield.jpg",
-            "Slim's" : "./sprites/slims.jpg",
-            "The Chapel" : "./sprites/chapel.jpg",
-            "Bottom of the Hill" : "./sprites/bottom.jpg",
-            "Sage & Drifter" : "./sprites/bobby-bar.jpg",
-            "Presidio" : "./sprites/presidio.jpg",
-            "Out & IN" : "./sprites/out&in.jpg"
+            "Lands End" : "./sprites/woman.jpg",
+            "Fisherman\'s Wharf" : "./sprites/fishermans"
 
 
         };
@@ -11436,7 +9798,6 @@
                 chop.points += updateChopScore('Lyrical Flow',points);
                 showSuccessAnimation();
                 updateFeedback(`🎉 CORRECT! The word was: ${word}. +${points} Lyrical Flow XP!`, 'text-green-400 bg-green-900/50 border border-green-700');
-                addChopAvailable(chop.name);
                 endGame();
                 //renderGame(); // Update main score display
 
@@ -11573,10 +9934,7 @@
 
         function renderLocation() {
             const name = game.currentLocationId;
-
             const data = landmarkData[name];
-            currentContext.data = data;
-
             const newImageUrl = landmarkImageRegistry[name];
 
             // 1. Define the HTML template
@@ -11966,7 +10324,7 @@
                     game.radio.isPlaying = true;
                     game.radio.errorState = false;
                     // Ensure UI reflects active state
-                    //setTimeout(renderGame, 50);
+                    setTimeout(renderGame, 50);
                 },
                 onerror: (err) => {
 
@@ -12426,14 +10784,13 @@
                 console.log(`Memory locked into slot ${index}: ${imageUrl}`);
                 
                 // Show the Hype message if this was a big discovery!
-                //showPhoto(`You captured a new memory for the scrapbook!`);
+                displayHypeIncrease("+100 FANS", `You captured a new memory for the scrapbook!`);
             }
         }
 
 
 
-      function renderScrapbook() {
-
+        function renderScrapbook() {
             const scrapbook = createElement('div', 'scrapbook-page p-6 md:p-10 min-h-[600px] flex flex-col relative');
             
             // Add decorative water stains
@@ -12456,11 +10813,10 @@
             pageItems.forEach((loc, i) => {
                 const globalIndex = startIndex + i;
                 const isSolved = game.solvedLocations.has(globalIndex);
-                const hasPhoto = !!loc.photoUrl; // Check if the image has been found
                 
                 const itemWrapper = createElement('div', 'flex flex-col space-y-4');
                 
-                // Input Field / Solved Header
+                // Input Field
                 const inputWrapper = createElement('div', 'w-full');
                 if (!isSolved) {
                     const input = createElement('input', 'w-full bg-transparent border-b-2 border-[#a39476] font-handwriting text-lg focus:outline-none focus:border-[#5d4037] placeholder:text-[#a39476]/50');
@@ -12472,29 +10828,15 @@
                 }
 
                 // Photo Area
-                const photoSlot = createElement('div', `photo-slot relative overflow-hidden flex items-center justify-center bg-black/5 ${isSolved ? 'photo-revealed' : ''}`);
-       
-                
-                if (hasPhoto) {
-                    // Display the actual image found
+                const photoSlot = createElement('div', `photo-slot ${isSolved ? 'photo-revealed' : ''}`);
+                if (isSolved) {
                     photoSlot.innerHTML = `
-                        <img src="${loc.photoUrl}" 
-                             class="w-full h-full object-contain rounded-sm shadow-inner transition-all duration-700" 
-                             style="filter: sepia(0.2) contrast(1.1) brightness(0.9);"
-                             onerror="this.src='[https://via.placeholder.com/300x200?text=Photo+Lost](https://via.placeholder.com/300x200?text=Photo+Lost)'">
-                        ${isSolved ? '<div class="absolute inset-0 border-4 border-white/20 pointer-events-none"></div>' : ''}
-                    `;
-                } else if (isSolved) {
-                    // Solved but no image found yet
-                    photoSlot.innerHTML = `
-                        <div class="text-center opacity-50">
+                        <div class="text-center">
                             <span class="check-mark">✓</span>
-                            <p class="font-handwriting text-xs text-[#5d4037] mt-1">Location Verified</p>
-                            <p class="font-handwriting text-[10px] text-[#a39476]">Photo still missing...</p>
+                            <p class="font-handwriting font-bold text-[#5d4037] mt-2">${loc.name}</p>
                         </div>
                     `;
                 } else {
-                    // Neither solved nor found
                     photoSlot.innerHTML = `<span class="font-handwriting text-[#a39476] text-xs uppercase tracking-widest">Image Missing</span>`;
                 }
 
@@ -12538,7 +10880,6 @@
         }
 
 
-
         function startChapterOne() {
             document.getElementById('app').style.display = 'none';
             document.getElementById('chapterOneView').style.display = 'flex';
@@ -12547,9 +10888,8 @@
         function exitChapterOne() {
             document.getElementById('chapterOneView').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
-            handleClick('Home');
-            home_action1();
-            //displayNewTopicAcquired('Musician Career');
+
+            displayNewTopicAcquired('Musician Career');
 
            // setPhase(10, 'Start the day');
            // handleClick(game.currentLocationId);
@@ -12673,7 +11013,6 @@
 
             if (matchFound) {
                 game.message = `NEW SONG ACHIEVED: "${matchFound.title}" (${matchFound.type})!`;
-                game.songs +=1;
             }
         }
 
@@ -12898,7 +11237,7 @@
 
             craftContent.appendChild(mainArea);
 
-            const backButton = createElement('button', 'punk-button px-8 py-2 text-xl font-bold mt-auto', 'Stop Composing');
+            const backButton = createElement('button', 'punk-button px-8 py-2 text-xl font-bold mt-auto', 'Back to the Streets');
             backButton.onclick = () => setPhase(0, '');
             craftContent.appendChild(backButton);
             return craftContent;
@@ -13316,11 +11655,8 @@
             } else if (game.pendingAcquisition.chop) {
                 // New Topic found, display the topic screen
                 showChopMasteryWindow(game.pendingAcquisition.chop);
-            } else if (game.pendingAcquisition.photo) {
-                // New Photo found, display the topic screen
-                displayNewPhotoAcquired(game.pendingAcquisition.photo);
             }
-            game.pendingAcquisition = { location: null, topic: null , item: null, chop: null, photo:null};
+            game.pendingAcquisition = { location: null, topic: null , item: null, chop: null};
         }
 
 
@@ -13358,73 +11694,6 @@
             game.iphoneState.selectedMessageIndex = null;
             setPhase(0, '');
         }
-
-
-        function displayNewPhotoAcquired(photo) {
-            // 1. Data Validation & State Update
-        
-
-            // 2. Create Overlay (Soft, warm focus)
-            const overlay = document.createElement('div');
-            overlay.className = "fixed inset-0 z-[1000] flex items-center justify-center bg-stone-900/60 backdrop-blur-sm animate-in fade-in duration-500";
-            
-            // 3. Window Content - "Mama's Polaroid" theme
-            overlay.innerHTML = `
-                <div class="relative bg-[#fdf6e3] p-6 text-center rounded-sm shadow-2xl max-w-sm w-full mx-4 transform rotate-1 animate-in zoom-in-95 duration-300 border-[12px] border-white">
-                    <!-- Decorative Tape -->
-                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-24 h-8 bg-yellow-100/60 border-y border-yellow-200/50 rotate-2 shadow-sm flex items-center justify-center">
-                        <span class="text-[10px] uppercase tracking-tighter text-yellow-700/50 font-sans font-bold">Photo Captured</span>
-                    </div>
-                    
-                    <div class="py-4">
-                        <!-- Visual Section (Polaroid Style) -->
-                        <div class="mb-6 flex justify-center bg-stone-100 p-2 shadow-inner min-h-[160px] items-center">
-                           
-                                <img src="${photo}" 
-                                     class="w-full h-40 object-contain border border-stone-200"
-                                     style="filter: sepia(0.1) contrast(1.05);"
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                              
-                        </div>
-
-                        <!-- Headline -->
-                        <h2 class="font-handwriting text-[#5d4037] text-3xl mb-1">
-                            A New Photo added to the Scrapbook!
-                        </h2>
-                        
-                        <!-- Divider -->
-                        <div class="h-px w-20 bg-[#a39476]/30 mx-auto mb-4"></div>
-
-                        <!-- Action Button -->
-                        <button id="close-topic-discovery" class="font-handwriting w-full bg-[#5d4037] hover:bg-[#4e342e] text-[#fdf6e3] py-3 rounded-md text-xl transition-all shadow-md active:shadow-inner">
-                            Keep in Scrapbook ❤️
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            document.body.appendChild(overlay);
-
-            // 4. Close Logic
-            const closeSequence = () => {
-                overlay.classList.add('animate-out', 'fade-out', 'zoom-out-95');
-                setTimeout(() => {
-                    overlay.remove();
-                    if (typeof renderGame === 'function') renderGame();
-                }, 300);
-            };
-
-            const closeBtn = overlay.querySelector('#close-topic-discovery');
-            closeBtn.onclick = (e) => {
-                e.stopPropagation();
-                closeSequence();
-            };
-            
-            overlay.onclick = () => closeSequence();
-        }
-
-
-
 
 
         function renderNotificationList() {
@@ -13706,60 +11975,36 @@
                 documentContainer.appendChild(headerSection);
 
                 const chopList = createElement('div', 'w-full space-y-1');
+                 game.chops.forEach(chop => {
+                // FIX: Set checkmark visibility based on chop.isUnlocked
+                const isMastered = chop.isUnlocked === true;
+                const color = (typeof chopColorMap !== 'undefined' && chopColorMap[chop.name]) 
+                    ? chopColorMap[chop.name] 
+                    : { bg: 'bg-blue-500' };
+                const percentage = Math.min(100, Math.max(0, (chop.points / 100) * 100));
 
-                // 1. Create Title Header for columns
-                const listHeader = createElement('div', 'flex items-center gap-4 px-3 mb-1 border-b border-gray-100 pb-1 opacity-60');
-                listHeader.innerHTML = `
-                    <div class="w-36 shrink-0 text-[9px] font-black text-gray-400 uppercase tracking-widest">Skill Set</div>
-                    <div class="flex-1 text-[9px] font-black text-gray-400 uppercase tracking-widest">Mastery</div>
+                const chopItem = createElement('div', 'flex items-center gap-4 py-2 px-3 hover:bg-gray-50 border-b border-gray-100 last:border-0 rounded-md group');
+                chopItem.innerHTML = `
+                    <div class="flex items-center space-x-3 w-36 shrink-0">
+                        <span class="text-2xl group-hover:scale-110 transition-transform">${chop.icon}</span>
+                        <p class="text-sm font-black text-gray-800 uppercase tracking-tighter leading-tight">${chop.name}</p>
+                    </div>
+                    <div class="flex-1 flex items-center space-x-3">
+                        <div class="flex-1 bg-gray-100 h-3 rounded shadow-inner overflow-hidden border border-gray-200 relative">
+                            <div class="h-full transition-all duration-700 ${color.bg}" style="width: ${percentage}%"></div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 w-1/2 -skew-x-12 animate-[shimmer_2s_infinite]"></div>
+                        </div>
+                        <span class="text-[10px] font-mono font-bold text-gray-400 w-8 text-right">${Math.floor(percentage)}%</span>
+                    </div>
                     <div class="flex items-center space-x-4 shrink-0">
-                        <div class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Rank</div>
-                        <div class="w-6 text-center text-[9px] font-black text-gray-400 uppercase tracking-widest">
-                            ${game.chapter === 1 ? 'Done' : 'Avail'}
+                        <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Lv. ${chop.level || 0}</div>
+                        <div class="w-6 h-6 flex items-center justify-center rounded-sm border-2 ${isMastered ? 'bg-gray-900 border-gray-900 shadow-md' : 'bg-white border-gray-200'}">
+                            ${isMastered ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
                         </div>
                     </div>
                 `;
-                chopList.appendChild(listHeader);
-
-                game.chops.forEach(chop => {
-                    const isMastered = chop.isUnlocked === true;
-                    const color = (typeof chopColorMap !== 'undefined' && chopColorMap[chop.name]) 
-                        ? chopColorMap[chop.name] 
-                        : { bg: 'bg-blue-500' };
-                    const percentage = Math.min(100, Math.max(0, (chop.points / 100) * 100));
-
-                    // 2. Logic to determine status display based on Chapter
-                    let statusContent = '';
-                    if (game.chapter === 1) {
-                        // Show checkmark only if chapter is 1 and it's mastered
-                        statusContent = isMastered ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : '';
-                    } else {
-                        // Otherwise, show the number of available items
-                        statusContent = `<span class="text-xs font-black ${isMastered ? 'text-white' : 'text-gray-600'}">${chop.available || 0}</span>`;
-                    }
-
-                    const chopItem = createElement('div', 'flex items-center gap-4 py-2 px-3 hover:bg-gray-50 border-b border-gray-100 last:border-0 rounded-md group');
-                    chopItem.innerHTML = `
-                        <div class="flex items-center space-x-3 w-36 shrink-0">
-                            <span class="text-2xl group-hover:scale-110 transition-transform">${chop.icon}</span>
-                            <p class="text-sm font-black text-gray-800 uppercase tracking-tighter leading-tight">${chop.name}</p>
-                        </div>
-                        <div class="flex-1 flex items-center space-x-3">
-                            <div class="flex-1 bg-gray-100 h-3 rounded shadow-inner overflow-hidden border border-gray-200 relative">
-                                <div class="h-full transition-all duration-700 ${color.bg}" style="width: ${percentage}%"></div>
-                                <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 w-1/2 -skew-x-12 animate-[shimmer_2s_infinite]"></div>
-                            </div>
-                            <span class="text-[10px] font-mono font-bold text-gray-400 w-8 text-right">${Math.floor(percentage)}%</span>
-                        </div>
-                        <div class="flex items-center space-x-4 shrink-0">
-                            <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Lv. ${chop.level || 0}</div>
-                            <div class="w-6 h-6 flex items-center justify-center rounded-sm border-2 ${isMastered ? 'bg-gray-900 border-gray-900 shadow-md' : 'bg-white border-gray-200'}">
-                                ${statusContent}
-                            </div>
-                        </div>
-                    `;
-                    chopList.appendChild(chopItem);
-                });
+                chopList.appendChild(chopItem);
+            });
             documentContainer.appendChild(chopList);
         }
             
@@ -13785,7 +12030,7 @@
     function StartChapter2() {
         // 1. Reset Global Game Object
            Object.assign(game, {
-        score: 250,
+        score: 200,
         level: 1,
         chapter:2,
         isLLMLoaded: false,
@@ -13814,7 +12059,7 @@
             'Red Hot Chili Peppers', 'Santana', 'Spice Girls', 'The Beatles',
             'The Police', 'The Smashing Pumpkins', 'Tool', 'U2', 'Van Halen'
         ],
-        artists_bought: ['Metallica', 'U2', 'Prince', 'The Smashing Pumpkins', 'Madonna', 'Nirvana'],
+        artists_bought: [],
         message: '',
         currentBand: '',
         currentSong: '',
@@ -13846,12 +12091,12 @@
         totalXP: 0,
         songCounts: 0,
         chops: [
-            { name: "Social Influence", points: 0, level: 1, available:0, isUnlocked: true, icon: '📣' },
-            { name: "Instrument Synergy", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🎸' },
-            { name: "Rhythm Mastery", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🎼' },
-            { name: "Lyrical Flow", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🖋️' },
-            { name: "Backstage Blueprint", points: 0, level: 1,  available:0, isUnlocked: true, icon: '📜' },
-            { name: "Stage Presence", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🎤' }
+            { name: "Social Influence", points: 0, level: 1, isUnlocked: true, icon: '📣' },
+            { name: "Instrument Synergy", points: 0, level: 1, isUnlocked: true, icon: '🎸' },
+            { name: "Rhythm Mastery", points: 0, level: 1, isUnlocked: true, icon: '🎼' },
+            { name: "Lyrical Flow", points: 0, level: 1, isUnlocked: true, icon: '🖋️' },
+            { name: "Backstage Blueprint", points: 0, level: 1, isUnlocked: true, icon: '📜' },
+            { name: "Stage Presence", points: 0, level: 1, isUnlocked: true, icon: '🎤' }
         ],
         chopsDiscovered: true,
         memories: {
@@ -13875,11 +12120,11 @@
         crazy_buttons: { showHelpButton: false, showLibrary: false, showPoker: false },
         cliffs_buttons: { showHelpButton: false },
         work_buttons: { badge: true },
-        mama_buttons: { showHelpButton: false , showHelpButton2: true, camera:false, polaroid:false, photos:0, lands_taken:true, coit_taken:true, fisherman_taken:true, painted_taken:true, alcatraz_taken:true, lombard_taken:true},
+        mama_buttons: { showHelpButton: false , showHelpButton2: true, camera:false},
         home_buttons: { showHelpButton: false, musician: true },
         bouncer_buttons: { showHelpButton: false, description: 'A giant gorilla is guarding the entrance' , showHelpButton2: true},
         bob_buttons: { showHelpButton: false, guitar: false, amoeba: false },
-        dj_buttons: { showHelpButton: false, showCD: true, cliffs: false },
+        dj_buttons: { showHelpButton: false, showCD: false, cliffs: false },
         bestie2_buttons: { showHelpButton: false, practiceChop: false, arn: false , spinebuster:false, showHelpButton2: true},
         popup_buttons: { tour: false },
         cool_bouncer_buttons:{showHelpButton2:true},
@@ -13914,13 +12159,12 @@
         inventoryItem.acquired = true
         inventoryItem = game.inventory_items.find(i => i.name === 'Cash');
         inventoryItem.acquired = true
+        inventoryItem = game.inventory_items.find(i => i.name === 'Apex Badge');
+        inventoryItem.acquired = true
         let topic = game.conversation_topics.unlocked.find(i => i.name === 'Song Writing');
         topic.acquired = true;
         topic = game.conversation_topics.unlocked.find(i => i.name === 'Music Gig');
         topic.acquired = true;
-     //   topic = game.conversation_topics.unlocked.find(i => i.name === 'Tom\'s Passion');
-      //  topic.acquired = true;
-
 
 
         landmarkImageRegistry["Cliff\'s Variety"] = "./sprites/cliffs-chapter2.jpg";
@@ -13936,15 +12180,11 @@
         landmarkData['Cliff\'s Variety'].found = true;
         landmarkData['Cliff\'s Variety'].hidden = true;
         landmarkData['Castro Gym'].found = true;
-        landmarkData['Amoeba'].hidden = false;
 
         landmarkData['Castro'].hidden = false;
         landmarkData['BESTIE'].hidden = false;
         landmarkData['Mama⬇️'].hidden = false;
         landmarkData['Home'].hidden = false;
-
-        landmarkData['Lands End'].hidden = false;
-        landmarkData['Fisherman\'s Wharf'].hidden = false;
 
 
          iphoneNotifications = [
@@ -13961,17 +12201,7 @@
             { id: 'gig', text: 'I need to learn how to secure some gigs!', completed: false, urgent: true },
         ];
 
-        const station = STATIONS.find(s => s.id === 'rock');
-        game.radio.currentStation = station;
-        game.radio.currentTrackIndex = 0;
-        game.radio.errorState = false;
-        if (!game.radio.isPlaying)  { 
-            playTrack();
-            game.radio.isPlaying=true;
-        }
-
-        initializeGame();
-
+        
         console.log("Chapter 2 Setup Complete.");
         handleClick('Home');
 
@@ -14098,14 +12328,9 @@
     window.sid_action4 = sid_action4;
     window.sid_action5 = sid_action5;
     window.sid_action6 = sid_action6;
-    window.sid_food = sid_food;
     window.sid_oasis = sid_oasis;
     window.sid_chops = sid_chops;
-    window.inout_action1 = inout_action1;
-    window.inout_action2 = inout_action2;
-    window.inout_action3 = inout_action3;
     window.go_to_work = go_to_work;
-    window.fisherman_songwriting = fisherman_songwriting;
     window.kevind_action1 = kevind_action1;
     window.kevind_action2 = kevind_action2;
     window.kevind_action3 = kevind_action3;
@@ -14113,8 +12338,6 @@
     window.kevind_action5 = kevind_action5;
     window.kevind_action6 = kevind_action6;
     window.kevind_action7 = kevind_action7;
-    window.presidio_action1 = presidio_action1;
-    window.presidio_race = presidio_race;
     window.handleRaffleEntry = handleRaffleEntry;
     window.popup_action1 = popup_action1;
     window.popup_action2 = popup_action2;
@@ -14140,8 +12363,6 @@
     window.mama_action2 = mama_action2;
     window.mama_action3 = mama_action3;
     window.mama_action4 = mama_action4;
-    window.mama_action5 = mama_action5;
-    window.mama_action6 = mama_action6;
     window.crazy_action1 = crazy_action1;
     window.crazy_action2 = crazy_action2;
     window.crazy_action3 = crazy_action3;
@@ -14156,7 +12377,6 @@
     window.lagunitas_action1 = lagunitas_action1;
     window.lagunitas_sign = lagunitas_sign;
     window.tom_copies = tom_copies;
-    window.tom_food = tom_food;
     window.tom_request_help = tom_request_help;
     window.lagunitas_sign_photo = lagunitas_sign_photo;
     window.get_book = get_book;
@@ -14167,20 +12387,6 @@
     window.rick_action1 = rick_action1;
     window.rick_action2 = rick_action2;
     window.rick_action3 = rick_action3;
-    window.coit_photo = coit_photo;
-    window.coit_sign = coit_sign;
-    window.painted_sign = painted_sign;
-    window.cliffs_sign = cliffs_sign;
-    window.landsend_sign = landsend_sign;
-    window.lombard_photo = lombard_photo;
-    window.landsend_food = landsend_food;
-    window.painted_photo = painted_photo;
-    window.landsend_photo = landsend_photo;
-    window.landsend_woman = landsend_woman;
-    window.fishermans_photo = fishermans_photo;
-    window.fishermans_food = fishermans_food;
-    window.fishermans_drink = fishermans_drink;
-    window.alcatraz_photo = alcatraz_photo;
     window.bestie2_request_help = bestie2_request_help;
     window.bestie2_chops = bestie2_chops;
     window.bob_request_help = bob_request_help;
@@ -14199,10 +12405,6 @@
     window.dj_action3 = dj_action3;
     window.dj_action4 = dj_action4;
     window.dj_chops = dj_chops;
-    window.bobby_request_help = bobby_request_help;
-    window.bobby_action1 = bobby_action1;
-    window.matt_request_help = matt_request_help;
-   // window.tom_action1 = tom_action1;
     window.showMetallica = showMetallica;
     window.returnToMainView = returnToMainView;
     window.handleClick = handleClick;

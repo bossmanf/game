@@ -1902,6 +1902,7 @@
                     });
                 }
             });
+            console.log(library);
             return library;
         }
 
@@ -1935,7 +1936,6 @@
             hype: 0,
             songs: 0,
             candy: 0,
-            musician: 0,
             dancers: 0,
             musicPart: {},
             dialogueIndex: 0,
@@ -2166,11 +2166,6 @@
                 showHelpButton: true,
                 musician: true
             },
-            fishermans_buttons:{
-                food:false,
-                drink:false,
-                first:true
-            },
             cool_bouncer_buttons:
             {
 
@@ -2190,8 +2185,7 @@
             tom_buttons:
             {
                 call:false,
-                cry:true,
-                copies:false
+                cry:true
             },
             bob_buttons:
             {
@@ -2338,10 +2332,20 @@
                         'Wrestling Club' : 'Training camp is over when this list is finished.'
                     }},
 
+                    {name: 'San Francisco Attire', icon: '👕', acquired: false, desc: 'I need to dress like a Bay Area person to get access to Lagunitas...', image: './sprites/sf-attire.jpg',
+                        actions : {'BESTIE': 'sid_action6' 
+                                   
+                                },
+                    messages: {
+                        
+                        'Lagunitas⬆️ ' : 'Exactly. You do not look like an authentic San Franciscan',
+                        'Mama⬇️': 'Do you need me to go to the store for you, habibi?',
+                        'Wrestling Club' : 'A singlet is always the answer!'
+                    }},
 
 
                     {name: 'Song Writing', icon:'📑', acquired: false, desc: 'I need to learn how to write songs!', image: './sprites/songwriting.jpg',
-                        actions : {'Castro Gym': 'bestie2_action7' , 'Fisherman\'s Wharf': 'fisherman_songwriting'
+                        actions : {'Castro Gym': 'bestie2_action7' 
                                    
                                 },
                     messages: {
@@ -2373,19 +2377,7 @@
                     }},
 
 
-
-                    {name: 'San Francisco Attire', icon: '👕', acquired: false, desc: 'I need to dress like a Bay Area person to get access to Lagunitas...', image: './sprites/sf-attire.jpg',
-                        actions : {'BESTIE': 'sid_action6' 
-                                   
-                                },
-                    messages: {
-                        
-                        'Lagunitas⬆️ ' : 'Exactly. You do not look like an authentic San Franciscan',
-                        'Mama⬇️': 'Do you need me to go to the store for you, habibi?',
-                        'Wrestling Club' : 'A singlet is always the answer!'
-                    }},
-
-                    {name: 'Tom\'s Passion', icon:'👳‍♂️', acquired: false, image: './sprites/Tom_love.png', desc: 'Tom wants to date Asian Women', 
+                    {name: 'Tom\'s passion', icon:'👳‍♂️', acquired: false, image: './sprites/Tom_love.png', desc: 'Tom wants to date Asian Women', 
                         actions : {'Lands End':'landsend_woman'},
                     messages: {
                         'BITTER END': '',
@@ -2417,13 +2409,6 @@
                         'Wrestling Club' : ''
                     }},
 
-                     {name: 'Organic Food', icon:'🦴', acquired: false, image: './sprites/dog-food.png', desc: 'Jimi the dog needs organic liquid and solid food', 
-                        actions : {'Lands End':'landsend_food', 'APEX Office ':'tom_food', 'BESTIE': 'sid_food'},
-                    messages: {
-                        'BITTER END': '',
-                        'Mama⬇️': '',
-                        'Wrestling Club' : ''
-                    }},
                     
 
                 ],
@@ -2874,7 +2859,7 @@
                 },
 
                  { name: 'Complete Gig Sign', acquired: false, image: './sprites/complete-sign.png', price: '', icon: '🔐', desc: 'An exciting gig sign! Now we need many copies!',
-                    actions : { 'APEX Office ':'tom_copies'},
+                    actions : { 'Apex Office ':'tom_copies'},
                     messages: {
                     'BITTER END': ' ',
                     'BESTIE': '',
@@ -2885,7 +2870,7 @@
                 },
 
                 { name: 'Gig Sign Copies', acquired: false, image: './sprites/complete-sign-copies.jpg', price: '', icon: '🔐', desc: 'Many copies of your gig sign! Now you are ready to use them to promote your gig!',
-                    actions : {'Coit Tower':'coit_sign' , 'Painted Ladies':'painted_sign', 'Lands End': 'lands_sign', 'Cliff\'s Variety':'cliffs_sign'},
+                    actions : {'Coit Tower':'coit_sign'},
                     messages: {
                     'BITTER END': ' ',
                     'BESTIE': '',
@@ -2919,17 +2904,6 @@
                     }
                 },
 
-                { name: 'Full Cycling Bottle', acquired: false, image: './sprites/cycling-botle-full.png', price: '', icon: '🔐', desc: 'A full cycling bottle, filled with organic fluids',
-                    actions : {'Fisherman\'s Wharf':'fishermans_drink'},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
 
                  { name: 'Revolution Bike', acquired: false, image: './sprites/bike.png', price: '', icon: '🔐', desc: 'The Ultimate Revolution Bike!',
                     actions : {'':''},
@@ -2942,41 +2916,8 @@
                     }
                 },
 
-                { name: 'Organic Burger', acquired: false, image: './sprites/organic-burger.png', price: '', icon: '🍔', desc: 'An organic (and freaking expensive) burger!',
-                    actions : {'Fisherman\'s Wharf':'fishermans_food'},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-                 { name: 'Sauce Packets', acquired: false, image: './sprites/sauce-packets.jpg', price: '', icon: '🍔', desc: 'A mix of organic sauce packets',
-                    actions : {'Presidio':'presidio_action2', 'Mama⬇️':'mama_action6'},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
-
-                  { name: 'Exotic Sauce', acquired: false, image: './sprites/arabic-sauce.jpg', price: '', icon: '🍔', desc: 'An exotic blend of sauces',
-                    actions : {'Presidio':'presidio_action3'},
-                    messages: {
-                    'BITTER END': ' ',
-                    'BESTIE': '',
-                    'The 440': '',
-                    'Mama⬇️': '',
-                    'Wrestling Club' : ''
-                    }
-                },
                 
-                { name: 'Song Book 1', icon: '📘', acquired: false, desc: 'A book with multiple songs. It can definitely give me ideas.', price: 50 },
-                { name: 'Song Book 2', icon: '📕', acquired: false, desc: 'A book with multiple songs - Volume 2. It can definitely give me ideas.', price: 50 },
+                { name: 'Song Book', icon: '📘', acquired: false, desc: 'A book with multiple songs. It can definitely give me ideas.', price: 50 },
                 { name: 'Chicken Pho', icon: '🍜', acquired: false, desc: 'Restores maximum health and focus.', price: 100 },
                 { name: 'Magic Zataar Spices', icon: '🌶️', acquired: false,desc: 'Boosts your focus and gives charisma.', price: 50 },
                  {name: 'Luxury Copper Cookware Set', price: 2000, icon:'🍳',  acquired: false, desc: 'Best set for a culinary quest'},
@@ -3074,13 +3015,13 @@
 
             "Sage & Drifter": { X: 220, Y: 410, W: 60, H: 40, category: "sagebar", emoji: "🍺", actionKey: "sagebar", hidden: true , description: "Neighborhood hangout offering cocktails, craft beers, and happy hours", character: 'Bobby'},
 
-             "Presidio": { X: 310, Y: 220, W: 50, H: 40, category: "presidio", emoji: "🚲", actionKey: "presidio", description: "Park and former U.S. Army post on the northern tip of the San Francisco", hidden: true, character: 'Matt' },
+             "Presidio": { X: 258, Y: 220, W: 50, H: 40, category: "presidio", emoji: "🥎", actionKey: "presidio", description: "park and former U.S. Army post on the northern tip of the San Francisco", hidden: true, character: 'Matt' },
 
 
 
              "APEX Office": { X: 650, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "work", description: "A towering monolith of glass and surveillance overlooking the Bay. Inside, the air is filtered, the lighting is 'optimized' for maximum productivity, and the silence is heavy. This isn't a workplace; it’s a high-frequency hive where human creativity is harvested by the Omni-Sync algorithm. Every cubicle is a cage, and every badge-swipe is a data point. To the world, it’s the pinnacle of tech success; to you, it’s the place where music goes to die.", hidden: true , character: 'Tom'},
 
-            "APEX Office ": { X: 640, Y: 280, W: 30, H: 30, category: "tom", emoji: "🏙️", actionKey: "tom", description: "A towering monolith of glass and surveillance overlooking the Bay.", hidden: true , character: 'Tom'},
+            "APEX Office ": { X: 640, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "tom", description: "A towering monolith of glass and surveillance overlooking the Bay.", hidden: true , character: 'Tom'},
 
              "Wrestling Club": { X: 510, Y: 420, W: 40, H: 30, category: "wrestling_club", emoji: "🤼", actionKey: "wrestling_club", description: "The Grappling Club where wrestling buddies meet weekly. It smells of wintergreen liniment, old canvas, and pure adrenaline.", hidden: true , character: 'Rick'},
 
@@ -3116,7 +3057,7 @@
             "Chase Center": { X: 690, Y: 440, W: 40, H: 30, category: "Sports/Venue", emoji: "🏀", actionKey: "sports", description: "Modern home of the Golden State Warriors.", hidden: true, character: 'Character X' },
             "Berkeley": { X: 900, Y: 150, W: 50, H: 40, category: "Academic", emoji: "🎓", actionKey: "academic", description: "East Bay academic zone.", hidden: true, character: 'Character X' },
             "Daly Shitty Underground Club⬇️": { X: 220, Y: 750, W: 50, H: 40, category: "City", emoji: "🌉", actionKey: "transit", description: "The gateway city immediately south of San Francisco.", hidden: true, character: 'Character X' },
-            "Out & In": { X: 340, Y: 750, W: 50, H: 40, category: "out&in", emoji: "🍔", actionKey: "outin", description: "Supposedly a well-know chain for organic food", hidden: true, character: 'Character X' },
+            "In-N-Out⬇️": { X: 340, Y: 750, W: 50, H: 40, category: "City", emoji: "🍔", actionKey: "transit", description: "The gateway city immediately south of San Francisco.", hidden: true, character: 'Character X' },
 
         };
 
@@ -3258,6 +3199,7 @@
             iphoneNotifications = iphoneNotifications.slice(1);            
             iphoneNotifications = appendNotification(iphoneNotifications,'Bobby', 'Hey habibi! I am hosting a fundraising event at the Sage & Drifter Bar. Wanna pass by?', '💬', 'Sage & Drifter');
             playMovie('./videos/lombard-video.mp4', 'You bring mama and visit together Lombard Street!');
+            console.log(game.mama_buttons.photos);
             if (game.mama_buttons.photos === 6){
                 let inventoryItem = game.inventory_items.find(i => i.name === 'Completed Scrapbook');
                 inventoryItem.acquired = true;
@@ -3316,16 +3258,11 @@
         }
 
         function coit_sign(){
-            game.hype +=50;
-            playMovie('./videos/coit-sign.mp4', 'You gained +50 Hype!');
+            game.hype +=30;
+            playMovie('./videos/coit-sign.mp4', 'You gained +30 Hype!');
 
         }
 
-        function cliffs_sign(){
-            game.hype +=50;
-            playMovie('./videos/cliffs-sign.mp4', 'You gained +50 Hype!');
-
-        }
 
         function fishermans_photo(){
             game.mama_buttons.photos +=1;
@@ -3361,7 +3298,7 @@
         }
 
         function landsend_woman(){
-            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Tom\'s Passion');
+            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Tom\'s passion');
             topic.acquired = false;
             toggleMission('tom');
 
@@ -3378,63 +3315,20 @@
                 { speaker: 'BESTIE', text: "Consider it done. I'll text him. If he can keep up with me to the Mile Rock Beach stairs, he might have a chance. See ya! ✌️🏁" },
             ];
             game.tom_buttons.cry = false;
-            landmarkImageRegistry["APEX Office "] = './sprites/tom-no-cry.jpeg';
-            characterPortraits["Tom"] = './faces/tom.jpg';
-            iphoneNotifications = appendNotification(iphoneNotifications,'Tom', 'WoW I have a date! Thanks so much! Is there anything I can do for you? Nutritional advice? Corporate printing?','💬',  '');
+            landmarkImageRegistry["Apex Office "] = './sprites/tom-no-cry.jpeg';
+            characterPortraits["Tom"] = './sprites/tom.jpg';
             const dialogueHtml = renderDialogue(tom_wingman_dialogue , "Woman");
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
 
-        }
-
-        function landsend_sign(){
-            game.hype +=50;
-            playMovie('./videos/landsend-sign.mp4', 'You gained +50 Hype!');
-
-        }
-
-        function painted_sign(){
-            game.hype +=50;
-            playMovie('./videos/painted-sign.mp4', 'You gained +50 Hype!');
 
 
         }
-
-        function landsend_food(){
-            const organic_food_dialogue = [
-                { speaker: 'Player', text: "Sorry to bother you again, maybe you can help me... I'm looking for the real deal. I need USDA biodynamic, pasture-raised, 100% organic sustenance. Not just the stuff with a sticker—the actual high-frequency fuel. 💎🌿" },
-                { speaker: 'Hana', text: "Biodynamic? Wow, you aren't messing around. Most people in this city think 'organic' just means it was in a bin near a tree once. 🙄" },
-                { speaker: 'Player', text: "I'm trying to help someone—and her puppy—who really need to get their spirit back. Do you know where I can find that level of quality?" },
-                { speaker: 'Hana', text: "In the Mission? Forget it. You need to head to the south of the city, near the industrial docks. There’s a place called 'Out & In.'" },
-                { speaker: 'Player', text: "Thank you! You’re a lifesaver." }
-            ];
-            game.pendingAcquisition.location = 'Out & In';
-            const dialogueHtml = renderDialogue(organic_food_dialogue, "Woman");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
-
-
-        function tom_food(){
-            const organic_food_dialogue = [
-                { speaker: 'Player', text: "Hi! Maybe you can help me... I'm looking for the real deal. I need USDA biodynamic, pasture-raised, 100% organic sustenance. Not just the stuff with a sticker—the actual high-frequency fuel. 💎🌿" },
-                { speaker: 'Hana', text: "Biodynamic? Wow, you aren't messing around. Most people in this city think 'organic' just means it was in a bin near a tree once. 🙄" },
-                { speaker: 'Player', text: "I'm trying to help someone—and her puppy—who really need to get their spirit back. Do you know where I can find that level of quality?" },
-                { speaker: 'Hana', text: "In the Mission? Forget it. You need to head to the south of the city, near the industrial docks. There’s a place called 'Out & In.'" },
-                { speaker: 'Player', text: "Thank you! You’re a lifesaver." }
-            ];
-            game.pendingAcquisition.location = 'Out & In';
-            const dialogueHtml = renderDialogue(organic_food_dialogue , "Tom");
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
-
 
         function home_action1(){
             game.home_buttons.showHelpButton = false;
-            //let topic = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
-            //topic.acquired = true;
-            game.pendingAcquisition.topic = 'Musician Career'
+            let topic = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
+            topic.acquired = true;
             const dialogueHtml = renderDialogue(intro_dialogue_data , game.names.main);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
@@ -3694,7 +3588,6 @@
                 { speaker: 'BESTIE', text: "I’m counting on you! I’ll be here practicing my 'Asheq' eyeliner until you return. Don't fail me! 👁️💄" }
             ];
             game.currentLocationId = 'BESTIE';
-            addMission('sid-asheq', 'Find an adequate attire for '+game.names.bestie+' to attend Asheq!');
             game.dialogueIndex = 0;
             const dialogueHtml = renderDialogue(asheq_sid_invitation_dialogue, game.names.bestie);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
@@ -3706,10 +3599,6 @@
             game.currentLocationId = 'BESTIE';
             playMovie('./videos/sid-arabic.mp4', 'The perfect attire for ASHEQ!'); 
             game.sids_buttons.oasis = true;
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Arabic Dress');
-            inventoryItem.acquired = false;
-            
-            toggleMission('sid-asheq');
 
         }
 
@@ -3732,19 +3621,6 @@
 
         }
 
-        function sid_food(){
-            const organic_food_dialogue = [
-                { speaker: 'Player', text: "Hi! Maybe you can help me... I'm looking for the real deal. I need USDA biodynamic, pasture-raised, 100% organic sustenance. Not just the stuff with a sticker—the actual high-frequency fuel. 💎🌿" },
-                { speaker: 'Hana', text: "Biodynamic? Wow, you aren't messing around. Most people in this city think 'organic' just means it was in a bin near a tree once. 🙄" },
-                { speaker: 'Player', text: "I'm trying to help someone—and her puppy—who really need to get their spirit back. Do you know where I can find that level of quality?" },
-                { speaker: 'Hana', text: "In the Mission? Forget it. You need to head to the south of the city, near the industrial docks. There’s a place called 'Out & In.'" },
-                { speaker: 'Player', text: "Thank you! You’re a lifesaver." }
-            ];
-            game.pendingAcquisition.location = 'Out & In';
-            const dialogueHtml = renderDialogue(organic_food_dialogue , game.names.bestie);
-            const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-            switchToView(contentDiv);
-        }
 
         function sid_money_action() {
             // Simulate giving the player money or a resource
@@ -3840,6 +3716,7 @@
             switchToView(contentDiv);
             game.bobby_buttons.showHelpButton = false;
             game.bobby_buttons.showBike = true;
+            game.pendingAcquisition.topic = 'Tom\'s passion';
             addMission('bobby', 'Donate $3001 to Bobby\'s Children charity fundraiser');
 
         }
@@ -3860,7 +3737,6 @@
 
             game.matt_buttons.showHelpButton = false;
             game.pendingAcquisition.topic = 'Matt\'s sauces';
-            addMission('Creates a special sauce for Matt to obtain \'candy\'');
             const dialogueHtml = renderDialogue(matt_dialogue , 'Matt');
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
@@ -3892,8 +3768,7 @@
 
 
         function tom_request_help(){
-          //  game.currentLocationId = 'Apex Office ';
-          //  game.currentPhase = 5;
+            game.currentLocationId = 'Apex Office ';
             const tom_breakup_dialogue_data = [
             { speaker: 'Player', text: "Tom? Hey man, are you actually crying? What happened?" },
             { speaker: 'Tom', text: "It’s over, man. She left me. My soul is in a full tactical retreat and I don't think I can hold the line anymore. 😭💔" },
@@ -3902,18 +3777,17 @@
             { speaker: 'Player', text: "You’re spiraling. You need to move on, man" },
             { speaker: 'Tom', text: "Sorry, I do not think I can function anymore..." }
             ];
-            game.pendingAcquisition.topic = 'Tom\'s Passion';
-            addMission('tom', 'Help Tom move on with his breakup');
-
             const dialogueHtml = renderDialogue(tom_breakup_dialogue_data , 'Tom');
                 const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
                 switchToView(contentDiv);
-           
+            game.pendingAcquisition.topic = 'Tom\'s passion';
+            addMission('tom', 'Help Tom move on with his breakup');
+
 
         }
 
         function tom_copies(){
-            game.currentLocationId = 'APEX Office ';
+            game.currentLocationId = 'Apex Office ';
             if (game.tom_buttons.cry){
                  const notnow_dialogue_data = [
                     { speaker: 'Bestie', text: "I need to get my shit together before I can help you!" }];
@@ -3923,10 +3797,7 @@
 
             }
             else{
-                let inventoryItem = game.inventory_items.find(i => i.name === 'Complete Gig Sign');
-                inventoryItem.acquired = false;
                 game.pendingAcquisition.item = 'Gig Sign Copies';
-                game.tom_buttons.copies = true;
                 playMovie('./videos/tom-copies.mp4', 'Tom makes multiple copies for you! Now you are ready to use them to promote the gig!');
             }
 
@@ -3950,32 +3821,17 @@
             }
         }
 
-        function presidio_action2(){
-             playMovie('./videos/matt-reject.mp4', 'This is too basic for Matt. He needs some exotic added flavour...');
-        }
-
-        function presidio_action3(){
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Exotic Sauce');
-            inventoryItem.acquired = false;
-            game.pendingAcquisition.item = 'Candy';
-            game.candy = true;
-            playMovie('./videos/matt-accept.mp4', 'OMG! This sauce is the best ultimate flavour of my life. Take the candy!');
-
-        }
-
         function presidio_race(){
             let inventoryItem = game.inventory_items.find(i => i.name === 'Revolution Bike');
             inventoryItem.acquired = false;
             game.presidio_buttons.race = false;
-            game.pendingAcquisition.memory = 'awe';
-            game.pendingAcquisition.memory_text = 'Awe feeling crossing the Golden Gate Bridge!';
-
-            playMovie('./videos/presidio-race.mp4', 'Cycling through the Golden Gate bridge is such an awesome experience!');
+            game.pendingAcquisition.memory = 'awe'
+            playMovie('./videos/race.mp4', 'Cycling through the Golden Gate bridge is such an awesome experience!');
 
 
         }
         
-        
+
 
         function lagunitas_sign(){
             game.currentLocationId = 'Lagunitas⬆️';
@@ -3996,7 +3852,7 @@
                     game.kevind_buttons.camera = true;
                 }
 
-            addMission('lagunitas', 'Create a sign with '+game.names.bestie3+' and a camera, add text, make copies, and post it everywhere!');
+            addMission('lagunitas', 'I need two songs, two successfull chop games, and a hype of 100 people to play at Lagunitas')
             const dialogueHtml = renderDialogue(kevind_sign_dialogue_data, game.names.bestie3);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv); 
@@ -4008,6 +3864,7 @@
         function lagunitas_sign_photo(){
             game.currentLocationId = 'Lagunitas⬆️';
             game.pendingAcquisition.item = 'Gig Sign';
+            addmission('sign','Create a sign with '+game.names.bestie3+' , add text, make copies, and post it everywhere!')
             playMovie('./videos/lagunitas-sign-photo.mp4', 'The photo session is a success! You have a great sign that needs a good message'); 
 
 
@@ -4136,24 +3993,6 @@
         function kevind_action7(){
             game.secrets +=1;
             playMovie('./videos/kevind-aa.mp4','Alcoholics Anonymous? NOOOO!!! I swear I am good, buddy! (Easter Egg found!)' );
-        }
-
-        function inout_action1(){
-            game.pendingAcquisition.item = 'Full Cycling Bottle';
-             playMovie('./videos/outin-drink.mp4','Excellent! This is supposed to be a bio-organic drink!' );        
-
-        }
-
-        function inout_action2(){
-            game.pendingAcquisition.item = 'Organic Burger';
-            playMovie('./videos/outin-burger.mp4','That was quick! You also got sauces! They do not provide cups so you will need to use your own container for the drink' );        
-
-        }
-
-        function inout_action3(){
-            game.pendingAcquisition.item = 'Sauce Packets';
-            playMovie('./videos/outin-packets.mp4','This is an interesting mix of organic sauce packets...' );        
-
         }
 
         function dj_action1(){
@@ -4391,6 +4230,7 @@
             landmarkImageRegistry["The Fillmore"] = "./sprites/fillmore-empty.jpg";
             game.bouncer_buttons.description = '';
             game.bridget_buttons.unlock = true;
+            addMission('lagunitas', 'Secure a gig at Lagunitas!');
             addMission('bottom', 'Play at the Bottom of the Hill!');
          //   addMission('chapel', 'Play at The Chapel!');
          //   addMission('slims', 'Play at Slim\'s!');
@@ -4413,20 +4253,11 @@
             'sid_action6'   : sid_action6,
             'sid_oasis'     : sid_oasis,
             'sid_chops'     : sid_chops,
-            'sid_food'      : sid_food,
-            'fisherman_songwriting' : fisherman_songwriting,
-            'fisherman_food' : fishermans_food,
-            'fisherman_drink' : fishermans_drink,
             'lagunitas_action1' : lagunitas_action1,
             'lagunitas_sign': lagunitas_sign,
             'tom_copies' : tom_copies,
-            'tom_food'  : tom_food,
             'tom_request_help' : tom_request_help,
-            'coit_sign' : coit_sign,
-            'cliffs_sign' : cliffs_sign,
-            'landsend_sign' : landsend_sign,
-            'landsend_food' : landsend_food,
-            'painted_sign' : painted_sign,
+            'coit_sign' : coig_sign,
             'bobby_action1' : bobby_action1,
             'lagunitas_sign_photo': lagunitas_sign_photo,
             'crazy_action1' : crazy_action1,
@@ -4441,7 +4272,6 @@
             'mama_action3'  : mama_action3,
             'mama_action4'  : mama_action4,
             'mama_action5'  : mama_action5,
-            'mama_action6'  : mama_action6,
             'kevind_action1': kevind_action1,
             'kevind_action2': kevind_action2,
             'kevind_action3': kevind_action3,
@@ -4989,7 +4819,7 @@
             const reqs = [
                 { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 60, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 2, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 50, icon: '👥' },
+                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 100, icon: '👥' },
                 { id: 'social', label: 'Social Influence', current: getChopVal('📣'), target: 1, icon: '📣' },
                 { id: 'guitar', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 1, icon: '🎸' },
                 { id: 'rhythm', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 1, icon: '🎼' }
@@ -5146,19 +4976,6 @@
                         </div>
                 </div>
                 
-                 <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="fisherman_songwriting()" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Greet ${data.character} </span>
-                            </button>
-                        </div>
-                </div>
-
-                f
-
-
-
                  ${(game.mama_buttons.polaroid  && game.mama_buttons.fisherman_taken) ? `
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
                     <button onclick="fishermans_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
@@ -5172,6 +4989,7 @@
 
         lands: (name, data) => {
             currentContext = { name, data };
+            console.log(game.mama_buttons.polaroid, game.mama_buttons.lands_taken);
             return `
                     <div class="mb-8">
                     <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
@@ -5203,16 +5021,6 @@
                     </button>
                 </div>
                 ` : ''}
-
-
-                   ${game.tom_buttons.copies ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="landsend_photo()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Post your gig poster</span>
-                    </button>
-                </div>
-                ` : ''}
-
             `;               
         },
 
@@ -5231,7 +5039,6 @@
                     </p>
                 </div>
                 
-
                 ${(game.mama_buttons.polaroid  && game.mama_buttons.alcatraz_taken) ? `
 
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
@@ -5240,16 +5047,6 @@
                     </button>
                 </div>
                 ` : ''}
-
-                   <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-4 w-full">
-                            <!-- Button to switch to the Question Grid view -->
-                            <button onclick="playMovie('So excited to ride the cable car for a while')" class="metal-button px-6 py-2 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Ride the Cable car</span>
-                            </button>
-                        </div>
-                </div>
-
             `;               
         },
 
@@ -5738,7 +5535,7 @@
                     </p>
                 </div>
                 <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">The registration tent for the race is open. Your softball buddy Mattt is surprisingly here with a suspicious stash...</p>
+                    <p class="italic">Bobby is dancing and collecting donations for the fundraiser. He is happy to see you! </p>
                 </div>
 
 
@@ -5783,48 +5580,6 @@
                
         },
 
-        outin:(name, data) => {
-            currentContext = { name, data };
-
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">This place seems utterly familiar... Food definitely smells good!</p>
-                </div>
-
-                <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-6 w-full">
-                            <button onclick="inout_action2()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Order Organic Food & Drink ($30)</span>
-                            </button>
-                        </div>
-                </div>
-
-                 <div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-6 w-full">
-                            <button onclick="inout_action3()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Grab sauce packages</span>
-                            </button>
-                        </div>
-                </div>
-
-                  ${game.rick_buttons.bottle ? `
-                ` : `div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="inout_action1()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Fill Bottle at the fountain</span>
-                    </button>
-                </div>`}
-            `;
-               
-        },
 
 
 
@@ -6478,7 +6233,6 @@
                 { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 1, icon: '🖋️' },
                 { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 1, icon: '📜' },
                 { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 2, icon: '🎤' },
-                { id: 'guitar', label: 'Musicians', current: game.musician, target: 2, icon: '👨‍🎤' },
                 { id: 'dancers', label: 'Dancers', current: game.dancers, target: 1, icon:'🕺🏿'}
 
             ];
@@ -6873,8 +6627,6 @@
                 </p>
             </div>
             
-          
-
             <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
                 <p class="italic">${game.names.bestie} is happy to see you! He looks busy prepping for some party...</p>
             </div>
@@ -6902,8 +6654,6 @@
                     </button>
                 </div>
             </div>
-
-          
         `;
     },
 
@@ -7224,6 +6974,7 @@
             const line = dialogueData[currentIndex];
             game.dialogueData = dialogueData;
             game.activeCharacter = characterName;
+            console.log('Dialogue:', dialogueData);
             if (!line) {
                 game.dialogueData = null;
                 screen_return();
@@ -7247,6 +6998,7 @@
                 characterPortraitName = characterPortraits[characterName];
             }
             
+            console.log('Line:', line)
             const isPlayer = line.speaker === 'Player';
             const speakerDisplayName = isPlayer ? game.names.main : characterName;
             const portraitUrl = isPlayer ? characterPortraits['Player'] : characterPortraitName;
@@ -7317,7 +7069,6 @@
 
         function addChopAvailable(chopName) {
             const chop = game.chops.find(c => c.name.toLowerCase() === chopName.toLowerCase());
-
 
             if (chop) {
                 chop.available += 1;
@@ -7420,62 +7171,7 @@
             }
         }
 
-        function fishermans_food(){
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Organic Burger');
-            inventoryItem.acquired = false;
-            game.fishermans_buttons.food = true
-            if (game.fishermans_buttons.food & game.fishermans_buttons.drink){
-                pendingAcquisition.item = 'Song Book 2'
-                playMovie('./videos/fisherman-success1.mp4','Little Jimi devours the burger! You have fully satisfied the demands and the song book is yours!' );
-            }
-            else{
-                playMovie('./videos/fisherman-food.mp4','Little Jimi devours the burger! Now he needs some organic liquid' );
 
-            }
-
-        }
-
-        function fishermans_drink(){
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Full Cycling Bottle');
-            inventoryItem.acquired = false;
-            inventoryItem = game.inventory_items.find(i => i.name === 'Cycling Bottle');
-            inventoryItem.acquired = true;
-
-            game.fishermans_buttons.drink = true
-            if (game.fishermans_buttons.food & game.fishermans_buttons.drink){
-                 playMovie('./videos/fisherman-success2.mp4','Little Jimi drinks the whole thing! You have fully satisfied the demands and the song book is yours!' );
-            }
-            else{
-                playMovie('./videos/fisherman-drink.mp4','Little Jimi drinks the whole thing! Now he needs some organic food' );
-            }
-
-        }
-
-        function fisherman_songwriting(){
-
-            if (game.fishermans_buttons.first){
-                game.fishermans_buttons.first = false;
-                game.currentLocationId = 'Fisherman\'s Wharf';
-                const musician_dialogue = [
-                    { speaker: 'Player', text: "I've walked this Wharf a thousand times, but I've never heard anyone play like you! 🎸✨" },
-                    { speaker: 'BESTIE', text: "Most people just hear the noise; it’s nice to meet a pair of ears that hear the truth, sugar 🌊🎶" },
-                    { speaker: 'Player', text: "Are those... songbooks in your crate? There must be fifty of them! All hand-written?" },
-                    { speaker: 'BESTIE', text: "Every frequency the city has hummed since the Summer of Love is in those pages. They’re my archives. My legacy. My retirement plan, if the birds ever start paying rent. 📖🐦" },
-                    { speaker: 'Player', text: "I'm trying to find my own voice in this city. I need to learn more lyric structures. Would you be willing to lend me one?" },
-                    { speaker: 'BESTIE', text: "I don't sell the soul for cash. But look at poor Jimi—he’s a growing boy, and this city’s trash-can diet is doing nothing for his spirit or mine. 🐶" },
-                    { speaker: 'Player', text: "You need real sustenance. Not the processed stuff the tourists leave behind." },
-                    { speaker: 'BESTIE', text: "Exactly. If you can find him some real USDA biodynamic, pasture-raised, Organic fuel—both fluids and solid nutrients, I’ll let you have one of my song books" },
-                    { speaker: 'Player', text: "Don't let that melody slip away while I'm gone!" }
-                ];
-                addMission('dog', 'Find Jimi the dog 🐶 some USDA organic fluid and solid food');
-                game.pendingAcquisition.topic = 'Organic Food';
-                const dialogueHtml = renderDialogue(musician_dialogue, 'Musician');
-                const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-                switchToView(contentDiv);
-
-            }
-
-        }
 
         function bouncer_request_help2(){
             game.currentLocationId = 'The GAMH';
@@ -7623,18 +7319,8 @@
             inventoryItem.acquired = false;
             toggleMission('scrapbook');
             game.currentLocationId = 'Mama⬇️';
-            game.pendingAcquisition.memory = 'Love';            
-            game.pendingAcquisition.memory_text = 'You feel your mom\'s love!';
-
+            game.pendingAcquisition.memory = 'Love';
             playMovie('./videos/mama-scrapbook.mp4','Shukran, habibi! This is wonderful! Thanks for being the best son in the world. I love you very much' );
-        }
-
-        function mama_action6(){
-            game.currentLocationId = 'Mama⬇️';
-            game.pendingAcquisition.item = 'Exotic Sauce';
-            let inventoryItem = game.inventory_items.find(i => i.name === 'Sauce Packets');
-            inventoryItem.acquired = false;
-            playMovie('./videos/mama-sauce.mp4','Mama is amazing! She just created the ultimate exotic blend of sauce flavors adding biryani, sumac, and zataar! 😋' );
         }
 
 
@@ -8237,6 +7923,7 @@
             }
 
             const statusBar = document.getElementById('status-bar-output');
+                console.log('statusBar', statusBar)
             if (statusBar) {
                 statusBar.innerHTML = message;
                 statusBar.classList.add('border-emerald-500', 'animate-pulse-quick');
@@ -8269,7 +7956,7 @@
                     'The 440': ['Chops list'],
                     'HSB Festival': ['Chops list'],
                     'The Fillmore': ['Chops list'],
-                    'APEX Office ': ['Complete Gig Sign'],
+                    'Apex Office ': ['Complete Gig Sign'],
                     'Sage & Drifter' : ['Cash']
                 };
 
@@ -8488,6 +8175,7 @@
             // Background click to close
             overlay.onclick = () => closeSequence();
 
+            console.log(`Topic Unlocked: ${topicName}`);
         }
 
        function displayNewLocationAcquired(locationName) {
@@ -8500,6 +8188,7 @@
 
             // If it's already found, we don't show the big celebratory window
             if (!newlocation.hidden) {
+                console.log(`${locationName} already found.`);
                 return;
             }
 
@@ -8982,12 +8671,10 @@
 
                 const response = await fetch('./trivia-questions.txt');
                 game.questionsData = await response.json();
-                if (game.chapter ===1){
-                    game.score = 50; 
-                }
-                else{
-                    game.score = 300;
-                }
+
+                game.score = 50; // Reset score for initial display
+                // Set initial chops values for display test (sum is 371)
+               
 
                 // Fetch, split, trim, and filter in one chain
                 game.words = (await read_wordle.text())
@@ -9372,6 +9059,7 @@
             try {
                 const parsed = loadTriviaQuestion(topic);
 
+                console.log(parsed);
                 if (parsed.question && parsed.correctAnswer && parsed.wrongAnswers && parsed.wrongAnswers.length === 3) {
                     updateState({ 
                         questionData: parsed,
@@ -9398,6 +9086,7 @@
         function handleAnswerSelect(answer) {
             if (game.selectedAnswer !== null || game.isLoading) return; 
 
+            console.log(game.questionData);
             if (game.selectedAnswer !== null || game.isLoading) return; 
 
             let newScore = game.chops["Backstage Blueprint"];
@@ -9817,6 +9506,7 @@
          function renderPhase_setup() {
 
             const station = STATIONS.find(s => s.id === 'rock');
+            
             game.radio.currentStation = station;
             game.radio.currentTrackIndex = 0;
             game.radio.errorState = false;
@@ -9938,7 +9628,7 @@
         }
 
         if (game.bestie2_buttons.songwriting){
-            shopData.push({ name: 'Song Book 1', price: 45, icon: '📖', desc: 'A book with multiple songs. It can definitely give me ideas' });
+            shopData.push({ name: 'Song Book', price: 45, icon: '📖', desc: 'A book with multiple songs. It can definitely give me ideas' });
         }
 
         if (game.bob_buttons.amoeba) {
@@ -9953,7 +9643,7 @@
             shopData.push({ name: 'Artist CD', price: 10, icon: '💿', desc: 'CDs to master your rhythm.' });
         }
 
-        inventoryItem = game.inventory_items.find(i => i.name === 'Song Book 1');
+        inventoryItem = game.inventory_items.find(i => i.name === 'Song Book');
         if (inventoryItem.acquired === true){
             inventoryItem.acquired = false;
             songRecipesData.forEach(song => { if ([3, 4].includes(song.id)) song.available = true; });
@@ -10864,9 +10554,7 @@
 
         function startPhase8Challenge() {
             stopRadio();
-
             if (!game.selectedPracticeArtist) return;
-
 
             // 1. Normalize the selected artist name
             const normalizedArtist = game.selectedPracticeArtist.toLowerCase().replace(/ /g, '_');
@@ -10876,7 +10564,6 @@
                 midiPath.toLowerCase().startsWith(normalizedArtist + '/')
             );
 
-
             if (artistPool.length === 0) {
                 // Use custom message instead of alert
                 updateState({ message: `No songs found for ${game.selectedPracticeArtist}!` });
@@ -10885,7 +10572,8 @@
 
             // 3. Pick a random MIDI
             const rawMidi = artistPool[Math.floor(Math.random() * artistPool.length)];
-            console.log(rawMidi);
+
+            // PREPARE STATE BEFORE RENDER
             const parts = rawMidi.split('/');
             const bandRaw = parts[0];
             const songRaw = parts[1].replace(/\.midi?$/i, '');
@@ -10899,11 +10587,14 @@
             playMusicChallenge('./midis/' + rawMidi);
             startTimer();
 
+            // 5. CRITICAL: Update state and force phase 8 re-render
+            // We pass phase: 8 to ensure the router picks the "Challenge Active" branch of renderPhase8
             updateState({ 
                 message: `Now streaming: ${game.currentSong}. GUESS THE SONG (do not write special characters!`, 
                 phase: 8 
             });
 
+            // Manual DOM refresh to be safe
             setPhase(8, `Guessing: ${game.currentSong}`);
         }
 
@@ -11207,7 +10898,7 @@
                     <!-- Header -->
                     <div class="text-center mb-6">
                         <h1 class="text-3xl font-bold title-font text-electric-cyan">MUSIC FEUD</h1>
-                        <p class="text-[10px] font-mono text-gray-400 mt-1 tracking-[0.2em]">Guess 3 out of the top 5 answers</p>
+                        <p class="text-[10px] font-mono text-gray-400 mt-1 tracking-[0.2em]">Guess the top 5 answers</p>
                     </div>
 
                     <!-- Question Box -->
@@ -11317,7 +11008,7 @@
             'Musician' : './faces/musician.jpg',
             'Woman' : './faces/woman.jpg',
             'Bobby' : './faces/bobby.png',
-            'Matt'  : './faces/matt.jpg'
+            'Matt'  : './faces/matt.png'
 
         };
 
@@ -11359,8 +11050,7 @@
             "The Chapel" : "./sprites/chapel.jpg",
             "Bottom of the Hill" : "./sprites/bottom.jpg",
             "Sage & Drifter" : "./sprites/bobby-bar.jpg",
-            "Presidio" : "./sprites/presidio.jpg",
-            "Out & IN" : "./sprites/out&in.jpg"
+            "Presidio" : "./sprites/presidio.jpg"
 
 
         };
@@ -11966,7 +11656,7 @@
                     game.radio.isPlaying = true;
                     game.radio.errorState = false;
                     // Ensure UI reflects active state
-                    //setTimeout(renderGame, 50);
+                    setTimeout(renderGame, 50);
                 },
                 onerror: (err) => {
 
@@ -12547,9 +12237,8 @@
         function exitChapterOne() {
             document.getElementById('chapterOneView').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
-            handleClick('Home');
-            home_action1();
-            //displayNewTopicAcquired('Musician Career');
+
+            displayNewTopicAcquired('Musician Career');
 
            // setPhase(10, 'Start the day');
            // handleClick(game.currentLocationId);
@@ -13785,7 +13474,7 @@
     function StartChapter2() {
         // 1. Reset Global Game Object
            Object.assign(game, {
-        score: 250,
+        score: 200,
         level: 1,
         chapter:2,
         isLLMLoaded: false,
@@ -13814,7 +13503,7 @@
             'Red Hot Chili Peppers', 'Santana', 'Spice Girls', 'The Beatles',
             'The Police', 'The Smashing Pumpkins', 'Tool', 'U2', 'Van Halen'
         ],
-        artists_bought: ['Metallica', 'U2', 'Prince', 'The Smashing Pumpkins', 'Madonna', 'Nirvana'],
+        artists_bought: [],
         message: '',
         currentBand: '',
         currentSong: '',
@@ -13846,12 +13535,12 @@
         totalXP: 0,
         songCounts: 0,
         chops: [
-            { name: "Social Influence", points: 0, level: 1, available:0, isUnlocked: true, icon: '📣' },
-            { name: "Instrument Synergy", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🎸' },
-            { name: "Rhythm Mastery", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🎼' },
-            { name: "Lyrical Flow", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🖋️' },
-            { name: "Backstage Blueprint", points: 0, level: 1,  available:0, isUnlocked: true, icon: '📜' },
-            { name: "Stage Presence", points: 0, level: 1,  available:0, isUnlocked: true, icon: '🎤' }
+            { name: "Social Influence", points: 0, level: 1, isUnlocked: true, icon: '📣' },
+            { name: "Instrument Synergy", points: 0, level: 1, isUnlocked: true, icon: '🎸' },
+            { name: "Rhythm Mastery", points: 0, level: 1, isUnlocked: true, icon: '🎼' },
+            { name: "Lyrical Flow", points: 0, level: 1, isUnlocked: true, icon: '🖋️' },
+            { name: "Backstage Blueprint", points: 0, level: 1, isUnlocked: true, icon: '📜' },
+            { name: "Stage Presence", points: 0, level: 1, isUnlocked: true, icon: '🎤' }
         ],
         chopsDiscovered: true,
         memories: {
@@ -13918,8 +13607,8 @@
         topic.acquired = true;
         topic = game.conversation_topics.unlocked.find(i => i.name === 'Music Gig');
         topic.acquired = true;
-     //   topic = game.conversation_topics.unlocked.find(i => i.name === 'Tom\'s Passion');
-      //  topic.acquired = true;
+        topic = game.conversation_topics.unlocked.find(i => i.name === 'Tom\'s passion');
+        topic.acquired = true;
 
 
 
@@ -13961,17 +13650,7 @@
             { id: 'gig', text: 'I need to learn how to secure some gigs!', completed: false, urgent: true },
         ];
 
-        const station = STATIONS.find(s => s.id === 'rock');
-        game.radio.currentStation = station;
-        game.radio.currentTrackIndex = 0;
-        game.radio.errorState = false;
-        if (!game.radio.isPlaying)  { 
-            playTrack();
-            game.radio.isPlaying=true;
-        }
-
-        initializeGame();
-
+        
         console.log("Chapter 2 Setup Complete.");
         handleClick('Home');
 
@@ -14098,14 +13777,9 @@
     window.sid_action4 = sid_action4;
     window.sid_action5 = sid_action5;
     window.sid_action6 = sid_action6;
-    window.sid_food = sid_food;
     window.sid_oasis = sid_oasis;
     window.sid_chops = sid_chops;
-    window.inout_action1 = inout_action1;
-    window.inout_action2 = inout_action2;
-    window.inout_action3 = inout_action3;
     window.go_to_work = go_to_work;
-    window.fisherman_songwriting = fisherman_songwriting;
     window.kevind_action1 = kevind_action1;
     window.kevind_action2 = kevind_action2;
     window.kevind_action3 = kevind_action3;
@@ -14141,7 +13815,6 @@
     window.mama_action3 = mama_action3;
     window.mama_action4 = mama_action4;
     window.mama_action5 = mama_action5;
-    window.mama_action6 = mama_action6;
     window.crazy_action1 = crazy_action1;
     window.crazy_action2 = crazy_action2;
     window.crazy_action3 = crazy_action3;
@@ -14156,7 +13829,6 @@
     window.lagunitas_action1 = lagunitas_action1;
     window.lagunitas_sign = lagunitas_sign;
     window.tom_copies = tom_copies;
-    window.tom_food = tom_food;
     window.tom_request_help = tom_request_help;
     window.lagunitas_sign_photo = lagunitas_sign_photo;
     window.get_book = get_book;
@@ -14169,17 +13841,11 @@
     window.rick_action3 = rick_action3;
     window.coit_photo = coit_photo;
     window.coit_sign = coit_sign;
-    window.painted_sign = painted_sign;
-    window.cliffs_sign = cliffs_sign;
-    window.landsend_sign = landsend_sign;
     window.lombard_photo = lombard_photo;
-    window.landsend_food = landsend_food;
     window.painted_photo = painted_photo;
     window.landsend_photo = landsend_photo;
     window.landsend_woman = landsend_woman;
     window.fishermans_photo = fishermans_photo;
-    window.fishermans_food = fishermans_food;
-    window.fishermans_drink = fishermans_drink;
     window.alcatraz_photo = alcatraz_photo;
     window.bestie2_request_help = bestie2_request_help;
     window.bestie2_chops = bestie2_chops;
