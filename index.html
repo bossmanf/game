@@ -1865,6 +1865,9 @@
         ./ethnic/Nightdreams.mp3
         ./ethnic/Lotus.mp3
         ./ethnic/Sardana.mp3
+        ./rock/airstream.mp3
+        ./rock/sunrise.mp3
+        ./rock/nexus.mp3
         ./rock/Hotrock.mp3
         ./rock/Metalmania.mp3
         ./rock/urban_theme_bpm115.mp3
@@ -1942,6 +1945,7 @@
             dialogueData: '', 
             activeCharacter: '',
             iPhoneMessage : false,
+            active_menu : false,
             isFanPanelVisible: true, // NEW: Control fan panel visibility
             currentTopic: '',
             questionData: null,
@@ -4529,7 +4533,7 @@
                 { speaker: 'Player', text: "I am so determined to become a musician! Let's examine my interface..." },
                 { speaker: 'Player', text: "First, the MAP icon 🗺️ is my compass. I use it to navigate different districts of San Francisco and visit my contacts." },
                 { speaker: 'Player', text: "The INBOX icon 📱 is for my phone. I should check it often for text notifications." },
-                { speaker: 'Player', text: "The BAG icon 🎒 is my lifeblood. It tracks my cash, the items I've collected, and the conversation topics I've unlocked." },
+                { speaker: 'Player', text: "The BAG icon 🎒 is my lifeblood. It tracks the items I've collected, the conversation topics I've unlocked, and important memories." },
                 { speaker: 'Player', text: "The TO-DO list 📋 is very helpful. It keeps track of my current quests and objectives so I don't lose focus on the mission." },
                 { speaker: 'Player', text: "My CAREER 🎸 page shows my growth as a musician—my stats, fan count, and progress toward the chapter goal." },
                 { speaker: 'Player', text: "I can use the CONFIG ⚙️ gear to save the game and choose music from different radio stations." },
@@ -9587,7 +9591,9 @@
             
             // Increased width (w-20 to w-24) and padding
             const tab = createElement('div', `relative py-3 flex flex-col items-center w-20 sm:w-24 cursor-pointer transition-all duration-200 ${activeClass} rounded-t-lg`);
-            tab.onclick = () => setPhase(phase, '');
+            if (game.active_menu){
+                tab.onclick = () => setPhase(phase, '');
+            }
             
             tab.innerHTML = `
                 <span class="text-3xl mb-1">${icon}</span>
@@ -12548,6 +12554,7 @@
             document.getElementById('app').style.display = 'flex';
             handleClick('Home');
             home_action1();
+            game.active_menu = true;
             //displayNewTopicAcquired('Musician Career');
 
            // setPhase(10, 'Start the day');
@@ -13789,6 +13796,7 @@
         chapter:2,
         isLLMLoaded: false,
         secrets: 0,
+        active_menu:true,
         isLoading: false,
         topics: [],
         selectedItem: null,
