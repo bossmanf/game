@@ -1,0 +1,501 @@
+/**
+ * SCENARIO MODULE: HABIBI'S JOURNEY
+ * Handles narrative choices, trait management, and finale triggering.
+ */
+
+// 1. Initialize Traits in the Game State (Add this to your initializeGame function)
+game.traits = game.traits || {
+    relationship: 50,
+    community: 50,
+    karma: 50,
+    confidence: 50,
+    motivation: 50,
+    happiness: 50
+};
+game.currentScenario = game.currentScenario || 0;
+
+// 2. Scenario Data Definition
+const scenarioData = [
+    // PHASE 1
+    {
+        title: "The Post-Gig High",
+        desc: "After the Fillmore, the adrenaline fades. You're alone in your room.",
+        choices: [
+            { text: "Videocall Ibearian to share the energy", impact: { relationship: 5 } },
+            { text: "Watch Arn Anderson tapes to decompress", impact: { confidence: 5 } }
+        ]
+    },
+    {
+        title: "The Sid Situation",
+        desc: "Sid needs a plus-one for a posh SOMA gallery opening.",
+        choices: [
+            { text: "Go as the 'savvy bestie'", impact: { community: 10, karma: 5 } },
+            { text: "Stay home to study Spanish for Ibearian", impact: { relationship: 10, community: -5 } }
+        ]
+    },
+    {
+        title: "The First Visit",
+        desc: "It’s been weeks since you've seen each other.",
+        milestone: true,
+        choices: [
+            { text: "Fly to SD to see Ibearian's world", impact: { relationship: 10, motivation: 5 } },
+            { text: "Invite him to the Mission to show your life", impact: { relationship: 5, happiness: 5 } },
+            { text: "Make an excuse about being 'too busy'", impact: { relationship: -10, confidence: -10 } }
+        ]
+    },
+    {
+        title: "The Gummy Incident",
+        desc: "Movie night snack choice.",
+        choices: [
+            { text: "Give him 'High-Voltage' gummies", impact: { motivation: 5 } },
+            { text: "Give him 'Organic Chill' ones", impact: { happiness: 5 } }
+        ]
+    },
+    {
+        title: "Softball Sunday",
+        desc: "Bill and Blake need a ringer against a tech-firm team.",
+        choices: [
+            { text: "Play and crush the corporate team", impact: { community: 5, confidence: 5 } },
+            { text: "Skip it to practice guitar", impact: { motivation: 5, community: -5 } }
+        ]
+    },
+    {
+        title: "The Mission Outreach",
+        desc: "Volunteering at a local shelter.",
+        choices: [
+            { text: "Spend the morning volunteering", impact: { community: 15, karma: 10 } },
+            { text: "Sleep in and order expensive brunch", impact: { motivation: -10, happiness: 5, community: -15 } }
+        ]
+    },
+    // PHASE 2
+    {
+        title: "The Language Barrier",
+        desc: "Ibearian’s mom sends a warm WhatsApp in Spanish.",
+        choices: [
+            { text: "Use a translation app to reply quickly", impact: { motivation: -5, relationship: -5 } },
+            { text: "Call Mama for a language/culture lesson", impact: { community: 10, karma: 5 } }
+        ]
+    },
+    {
+        title: "Defining the Bond",
+        desc: "Sunset at Lands End.",
+        milestone: true,
+        choices: [
+            { text: "Ask Ibearian to be your boyfriend", impact: { relationship: 10, confidence: 5 } },
+            { text: "Keep it casual to avoid pressure", impact: { relationship: -15, motivation: -5 } }
+        ]
+    },
+    {
+        title: "The Family Feast",
+        desc: "Mama insists on meeting your 'friend.'",
+        choices: [
+            { text: "Bring Ibearian to the family dinner", impact: { relationship: 15, community: 5, karma: 5 } },
+            { text: "Go alone to avoid the 'talk'", impact: { relationship: -10, happiness: -5, community: -5 } }
+        ]
+    },
+    {
+        title: "The Great Escape",
+        desc: "A weekend away.",
+        milestone: true,
+        choices: [
+            { text: "Go to Big Bear Lake", impact: { happiness: 10, confidence: 5 } },
+            { text: "Go to Puerto Vallarta", impact: { motivation: 10, relationship: 5 } }
+        ]
+    },
+    {
+        title: "FIFA Night with Kevin D",
+        desc: "Kevin wants a 5-game marathon.",
+        choices: [
+            { text: "Play until dawn", impact: { happiness: 5, community: 10 } },
+            { text: "End early to text Ibearian goodnight", impact: { relationship: 5, karma: 5 } }
+        ]
+    },
+    {
+        title: "The Style Choice",
+        desc: "Your favorite beanie is falling apart.",
+        choices: [
+            { text: "Buy a new high-end black beanie", impact: { happiness: 5, motivation: 5 } },
+            { text: "Keep your old 'soul' beanie", impact: { confidence: 5, happiness: -5 } }
+        ]
+    },
+    // PHASE 3
+    {
+        title: "Matt’s Elitist Social",
+        desc: "Rooftop party in the Presidio.",
+        choices: [
+            { text: "Attend to network for the tour", impact: { confidence: 5, relationship: -5, community: -10 } },
+            { text: "Bring Sid and roast the elitists", impact: { community: 10, confidence: 10 } },
+            { text: "Skip for late-night Pho with Ibearian", impact: { happiness: 10, relationship: 5 } }
+        ]
+    },
+    {
+        title: "The Homeless Busker",
+        desc: "You see your friend from the Wharf shivering.",
+        choices: [
+            { text: "Give her your favorite hoodie and cash", impact: { karma: 15, happiness: 5 } },
+            { text: "Offer a nod and keep walking", impact: { karma: -15, confidence: -5 } }
+        ]
+    },
+    {
+        title: "The Chapel Gig",
+        desc: "Solo set with Ibearian in the front row.",
+        choices: [
+            { text: "Play a raw, emotional Iraqi-blues set", impact: { confidence: 10, relationship: 10 } },
+            { text: "Play a safe set of covers", impact: { confidence: -10, motivation: -10 } }
+        ]
+    },
+    {
+        title: "The Road Trip",
+        desc: "Hitting the PCH.",
+        milestone: true,
+        choices: [
+            { text: "Drive to Big Sur for nature", impact: { happiness: 10, karma: 5 } },
+            { text: "Go to Napa for luxury", impact: { motivation: 5, relationship: 5 } }
+        ]
+    },
+    {
+        title: "The Apex Ghost",
+        desc: "Old boss offers a high-paying role.",
+        choices: [
+            { text: "Take the money", impact: { confidence: -10, motivation: -15, karma: -10 } },
+            { text: "Block the number", impact: { motivation: 10, karma: 10, confidence: 5 } }
+        ]
+    },
+    {
+        title: "Hosting the Besties",
+        desc: "Zataar and Labne night for Sid and the Kevins.",
+        choices: [
+            { text: "Spend all day prepping a feast", impact: { community: 15, karma: 10, happiness: 5 } },
+            { text: "Order generic delivery", impact: { community: -20, motivation: -10 } }
+        ]
+    },
+    // PHASE 4
+    {
+        title: "The Co-habitation Talk",
+        desc: "Your apartment feels empty.",
+        milestone: true,
+        choices: [
+            { text: "Ask Ibearian to move in", impact: { relationship: 15, happiness: 10 } },
+            { text: "Say you 'need space'", impact: { relationship: -20, confidence: 5, community: -10 } }
+        ]
+    },
+    {
+        title: "NYC Soul Trip",
+        desc: "Showing him your 'Soul City.'",
+        choices: [
+            { text: "Book a fancy hotel in Soho", impact: { happiness: 5, motivation: 5 } },
+            { text: "Stay in a gritty Brooklyn Airbnb", impact: { confidence: 5, happiness: 10 } }
+        ]
+    },
+    {
+        title: "Wrestling at the Club",
+        desc: "Sparring vs. Refereeing.",
+        choices: [
+            { text: "Spar with Ibearian (Exhibition)", impact: { confidence: 10, relationship: 10, happiness: 5 }, video: './videos/sparring.mp4' },
+            { text: "Referee a high-stakes match", impact: { community: 10, karma: 10, confidence: 5 } },
+            { text: "Stay on the sidelines", impact: { happiness: -5, motivation: -5, community: -15 } }
+        ]
+    },
+    {
+        title: "The GAMH Show",
+        desc: "Opportunity at the Great American Music Hall.",
+        choices: [
+            { text: "Obsessively practice all week", impact: { confidence: 15, happiness: -5 } },
+            { text: "Balance practice with a date night", impact: { relationship: 10, happiness: 10 } }
+        ]
+    },
+    {
+        title: "The Comedy Club",
+        desc: "Comic roasts bald, bearded rockers in their 40s.",
+        choices: [
+            { text: "Laugh and buy the comic a drink", impact: { happiness: 10, confidence: 10 } },
+            { text: "Get annoyed and leave", impact: { confidence: -15, happiness: -10 } }
+        ]
+    },
+    {
+        title: "The Tech Sabotage",
+        desc: "Sid wants to 'troll' an AI developer’s party.",
+        choices: [
+            { text: "Join the prank for the chaos", impact: { community: 10, karma: 5, happiness: 10 } },
+            { text: "Stay home and cook with Ibearian", impact: { relationship: 10, community: 5 } }
+        ]
+    },
+    // PHASE 5
+    {
+        title: "Christmas Plans",
+        desc: "The big decision.",
+        milestone: true,
+        choices: [
+            { text: "Go to Granada to meet his parents", impact: { relationship: 20, community: 5 } },
+            { text: "Stay in SF for a cozy Christmas", impact: { relationship: 10, happiness: 10, community: 15 } }
+        ]
+    },
+    {
+        title: "The Big Event",
+        desc: "Metallica (Sphere) vs Billie Eilish (Chase Center).",
+        milestone: true,
+        choices: [
+            { text: "Metallica in Vegas", impact: { motivation: 10, happiness: 10, confidence: 5 } },
+            { text: "Billie Eilish in SF", impact: { happiness: 10, karma: 5, relationship: 5 } }
+        ]
+    },
+    {
+        title: "The Financial Stress",
+        desc: "Unexpected tax bill hits.",
+        choices: [
+            { text: "Panic and cancel the vacation", impact: { confidence: -15, happiness: -10 } },
+            { text: "Trust the process and work extra gigs", impact: { motivation: 10, confidence: 10 } }
+        ]
+    },
+    {
+        title: "The Fillmore Finale",
+        desc: "Headlining show.",
+        choices: [
+            { text: "Perform a legendary set", impact: { happiness: 15, confidence: 10, motivation: 5 } },
+            { text: "Manage the guest list for friends", impact: { community: 20, relationship: 5, karma: 10 } },
+            { text: "Get stage fright", impact: { happiness: -20, confidence: -20, community: -20 } }
+        ]
+    },
+    {
+        title: "The Spanish Final",
+        desc: "Sitting across from Ibearian's parents.",
+        choices: [
+            { text: "Speak in your best Spanish", impact: { relationship: 20, community: 10 } },
+            { text: "Stick to English", impact: { relationship: 5, confidence: -15 } }
+        ]
+    },
+    {
+        title: "The Mission Gentrification",
+        desc: "A massive tech campus is moving in, threatening Sid’s neighborhood.",
+        choices: [
+            { text: "Lead the community protest", impact: { community: 20, karma: 15, motivation: 10 } },
+            { text: "Mind your own business", impact: { community: -30, karma: -20, confidence: 5 } }
+        ]
+    },
+    {
+        title: "The Future Talk",
+        desc: "A quiet night at Big Bear Lake.",
+        choices: [
+            { text: "Discuss kids and a permanent future", impact: { relationship: 15, happiness: 10 } },
+            { text: "Avoid the topic", impact: { relationship: -15, motivation: 5 } }
+        ]
+    },
+    // SCENARIO 32: THE CROSSROADS (INDEX 31)
+    {
+        title: "THE CROSSROADS",
+        desc: "", // Dynamically generated based on Relationship
+        choices: [] // Dynamically generated
+    }
+];
+
+// 3. Rendering Logic
+function renderScenarioScreen() {
+    const idx = game.currentScenario;
+    const scenario = scenarioData[idx];
+    
+    // Handle Scenario 32 logic
+    if (idx === 31) return renderCrossroads();
+
+    const container = createElement('div', 'flex flex-col w-full h-full p-6 space-y-8 animate-in fade-in duration-500');
+
+    // Traits Bar
+    const traitsBar = createElement('div', 'grid grid-cols-3 md:grid-cols-6 gap-2 w-full p-4 bg-black/40 border border-white/10 rounded-xl mb-4');
+    const traitList = [
+        { k: 'relationship', n: 'Rel.', e: '❤️' },
+        { k: 'community', n: 'Comm.', e: '🤝' },
+        { k: 'karma', n: 'Karma', e: '✨' },
+        { k: 'confidence', n: 'Conf.', e: '🛡️' },
+        { k: 'motivation', n: 'Motiv.', e: '⚡' },
+        { k: 'happiness', n: 'Happy', e: '☀️' }
+    ];
+    
+    traitList.forEach(t => {
+        const val = game.traits[t.k];
+        traitsBar.innerHTML += `
+            <div class="flex flex-col items-center">
+                <span class="text-xs font-bold text-gray-500 uppercase">${t.n} ${t.e}</span>
+                <span class="text-xl font-black text-white">${val}</span>
+            </div>
+        `;
+    });
+
+    // Content
+    const scenarioBox = createElement('div', 'flex-1 flex flex-col items-center justify-center text-center space-y-6');
+    scenarioBox.innerHTML = `
+        <span class="text-cyan-400 font-mono text-[10px] tracking-[0.4em] uppercase">Scenario ${idx + 1} / 32</span>
+        <h2 class="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">${scenario.title}</h2>
+        <p class="text-xl text-gray-300 max-w-xl font-medium leading-snug">"${scenario.desc}"</p>
+    `;
+
+    const choiceContainer = createElement('div', 'grid grid-cols-1 gap-4 w-full max-w-lg');
+    scenario.choices.forEach((choice, cIdx) => {
+        const btn = createElement('button', 'metal-button p-4 text-left group flex items-center justify-between');
+        btn.innerHTML = `
+            <span class="text-sm font-black uppercase italic">${choice.text}</span>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400">SELECT ▶</span>
+        `;
+        btn.onclick = () => handleChoice(choice);
+        choiceContainer.appendChild(btn);
+    });
+
+    container.appendChild(traitsBar);
+    container.appendChild(scenarioBox);
+    container.appendChild(choiceContainer);
+    
+    return container;
+}
+
+function handleChoice(choice) {
+    // 1. Update Traits with Capping
+    const deltas = [];
+    for (const [trait, value] of Object.entries(choice.impact)) {
+        const oldVal = game.traits[trait];
+        game.traits[trait] = Math.min(100, Math.max(0, oldVal + value));
+        
+        const emojiMap = { relationship: '❤️', community: '🤝', karma: '✨', confidence: '🛡️', motivation: '⚡', happiness: '☀️' };
+        const nameMap = { relationship: 'Relationship', community: 'Community', karma: 'Karma', confidence: 'Confidence', motivation: 'Motivation', happiness: 'Happiness' };
+        
+        deltas.push({ name: nameMap[trait], emoji: emojiMap[trait], value });
+    }
+
+    // 2. Show Feedback
+    showImpactFeedback(deltas, () => {
+        // 3. Move forward
+        if (choice.video) {
+            playMovie(choice.video, "Experience Recorded.", 21); // Assuming 21 is Scenario Phase
+        } else {
+            advanceScenario();
+        }
+    });
+}
+
+function showImpactFeedback(deltas, callback) {
+    const overlay = document.createElement('div');
+    overlay.className = "fixed inset-0 z-[2000] flex items-center justify-center bg-black/90 backdrop-blur-md animate-in fade-in duration-300";
+    
+    const content = createElement('div', 'text-center space-y-6 transform animate-in zoom-in-95');
+    
+    let deltaHtml = '';
+    deltas.forEach(d => {
+        const colorClass = d.value > 0 ? 'text-green-400' : 'text-red-500';
+        const sign = d.value > 0 ? '+' : '';
+        deltaHtml += `
+            <div class="flex items-center justify-center gap-4 animate-in slide-in-from-bottom-4">
+                <span class="text-2xl">${d.emoji}</span>
+                <span class="text-2xl font-black uppercase text-white">${d.name}</span>
+                <span class="text-4xl font-black ${colorClass}">${sign}${d.value}</span>
+            </div>
+        `;
+    });
+
+    content.innerHTML = `
+        <h3 class="text-cyan-400 font-mono text-xs tracking-widest uppercase mb-12">System Update</h3>
+        <div class="space-y-4 mb-16">${deltaHtml}</div>
+        <button id="impact-close" class="metal-button px-12 py-3">CONTINUE</button>
+    `;
+
+    overlay.appendChild(content);
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#impact-close').onclick = () => {
+        overlay.remove();
+        callback();
+    };
+}
+
+function advanceScenario() {
+    game.currentScenario++;
+    if (game.currentScenario >= scenarioData.length) {
+        // This shouldn't happen if Crossroads logic works
+    } else {
+        renderGame();
+    }
+}
+
+function renderCrossroads() {
+    const isHighRel = game.traits.relationship > 80;
+    const container = createElement('div', 'flex flex-col items-center justify-center h-full p-8 text-center space-y-8 animate-in fade-in duration-1000');
+
+    if (isHighRel) {
+        container.innerHTML = `
+            <div class="space-y-4">
+                <span class="text-red-500 animate-pulse font-black text-xs uppercase tracking-widest">Chapter Final</span>
+                <h2 class="text-6xl font-black text-white italic tracking-tighter uppercase italic">THE CROSSROADS</h2>
+                <p class="text-2xl text-gray-200 italic max-w-2xl leading-snug">
+                    Ibearian takes your hand on a cliff overlooking the Golden Gate. "Habibi, I want to share my life with you. Will you marry me?"
+                </p>
+            </div>
+            <div class="flex flex-col gap-4 w-full max-w-sm">
+                <button onclick="triggerFinale('MARRIAGE')" class="metal-button py-6 text-2xl font-black border-red-500 text-red-500 hover:bg-red-500/10">YES ❤️</button>
+                <button onclick="triggerFinale('TROUBADOUR')" class="metal-button py-4 text-xl font-black border-zinc-500 text-zinc-500">NO</button>
+            </div>
+        `;
+    } else {
+        container.innerHTML = `
+            <div class="space-y-4">
+                <span class="text-cyan-400 font-black text-xs uppercase tracking-widest">Chapter Final</span>
+                <h2 class="text-6xl font-black text-white italic tracking-tighter uppercase italic">THE CROSSROADS</h2>
+                <p class="text-2xl text-gray-200 italic max-w-2xl leading-snug">
+                    You sit at the Wharf, watching the fog roll in. The spark is fading into a deep, respectful friendship. "We'll always be in each other's lives," he says softly.
+                </p>
+            </div>
+            <div class="flex flex-col gap-4 w-full max-w-sm">
+                <button onclick="triggerFinale('FRIENDSHIP_VISIT')" class="metal-button py-6 text-xl font-black">Offer to visit him in Spain as a friend</button>
+                <button onclick="triggerFinale('FRIENDSHIP_HEAL')" class="metal-button py-4 text-xl font-black">Keep your distance to heal</button>
+            </div>
+        `;
+    }
+    return container;
+}
+
+function triggerFinale(choice) {
+    // Apply final choice impacts
+    if (choice === 'FRIENDSHIP_VISIT') { game.traits.relationship += 5; game.traits.community += 5; }
+    if (choice === 'FRIENDSHIP_HEAL') { game.traits.relationship -= 5; game.traits.confidence += 5; }
+
+    // Priority Check
+    if (choice === 'MARRIAGE') return renderFinaleScreen('MARRIAGE');
+    if (choice === 'TROUBADOUR') return renderFinaleScreen('TROUBADOUR');
+
+    // Traits Logic Check
+    const t = game.traits;
+    
+    if (t.motivation < 40 || t.confidence < 40) return renderFinaleScreen('CORPORATE');
+    if (t.karma >= 80 && t.motivation >= 75) return renderFinaleScreen('ACTIVIST');
+    if (t.community >= 70 && t.karma >= 60) return renderFinaleScreen('BESTIE');
+    if (t.happiness >= 75 && t.confidence >= 60) return renderFinaleScreen('BACHELOR');
+    
+    return renderFinaleScreen('GHOST');
+}
+
+function renderFinaleScreen(tier) {
+    const container = document.getElementById('game-container');
+    const finales = {
+        MARRIAGE: { t: "THE MARRIAGE", desc: "You said Yes. The Mission District hasn't seen a wedding like this in decades. You and Ibearian build a life of music, wrestling, and Iraqi-Spanish fusion meals.", color: "text-red-500" },
+        TROUBADOUR: { t: "THE TROUBADOURS", desc: "You chose freedom, but you chose it together. You sell the SF apartment and travel the world as nomadic lovers, your guitars the only luggage you need.", color: "text-yellow-400" },
+        CORPORATE: { t: "THE CORPORATE RELAPSE", desc: "The dream broke. Hassan loses the rebel spirit, breaks up with Ibearian, and returns to a soul-crushing job at Apex. The guitar gathers dust in a corner.", color: "text-zinc-500" },
+        ACTIVIST: { t: "THE GLOBAL ACTIVIST", desc: "You didn't marry, but you became a legend. A global figure in the fight against corporate greed, using your music to dismantle the machine.", color: "text-cyan-400" },
+        BESTIE: { t: "THE BESTIE ICON", desc: "The Mission District legend. You run the youth center and are the beloved 'bestie' of every local. Your music is the heartbeat of the streets.", color: "text-green-400" },
+        BACHELOR: { t: "THE SOULFUL BACHELOR", desc: "A peaceful, solo life in a cabin at Big Bear Lake. You play your guitar for the mountains now, finally at peace with yourself.", color: "text-orange-400" },
+        GHOST: { t: "THE BITTER GHOST", desc: "Alone and disconnected, Hassan haunts the dive bars of SF, bitter about his lost career and lost love. A ghost in the city he once owned.", color: "text-gray-700" }
+    };
+
+    const fin = finales[tier];
+    container.innerHTML = `
+        <div class="flex flex-col items-center justify-center min-h-screen p-8 bg-black text-center space-y-12 animate-in fade-in zoom-in-95 duration-[2000ms]">
+            <div class="space-y-4">
+                <h3 class="font-mono text-xs tracking-[1em] text-white/40 uppercase">Epilogue</h3>
+                <h1 class="text-8xl font-black italic tracking-tighter uppercase ${fin.color} drop-shadow-2xl">${fin.t}</h1>
+            </div>
+            
+            <p class="text-3xl font-medium text-gray-300 max-w-3xl leading-snug">
+                "${fin.desc}"
+            </p>
+
+            <div class="pt-12 border-t border-white/10 w-full max-w-sm flex flex-col gap-6">
+                <button onclick="location.reload()" class="metal-button py-6 text-2xl font-black">START NEW JOURNEY</button>
+                <div class="text-[10px] text-white/30 uppercase tracking-[0.5em]">Habibi's Dream : The End</div>
+            </div>
+        </div>
+    `;
+}
