@@ -2025,6 +2025,7 @@
             currentBand: '',
             currentSong: '',
             timer: 40,
+            endSong:false,
             timerInterval: null,
             synth: null, // Tone.js synth instance
             error: null,
@@ -2115,7 +2116,8 @@
             chapel_buttons:
             {
                 play:true,
-                guitar:false
+                guitar:false,
+                broken:false
             },
             slims_buttons:
             {
@@ -2165,11 +2167,6 @@
             dolores_buttons:
             {
                 finale:false
-            },
-            cliffs_buttons:
-            {
-                showHelpButton:true
-
             },
             bobby_buttons:
             {
@@ -2253,7 +2250,9 @@
                 copies:false
             },
             cliffs_buttons:{
-                copies:false
+                copies:false,
+                showHelpButton:true
+
             },
 
             bob_buttons:
@@ -2352,7 +2351,7 @@
                     'BITTER END ': 'I prefer bands that play in laundromats and only release music via carrier pigeon.',
                     'Metallica Pop-up Store': 'The greatest show on earth! We\'re following them city to city.',
                     'BESTIE': 'No, thanks! but probably your music buddy will know about it...',
-                    'HSB Festival': 'I think they have a ruffle in their pop-up store. I wish I knew where it is...',
+                    'HSB Festival': 'I think they have a ruffle in their pop-up store at the Mission. Ask your music buddy.',
                     'Crazy K': 'The heavy metal thunder... it is a modern-day ritual of the masses.',
                     'The Fillmore ': 'The gold standard for stadium shows...',
                     'The Fillmore': 'I could not be less impressed...',
@@ -3365,7 +3364,7 @@
 
 
 
-             "APEX Office": { X: 650, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "work", description: "A towering monolith of glass and surveillance overlooking the Bay. Inside, the air is filtered, the lighting is 'optimized' for maximum productivity, and the silence is heavy. This isn't a workplace; it’s a high-frequency hive where human creativity is harvested by the Omni-Sync algorithm. Every cubicle is a cage, and every badge-swipe is a data point. To the world, it’s the pinnacle of tech success; to you, it’s the place where music goes to die.", hidden: true , character: 'Tom'},
+             "APEX Office": { X: 650, Y: 280, W: 30, H: 30, category: "Work", emoji: "🏙️", actionKey: "work", description: "A towering monolith of glass and surveillance overlooking the Bay. This isn't a workplace; it’s a high-frequency hive where human creativity is harvested by the Omni-Sync algorithm. Every cubicle is a cage, and every badge-swipe is a data point.", hidden: true , character: 'Tom'},
 
             "APEX Office ": { X: 640, Y: 280, W: 30, H: 30, category: "tom", emoji: "🏙️", actionKey: "tom", description: "A towering monolith of glass and surveillance overlooking the Bay.", hidden: true , character: 'Tom'},
 
@@ -3839,11 +3838,13 @@
             toggleLandmarkVisibilityByName('Lagunitas⬆️', false);
             toggleLandmarkVisibilityByName('Sage & Drifter', false);
             toggleLandmarkVisibilityByName('Presidio', false);
+            toggleLandmarkVisibilityByName('Bottom of the Hill', false);
+
 
 
             
-            game.hype = 1000;
-            game.fans = 1000;
+            game.hype = 0;
+            game.fans = 50;
             game.songs = 7;
             game.bestie2_buttons.songwriting_able = true;
             let inventoryItem = game.inventory_items.find(i => i.name === 'Gig Sign Copies');
@@ -3857,6 +3858,8 @@
             inventoryItem = game.inventory_items.find(i => i.name === 'Full Cycling Bottle');
             inventoryItem.acquired = true;
 
+            inventoryItem = game.inventory_items.find(i => i.name === 'Exotic Sauce');
+            inventoryItem.acquired = true;
 
 
             inventoryItem.given = true;
@@ -3865,7 +3868,7 @@
             game.painted_buttons.copies = true;
             game.cliffs_buttons.copies = true;
             game.coit_buttons.copies = true;
-            game.candy = 1;
+            //game.candy = 1;
 
              game.chops.forEach(chop => {
                 // 1. Increment the available points
@@ -4230,7 +4233,6 @@
         }
 
         function tom_request_help(){
-          //  game.currentLocationId = 'Apex Office ';
           //  game.currentPhase = 5;
             const tom_breakup_dialogue_data = [
             { speaker: 'Player', text: "Tom? Hey man, are you actually crying? What happened?" },
@@ -4293,7 +4295,7 @@
         function presidio_action3(){
             let inventoryItem = game.inventory_items.find(i => i.name === 'Exotic Sauce');
             inventoryItem.acquired = false;
-            game.pendingAcquisition.item = 'Candy';
+            game.pendingAcquisition.item = '\"Candy\"';
             game.candy = 1;
             playMovie('./videos/matt-accept.mp4', 'OMG! This sauce is the best ultimate flavour of my life. Take the candy!');
 
@@ -4362,6 +4364,7 @@
                     game.work_buttons.badge = false;
                     playMovie('./videos/habibi-officebuilding.mp4', 'I have the feeling it won\'t be the last time I see this evil corporation... They can keep their tower. They can keep their \'Sync.\' I’ve finally found my own frequency... and for the first time in a decade, I’m actually breathing.'); 
                 }
+                toggleLandmarkVisibilityByName('APEX Office', true);
 
         }
 
@@ -4370,15 +4373,13 @@
             
             game.kevind_buttons.chapel = true;
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 60;
-            game.pendingAcquisition.fans = 80;
-            game.pendingAcquisition.cash = 800;
+            game.pendingAcquisition.hype = 120;
+            game.pendingAcquisition.fans = 160;
+            game.pendingAcquisition.cash = 400;
             playMovie('./videos/lagunitas-gig.mp4', 'Your first show! An unforgetable gig!'); 
             landmarkImageRegistry['Lagunitas⬆️'] = './sprites/lagunitas_kevind_after.jpg';
             if (game.kevind_buttons.lagunitas){
-                game.hype += 60;
-                game.fans += 80;
-                game.score +=800;
+               
                 game.kevind_buttons.lagunitas = false;
             }
             game.lagunitas_buttons.play = false;
@@ -4412,12 +4413,10 @@
         function startBottom(){
             playMovie('./videos/bottom-gig.mp4', 'Your second show! The public loves your energy!'); 
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 130;
-            game.pendingAcquisition.fans = 100;
+            game.pendingAcquisition.hype = 200;
+            game.pendingAcquisition.fans = 200;
             game.pendingAcquisition.cash = 1100;
-            game.hype += 130;
-            game.fans += 100;
-            game.score +=1100;
+           
             game.bottom_buttons.play = false;
             toggleLandmarkVisibilityByName('Bottom of the Hill', true);
             toggleMission('bottom');
@@ -4439,12 +4438,10 @@
             game.currentLocationId = 'The Chapel';
             playMovie('./videos/chapel-gig.mp4', 'Third show! Incredible energy!'); 
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 100;
-            game.pendingAcquisition.fans = 100;
+            game.pendingAcquisition.hype = 200;
+            game.pendingAcquisition.fans = 200;
             game.pendingAcquisition.cash = 1250;
-            game.hype += 100;
-            game.fans += 100;
-            game.score +=1250;
+       
             toggleMission('chapel');
             landmarkImageRegistry['The Chapel'] = './sprites/chapel-guitar.jpg';
             iphoneNotifications = iphoneNotifications.slice(1);            
@@ -4456,12 +4453,14 @@
             iphoneNotifications = appendNotification(iphoneNotifications,'Bob Mould', 'I forgot to mention that they require a dancer on the stage too' , '💬', '', '', 'Gig Dancer');
             game.chapel_buttons.guitar = true;
             game.active_menu = false;
+            game.chapel_buttons.broken = true;
 
         }
 
 
          function endChapel(){
             game.currentLocationId = 'The Chapel';
+            game.chapel_buttons.broken = false;
             iphoneNotifications = iphoneNotifications.slice(1);       
             iphoneNotifications = appendNotification(iphoneNotifications,'DJ Robbie', 'I will be in the first row filming your entire next show!' , '💬', '');
             const guitar_broken_dialogue = [
@@ -4478,6 +4477,7 @@
             game.active_menu = true;
 
 
+
         }
 
 
@@ -4487,13 +4487,11 @@
             playMovie('./videos/slims-gig.mp4', 'Fourth show! Incredible energy!'); 
             landmarkImageRegistry["Slim\'s"] = "./sprites/slims-after.png";
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 100;
-            game.pendingAcquisition.fans = 100;
+            game.pendingAcquisition.hype = 200;
+            game.pendingAcquisition.fans = 200;
             game.pendingAcquisition.cash = 1300;
             toggleMission('slims_guitar');
-            game.hype += 100;
-            game.fans += 100;
-            game.score +=1300;
+    
             game.currentLocationId = 'Slim\'s';
             game.level++;
             game.chops.forEach(c => {
@@ -4542,12 +4540,10 @@
             playMovie('./videos/fillmore-gig.mp4', 'Fifth show! You are killing it! You are hassansational!'); 
             game.currentLocationId = 'Home';
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 110;
-            game.pendingAcquisition.fans = 200;
+            game.pendingAcquisition.hype = 220;
+            game.pendingAcquisition.fans = 400;
             game.pendingAcquisition.cash = 1500;
-            game.hype += 110;
-            game.fans += 200;
-            game.score +=1500;
+   
             toggleLandmarkVisibilityByName('The Fillmore ', true);
             toggleLandmarkVisibilityByName('The Fillmore', true);
 
@@ -4561,13 +4557,11 @@
         function startWarfield(){
             playMovie('./videos/warfield-gig.mp4', 'Sixth show! You have become a rock legend!'); 
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 150;
-            game.pendingAcquisition.fans = 300;
+            game.pendingAcquisition.hype = 300;
+            game.pendingAcquisition.fans = 600;
             game.pendingAcquisition.cash = 2000;
             game.currentLocationId = 'Home';
-            game.hype += 80;
-            game.fans += 300;
-            game.score +=2000;
+           
             toggleLandmarkVisibilityByName('The Warfield', false);
             toggleMission('warfield');
             game.level++;
@@ -4850,7 +4844,7 @@
             newTopic.ruffle = true;
             game.score = game.score - 5;
             game.popup_buttons.tour = false;
-
+            iphoneNotifications = iphoneNotifications.slice(1);            
             iphoneNotifications = appendNotification(iphoneNotifications,'E-mail URGENT!', 'Subject: Outstanding Asset Recovery - Action Required. Our records indicate that Employee Asset #8821 is still in possession of an active Omni-Sync Badge. This device is proprietary Apex technology. You are hereby ordered to return to the APEX Tower immediately. Compliance is the only rhythm. Return the badge.','📧',  'APEX Office');
 
             playMovie('./videos/popup-raffle.mp4','So you want to enter the $5 raffle to gain a ticket for the Metallica concert? Cool! You\'re officially on the list! If you\'re the chosen one, we\’ll blast an email your way faster than a Kirk Hammett solo. 📧⚡. Good luck!' );
@@ -5052,6 +5046,7 @@
             'bob_action4' : bob_action4,
             'bob_chops'   : bob_chops,
             'get_book' : get_book,
+            'presidio_action3' : presidio_action3,
             'rick_action1' : rick_action1,
             'rick_action0' : rick_action0,
             'rick_action4' : rick_action4,
@@ -5913,9 +5908,9 @@
 
             // 1. Define granular requirements
             const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 160, icon: '🔥' },
+                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 200, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 3, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 130, icon: '👥' },
+                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 200, icon: '👥' },
                 { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 1, icon: '🖋️' },
                 { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 1, icon: '📜' },
                 { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 1, icon: '🎤' }
@@ -6005,9 +6000,9 @@
 
             // 1. Define granular requirements
             const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 290, icon: '🔥' },
+                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 450, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 4, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 230, icon: '👥' },
+                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 400, icon: '👥' },
                 { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 2, icon: '📣' },
                 { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 2, icon: '🎼' },
                 { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 2, icon: '🖋️' },
@@ -6047,7 +6042,7 @@
                 </div>
 
 
-                 ${game.chapel_buttons.guitar ? `
+                 ${game.chapel_buttons.broken ? `
                      <div class="flex justify-center mt-4" id="sids-help-button-container">
                     <button onclick="endChapel()");" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
                         <span class="text-sm font-bold text-yellow-300">What happened to the guitar?</span>
@@ -6114,9 +6109,9 @@
 
             // 1. Define granular requirements
             const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 440, icon: '🔥' },
+                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 650, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 5, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 330, icon: '👥' },
+                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 600, icon: '👥' },
                 { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 2, icon: '📣' },
                 { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 3, icon: '🎼' },
                 { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 2, icon: '🎸' },
@@ -6224,7 +6219,7 @@
 
             // 1. Define granular requirements
             const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 700, icon: '🔥' },
+                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 1000, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 6, icon: '💿' },
                 { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 1000, icon: '👥' },
                 { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 4, icon: '📣' },
@@ -6488,14 +6483,14 @@
 
                  ${game.dolores_buttons.finale ? `
                 <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="Finale()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
+                    <button onclick="renderFinale()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
                         <span class="text-sm font-bold text-yellow-300">Is this the beginning of something?</span>
                     </button>
                 </div>
                 ` : `<div id="main-action-buttons" class="flex flex-col items-center">
                         <div class="flex justify-center mt-6 w-full">
                             <button onclick="dolores_action1()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Greet Ibearian</span>
+                                <span class="text-sm font-bold">Wrestle Ibearian</span>
                             </button>
                         </div>
                 </div>`}
@@ -7147,9 +7142,9 @@
 
             // 1. Define granular requirements
             const reqs = [
-                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 560, icon: '🔥' },
+                { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 800, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 6, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 450, icon: '👥' },
+                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 800, icon: '👥' },
                 { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 3, icon: '📣' },
                 { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 3, icon: '🎼' },
                 { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 3, icon: '🎸' },
@@ -7903,11 +7898,6 @@
         }
 
 
-        function finale(){
-
-
-        }
-
         function renderDialogue(dialogueData, characterName) {
             const container = document.getElementById('status-panel');
             const currentIndex = game.dialogueIndex;
@@ -8117,6 +8107,8 @@
             game.fishermans_buttons.food = true
             if (game.fishermans_buttons.food & game.fishermans_buttons.drink){
                 playMovie('./videos/fisherman-success1.mp4','Little Jimi devours the burger! You have fully satisfied the demands and the song book is yours - 3 new songs learned!' );
+                let topic = game.conversation_topics.acquired.find(i => i.name === 'Organic Food');
+                topic.acquired = false;
                 songRecipesData.forEach(song => { if ([5, 6, 7].includes(song.id)) song.available = true; });
 
             }
@@ -8136,6 +8128,8 @@
             game.fishermans_buttons.drink = true
             if (game.fishermans_buttons.food & game.fishermans_buttons.drink){
                 playMovie('./videos/fisherman-success2.mp4','Little Jimi drinks the whole thing! You have fully satisfied the demands and the song book is yours - 3 new songs learned' );
+                let topic = game.conversation_topics.acquired.find(i => i.name === 'Organic Food');
+                topic.acquired = false;
                 songRecipesData.forEach(song => { if ([5,6,7].includes(song.id)) song.available = true; });
 
             }
@@ -8273,6 +8267,7 @@
             game.pendingAcquisition.item = 'Metallica Guitar Pick';
             game.pendingAcquisition.memory = 'Happiness';
             game.pendingAcquisition.memory_text = 'You attended an amazing Metallica Concert!'
+            toggleMission('metallica');
             playMovie('./videos/metallica-concert.mp4','WHAT AN AMAZING CONCERT! I got a pick!' );
         }
 
@@ -8441,7 +8436,7 @@
                 iphoneNotifications = appendNotification(iphoneNotifications,'E-mail', 'Subject: Congratulations! YOU are the official winner of our recent raffle! Out of all the entries received, your name was selected to receive one ticket to the Metallica show at Oracle Park.','📧',  'Oracle Park');
                 game.metallica_buttons.raffle = false;
             }
-            toggleMission('metallica');
+            
             game.dialogueIndex = 0;
             const dialogueHtml = renderDialogue(bob_help_dialogue_data, 'Bob Mould');
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
@@ -8969,7 +8964,8 @@
                     'BITTER END': ['Chops list'],
                     'The 440': ['Chops list'],
                     'HSB Festival': ['Chops list'],
-                    'The Fillmore': ['Chops list'],
+                    'The Fillmore ': ['Chops list'],
+                    'Peet\s Coffee' : ['Chops list'],
                     'APEX Office ': ['Complete Gig Sign'],
                     'Sage & Drifter' : ['Cash']
                 };
@@ -10030,9 +10026,9 @@
                 
                  const buttons = [
                     { text: 'NEW JOURNEY', icon: '🎸', action: () => { game.phase = 18; renderGame(); } },
-                    { text: 'RESTORE SESSION', icon: '📂', action: () => { storageMode = 'restore'; setPhase(6); } },
                     { text: 'CHAPTER 2', icon: '🔒', action: () => unlockChapter2() },
                     { text: 'CHAPTER 3', icon: '🔒', action: () => unlockChapter3() },
+                    { text: 'RESTORE SESSION', icon: '📂', action: () => { storageMode = 'restore'; setPhase(6); } },
                     { text: 'CHOP GALLERY', icon: '🏆', action: () => showGameMessage("Locked until Chapter 2") },
 
                     //{ text: 'CHOP GALLERY1', icon: '🏆', action: () => debugUnlockAll()},
@@ -10646,8 +10642,8 @@
                 { title: 'JUST ONE', action: () => setPhase(9,''), iconEmoji: '1️' },
                 { title: 'CARDS', action: () => setPhase(20, ''), iconEmoji: '🃏' },
                 { title: 'FEUD', action: () => setPhase(11, ''), iconEmoji: '📊' },
-                { title: 'FORCE', action: () => cheat(), iconEmoji: '🤘' },
-                { title: 'MIXER', action: () => setPhase(13,''), iconEmoji: '🎛️' },
+                { title: 'FORCE', action: () => showMasteryCelebration(), iconEmoji: '🤘' },
+                { title: 'MIXER', action: () => cheat(), iconEmoji: '🎛️' },
                 { title: 'SCREEN', action: () => renderFinale(), iconEmoji: '🎦' },
                 { title: 'CH2', action: () => unlockChapter2(), iconEmoji: '👨‍👩‍👧‍👦' },
                 { title: 'CH3', action: () =>  setPhase(24,''), iconEmoji: '🎵' },
@@ -12423,7 +12419,7 @@
                 <!-- Main Clue Game Container (The look matches the overall sci-fi theme) -->
                 <div class="w-full max-w-lg bg-gray-800 p-6 md:p-10 border-4 border-electric-cyan rounded-xl shadow-2xl shadow-electric-cyan/50">
 
-                    <h1 class="text-3xl font-bold title-font text-center text-electric-cyan mb-4">CYBERCLUE SEQUENCE</h1>
+                    <h1 class="text-3xl font-bold title-font text-center text-electric-cyan mb-4">JUST ONE SEQUENCE</h1>
                     <p class="text-center text-sm text-gray-400 mb-8">Find the harmonic thread that ties these together.</p>
 
                     <!-- Clues List Container -->
@@ -12712,7 +12708,6 @@
         let cinematicScriptIndex = -1;
 
         function startCinematic() {
-
             if (game.chopsDiscovered){
                 if (game.chapter === 2){
                     cinematicScript = [
@@ -12832,9 +12827,14 @@
                         startChapter2();
                         setPhase(23,'');
                     }
-                    else{
-                       // startChapter3();
+                    if (game.chapter ===3){
+
                         setPhase(25,'');
+                    }
+                    else{
+                        console.log('waiting');
+                       // startChapter3();
+                      //  
 
                     }
                 }
@@ -12916,6 +12916,7 @@
                     if (bufferDuration > 0) {
                         console.log("Track finished, moving to next...");
                         changeTrack(1);
+                        game.endSong = true;
                     }
                 }
             };
@@ -12959,7 +12960,10 @@
             // Auto-play the next track if the radio is "on"
             if (game.radio.isPlaying || game.radio.errorState === "DECODE ERROR") {
                 playTrack();
-                renderGame();
+                if (!game.endSong){
+                    renderGame();
+                    game.endSong = false;
+                }
             } else {
                 renderGame();
             }
@@ -13854,7 +13858,7 @@
                         </div>
                         <div class="text-center">
                             <span class="inline-block px-3 py-1 bg-white text-black text-[10px] font-black uppercase tracking-[0.2em]">
-                                Chapter 2 AVAILABLE! PASSWORD: 1018
+                                Chapter 2 AVAILABLE! PASSWORD: 1015
                             </span>
                         </div>
                         <button onclick="setPhase(-1, 'MAIN MENU')" class="restart-btn w-full py-6 text-2xl font-black italic">
@@ -14881,7 +14885,9 @@
         function closeCelebration() {
             document.getElementById('celebration-overlay').classList.add('hidden');
             document.getElementById('celebration-overlay').classList.remove('flex');
-            startCinematic();
+            game.chopsDiscovered = true;
+            game.chapter = 1;
+            byeCinematic();
         }
 
         function debugUnlockAll() {
@@ -15253,7 +15259,7 @@
         kevind_buttons: { chops: false, practiceChop: false, guitar: false },
         bridget_buttons: { showHelpButton: false, photo: false, trivia: false, action2: false, code: true },
         crazy_buttons: { showHelpButton: false, showLibrary: false, showPoker: false },
-        cliffs_buttons: { showHelpButton: false },
+        cliffs_buttons: { showHelpButton: false , copies: false},
         work_buttons: { badge: true },
         mama_buttons: { showHelpButton: false , showHelpButton2: true, camera:false, polaroid:false, photos:0, lands_taken:true, coit_taken:true, fisherman_taken:true, painted_taken:true, alcatraz_taken:true, lombard_taken:true},
         home_buttons: { showHelpButton: false, musician: true },
@@ -15967,7 +15973,7 @@
 
                     // Use a small timeout to ensure the DOM has finished switching phases
                     setTimeout(() => {
-                        showImpactFeedback(reasoning, deltas, () => {
+                        showImpactFeedback('', deltas, () => {
                             advanceScenario();
                         });
                     }, 50);
@@ -16167,9 +16173,13 @@
                             </h2>
                         </div>
 
-                        <div class="p-6 bg-black/40 border-b border-zinc-800">
-                            <p class="text-lg italic text-zinc-300 font-medium leading-relaxed text-center">"${reasoning}"</p>
-                        </div>
+                         ${reasoning ? `
+                            <div class="p-6 bg-black/40 border-b border-zinc-800">
+                                <p class="text-lg italic text-zinc-300 font-medium leading-relaxed text-center">
+                                    "${reasoning}"
+                                </p>
+                            </div>
+                            ` : ''}
 
                         <div class="p-8 space-y-6 bg-gradient-to-b from-zinc-900 to-black">
                             ${rowsHtml}
