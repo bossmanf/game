@@ -10054,7 +10054,7 @@
                 });
 
                 container.appendChild(btnGroup);
-                container.appendChild(createElement('div', 'text-zinc-600 text-[10px] font-mono pt-4 tracking-widest', 'V1.0.9'));
+                container.appendChild(createElement('div', 'text-zinc-600 text-[10px] font-mono pt-4 tracking-widest', 'V3.7.9'));
                 
                 return container;
             }
@@ -14539,7 +14539,7 @@
             // Using a very dark slate background to make the cyan borders pop
             const cinematicContent = createElement('div', 'flex flex-col items-center justify-center min-h-screen w-full bg-slate-950 p-4 md:p-8');
             cinematicContent.innerHTML = `
-            <div id="cinematic-wrapper" class="relative w-full max-w-6xl mx-auto group">
+            <div id="cinematic-wrapper" class="relative w-full max-w-6xl mx-auto flex flex-col items-center group">
                 
                 <div class="relative p-1 bg-gradient-to-b from-electric-cyan/40 to-slate-900 rounded-lg shadow-[0_0_80px_rgba(0,0,0,0.8)] max-h-[80vh] w-fit mx-auto overflow-hidden">
                     
@@ -14560,7 +14560,7 @@
                     </div>
                 </div>
 
-                <div class="mt-8 transform transition-all duration-500">
+                <div class="mt-8 transform transition-all duration-500 w-full flex justify-center">
                     <div id="cinematic-panel" class="relative p-1 bg-gradient-to-r from-transparent via-magenta-500/40 to-transparent">
                         <div class="bg-slate-900/90 py-4 px-8 text-center border-x border-magenta-500/50">
                             <p class="text-xl md:text-2xl font-mono text-white leading-relaxed tracking-wide">
