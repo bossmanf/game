@@ -2168,7 +2168,8 @@
             },
             cliffs_buttons:
             {
-                showHelpButton:true
+                showHelpButton:true,
+                copies:false
 
             },
             bobby_buttons:
@@ -2252,9 +2253,7 @@
             coit_buttons:{
                 copies:false
             },
-            cliffs_buttons:{
-                copies:false
-            },
+           
 
             bob_buttons:
             {
@@ -13158,117 +13157,13 @@
 
 
 
-        function createSecurityTerminal({ onSuccess, onFailure }) {
-            // 1. Inject Styles dynamically within the function
-            if (!document.getElementById('terminal-component-styles')) {
-                const style = document.createElement('style');
-                style.id = 'terminal-component-styles';
-                style.textContent = `
-                    .terminal-container {
-                        position: relative;
-                        box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
-                        border: 10px solid #222;
-                        border-radius: 15px;
-                        background: #000;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        padding-bottom: 15px;
-                        max-width: 95vw;
-                        font-family: 'Courier New', Courier, monospace;
-                    }
-
-                    .terminal-canvas {
-                        display: block;
-                        image-rendering: pixelated;
-                        max-height: 40vh; /* Keep canvas height in check for mobile */
-                    }
-
-                    .terminal-overlay-ui {
-                        position: absolute;
-                        top: 35%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        background: rgba(0, 0, 0, 0.95);
-                        color: #0f0;
-                        padding: 30px;
-                        border: 2px solid #0f0;
-                        text-align: center;
-                        z-index: 10;
-                        display: none;
-                        min-width: 250px;
-                    }
-
-                    .terminal-overlay-ui button {
-                        background: #0f0;
-                        border: none;
-                        padding: 10px 20px;
-                        margin-top: 15px;
-                        cursor: pointer;
-                        font-weight: bold;
-                        font-family: inherit;
-                        color: #000;
-                    }
-
-                    .term-keyboard-container {
-                        width: 100%;
-                        max-width: 580px;
-                        padding: 10px;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 6px;
-                        background: #000;
-                    }
-
-                    .term-kb-row {
-                        display: flex;
-                        justify-content: center;
-                        gap: 4px;
-                        width: 100%;
-                    }
-
-                    .term-key {
-                        background: #111;
-                        border: 1px solid #003b00;
-                        color: #00ff41;
-                        padding: 14px 0;
-                        border-radius: 4px;
-                        font-family: inherit;
-                        font-weight: bold;
-                        font-size: 14px;
-                        cursor: pointer;
-                        flex: 1;
-                        transition: all 0.1s;
-                        -webkit-tap-highlight-color: transparent;
-                        text-transform: uppercase;
-                    }
-
-                    .term-key:active {
-                        background: #00ff41;
-                        color: #000;
-                        transform: scale(0.95);
-                    }
-
-                    .term-key.key-special {
-                        flex: 1.5;
-                        background: #001a00;
-                    }
-
-                    .term-key.key-del {
-                        color: #ff0033;
-                        border-color: #440000;
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-
+          function createSecurityTerminal({ onSuccess, onFailure }) {
             const container = document.createElement('div');
             container.className = 'terminal-container';
 
             const canvas = document.createElement('canvas');
-            canvas.className = 'terminal-canvas';
             canvas.width = 600;
-            canvas.height = 300; 
+            canvas.height = 400;
             container.appendChild(canvas);
 
             const overlay = document.createElement('div');
@@ -13286,7 +13181,7 @@
             const state = {
                 input: ['', '', '', '', ''],
                 currentIndex: 0,
-                status: 'READY',
+                status: 'READY', // READY, GRANTED, DENIED
                 shake: 0,
                 targetWord: "MUSIC",
                 colors: {
@@ -13302,6 +13197,15 @@
                 overlay.querySelector('#term-ui-desc').innerText = desc;
                 overlay.style.display = 'block';
             };
+
+            const resetTerminal = () => {
+                overlay.style.display = 'none';
+                state.status = 'READY';
+                state.input = ['', '', '', '', ''];
+                state.currentIndex = 0;
+            };
+
+            overlay.querySelector('#term-ui-btn').onclick = resetTerminal;
 
             const checkWord = () => {
                 const word = state.input.join('');
@@ -13323,72 +13227,33 @@
                 }
             };
 
-            const processChar = (char) => {
-                if (state.status !== 'READY' || overlay.style.display === 'block') return;
-                if (state.currentIndex < 5) {
-                    state.input[state.currentIndex] = char.toUpperCase();
-                    state.currentIndex++;
-                    if (state.currentIndex === 5) setTimeout(checkWord, 300);
-                }
-            };
-
-            const processBackspace = () => {
-                if (state.status !== 'READY' || overlay.style.display === 'block') return;
-                if (state.currentIndex > 0) {
-                    state.currentIndex--;
-                    state.input[state.currentIndex] = '';
-                }
-            };
-
-            // Visual Keyboard Construction
-            const kbContainer = document.createElement('div');
-            kbContainer.className = 'term-keyboard-container';
-            
-            const layout = [
-                ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-                ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-                ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DEL']
-            ];
-
-            layout.forEach(row => {
-                const rowEl = document.createElement('div');
-                rowEl.className = 'term-kb-row';
-                row.forEach(key => {
-                    const kBtn = document.createElement('button');
-                    kBtn.className = `term-key ${key === 'DEL' ? 'key-special key-del' : ''}`;
-                    kBtn.textContent = key;
-                    kBtn.onclick = (e) => {
-                        e.preventDefault();
-                        if (key === 'DEL') processBackspace();
-                        else processChar(key);
-                    };
-                    rowEl.appendChild(kBtn);
-                });
-                kbContainer.appendChild(rowEl);
-            });
-            container.appendChild(kbContainer);
-
-            // Keep physical keyboard listener for desktop users
             const handleKeydown = (e) => {
-                if (e.key === 'Backspace') processBackspace();
-                else if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) processChar(e.key);
-            };
-            window.addEventListener('keydown', handleKeydown);
+                if (state.status !== 'READY' || overlay.style.display === 'block') return;
 
-            overlay.querySelector('#term-ui-btn').onclick = () => {
-                overlay.style.display = 'none';
-                if (state.status !== 'GRANTED') {
-                    state.status = 'READY';
-                    state.input = ['', '', '', '', ''];
-                    state.currentIndex = 0;
+                if (e.key === 'Backspace') {
+                    if (state.currentIndex > 0) {
+                        state.currentIndex--;
+                        state.input[state.currentIndex] = '';
+                    }
+                } else if (e.key === 'Enter') {
+                    if (state.currentIndex === 5) checkWord();
+                } else if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) {
+                    if (state.currentIndex < 5) {
+                        state.input[state.currentIndex] = e.key.toUpperCase();
+                        state.currentIndex++;
+                        if (state.currentIndex === 5) setTimeout(checkWord, 300);
+                    }
                 }
             };
+
+            // Attach event listener locally (removed when element is destroyed if needed)
+            window.addEventListener('keydown', handleKeydown);
 
             // Drawing Loop
             function render(time) {
                 if (!container.isConnected) {
                     window.removeEventListener('keydown', handleKeydown);
-                    return;
+                    return; // Stop loop if detached
                 }
 
                 let offsetX = 0, offsetY = 0;
@@ -13398,6 +13263,7 @@
                     state.shake *= 0.9;
                 }
 
+                // Draw Background
                 ctx.fillStyle = state.colors.bg;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -13418,13 +13284,13 @@
                 let titleText = "BOUNCER SECURITY TERMINAL";
                 if (state.status === 'GRANTED') titleText = "ACCESS GRANTED";
                 if (state.status === 'DENIED') titleText = "SYSTEM REJECTED";
-                ctx.fillText(titleText, canvas.width / 2, 70);
+                ctx.fillText(titleText, canvas.width / 2, 80);
 
                 // Inputs
                 const boxSize = 60, spacing = 15;
                 const startX = (canvas.width - (boxSize * 5 + spacing * 4)) / 2;
                 state.input.forEach((char, i) => {
-                    const x = startX + i * (boxSize + spacing), y = 140;
+                    const x = startX + i * (boxSize + spacing), y = 160;
                     ctx.strokeStyle = (i === state.currentIndex && state.status === 'READY') ? state.colors.text : state.colors.accent;
                     ctx.lineWidth = 3;
                     ctx.strokeRect(x, y, boxSize, boxSize);
@@ -13437,9 +13303,10 @@
                     }
                 });
 
+                // Instructions
                 ctx.font = '14px "Courier New"';
                 ctx.fillStyle = state.colors.accent;
-                ctx.fillText("USE ON-SCREEN KEYS TO ENTER PASSCODE", canvas.width / 2, 260);
+                ctx.fillText("TYPE 5-LETTER PASSCODE", canvas.width / 2, 280);
                 
                 ctx.restore();
 
@@ -13456,6 +13323,10 @@
             requestAnimationFrame(render);
             return container;
         }
+
+
+
+
        
             function unlockChapter2() {
                 const terminal = createSecurityTerminalChapter(2, "1015", "Ready to become a music legend?", {
@@ -13502,31 +13373,11 @@
 
 
     
-
         function createSecurityTerminalChapter(chapter_number, code, text, { onSuccess, onFailure }) {
-            // 1. Inject Styles for the Terminal and Keyboard
-            if (!document.getElementById('terminal-styles')) {
-                const style = document.createElement('style');
-                style.id = 'terminal-styles';
-                style.textContent = `
-                    .terminal-container { position: relative; box-shadow: 0 0 50px rgba(0, 255, 65, 0.2); border: 8px solid #222; border-radius: 12px; background: #000; overflow: hidden; display: flex; flex-col; align-items: center; padding-bottom: 20px; }
-                    .terminal-overlay-ui { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.95); color: #0f0; padding: 30px; border: 2px solid #0f0; text-align: center; z-index: 10; display: none; min-width: 280px; font-family: 'Courier New', monospace; }
-                    .terminal-overlay-ui button { background: #0f0; border: none; padding: 10px 20px; margin-top: 15px; cursor: pointer; font-weight: bold; font-family: inherit; color: black; }
-                    
-                    .terminal-keyboard { width: 100%; max-width: 400px; padding: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: -20px; position: relative; z-index: 5; }
-                    .term-key { background: #111; border: 2px solid #003b00; color: #00ff41; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-weight: bold; font-size: 20px; cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent; }
-                    .term-key:active { background: #00ff41; color: black; transform: scale(0.95); }
-                    .term-key.key-del { background: #220000; border-color: #550000; color: #ff0033; }
-                `;
-                document.head.appendChild(style);
-            }
-
-            const container = createElement('div', 'terminal-container flex flex-col items-center');
-            
-            // 2. Terminal Display (Canvas)
+            const container = createElement('div', 'terminal-container');
             const canvas = createElement('canvas');
             canvas.width = 500;
-            canvas.height = 300; // Slightly shorter to make room for keys
+            canvas.height = 350;
             container.appendChild(canvas);
 
             const overlay = createElement('div', 'terminal-overlay-ui');
@@ -13536,7 +13387,6 @@
             const ctx = canvas.getContext('2d');
             const state = { input: ['', '', '', ''], currentIndex: 0, status: 'READY', shake: 0, targetWord: code };
 
-            // 3. Logic Functions
             const showUI = (title, desc) => {
                 overlay.querySelector('#term-ui-title').innerText = title;
                 overlay.querySelector('#term-ui-desc').innerText = desc;
@@ -13548,124 +13398,62 @@
                 if (word === state.targetWord) {
                     state.status = 'GRANTED';
                     setTimeout(() => {
-                        showUI(`CHAPTER ${chapter_number}`, "Access Verified. " + text);
+                        showUI(`CHAPTER ${chapter_number}`, "Access Verified. "+text);
                     }, 600);
                 } else {
                     state.shake = 15;
                     state.status = 'DENIED';
                     if (onFailure) onFailure();
-                    setTimeout(() => { 
-                        state.status = 'READY'; 
-                        state.input = ['', '', '', '']; 
-                        state.currentIndex = 0; 
-                    }, 1200);
+                    setTimeout(() => { state.status = 'READY'; state.input = ['', '', '', '']; state.currentIndex = 0; }, 1200);
                 }
             };
 
-            const handleInput = (val) => {
+            const resetTerminal = () => {
+                if (state.status === 'GRANTED') {
+                    // Dismiss the modal FIRST, then trigger the callback
+                    document.getElementById('chapter-unlock-modal')?.remove();
+                    if (onSuccess) onSuccess(); 
+                    return;
+                }
+                overlay.style.display = 'none';
+                state.status = 'READY';
+                state.input = ['', '', '', ''];
+                state.currentIndex = 0;
+            };
+
+            overlay.querySelector('#term-ui-btn').onclick = resetTerminal;
+
+            const handleKeydown = (e) => {
                 if (state.status !== 'READY' || overlay.style.display === 'block') return;
-                if (state.currentIndex < 4) {
-                    state.input[state.currentIndex] = val;
-                    state.currentIndex++;
+                if (e.key === 'Backspace' && state.currentIndex > 0) { state.currentIndex--; state.input[state.currentIndex] = ''; }
+                else if (e.key.length === 1 && /^[0-9]$/.test(e.key) && state.currentIndex < 4) {
+                    state.input[state.currentIndex] = e.key; state.currentIndex++;
                     if (state.currentIndex === 4) setTimeout(checkWord, 200);
                 }
             };
 
-            const handleBackspace = () => {
-                if (state.status !== 'READY' || overlay.style.display === 'block') return;
-                if (state.currentIndex > 0) {
-                    state.currentIndex--;
-                    state.input[state.currentIndex] = '';
-                }
-            };
-
-            // 4. Create Visual Keyboard
-            const keyboard = createElement('div', 'terminal-keyboard');
-            const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'DEL'];
-            
-            keys.forEach(key => {
-                const kBtn = createElement('button', `term-key ${key === 'DEL' ? 'key-del col-span-2' : ''}`, key);
-                kBtn.onclick = (e) => {
-                    e.preventDefault();
-                    if (key === 'DEL') handleBackspace();
-                    else handleInput(key);
-                };
-                keyboard.appendChild(kBtn);
-            });
-            container.appendChild(keyboard);
-
-            // 5. Physical Keyboard Support (for Mac users)
-            const handleKeydown = (e) => {
-                if (e.key === 'Backspace') handleBackspace();
-                else if (/^[0-9]$/.test(e.key)) handleInput(e.key);
-            };
             window.addEventListener('keydown', handleKeydown);
 
-            // 6. Drawing Loop
-            function renderLoop(time) {
+            function renderLoop() {
                 if (!container.isConnected) { window.removeEventListener('keydown', handleKeydown); return; }
+                ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                let ox = 0, oy = 0;
-                if (state.shake > 0) {
-                    ox = (Math.random() - 0.5) * state.shake;
-                    oy = (Math.random() - 0.5) * state.shake;
-                    state.shake *= 0.85;
-                }
-
-                ctx.fillStyle = '#050505';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.save();
-                ctx.translate(ox, oy);
-
-                // Scanlines
-                ctx.strokeStyle = '#001a00';
-                ctx.lineWidth = 1;
-                for (let i = 0; i < canvas.height; i += 3) {
-                    ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
-                }
-
-                // Header
                 ctx.fillStyle = state.status === 'DENIED' ? '#ff0033' : '#00ff41';
-                ctx.font = 'bold 18px "Courier New"';
-                ctx.textAlign = 'center';
-                ctx.fillText(state.status === 'DENIED' ? "INVALID PASSCODE" : `CHAPTER ${chapter_number} SECURITY`, canvas.width / 2, 50);
+                ctx.font = 'bold 20px "Courier New"'; ctx.textAlign = 'center';
+                ctx.fillText(state.status === 'DENIED' ? "INVALID PASSCODE" : `CHAPTER ${chapter_number} ACCESS TERMINAL`, canvas.width / 2, 60);
 
-                // Code Boxes
                 state.input.forEach((char, i) => {
-                    const x = 110 + i * 75, y = 100;
-                    ctx.strokeStyle = (i === state.currentIndex && state.status === 'READY') ? '#00ff41' : '#003b00';
+                    const x = 110 + i * 75, y = 130;
+                    ctx.strokeStyle = (i === state.currentIndex) ? '#00ff41' : '#003b00';
                     ctx.strokeRect(x, y, 65, 65);
-                    ctx.fillStyle = '#00ff41';
-                    ctx.font = 'bold 44px "Courier New"';
+                    ctx.fillStyle = '#00ff41'; ctx.font = 'bold 44px "Courier New"';
                     ctx.fillText(char, x + 32, y + 48);
-                    
-                    // Cursor
-                    if (i === state.currentIndex && state.status === 'READY' && Math.floor(time / 500) % 2 === 0) {
-                        ctx.fillRect(x + 10, y + 55, 45, 4);
-                    }
                 });
 
-                ctx.font = '10px "Courier New"';
-                ctx.fillStyle = '#003b00';
-                ctx.fillText("TAP KEYS OR TYPE CODE TO PROCEED", canvas.width / 2, 220);
-                
-                ctx.restore();
                 requestAnimationFrame(renderLoop);
             }
 
             requestAnimationFrame(renderLoop);
-
-            // 7. Success logic
-            overlay.querySelector('#term-ui-btn').onclick = () => {
-                if (state.status === 'GRANTED') {
-                    document.getElementById('chapter-unlock-modal')?.remove();
-                    if (onSuccess) onSuccess(); 
-                } else {
-                    overlay.style.display = 'none';
-                }
-            };
-
             return container;
         }
 
@@ -15478,10 +15266,10 @@
             milestone: true,
             choices: [
                 { 
-                    text: "Fly to San Diego to see Ibearian", 
+                    text: "Fly to SD to see Ibearian", 
                     impact: { relationship: 10, motivation: -15, community: -5 },
                     resolution_reasoning: "A grand romantic gesture secures the heart but derails your tour momentum and city commitments.",
-                    video: './videos/chapter3-sd.mp4'
+                    video: './videos/chapter-sd.mp4'
                 },
                 { 
                     text: "Invite him to the Mission", 
@@ -15517,7 +15305,7 @@
         // PHASE 2: THE DEEPENING
         {
             title: "The bachelor party",
-            desc: "Kevin W's getting married and you think about throwing him a bachelor party",
+            desc: "Kevin W's getting married and you feel pressure to organize his bachelor party",
             choices: [
                 { 
                     text: "The responsibility and pressure feels too much and you ask Sid to be the planner", 
@@ -15714,7 +15502,7 @@
                     text: "Ask Ibearian to move in", 
                     impact: { relationship: 15, happiness: 15, confidence: -5 },
                     resolution_reasoning: "Building a home brings immense joy, but the loss of your private sanctuary makes you feel vulnerable.",
-                    video : './movies/chapter3-moving.mp4'
+                    video : './movie/chapter3-moving.mp4'
                 },
                 { 
                     text: "Say you 'need space'", 

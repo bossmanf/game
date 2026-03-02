@@ -1598,9 +1598,9 @@
     </div>
 
 
-    <div id="cinematicView" class="hidden fixed inset-0 flex flex-col items-center justify-center p-4 opacity-0 cursor-pointer max-h-[80vh] w-fit" onclick="displayNextSentence()">
+    <div id="cinematicView" class="hidden fixed inset-0 flex flex-col items-center justify-center p-4 opacity-0 cursor-pointer" onclick="displayNextSentence()">
     <div class="mb-6 flex justify-center w-full max-w-4xl">
-        <video id="videoDisplay" class="rounded-xl transition-opacity duration-700 opacity-0 h-[75vh] w-auto max-w-full max-h-[60vh] object-cover shadow-2xl" muted playsinline></video>
+        <video id="videoDisplay" class="rounded-xl transition-opacity duration-700 opacity-0 w-full h-auto max-h-[60vh] object-cover shadow-2xl" muted playsinline></video>
     </div>
     <div id="textBox" class="w-full max-w-4xl p-6 text-2xl font-sans text-center rounded-xl bg-black/40">
         <p id="cinematicText" class="text-gray-100 italic"></p>
@@ -1688,7 +1688,7 @@
                     missions, 
                     LEVEL_CONFIG, 
                     landmarkData, 
-                    songRecipesData,
+                    songRecipes,
                     timestamp: new Date().toISOString() 
                 };
 
@@ -1752,7 +1752,6 @@
                 if (!game.leadSynth || typeof game.leadSynth.triggerAttackRelease !== 'function') {
                     game.leadSynth = new Tone.PolySynth(Tone.Synth).toDestination();
                 }
-                game.active_menu = true;
 
                 // Return to main menu / refresh UI
                 setPhase(0); 
@@ -1941,7 +1940,6 @@
             dancers: 0,
             musicPart: {},
             dialogueIndex: 0,
-            learn:true,
             dialogueData: '', 
             activeCharacter: '',
             iPhoneMessage : false,
@@ -2162,10 +2160,6 @@
                 showLibrary:true,
                 showPoker:false
             },
-            dolores_buttons:
-            {
-                finale:false
-            },
             cliffs_buttons:
             {
                 showHelpButton:true
@@ -2296,15 +2290,6 @@
             },
             currentBuildingName: 'Home',
             currentLocationId: 'Home',
-            traits : {
-                relationship: 50,
-                community: 50,
-                karma: 50,
-                confidence: 50,
-                motivation: 50,
-                happiness: 50
-            },
-            currentScenario : 0,
             conversation_topics: {
             unlocked: [
 
@@ -2555,7 +2540,7 @@
 
                     }},
                     
-                       {name: '\"Candy\"', icon:'🦴', acquired: false, image: './sprites/candy.png', desc: 'I need candy to play at The Warfield...', 
+                       {name: '\"Candy\"', icon:'🦴', acquired: false, image: './sprites/candy.png', desc: 'I need candy to play at the Warfield...', 
                         actions : {},
                     messages: {
                     
@@ -3244,7 +3229,7 @@
                  },
 
 
-                 {name: '\"Candy\"', icon:'🦴', acquired: false, image: './sprites/candy.png', desc: 'I need this candy to play at The Warfield...', 
+                 {name: '\"Candy\"', icon:'🦴', acquired: false, image: './sprites/candy.png', desc: 'I need this candy to play at the Warfield...', 
                         actions : {},
                     messages: {
                         'Lagunitas⬆️': 'An authentic rhythm multiplier! Take care, buddy!',
@@ -3533,9 +3518,8 @@
         }
 
          function rick_action4(){
-            game.fans += 40;
-            game.hype +=40;
-            playMovie('./videos/grapplers-cheer.mp4', 'The wrestlers at the grapplers club are rooting for you!');
+            game.fans += 20
+            playMovie('./videos/grapplers-cheer.mp4', 'The wrestlers at the grapplers club are rooting for you! Fans +=20');
         }
 
         function lombard_photo(){
@@ -3679,7 +3663,6 @@
             game.tom_buttons.cry = false;
             landmarkImageRegistry["APEX Office "] = './sprites/tom-no-cry.jpeg';
             characterPortraits["Tom"] = './faces/tom.jpg';
-            iphoneNotifications = iphoneNotifications.slice(1);            
             iphoneNotifications = appendNotification(iphoneNotifications,'Tom', 'WoW I have a date! Thanks so much! Is there anything I can do for you? Nutritional advice? Corporate printing?','💬',  '');
             const dialogueHtml = renderDialogue(tom_wingman_dialogue , "Woman");
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
@@ -3745,22 +3728,6 @@
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
         }
-
-        function home_action2(){
-
-               const own_dialogue = [
-               { speaker: 'Player', text: "Six stages. Six nights of sweat, feedback, and the kind of truth you just can't find in a cubicle." },
-               { speaker: 'Player', text: "Six months ago, I was a ghost. I was ‘out of sync’ at Apex, drowning in a sea of binary and 'Omni-Sync' alerts. They wanted to optimize my soul until it fit into a spreadsheet." },
-                { speaker: 'Player', text: "I’ve stood on the sticky floors of the Wrestling Club, felt the salt spray at the Wharf, and seen the sunset cycling across the Golden State Bridge. I’ve played for the drunks, the dreamers, and the ones who just needed to remember they were alive." },
-                { speaker: 'Player', text: "This isn't just a career. It’s an escape. It’s a riot. And the best part? We’re just getting started. I can see the lights of the Fillmore from here, and they look like home." },
-                { speaker: 'Player', text: "The city is finally singing back to me. And this time, I’m the one setting the frequency. Let’s show them what a 'Standard Human' can really do." }
-            ];
-             const dialogueHtml = renderDialogue(own_dialogue , game.names.main);
-                const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
-                switchToView(contentDiv);
-
-        }
-
 
         function crazy_action1(){
             game.currentLocationId = 'Crazy K';
@@ -3842,9 +3809,7 @@
 
 
             
-            game.hype = 1000;
-            game.fans = 1000;
-            game.songs = 7;
+
             game.bestie2_buttons.songwriting_able = true;
             let inventoryItem = game.inventory_items.find(i => i.name === 'Gig Sign Copies');
 
@@ -3869,7 +3834,7 @@
 
              game.chops.forEach(chop => {
                 // 1. Increment the available points
-                chop.available += 5;
+                chop.available += 4;
                 chop.isUnlocked = true;
 
             });
@@ -4048,7 +4013,7 @@
             game.pendingAcquisition.item = 'SF attire';
             let topic = game.conversation_topics.unlocked.find(i => i.name === 'San Francisco Attire');
             topic.acquired = false;
-            playMovie('./videos/sid-sf-attire.mp4', 'He just gave you the perfect San Francisco attire!'); 
+            playMovie('./videos/sid-sf-attire.mp4', 'The perfect San Francisco attire!'); 
             game.sids_buttons.sf_attire = false;
 
         }
@@ -4190,7 +4155,7 @@
 
             game.matt_buttons.showHelpButton = false;
             game.pendingAcquisition.topic = 'Matt\'s sauces';
-            addMission('sauce', 'Creates a special sauce for Matt to obtain \'candy\'');
+            addMission('Creates a special sauce for Matt to obtain \'candy\'');
             const dialogueHtml = renderDialogue(matt_dialogue , 'Matt');
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
@@ -4309,7 +4274,7 @@
             playMovie('./videos/presidio-race.mp4', 'Cycling through the Golden Gate bridge is such an awesome experience!');
             iphoneNotifications = iphoneNotifications.slice(1);            
             iphoneNotifications = appendNotification(iphoneNotifications,game.names.bestie, 'I am going to Barbados now! See you in a couple of months!' , '💬', '');
-            toggleLandmarkVisibilityByName('BESTIE',true);
+            toggleLandmarkVisibilityByName('BESTIE',false);
 
         }
         
@@ -4367,24 +4332,19 @@
 
         function startLagunitas(){
             game.currentLocationId = 'Lagunitas⬆️';
-            
+            game.kevind_buttons.lagunitas = false;
             game.kevind_buttons.chapel = true;
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 60;
-            game.pendingAcquisition.fans = 80;
-            game.pendingAcquisition.cash = 800;
+            game.pendingAcquisition.hype = 30;
+            game.pendingAcquisition.fans = 40;
+            game.pendingAcquisition.cash = 600;
             playMovie('./videos/lagunitas-gig.mp4', 'Your first show! An unforgetable gig!'); 
             landmarkImageRegistry['Lagunitas⬆️'] = './sprites/lagunitas_kevind_after.jpg';
-            if (game.kevind_buttons.lagunitas){
-                game.hype += 60;
-                game.fans += 80;
-                game.score +=800;
-                game.kevind_buttons.lagunitas = false;
-            }
+            game.hype += 30;
+            game.fans += 40;
+            game.score +=600;
             game.lagunitas_buttons.play = false;
             toggleMission('lagunitas');
-            game.active_menu = false;
-            console.log('activated!');
 
         }
 
@@ -4402,8 +4362,6 @@
             const dialogueHtml = renderDialogue(lagunitas_after_dialogue, game.names.main3);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
-            game.active_menu = true;
-
 
 
             
@@ -4412,12 +4370,12 @@
         function startBottom(){
             playMovie('./videos/bottom-gig.mp4', 'Your second show! The public loves your energy!'); 
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 130;
-            game.pendingAcquisition.fans = 100;
-            game.pendingAcquisition.cash = 1100;
-            game.hype += 130;
-            game.fans += 100;
-            game.score +=1100;
+            game.pendingAcquisition.hype = 40;
+            game.pendingAcquisition.fans = 50;
+            game.pendingAcquisition.cash = 1000;
+            game.hype += 40;
+            game.fans += 50;
+            game.score +=1000;
             game.bottom_buttons.play = false;
             toggleLandmarkVisibilityByName('Bottom of the Hill', true);
             toggleMission('bottom');
@@ -4439,12 +4397,12 @@
             game.currentLocationId = 'The Chapel';
             playMovie('./videos/chapel-gig.mp4', 'Third show! Incredible energy!'); 
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 100;
-            game.pendingAcquisition.fans = 100;
-            game.pendingAcquisition.cash = 1250;
-            game.hype += 100;
-            game.fans += 100;
-            game.score +=1250;
+            game.pendingAcquisition.hype = 50;
+            game.pendingAcquisition.fans = 50;
+            game.pendingAcquisition.cash = 1200;
+            game.hype += 50;
+            game.fans += 50;
+            game.score +=1200;
             toggleMission('chapel');
             landmarkImageRegistry['The Chapel'] = './sprites/chapel-guitar.jpg';
             iphoneNotifications = iphoneNotifications.slice(1);            
@@ -4452,7 +4410,6 @@
             inventoryItem.acquired = false
             game.currentLocationId = 'The Chapel';
             iphoneNotifications = appendNotification(iphoneNotifications,'Bob Mould', 'I am SO proud of you! I got you a gig at The Fillmore. Do not let me down' , '💬', 'The Fillmore');
-            iphoneNotifications = iphoneNotifications.slice(1);       
             iphoneNotifications = appendNotification(iphoneNotifications,'Bob Mould', 'I forgot to mention that they require a dancer on the stage too' , '💬', '', '', 'Gig Dancer');
             game.chapel_buttons.guitar = true;
             game.active_menu = false;
@@ -4461,9 +4418,10 @@
 
 
          function endChapel(){
-            game.currentLocationId = 'The Chapel';
+           
             iphoneNotifications = iphoneNotifications.slice(1);       
-            iphoneNotifications = appendNotification(iphoneNotifications,'DJ Robbie', 'I will be in the first row filming your entire next show!' , '💬', '');
+            game.chapel_buttons.guitar = false;     
+          //  iphoneNotifications = appendNotification(iphoneNotifications,'Apple Music', ' Your \'Unlocked Connections\' track just hit 500 listeners in Apple Music!' , '🍎', '');
             const guitar_broken_dialogue = [
                     { speaker: 'Player', text: "That was awesome! but I totally smashed my guitar! 🎸✨" },
                     { speaker: 'Player', text: "I will need to buy a better one for my next gig..." }
@@ -4487,12 +4445,12 @@
             playMovie('./videos/slims-gig.mp4', 'Fourth show! Incredible energy!'); 
             landmarkImageRegistry["Slim\'s"] = "./sprites/slims-after.png";
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 100;
-            game.pendingAcquisition.fans = 100;
+            game.pendingAcquisition.hype = 60;
+            game.pendingAcquisition.fans = 60;
             game.pendingAcquisition.cash = 1300;
-            toggleMission('slims_guitar');
-            game.hype += 100;
-            game.fans += 100;
+            toggleMission('slims-guitar');
+            game.hype += 60;
+            game.fans += 60;
             game.score +=1300;
             game.currentLocationId = 'Slim\'s';
             game.level++;
@@ -4504,8 +4462,6 @@
             showGameMessage(`YOU LEVEL UP! You are now a ${nextRank}!!!`, 'success');
             game.active_menu = false;
             game.slims_buttons.after = true;
-            iphoneNotifications = iphoneNotifications.slice(1);            
-            iphoneNotifications = appendNotification(iphoneNotifications,'Rolling Stone', 'Who is the Zataar Rebel? up-and-coming star trending in SF.','📰');
 
      
 
@@ -4515,6 +4471,7 @@
         function endSlims(){
            
             toggleLandmarkVisibilityByName('Slim\'s', true);
+            iphoneNotifications = iphoneNotifications.slice(1);            
             const kevind_slims_dialogue = [
                 { speaker: 'BESTIE', text: "THAT WAS LEGENDARY! That Tom\'s Morello guitar is incredible!" },
                 { speaker: 'Player', text: "I KNOW!!!!" },
@@ -4524,11 +4481,11 @@
                 { speaker: 'Player', text: "Candy? Is that what I think it means?"},
                 { speaker: 'BESTIE', text: "I do not know what you are talking about..."},
             ];
-            iphoneNotifications = iphoneNotifications.slice(1);            
             game.pendingAcquisition.location = 'The Warfield';
             const dialogueHtml = renderDialogue(kevind_slims_dialogue, game.names.bestie3);
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
+            toggleMission('slims_guitar');
             addMission('candy', 'Play at The Warfield using some candy...');
             game.active_menu = true;
 
@@ -4539,34 +4496,28 @@
 
 
         function startFillmore(){
-            playMovie('./videos/fillmore-gig.mp4', 'Fifth show! You are killing it! You are hassansational!'); 
+            playMovie('./videos/fillmore-gig.mp4', 'Fifth show! You are killing it! '); 
             game.currentLocationId = 'Home';
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 110;
-            game.pendingAcquisition.fans = 200;
+            game.pendingAcquisition.hype = 70;
+            game.pendingAcquisition.fans = 570;
             game.pendingAcquisition.cash = 1500;
-            game.hype += 110;
-            game.fans += 200;
+            game.hype += 70;
+            game.fans += 70;
             game.score +=1500;
-            toggleLandmarkVisibilityByName('The Fillmore ', true);
-            toggleLandmarkVisibilityByName('The Fillmore', true);
-
+            toggleLandmarkVisibilityByName('The Fillmore ', false);
             toggleMission('fillmore');
-            iphoneNotifications = iphoneNotifications.slice(1);            
-            iphoneNotifications = appendNotification(iphoneNotifications,'Metallica', 'Hello Rebel! Metallica wants you to be their opener at the Sphere! Please let me know if you are interested. Vickie','📧');
-          
         }
 
 
         function startWarfield(){
-            playMovie('./videos/warfield-gig.mp4', 'Sixth show! You have become a rock legend!'); 
+            playMovie('./videos/warfield-gig.mp4', 'Sixth show! You are incredible! You have become a Rock Legend! 🤟🏻'); 
             game.pendingAcquisition.gig = true;
-            game.pendingAcquisition.hype = 150;
-            game.pendingAcquisition.fans = 300;
+            game.pendingAcquisition.hype = 80;
+            game.pendingAcquisition.fans = 80;
             game.pendingAcquisition.cash = 2000;
-            game.currentLocationId = 'Home';
             game.hype += 80;
-            game.fans += 300;
+            game.fans += 80;
             game.score +=2000;
             toggleLandmarkVisibilityByName('The Warfield', false);
             toggleMission('warfield');
@@ -4577,16 +4528,6 @@
             let nextRank = LEVEL_CONFIG[game.level].rank;
             game.rank = nextRank;
             showGameMessage(`YOU LEVEL UP! You are now a ${nextRank}!!!`, 'success');
-            game.learn = false;
-            iphoneNotifications = iphoneNotifications.slice(1);            
-            iphoneNotifications = appendNotification(iphoneNotifications,'MeetFighters', '-IBEARIAN- I am in town! Would you like to meet in Dolores Park?', '🤼', 'Dolores Park');
-            if (typeof landmarkData !== 'undefined') {
-                    Object.keys(landmarkData).forEach(key => {
-                        landmarkData[key].hidden = true;
-                    });
-                }
-            landmarkData['Home'].hidden = false;
-
         }
 
         function kevind_action1(){
@@ -5440,9 +5381,6 @@
                 </div>
                 ` : ''}
 
-
-
-            ${game.learn  ? `
                 ${game.bestie2_buttons.songwriting_able  ? `
                 <div class="flex justify-center" mt-6>
                         <button onclick="setPhase(13,'')" class="career-milestone-button px-10 py-5 rounded-xl border-4">
@@ -5451,6 +5389,8 @@
                         </button>
                     </div>
                     ` : ''}
+
+
 
                 <!-- Dynamic Chop Practice Buttons -->
                 <div class="space-y-4 mt-4">
@@ -5502,12 +5442,6 @@
                     </div>
                     ` : ''}
                 </div>
-
-                     ` : `<div class="flex justify-center">
-                        <button onclick="home_action2()" class="metal-button px-6 py-2 border-white/20 hover:opacity-90 ${getChopColors('Stage Presence')}">
-                            <span class="text-sm font-bold brightness-125">Examine your career</span>
-                        </button>
-                    </div>`}
             `;
         },
 
@@ -6122,7 +6056,7 @@
                 { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 2, icon: '🎸' },
                 { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 3, icon: '🖋️' },
                 { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 3, icon: '📜' },
-                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 2, icon: '🎤' },
+                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 3, icon: '🎤' },
                 { id: 'guitar', label: 'New Guitar', current: game.guitar || 0, target: 1, icon: '🎸' },
 
             ];
@@ -6226,13 +6160,13 @@
             const reqs = [
                 { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 700, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 6, icon: '💿' },
-                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 1000, icon: '👥' },
-                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 4, icon: '📣' },
-                { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 4, icon: '🎼' },
-                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 4, icon: '🎸' },
-                { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 4, icon: '🖋️' },
+                { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 100, icon: '👥' },
+                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 5, icon: '📣' },
+                { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 5, icon: '🎼' },
+                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 5, icon: '🎸' },
+                { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 5, icon: '🖋️' },
                 { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 6, icon: '📜' },
-                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 5, icon: '🎤' },
+                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 6, icon: '🎤' },
                 { id: 'candy', label: 'candy', current: game.candy, target: 1, icon: '🍬' }
             ];
 
@@ -6294,7 +6228,7 @@
                 <div id="main-action-buttons" class="flex flex-col items-center">
                     <div class="flex justify-center mt-6 w-full">
                         ${allMet ? `
-                            <button onclick="startWarfield()" class="metal-button px-10 py-4 w-full sm:w-3/4 border-green-500 bg-green-900/20 hover:bg-green-600 group transition-all">
+                            <button onclick="startFinalGig()" class="metal-button px-10 py-4 w-full sm:w-3/4 border-green-500 bg-green-900/20 hover:bg-green-600 group transition-all">
                                 <span class="text-xl font-black text-white group-hover:scale-110 block">
                                     🔥 EVERYTHING ACCOMPLISHED. SHOWTIME! 🔥
                                 </span>
@@ -6469,42 +6403,7 @@
                
         },
 
-        dolores: (name, data) => {
-            currentContext = { name, data };
 
-            return `
-                    <div class="mb-8">
-                    <span class="inline-block text-3xl font-black tracking-tighter text-white uppercase border-b-8 border-amber-500 mb-4 pb-1">
-                        ${name.toUpperCase()}
-                    </span>
-
-                    <p class="text-xl text-gray-100 leading-relaxed font-medium max-w-2xl">
-                        ${data.description}
-                    </p>
-                </div>
-                <div id="status-bar-output" class="mt-8 p-4 text-center rounded-lg bg-gray-800 border border-gray-600 text-gray-400">
-                    <p class="italic">Beautiful day to chill in the park. You recognize Ibearian standing...</p>
-                </div>
-
-                 ${game.dolores_buttons.finale ? `
-                <div class="flex justify-center mt-4" id="sids-help-button-container">
-                    <button onclick="Finale()" class="metal-button px-6 py-2 border-yellow-500 hover:bg-yellow-800">
-                        <span class="text-sm font-bold text-yellow-300">Is this the beginning of something?</span>
-                    </button>
-                </div>
-                ` : `<div id="main-action-buttons" class="flex flex-col items-center">
-                        <div class="flex justify-center mt-6 w-full">
-                            <button onclick="dolores_action1()" class="metal-button px-6 py-3 w-3/4 sm:w-1/2">
-                                <span class="text-sm font-bold">Greet Ibearian</span>
-                            </button>
-                        </div>
-                </div>`}
-
-                
-
-            `;
-               
-        },
 
         oracle: (name, data) => {
             currentContext = { name, data };
@@ -7150,12 +7049,12 @@
                 { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 560, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 6, icon: '💿' },
                 { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 450, icon: '👥' },
-                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 3, icon: '📣' },
-                { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 3, icon: '🎼' },
-                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 3, icon: '🎸' },
+                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 4, icon: '📣' },
+                { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 4, icon: '🎼' },
+                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 4, icon: '🎸' },
                 { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 4, icon: '🖋️' },
                 { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 5, icon: '📜' },
-                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 3, icon: '🎤' },
+                { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 4, icon: '🎤' },
                 { id: 'dancers', label: 'Dancers', current: game.dancers, target: 1, icon:'🕺🏿'}
 
             ];
@@ -7900,12 +7799,6 @@
                 setPhase(10, '');
                 handleClick(game.currentLocationId);
             }
-        }
-
-
-        function finale(){
-
-
         }
 
         function renderDialogue(dialogueData, characterName) {
@@ -9624,80 +9517,6 @@
 
 
 
-    function renderChapterThreeIntro() {
-        const container = document.createElement('div');
-        container.id = "chapterThreeView";
-        container.className = "fixed inset-0 z-[4000] flex items-center justify-center overflow-hidden bg-zinc-950 animate-in fade-in duration-1000";
-        
-        container.innerHTML = `
-            <!-- Background Image Container -->
-            <div class="absolute inset-0 z-0">
-                <img src="./sprites/sunset-lands-end.jpg" alt="Background" class="w-full h-full object-cover opacity-50 scale-105" onerror="this.src='./sprites/street-night.jpg'">
-                <!-- Warm Golden/Rose Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-rose-900/20 to-transparent"></div>
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent"></div>
-            </div>
-
-            <!-- Main Content Card -->
-            <div class="relative z-10 w-full max-w-3xl mx-4 p-8 md:p-12 border-l-4 border-amber-400 bg-black/60 backdrop-blur-md border-t border-white/5 shadow-[0_0_50px_rgba(251,191,36,0.15)] transform animate-in slide-in-from-bottom-8 duration-700">
-                <!-- Subtle Texture -->
-                <div class="absolute inset-0 pointer-events-none opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
-                
-                <!-- Status Bar -->
-                <div class="flex justify-between items-center mb-6">
-                    <div class="h-[1px] flex-grow mr-4 bg-amber-400/30"></div>
-                    <div class="text-amber-400 text-[11px] font-black tracking-[0.2em] uppercase animate-pulse">
-                        Frequency: Harmonic Connection
-                    </div>
-                </div>
-
-                <!-- Chapter Label -->
-                <div class="mb-2">
-                    <span class="text-white/60 text-xs font-bold tracking-[0.5em] uppercase">Chapter Three</span>
-                </div>
-                
-                <!-- Hero Titles -->
-                <div class="relative mb-10">
-                    <h1 class="text-6xl md:text-8xl text-white font-black leading-none tracking-tighter uppercase italic drop-shadow-[4px_4px_0px_#d97706]">
-                        HEARTSTRINGS
-                    </h1>
-                    <div class="flex items-center mt-[-5px]">
-                        <div class="h-1.5 w-16 bg-amber-400 mr-4"></div>
-                        <h2 class="text-4xl md:text-6xl text-amber-400 font-bold italic tracking-tight">
-                            A Shared Resonance
-                        </h2>
-                    </div>
-                </div>
-
-                <!-- Narrative Section -->
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                    <div class="md:col-span-8">
-                        <p class="text-white text-xl md:text-2xl italic leading-tight font-black border-l-4 border-rose-500 pl-6 py-2">
-                            "I used to play to escape. Now, I play to connect. Every scale I learn, every word I practice... it’s all building a bridge that doesn't lead to a stage, but to a person."
-                        </p>
-                    </div>
-                    
-                    <div class="md:col-span-4">
-                        <button onclick="setPhase(24,'');" 
-                                class="group relative w-full bg-amber-400 text-black font-black py-5 transition-all hover:bg-white active:scale-95 shadow-[6px_6px_0px_#92400e]">
-                            <span class="inline-block text-2xl uppercase italic tracking-tighter">
-                                FIND CONNECTION
-                            </span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Bottom Tag -->
-                <div class="mt-10 pt-4 border-t border-white/10 text-[10px] text-rose-400/60 tracking-[0.6em] uppercase text-center font-bold">
-                    LOVE IS THE ULTIMATE ANTHEM
-                </div>
-            </div>
-        `;
-
-        return container;
-    }
-
-
         function displayHype(fanCount, flavorText) {
             const color = '#D946EF'; // Neon Fuchsia
             
@@ -10031,8 +9850,7 @@
                  const buttons = [
                     { text: 'NEW JOURNEY', icon: '🎸', action: () => { game.phase = 18; renderGame(); } },
                     { text: 'RESTORE SESSION', icon: '📂', action: () => { storageMode = 'restore'; setPhase(6); } },
-                    { text: 'CHAPTER 2', icon: '🔒', action: () => unlockChapter2() },
-                    { text: 'CHAPTER 3', icon: '🔒', action: () => unlockChapter3() },
+                    { text: 'UNLOCK CHAPTER 2', icon: '📖', action: () => unlockChapter2() },
                     { text: 'CHOP GALLERY', icon: '🏆', action: () => showGameMessage("Locked until Chapter 2") },
 
                     //{ text: 'CHOP GALLERY1', icon: '🏆', action: () => debugUnlockAll()},
@@ -10648,11 +10466,8 @@
                 { title: 'FEUD', action: () => setPhase(11, ''), iconEmoji: '📊' },
                 { title: 'FORCE', action: () => cheat(), iconEmoji: '🤘' },
                 { title: 'MIXER', action: () => setPhase(13,''), iconEmoji: '🎛️' },
-                { title: 'SCREEN', action: () => renderFinale(), iconEmoji: '🎦' },
                 { title: 'CH2', action: () => unlockChapter2(), iconEmoji: '👨‍👩‍👧‍👦' },
-                { title: 'CH3', action: () =>  setPhase(24,''), iconEmoji: '🎵' },
-
-
+                { title: 'Test', action: () =>  displayGigResults(30, 50, 60), iconEmoji: '🎵' },
             ];
 
             menubuttons.forEach(btn => {
@@ -10809,7 +10624,7 @@
         let shopData = [
             { name: 'Guitar Pick', price: 1, icon: '🔻', desc: 'A simple guitar pick' },
             { name: 'Black Magic Gummies', price: 20, icon: '🍬', desc: 'They are magic!' },
-            { name: 'Morello\'s Guitar', price: 2500, icon: '🎸', desc: 'Ultimate Rock Power-Up.' },
+            { name: 'Morello\'s Guitar', price: 3000, icon: '🎸', desc: 'Ultimate Rock Power-Up.' },
             { name: 'Billie Eilish\ VIP concert ticket', price: 12600, icon: '🎟️', desc: 'A waste of money and time?' }
         ];
 
@@ -10977,15 +10792,10 @@
         return shopContent;
     }
     
-    function dolores_action1(){
-
-            playMovie('./videos/dolores-wrestle.mp4', 'Good vibes wrestling Ibearian!'); 
-            game.dolores_buttons.finale = true;
-    }
 
      function renderCliffs() {
 
-        console.log(game.cliffs_buttons);
+
         let inventoryItem = game.inventory_items.find(i => i.name === 'Polaroid');
         if (inventoryItem.acquired){
             game.mama_buttons.polaroid = true;
@@ -11675,7 +11485,7 @@
             } catch (e) {
                 console.error("MIDI loading/parsing failed:", e);
                 updateState({ 
-                //    error: `MIDI Load Error: ${e.message}. Check console for details.`, 
+                    error: `MIDI Load Error: ${e.message}. Check console for details.`, 
                     message: 'AUDIO SYSTEM FAILED TO LOAD TRACK.', 
                     isLoading: false 
                 });
@@ -11729,7 +11539,7 @@
             const correctSong = game.currentSong.toLowerCase();
 
             let resultMessage = '';
-         //   game.pendingAcquisition.chop = 'Rhythm Mastery';
+            game.pendingAcquisition.chop = 'Rhythm Mastery';
             let chop = game.chops.find(i => i.name === 'Rhythm Mastery');
 
 
@@ -12256,8 +12066,7 @@
             "Bottom of the Hill" : "./sprites/bottom.jpg",
             "Sage & Drifter" : "./sprites/bobby-bar.jpg",
             "Presidio" : "./sprites/presidio.jpg",
-            "Out & In" : "./sprites/out&in.jpg",
-            "Dolores Park" : "./sprites/dolores.jpg"
+            "Out & In" : "./sprites/out&in.jpg"
 
 
         };
@@ -12714,37 +12523,21 @@
         function startCinematic() {
 
             if (game.chopsDiscovered){
-                if (game.chapter === 2){
-                    cinematicScript = [
-                    { 
-                        text: "The rhythm of the city, the geometry of sound, the history of every stage... I see it all now. The dream isn't a whisper anymore. It's a blueprint for a revolution.", 
-                        url: "./videos/habibi-learn.mp4" 
-                    },
-                    { 
-                        text: "Every empty seat is a challenge. Every silent stage, a promise. The echo of expectation is louder than any applause I've ever heard. It's not about hoping anymore. It's about earning it.", 
-                        url: "./videos/habibi-slims.mp4" 
-                    },
-                    { 
-                        text: "Now, the real work begins - Gigs to chase, songs to write, fans to win, and a message to scream from every rooftop. San Francisco... hear me. I'm coming for you. Chapter Two: The Ascent.", 
-                        url: "./videos/chapter2.mp4" 
-                    }
-                    ]
-                  
-                }
-                if (game.chapter ===3){
-                    cinematicScript = [
-
-                    { 
-                        text: "I used to play to escape. Now, I play to connect. Every scale I learn, every word I practice... it’s all building a bridge that doesn't lead to a stage, but to a person.", 
-                        url: "./videos/chapter3-0.mp4" 
-                    },
-                    { 
-                        text: "For years, I was a ghost in the Apex machine, and then a rebel on the streets. I’ve spent my life looking for a crowd. Now that I have it... I may be looking for a heartbeat that plays in sync with mine.", 
-                        url: "./videos/chapter3-1.mp4" 
-                    }
-                    ]
-
-                }
+                cinematicScript = [
+                { 
+                    text: "The rhythm of the city, the geometry of sound, the history of every stage... I see it all now. The dream isn't a whisper anymore. It's a blueprint for a revolution.", 
+                    url: "./videos/habibi-learn.mp4" 
+                },
+                { 
+                    text: "Every empty seat is a challenge. Every silent stage, a promise. The echo of expectation is louder than any applause I've ever heard. It's not about hoping anymore. It's about earning it.", 
+                    url: "./videos/habibi-slims.mp4" 
+                },
+                { 
+                    text: "Now, the real work begins - Gigs to chase, songs to write, fans to win, and a message to scream from every rooftop. San Francisco... hear me. I'm coming for you. Chapter Two: The Ascent.", 
+                    url: "./videos/chapter2.mp4" 
+                },
+                
+                ]
 
                 scriptIndex = -1; // Start at -1 to show "Click to begin" first.
                 cinematicScriptIndex = -1;
@@ -12828,14 +12621,9 @@
                     if (game.chapter === 1){
                         renderFin();
                     }
-                    if (game.chapter === 2){
+                    else{
                         startChapter2();
                         setPhase(23,'');
-                    }
-                    else{
-                       // startChapter3();
-                        setPhase(25,'');
-
                     }
                 }
                 
@@ -13158,117 +12946,13 @@
 
 
 
-        function createSecurityTerminal({ onSuccess, onFailure }) {
-            // 1. Inject Styles dynamically within the function
-            if (!document.getElementById('terminal-component-styles')) {
-                const style = document.createElement('style');
-                style.id = 'terminal-component-styles';
-                style.textContent = `
-                    .terminal-container {
-                        position: relative;
-                        box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
-                        border: 10px solid #222;
-                        border-radius: 15px;
-                        background: #000;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        padding-bottom: 15px;
-                        max-width: 95vw;
-                        font-family: 'Courier New', Courier, monospace;
-                    }
-
-                    .terminal-canvas {
-                        display: block;
-                        image-rendering: pixelated;
-                        max-height: 40vh; /* Keep canvas height in check for mobile */
-                    }
-
-                    .terminal-overlay-ui {
-                        position: absolute;
-                        top: 35%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        background: rgba(0, 0, 0, 0.95);
-                        color: #0f0;
-                        padding: 30px;
-                        border: 2px solid #0f0;
-                        text-align: center;
-                        z-index: 10;
-                        display: none;
-                        min-width: 250px;
-                    }
-
-                    .terminal-overlay-ui button {
-                        background: #0f0;
-                        border: none;
-                        padding: 10px 20px;
-                        margin-top: 15px;
-                        cursor: pointer;
-                        font-weight: bold;
-                        font-family: inherit;
-                        color: #000;
-                    }
-
-                    .term-keyboard-container {
-                        width: 100%;
-                        max-width: 580px;
-                        padding: 10px;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 6px;
-                        background: #000;
-                    }
-
-                    .term-kb-row {
-                        display: flex;
-                        justify-content: center;
-                        gap: 4px;
-                        width: 100%;
-                    }
-
-                    .term-key {
-                        background: #111;
-                        border: 1px solid #003b00;
-                        color: #00ff41;
-                        padding: 14px 0;
-                        border-radius: 4px;
-                        font-family: inherit;
-                        font-weight: bold;
-                        font-size: 14px;
-                        cursor: pointer;
-                        flex: 1;
-                        transition: all 0.1s;
-                        -webkit-tap-highlight-color: transparent;
-                        text-transform: uppercase;
-                    }
-
-                    .term-key:active {
-                        background: #00ff41;
-                        color: #000;
-                        transform: scale(0.95);
-                    }
-
-                    .term-key.key-special {
-                        flex: 1.5;
-                        background: #001a00;
-                    }
-
-                    .term-key.key-del {
-                        color: #ff0033;
-                        border-color: #440000;
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-
+          function createSecurityTerminal({ onSuccess, onFailure }) {
             const container = document.createElement('div');
             container.className = 'terminal-container';
 
             const canvas = document.createElement('canvas');
-            canvas.className = 'terminal-canvas';
             canvas.width = 600;
-            canvas.height = 300; 
+            canvas.height = 400;
             container.appendChild(canvas);
 
             const overlay = document.createElement('div');
@@ -13286,7 +12970,7 @@
             const state = {
                 input: ['', '', '', '', ''],
                 currentIndex: 0,
-                status: 'READY',
+                status: 'READY', // READY, GRANTED, DENIED
                 shake: 0,
                 targetWord: "MUSIC",
                 colors: {
@@ -13302,6 +12986,15 @@
                 overlay.querySelector('#term-ui-desc').innerText = desc;
                 overlay.style.display = 'block';
             };
+
+            const resetTerminal = () => {
+                overlay.style.display = 'none';
+                state.status = 'READY';
+                state.input = ['', '', '', '', ''];
+                state.currentIndex = 0;
+            };
+
+            overlay.querySelector('#term-ui-btn').onclick = resetTerminal;
 
             const checkWord = () => {
                 const word = state.input.join('');
@@ -13323,72 +13016,33 @@
                 }
             };
 
-            const processChar = (char) => {
-                if (state.status !== 'READY' || overlay.style.display === 'block') return;
-                if (state.currentIndex < 5) {
-                    state.input[state.currentIndex] = char.toUpperCase();
-                    state.currentIndex++;
-                    if (state.currentIndex === 5) setTimeout(checkWord, 300);
-                }
-            };
-
-            const processBackspace = () => {
-                if (state.status !== 'READY' || overlay.style.display === 'block') return;
-                if (state.currentIndex > 0) {
-                    state.currentIndex--;
-                    state.input[state.currentIndex] = '';
-                }
-            };
-
-            // Visual Keyboard Construction
-            const kbContainer = document.createElement('div');
-            kbContainer.className = 'term-keyboard-container';
-            
-            const layout = [
-                ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-                ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-                ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DEL']
-            ];
-
-            layout.forEach(row => {
-                const rowEl = document.createElement('div');
-                rowEl.className = 'term-kb-row';
-                row.forEach(key => {
-                    const kBtn = document.createElement('button');
-                    kBtn.className = `term-key ${key === 'DEL' ? 'key-special key-del' : ''}`;
-                    kBtn.textContent = key;
-                    kBtn.onclick = (e) => {
-                        e.preventDefault();
-                        if (key === 'DEL') processBackspace();
-                        else processChar(key);
-                    };
-                    rowEl.appendChild(kBtn);
-                });
-                kbContainer.appendChild(rowEl);
-            });
-            container.appendChild(kbContainer);
-
-            // Keep physical keyboard listener for desktop users
             const handleKeydown = (e) => {
-                if (e.key === 'Backspace') processBackspace();
-                else if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) processChar(e.key);
-            };
-            window.addEventListener('keydown', handleKeydown);
+                if (state.status !== 'READY' || overlay.style.display === 'block') return;
 
-            overlay.querySelector('#term-ui-btn').onclick = () => {
-                overlay.style.display = 'none';
-                if (state.status !== 'GRANTED') {
-                    state.status = 'READY';
-                    state.input = ['', '', '', '', ''];
-                    state.currentIndex = 0;
+                if (e.key === 'Backspace') {
+                    if (state.currentIndex > 0) {
+                        state.currentIndex--;
+                        state.input[state.currentIndex] = '';
+                    }
+                } else if (e.key === 'Enter') {
+                    if (state.currentIndex === 5) checkWord();
+                } else if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) {
+                    if (state.currentIndex < 5) {
+                        state.input[state.currentIndex] = e.key.toUpperCase();
+                        state.currentIndex++;
+                        if (state.currentIndex === 5) setTimeout(checkWord, 300);
+                    }
                 }
             };
+
+            // Attach event listener locally (removed when element is destroyed if needed)
+            window.addEventListener('keydown', handleKeydown);
 
             // Drawing Loop
             function render(time) {
                 if (!container.isConnected) {
                     window.removeEventListener('keydown', handleKeydown);
-                    return;
+                    return; // Stop loop if detached
                 }
 
                 let offsetX = 0, offsetY = 0;
@@ -13398,6 +13052,7 @@
                     state.shake *= 0.9;
                 }
 
+                // Draw Background
                 ctx.fillStyle = state.colors.bg;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -13418,13 +13073,13 @@
                 let titleText = "BOUNCER SECURITY TERMINAL";
                 if (state.status === 'GRANTED') titleText = "ACCESS GRANTED";
                 if (state.status === 'DENIED') titleText = "SYSTEM REJECTED";
-                ctx.fillText(titleText, canvas.width / 2, 70);
+                ctx.fillText(titleText, canvas.width / 2, 80);
 
                 // Inputs
                 const boxSize = 60, spacing = 15;
                 const startX = (canvas.width - (boxSize * 5 + spacing * 4)) / 2;
                 state.input.forEach((char, i) => {
-                    const x = startX + i * (boxSize + spacing), y = 140;
+                    const x = startX + i * (boxSize + spacing), y = 160;
                     ctx.strokeStyle = (i === state.currentIndex && state.status === 'READY') ? state.colors.text : state.colors.accent;
                     ctx.lineWidth = 3;
                     ctx.strokeRect(x, y, boxSize, boxSize);
@@ -13437,9 +13092,10 @@
                     }
                 });
 
+                // Instructions
                 ctx.font = '14px "Courier New"';
                 ctx.fillStyle = state.colors.accent;
-                ctx.fillText("USE ON-SCREEN KEYS TO ENTER PASSCODE", canvas.width / 2, 260);
+                ctx.fillText("TYPE 5-LETTER PASSCODE", canvas.width / 2, 280);
                 
                 ctx.restore();
 
@@ -13456,218 +13112,222 @@
             requestAnimationFrame(render);
             return container;
         }
-       
-            function unlockChapter2() {
-                const terminal = createSecurityTerminalChapter(2, "1015", "Ready to become a music legend?", {
-                    onSuccess: () => {
-                        game.chapter = 2;
-                        game.chopsDiscovered = true;
-                        if (typeof startCinematic === 'function') startCinematic();
-                    },
-                    onFailure: () => console.warn("Invalid Code Attempt")
-                });
-                
-                const wrapper = createElement('div', 'fixed inset-0 z-[3000] flex items-center justify-center bg-black/80 backdrop-blur-md');
-                wrapper.id = "chapter-unlock-modal";
-                const closeX = createElement('button', 'absolute top-6 right-8 text-4xl text-zinc-500 font-bold', '×');
-                closeX.onclick = () => wrapper.remove();
-                
-                wrapper.appendChild(closeX);
-                wrapper.appendChild(terminal);
-                document.body.appendChild(wrapper);
-            }
-
-
-        
-            function unlockChapter3() {
-                const terminal = createSecurityTerminalChapter(3, "1018", "Ready to work on your future?" ,{
-                    onSuccess: () => {
-                        game.chapter = 3;
-                        game.chopsDiscovered = true;
-                        if (typeof startCinematic === 'function') startCinematic();
-                    },
-                    onFailure: () => console.warn("Invalid Code Attempt")
-                });
-                
-                const wrapper = createElement('div', 'fixed inset-0 z-[3000] flex items-center justify-center bg-black/80 backdrop-blur-md');
-                wrapper.id = "chapter-unlock-modal";
-                const closeX = createElement('button', 'absolute top-6 right-8 text-4xl text-zinc-500 font-bold', '×');
-                closeX.onclick = () => wrapper.remove();
-                
-                wrapper.appendChild(closeX);
-                wrapper.appendChild(terminal);
-                document.body.appendChild(wrapper);
-            }
 
 
 
-    
 
-        function createSecurityTerminalChapter(chapter_number, code, text, { onSuccess, onFailure }) {
-            // 1. Inject Styles for the Terminal and Keyboard
+        function unlockChapter2() {
+            const terminal = createSecurityTerminal2({
+                onSuccess: () => {
+                    console.log("Chapter 2 Unlocked!");
+                    game.chapter = 2; // Logic to advance the game state
+                    // Optionally save the session here
+                    game.chopsDiscovered = true;
+                    startCinematic();
+                },
+                onFailure: () => {
+                    console.warn("Invalid Chapter 2 Unlock Attempt");
+                }
+            });
+            
+            // Add to body with high z-index overlay
+            const modalWrapper = document.createElement('div');
+            modalWrapper.className = "fixed inset-0 z-[3000] flex items-center justify-center bg-black/80 backdrop-blur-md";
+            modalWrapper.id = "chapter-unlock-modal";
+            
+            // Add a close button for the modal itself
+            const closeX = document.createElement('button');
+            closeX.innerHTML = "×";
+            closeX.className = "absolute top-6 right-8 text-4xl text-zinc-500 hover:text-white transition-colors font-bold";
+            closeX.onclick = () => modalWrapper.remove();
+            
+            modalWrapper.appendChild(closeX);
+            modalWrapper.appendChild(terminal);
+            document.body.appendChild(modalWrapper);
+        }
+
+
+
+        function createSecurityTerminal2({ onSuccess, onFailure }) {
+            // Inject Styles if not present
             if (!document.getElementById('terminal-styles')) {
                 const style = document.createElement('style');
                 style.id = 'terminal-styles';
                 style.textContent = `
-                    .terminal-container { position: relative; box-shadow: 0 0 50px rgba(0, 255, 65, 0.2); border: 8px solid #222; border-radius: 12px; background: #000; overflow: hidden; display: flex; flex-col; align-items: center; padding-bottom: 20px; }
-                    .terminal-overlay-ui { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.95); color: #0f0; padding: 30px; border: 2px solid #0f0; text-align: center; z-index: 10; display: none; min-width: 280px; font-family: 'Courier New', monospace; }
+                    .terminal-container { position: relative; box-shadow: 0 0 50px rgba(0, 255, 65, 0.2); border: 8px solid #222; border-radius: 12px; background: #000; overflow: hidden; }
+                    .terminal-overlay-ui { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.95); color: #0f0; padding: 30px; border: 2px solid #0f0; text-align: center; z-index: 10; display: none; min-width: 280px; font-family: 'Courier New', monospace; }
                     .terminal-overlay-ui button { background: #0f0; border: none; padding: 10px 20px; margin-top: 15px; cursor: pointer; font-weight: bold; font-family: inherit; color: black; }
-                    
-                    .terminal-keyboard { width: 100%; max-width: 400px; padding: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: -20px; position: relative; z-index: 5; }
-                    .term-key { background: #111; border: 2px solid #003b00; color: #00ff41; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-weight: bold; font-size: 20px; cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent; }
-                    .term-key:active { background: #00ff41; color: black; transform: scale(0.95); }
-                    .term-key.key-del { background: #220000; border-color: #550000; color: #ff0033; }
                 `;
                 document.head.appendChild(style);
             }
 
-            const container = createElement('div', 'terminal-container flex flex-col items-center');
-            
-            // 2. Terminal Display (Canvas)
-            const canvas = createElement('canvas');
+            const container = document.createElement('div');
+            container.className = 'terminal-container';
+
+            const canvas = document.createElement('canvas');
             canvas.width = 500;
-            canvas.height = 300; // Slightly shorter to make room for keys
+            canvas.height = 350;
             container.appendChild(canvas);
 
-            const overlay = createElement('div', 'terminal-overlay-ui');
-            overlay.innerHTML = `<h2 id="term-ui-title"></h2><p id="term-ui-desc"></p><button id="term-ui-btn">CONTINUE</button>`;
+            const overlay = document.createElement('div');
+            overlay.className = 'terminal-overlay-ui';
+            overlay.innerHTML = `
+                <h2 id="term-ui-title" style="margin-top:0"></h2>
+                <p id="term-ui-desc" style="font-size: 14px"></p>
+                <button id="term-ui-btn">CONTINUE</button>
+            `;
             container.appendChild(overlay);
 
             const ctx = canvas.getContext('2d');
-            const state = { input: ['', '', '', ''], currentIndex: 0, status: 'READY', shake: 0, targetWord: code };
+            
+            const state = {
+                input: ['', '', '', ''], // 4 slots for 1018
+                currentIndex: 0,
+                status: 'READY',
+                shake: 0,
+                targetWord: "1018",
+                colors: {
+                    bg: '#050505',
+                    text: '#00ff41',
+                    accent: '#003b00',
+                    error: '#ff0033'
+                }
+            };
 
-            // 3. Logic Functions
             const showUI = (title, desc) => {
                 overlay.querySelector('#term-ui-title').innerText = title;
                 overlay.querySelector('#term-ui-desc').innerText = desc;
                 overlay.style.display = 'block';
             };
 
+            const resetTerminal = () => {
+                if (state.status === 'GRANTED') {
+                    document.getElementById('chapter-unlock-modal')?.remove();
+                    return;
+                }
+                overlay.style.display = 'none';
+                state.status = 'READY';
+                state.input = ['', '', '', ''];
+                state.currentIndex = 0;
+            };
+
+            overlay.querySelector('#term-ui-btn').onclick = resetTerminal;
+
             const checkWord = () => {
                 const word = state.input.join('');
                 if (word === state.targetWord) {
                     state.status = 'GRANTED';
                     setTimeout(() => {
-                        showUI(`CHAPTER ${chapter_number}`, "Access Verified. " + text);
+                        showUI("CHAPTER 2", "Ready to become a music legend?");
+                        if (onSuccess) onSuccess();
                     }, 600);
                 } else {
                     state.shake = 15;
                     state.status = 'DENIED';
                     if (onFailure) onFailure();
-                    setTimeout(() => { 
-                        state.status = 'READY'; 
-                        state.input = ['', '', '', '']; 
-                        state.currentIndex = 0; 
+                    setTimeout(() => {
+                        state.status = 'READY';
+                        state.input = ['', '', '', ''];
+                        state.currentIndex = 0;
                     }, 1200);
                 }
             };
 
-            const handleInput = (val) => {
-                if (state.status !== 'READY' || overlay.style.display === 'block') return;
-                if (state.currentIndex < 4) {
-                    state.input[state.currentIndex] = val;
-                    state.currentIndex++;
-                    if (state.currentIndex === 4) setTimeout(checkWord, 200);
-                }
-            };
-
-            const handleBackspace = () => {
-                if (state.status !== 'READY' || overlay.style.display === 'block') return;
-                if (state.currentIndex > 0) {
-                    state.currentIndex--;
-                    state.input[state.currentIndex] = '';
-                }
-            };
-
-            // 4. Create Visual Keyboard
-            const keyboard = createElement('div', 'terminal-keyboard');
-            const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'DEL'];
-            
-            keys.forEach(key => {
-                const kBtn = createElement('button', `term-key ${key === 'DEL' ? 'key-del col-span-2' : ''}`, key);
-                kBtn.onclick = (e) => {
-                    e.preventDefault();
-                    if (key === 'DEL') handleBackspace();
-                    else handleInput(key);
-                };
-                keyboard.appendChild(kBtn);
-            });
-            container.appendChild(keyboard);
-
-            // 5. Physical Keyboard Support (for Mac users)
             const handleKeydown = (e) => {
-                if (e.key === 'Backspace') handleBackspace();
-                else if (/^[0-9]$/.test(e.key)) handleInput(e.key);
+                if (state.status !== 'READY' || overlay.style.display === 'block') return;
+
+                if (e.key === 'Backspace') {
+                    if (state.currentIndex > 0) {
+                        state.currentIndex--;
+                        state.input[state.currentIndex] = '';
+                    }
+                } else if (e.key === 'Enter') {
+                    if (state.currentIndex === 4) checkWord();
+                } else if (e.key.length === 1 && /^[0-9]$/.test(e.key)) {
+                    if (state.currentIndex < 4) {
+                        state.input[state.currentIndex] = e.key;
+                        state.currentIndex++;
+                        if (state.currentIndex === 4) setTimeout(checkWord, 200);
+                    }
+                }
             };
+
             window.addEventListener('keydown', handleKeydown);
 
-            // 6. Drawing Loop
-            function renderLoop(time) {
-                if (!container.isConnected) { window.removeEventListener('keydown', handleKeydown); return; }
-                
-                let ox = 0, oy = 0;
+            function render(time) {
+                if (!container.isConnected) {
+                    window.removeEventListener('keydown', handleKeydown);
+                    return;
+                }
+
+                let offsetX = 0, offsetY = 0;
                 if (state.shake > 0) {
-                    ox = (Math.random() - 0.5) * state.shake;
-                    oy = (Math.random() - 0.5) * state.shake;
+                    offsetX = (Math.random() - 0.5) * state.shake;
+                    offsetY = (Math.random() - 0.5) * state.shake;
                     state.shake *= 0.85;
                 }
 
-                ctx.fillStyle = '#050505';
+                ctx.fillStyle = state.colors.bg;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.save();
-                ctx.translate(ox, oy);
 
                 // Scanlines
-                ctx.strokeStyle = '#001a00';
+                ctx.strokeStyle = state.colors.accent;
                 ctx.lineWidth = 1;
                 for (let i = 0; i < canvas.height; i += 3) {
                     ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
                 }
 
-                // Header
-                ctx.fillStyle = state.status === 'DENIED' ? '#ff0033' : '#00ff41';
-                ctx.font = 'bold 18px "Courier New"';
-                ctx.textAlign = 'center';
-                ctx.fillText(state.status === 'DENIED' ? "INVALID PASSCODE" : `CHAPTER ${chapter_number} SECURITY`, canvas.width / 2, 50);
+                ctx.save();
+                ctx.translate(offsetX, offsetY);
 
-                // Code Boxes
+                // Header
+                ctx.fillStyle = state.status === 'DENIED' ? state.colors.error : state.colors.text;
+                ctx.font = 'bold 20px "Courier New"';
+                ctx.textAlign = 'center';
+                let titleText = "CHAPTER 2 ACCESS TERMINAL";
+                if (state.status === 'GRANTED') titleText = "ACCESS GRANTED";
+                if (state.status === 'DENIED') titleText = "INVALID PASSCODE";
+                ctx.fillText(titleText, canvas.width / 2, 60);
+
+                // Input Boxes
+                const boxSize = 65, spacing = 12;
+                const startX = (canvas.width - (boxSize * 4 + spacing * 3)) / 2;
                 state.input.forEach((char, i) => {
-                    const x = 110 + i * 75, y = 100;
-                    ctx.strokeStyle = (i === state.currentIndex && state.status === 'READY') ? '#00ff41' : '#003b00';
-                    ctx.strokeRect(x, y, 65, 65);
-                    ctx.fillStyle = '#00ff41';
-                    ctx.font = 'bold 44px "Courier New"';
-                    ctx.fillText(char, x + 32, y + 48);
+                    const x = startX + i * (boxSize + spacing), y = 130;
+                    ctx.strokeStyle = (i === state.currentIndex && state.status === 'READY') ? state.colors.text : state.colors.accent;
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, y, boxSize, boxSize);
                     
-                    // Cursor
+                    ctx.fillStyle = state.colors.text;
+                    ctx.font = 'bold 44px "Courier New"';
+                    ctx.fillText(char, x + boxSize / 2, y + 48);
+
                     if (i === state.currentIndex && state.status === 'READY' && Math.floor(time / 500) % 2 === 0) {
-                        ctx.fillRect(x + 10, y + 55, 45, 4);
+                        ctx.fillRect(x + 10, y + boxSize - 12, boxSize - 20, 4);
                     }
                 });
 
-                ctx.font = '10px "Courier New"';
-                ctx.fillStyle = '#003b00';
-                ctx.fillText("TAP KEYS OR TYPE CODE TO PROCEED", canvas.width / 2, 220);
+                ctx.font = '12px "Courier New"';
+                ctx.fillStyle = state.colors.accent;
+                ctx.fillText("INPUT 4-DIGIT AUTHORIZATION KEY", canvas.width / 2, 250);
                 
                 ctx.restore();
-                requestAnimationFrame(renderLoop);
+
+                // CRT Glare
+                const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 50, canvas.width/2, canvas.height/2, 350);
+                grad.addColorStop(0, 'rgba(0,255,65,0.02)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.5)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                requestAnimationFrame(render);
             }
 
-            requestAnimationFrame(renderLoop);
-
-            // 7. Success logic
-            overlay.querySelector('#term-ui-btn').onclick = () => {
-                if (state.status === 'GRANTED') {
-                    document.getElementById('chapter-unlock-modal')?.remove();
-                    if (onSuccess) onSuccess(); 
-                } else {
-                    overlay.style.display = 'none';
-                }
-            };
-
+            requestAnimationFrame(render);
             return container;
         }
+
+
 
 
          function checkGuess(index, val) {
@@ -13865,114 +13525,7 @@
             `;
         }
 
-
-        function renderFinale() {
-                const container = document.getElementById('game-container');
-                
-                // Calculate final stats for display
-                const finalFans = (game.fans || 0).toLocaleString();
-                const finalHype = game.hype || 0;
-                const finalScore = (game.score || 0).toLocaleString(undefined, { minimumFractionDigits: 2 });
-
-                container.innerHTML = `
-                    <div class="relative min-h-[600px] bg-black border-4 border-cyan-500 p-1 rounded-3xl shadow-[0_0_60px_rgba(6,182,212,0.3)] overflow-hidden animate-in fade-in zoom-in-95 duration-700">
-                        <!-- Background Visual: Stage Lights/Crowd Silhouette -->
-                        <div class="absolute inset-0 z-0 opacity-40">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-cyan-500/20 via-transparent to-transparent"></div>
-                        </div>
-
-                        <!-- Ribbon Tag -->
-                        <div class="absolute top-0 right-0 p-3 bg-cyan-500 text-black font-black text-xs uppercase -rotate-45 translate-x-6 -translate-y-2 z-20 shadow-lg">
-                            LEGEND_STATUS_REACHED
-                        </div>
-                        
-                        <div class="relative z-10 p-8 flex flex-col items-center h-full">
-                            <!-- Hero Title Section -->
-                            <div class="text-center mb-8">
-                                <div class="text-cyan-400 font-mono text-xs font-bold tracking-[0.6em] uppercase mb-2 animate-pulse">
-                                    Chapter Complete
-                                </div>
-                                <h1 class="text-7xl md:text-8xl font-black text-white italic tracking-tighter leading-none uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]">
-                                    STAR
-                                </h1>
-                                <div class="h-1.5 w-32 bg-cyan-500 mx-auto mt-2"></div>
-                            </div>
-
-                            <h2 class="text-2xl font-black mb-10 text-cyan-500 tracking-widest uppercase italic bg-white/5 px-6 py-1 rounded-full border border-cyan-500/20">
-                                Habibi's Legend
-                            </h2>
-
-                            <!-- Accomplishment Stats -->
-                            <div class="w-full max-w-md space-y-4 mb-12">
-                                <!-- Fans Gained -->
-                                <div class="bg-zinc-900/80 border-l-4 border-cyan-500 p-5 flex justify-between items-center group transition-all hover:bg-zinc-800">
-                                    <div>
-                                        <span class="block text-[10px] font-black uppercase tracking-widest text-cyan-500/60">Crowd Size</span>
-                                        <span class="font-black uppercase text-white text-lg italic">The Fanbase</span>
-                                    </div>
-                                    <span class="text-4xl font-black italic text-white group-hover:scale-110 transition duration-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                                        ${finalFans}
-                                    </span>
-                                </div>
-
-                                <!-- Hype Level -->
-                                <div class="bg-zinc-900/80 border-l-4 border-red-500 p-5 flex justify-between items-center group transition-all hover:bg-zinc-800">
-                                    <div>
-                                        <span class="block text-[10px] font-black uppercase tracking-widest text-red-500/60">Momentum</span>
-                                        <span class="font-black uppercase text-white text-lg italic">Hype Score</span>
-                                    </div>
-                                    <span class="text-4xl font-black italic text-red-500 group-hover:scale-110 transition duration-300">
-                                        ${finalHype}
-                                    </span>
-                                </div>
-
-                                <!-- Final Revenue -->
-                                <div class="bg-zinc-900/80 border-l-4 border-green-500 p-5 flex justify-between items-center group transition-all hover:bg-zinc-800">
-                                    <div>
-                                        <span class="block text-[10px] font-black uppercase tracking-widest text-green-500/60">Total Earnings</span>
-                                        <span class="font-black uppercase text-white text-lg italic">Tour Revenue</span>
-                                    </div>
-                                    <span class="text-4xl font-black italic text-green-400 group-hover:scale-110 transition duration-300">
-                                        $${finalScore}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Final Narrative Message -->
-                            <div class="w-full text-center border-t border-white/10 pt-8 mb-10">
-                                <p class="text-white text-xl md:text-2xl italic font-black leading-tight max-w-sm mx-auto mb-6">
-                                    "You’ve conquered the stage and escaped the machine. It’s time to stop looking for a crowd and start looking for the heartbeat that finally plays in sync with your own."
-                                </p>
-                                <div class="flex justify-center items-center gap-3">
-                                    <div class="h-px w-8 bg-zinc-800"></div>
-                                    <p class="text-xs font-black text-zinc-500 uppercase tracking-[0.3em]">The journey continues</p>
-                                    <div class="h-px w-8 bg-zinc-800"></div>
-                                </div>
-                            </div>
-
-                            <!-- Footer Buttons -->
-                            <div class="w-full grid grid-cols-1 gap-4">
-                                <button onclick="setPhase(-1, 'MAIN MENU')" 
-                                        class="bg-cyan-500 hover:bg-white text-black font-black py-6 text-2xl transition-all transform hover:scale-[1.02] active:scale-95 shadow-[8px_8px_0px_#0e7490] italic uppercase tracking-tighter">
-                                    Back to Main Stage
-                                </button>
-                                
-                                <div class="text-center">
-                                    <span class="inline-block px-4 py-1.5 bg-zinc-800 text-cyan-400 text-[10px] font-black uppercase tracking-[0.3em] border border-cyan-500/30 rounded-full">
-                                        CHAPTER 3 UNLOCKED. CODE = 1018
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Scanline / CRT Texture -->
-                        <div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)50%,rgba(0,0,0,0.25)50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]"></div>
-                    </div>
-                `;
-                    }   
-
-
+        // --- Rendering ---
 
         function renderPhase12() {
             // Create the noise overlay if it doesn't exist
@@ -14535,13 +14088,16 @@
 
         function renderCinematic() {
 
-            const { videoPath, cinematicText } = game.cinematicData;            
+            
+            const { videoPath, cinematicText } = game.cinematicData;
+            
             // Using a very dark slate background to make the cyan borders pop
             const cinematicContent = createElement('div', 'flex flex-col items-center justify-center min-h-screen w-full bg-slate-950 p-4 md:p-8');
+
             cinematicContent.innerHTML = `
             <div id="cinematic-wrapper" class="relative w-full max-w-6xl mx-auto group">
                 
-                <div class="relative p-1 bg-gradient-to-b from-electric-cyan/40 to-slate-900 rounded-lg shadow-[0_0_80px_rgba(0,0,0,0.8)] max-h-[80vh] w-fit mx-auto overflow-hidden">
+                <div class="relative p-1 bg-gradient-to-b from-electric-cyan/40 to-slate-900 rounded-lg shadow-[0_0_50px_rgba(0,0,0,0.8)]">
                     
                     <div id="cinematic-video-host" class="relative bg-black rounded-md overflow-hidden flex items-center justify-center">
                         
@@ -14549,7 +14105,7 @@
                         <div class="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-black to-transparent z-10 opacity-60"></div>
 
                         <video id="cinematic-video" 
-                            class="h-[70vh] w-auto max-w-full block object-contain shadow-inner" 
+                            class="w-full h-auto max-h-[65vh] block object-contain shadow-inner" 
                             autoplay loop muted playsinline>
                             <source src="${videoPath || 'https://assets.mixkit.co/videos/preview/mixkit-concert-crowd-applause-and-lights-1087-large.mp4'}" type="video/mp4">
                             Your browser does not support the video tag.
@@ -15378,930 +14934,6 @@
     }
 
 
-
-      
-        function triggerFinale(choice) {
-            // Final Impact Logic
-            if (choice === 'FRIENDSHIP_VISIT') { 
-                game.traits.relationship = Math.min(100, game.traits.relationship + 10); 
-                game.traits.community = Math.min(100, game.traits.community + 10); 
-            }
-            if (choice === 'FRIENDSHIP_HEAL') { 
-                game.traits.confidence = Math.min(100, game.traits.confidence + 15); 
-                game.traits.motivation = Math.min(100, game.traits.motivation + 15); 
-            }
-
-            // Branch A: Direct Triggers
-            if (choice === 'MARRIAGE') return renderFinaleScreen('MARRIAGE');
-            if (choice === 'TROUBADOUR') return renderFinaleScreen('TROUBADOUR');
-
-            // Branch B: Threshold Triggers
-            const t = game.traits;
-            if (t.motivation < 40 || t.confidence < 40) return renderFinaleScreen('CORPORATE');
-            if (t.karma >= 75 && t.motivation >= 70) return renderFinaleScreen('ACTIVIST');
-            if (t.community >= 75 && t.karma >= 65) return renderFinaleScreen('BESTIE');
-            if (t.happiness >= 70 && t.confidence >= 65) return renderFinaleScreen('BACHELOR');
-            
-            return renderFinaleScreen('GHOST');
-        }
-        const scenarioData = [
-        // PHASE 1: THE DISTANT SPARK
-        {
-            title: "The Post-Gig High",
-            desc: "You're alone after performing at the Warfield. The silence is deafening.",
-            choices: [
-                { 
-                    text: "Videocall Ibearian to share the energy", 
-                    impact: { relationship: 10, motivation: -5 },
-                    resolution_reasoning: "Sharing the thrill deepens your bond, but your professional focus wavers as you drift into late-night talk." ,
-                    video: './videos/chapter3-calling.mp4'
-                },
-                { 
-                    text: "Watch Arn Anderson tapes to study wrestling technique alone", 
-                    impact: { confidence: 10, relationship: -5 },
-                    resolution_reasoning: "Internalizing the win boosts your ego and skill, though the distance feels colder when he's left on 'read'." 
-                }
-            ]
-        },
-
-         {
-            title: "The Gummy Incident",
-            desc: "Time to compose a new song. What is your snack choice?",
-            choices: [
-                { 
-                    text: "High-Voltage gummies", 
-                    impact: { motivation: 10, happiness: -5 },
-                    resolution_reasoning: "The sugar rush fuels your creative drive, but the inevitable crash leaves you feeling restless and low."
-                },
-                { 
-                    text: "Organic Chill gummies", 
-                    impact: { happiness: 10, motivation: -10 },
-                    resolution_reasoning: "Deep relaxation brings peace of mind, though you find it hard to care about your guitar scales afterward."
-                }
-            ]
-        },
-        {
-            title: "The Sid Situation",
-            desc: "Sid needs a plus-one for a posh SOMA gallery opening.",
-            choices: [
-                { 
-                    text: "Go and be the 'savvy bestie'", 
-                    impact: { community: 10, karma: 5, relationship: -10 },
-                    resolution_reasoning: "Supporting Sid builds social capital and local karma, but missing Ibearian's call creates a noticeable rift."
-                },
-                { 
-                    text: "Stay home and videocall Ibearian", 
-                    impact: { relationship: 10, community: -10 },
-                    resolution_reasoning: "Studying proves your devotion to his heritage, though your friends feel the sting of your absence."
-                }
-            ]
-        },
-         {
-            title: "Softball Sunday",
-            desc: "Bill and Blake need a ringer against a tech-firm team.",
-            choices: [
-                { 
-                    text: "Play and crush the corporate team", 
-                    impact: { community: 10, confidence: 5, motivation: -10 },
-                    resolution_reasoning: "Victory over the tech-bros cements your place in the community, even if it drains your practicing time."
-                },
-                { 
-                    text: "Skip it to practice your electric guitar", 
-                    impact: { motivation: 10, community: -10 },
-                    resolution_reasoning: "Your tone reaches a new level of precision, but the guys feel like you're outgrowing the neighborhood."
-                }
-            ]
-        },
-        {
-            title: "The First Visit",
-            desc: "It’s been weeks. How do you handle the distance?",
-            milestone: true,
-            choices: [
-                { 
-                    text: "Fly to San Diego to see Ibearian", 
-                    impact: { relationship: 10, motivation: -15, community: -5 },
-                    resolution_reasoning: "A grand romantic gesture secures the heart but derails your tour momentum and city commitments.",
-                    video: './videos/chapter3-sd.mp4'
-                },
-                { 
-                    text: "Invite him to the Mission", 
-                    impact: { relationship: 10, happiness: 5, motivation: -5 },
-                    resolution_reasoning: "Showing him your world brings joy and connection without the heavy travel fatigue.",
-                    video: './videos/chapter3-inviting.mp4'
-                },
-                { 
-                    text: "Cancel to focus on your new tour prep", 
-                    impact: { motivation: 15, relationship: -20 },
-                    resolution_reasoning: "Professional ambition surges as you lock in the tour, but the emotional cost to the relationship is severe."
-                }
-            ]
-        },
-       
-       
-        {
-            title: "The Mission Outreach",
-            desc: "Volunteering at a local shelter.",
-            choices: [
-                { 
-                    text: "Spend the morning volunteering", 
-                    impact: { community: 10, karma: 15, happiness: -10, motivation: -5 },
-                    resolution_reasoning: "Doing the right thing fills your soul with karma, but the emotional weight of the work dampens your mood."
-                },
-                { 
-                    text: "Sleep in and order an expensive brunch", 
-                    impact: { happiness: 10, motivation: -10, karma: -10, community: -10 },
-                    resolution_reasoning: "Self-care brings a fleeting happiness, but the lack of community spirit leaves you feeling hollow and selfish."
-                }
-            ]
-        },
-        // PHASE 2: THE DEEPENING
-        {
-            title: "The bachelor party",
-            desc: "Kevin W's getting married and you think about throwing him a bachelor party",
-            choices: [
-                { 
-                    text: "The responsibility and pressure feels too much and you ask Sid to be the planner", 
-                    impact: { motivation: -10, confidence: -5, relationship: -5 },
-                    resolution_reasoning: "Sid ends up planning an amazing party but you feel like you failed Kevin W and gave a bad impression."
-                },
-                { 
-                    text: "You take the lead organizing the bachelor party", 
-                    impact: { community: 10, karma: 5, relationship: 5 },
-                    resolution_reasoning: "Everyone has a blast and Kevin W thanks you inmensely. Ibearian appreciates your effort too."
-                }
-            ]
-        },
-        {
-            title: "Defining the Bond",
-            desc: "Sunset at Dolores Park. Your heart is rushing next to Ibearian",
-            milestone: true,
-            choices: [
-                { 
-                    text: "Ask Ibearian to be your boyfriend", 
-                    impact: { relationship: 15, confidence: 5, motivation: -10 },
-                    resolution_reasoning: "Commitment provides a powerful emotional anchor, but the weight of 'the future' starts to overshadow your solo dreams."
-                },
-                { 
-                    text: "Keep it casual to avoid pressure", 
-                    impact: { motivation: 10, relationship: -25 },
-                    resolution_reasoning: "Freedom allows you to push the tour further, but the look of disappointment in his eyes is hard to forget."
-                }
-            ]
-        },
-        {
-            title: "The Great Escape",
-            desc: "A weekend away from the city.",
-            milestone: true,
-            choices: [
-                { 
-                    text: "Go to Big Bear Lake", 
-                    impact: { happiness: 15, confidence: 10, relationship: -5 },
-                    resolution_reasoning: "Returning to your happy place restores your soul, but Ibearian gets dizzy driving up the hill."
-                },
-                { 
-                    text: "Go to Puerto Vallarta", 
-                    impact: { motivation: 15, relationship: 10, community: -10 },
-                    resolution_reasoning: "The exotic sun sparks new motivation and passion, but the expensive trip disconnects you from your SF roots."
-                }
-            ]
-        },
-        {
-            title: "The Family Feast",
-            desc: "Mama insists on meeting your 'friend.'",
-            choices: [
-                { 
-                    text: "Bring Ibearian to the family dinner", 
-                    impact: { relationship: 15, community: 10, karma: 5, confidence: -10 },
-                    resolution_reasoning: "Merging families is the ultimate bond, though the maternal pressure lowers your confidence.",
-                    video: './videos/chapter3-mama.mp4'
-                },
-                { 
-                    text: "Go alone to avoid the 'parent talk'", 
-                    impact: { community: 5, relationship: -15, happiness: -5 },
-                    resolution_reasoning: "Protecting your privacy keeps things simple for you, but leaves Ibearian feeling like a shameful secret."
-                }
-            ]
-        },
-        {
-            title: "The Style Choice",
-            desc: "Your favorite jacket is falling apart.",
-            choices: [
-                { 
-                    text: "Buy a new high-end black beanie", 
-                    impact: { happiness: 10, motivation: 5, karma: -5 },
-                    resolution_reasoning: "Fresh gear gives you a new rockstar edge, but spending on luxury makes you feel a bit like the people you left at Apex."
-                },
-                { 
-                    text: "Keep your old 'soul' jacket", 
-                    impact: { confidence: 10, happiness: -10 },
-                    resolution_reasoning: "Staying true to your roots makes you feel authentic, but the ragged look attracts pity rather than praise."
-                }
-            ]
-        },
-        
-        {
-            title: "Metallica weekend",
-            desc: "Ibearian is visiting and it's Metallica weekend. Kevin D wants to attend all the shows, events, and pop-up stores.",
-            choices: [
-                { 
-                    text: "Yay! It's Metallica weekend! Attend all events", 
-                    impact: { happiness: 10, community: 15, relationship: -15 },
-                    resolution_reasoning: "Classic bestie bonding brings pure joy, but Ibearian missed seeing you."
-                },
-                { 
-                    text: "Invite Ibearian to one of the shows", 
-                    impact: { relationship: 10, karma: 5, community: -10 },
-                    resolution_reasoning: "Prioritizing your partner shows integrity, but your buddy jokes that you're not as cool anymore."
-                }
-            ]
-        },
-        
-        // PHASE 3: THE FRICTION
-        {
-            title: "Matt’s Elitist Social",
-            desc: "Rooftop party in Hayes Valley. High-stakes networking.",
-            choices: [
-                { 
-                    text: "Attend to network for the tour", 
-                    impact: { confidence: 10, relationship: -15, karma: -10 },
-                    resolution_reasoning: "Navigating the sharks proves you can handle the industry, but rubbing elbows with greed makes your heart feel heavy."
-                },
-                { 
-                    text: "Bring Sid and roast the elitists", 
-                    impact: { community: 15, confidence: 10, karma: -5 },
-                    resolution_reasoning: "Using humor to fight pretension strengthens your ties to Sid, even if you burn bridges with the money-men."
-                },
-                { 
-                    text: "Skip for late-night Pho with Kevin W", 
-                    impact: { happiness: 10, relationship: 10, community: -10 },
-                    resolution_reasoning: "A simple meal for two is the perfect antidote to elitism, but you miss out on a massive tour lead."
-                }
-            ]
-        },
-        {
-            title: "The Homeless Busker",
-            desc: "You see a homeless kid playing the guitar shivering in Union Square.",
-            choices: [
-                { 
-                    text: "Give her your favorite hoodie and cash", 
-                    impact: { karma: 20, happiness: 5, motivation: -5 },
-                    resolution_reasoning: "True selflessness elevates your spirit to 'Legend' status, though you find yourself cold and underfunded."
-                },
-                { 
-                    text: "Offer a nod and keep walking", 
-                    impact: { motivation: 5, karma: -25, community: -10 },
-                    resolution_reasoning: "Focusing on your own survival keeps you moving forward, but your reputation in the streets takes a dark hit."
-                }
-            ]
-        },
-        {
-            title: "The August Hall Gig",
-            desc: "Solo set with Ibearian in the front row.",
-            choices: [
-                { 
-                    text: "Play a raw, emotional Iraqi-blues set", 
-                    impact: { confidence: 15, relationship: 10, happiness: -10 },
-                    resolution_reasoning: "Vulnerability is your superpower. He sees the real you, but the emotional purge leaves you exhausted."
-                },
-                { 
-                    text: "Play a safe set of covers", 
-                    impact: { confidence: -15, motivation: -10, relationship: -5 },
-                    resolution_reasoning: "Playing it safe bores the crowd and makes you feel like the corporate ghost you tried to kill."
-                }
-            ]
-        },
-        {
-            title: "The Road Trip",
-            desc: "Time to decompress with a solo road trip",
-            milestone: true,
-            choices: [
-                { 
-                    text: "Drive to Big Sur", 
-                    impact: { happiness: 15, karma: 5, motivation: -10 },
-                    resolution_reasoning: "The sheer awe of the coast cleanses your mind, though the slow pace makes you lazy about the tour."
-                },
-                { 
-                    text: "Go to a fancy Napa winery event with Robbie", 
-                    impact: { motivation: 10, relationship: 10, karma: -10 },
-                    resolution_reasoning: "A taste of the high life keeps your ambition sharp, but the luxury makes you feel disconnected from the struggle."
-                }
-            ]
-        },
-      
-        {
-            title: "Hosting the Besties",
-            desc: "Zataar and Labne night. Authentic prep or convenience?",
-            choices: [
-                { 
-                    text: "Spend all day prepping a feast", 
-                    impact: { community: 20, karma: 15, relationship: -15 },
-                    resolution_reasoning: "A masterclass in hospitality makes you a neighborhood legend, but you're too tired to focus on Ibearian when he arrives."
-                },
-                { 
-                    text: "Order generic delivery", 
-                    impact: { motivation: 5, community: -30, relationship: 5 },
-                    resolution_reasoning: "Taking the easy way out saves your energy, but the friends who supported your rise feel disappointed."
-                }
-            ]
-        },
-        // PHASE 4: THE INTEGRATION
-        {
-            title: "The Co-habitation Talk",
-            desc: "Your apartment feels empty. Is it time?",
-            milestone: true,
-            choices: [
-                { 
-                    text: "Ask Ibearian to move in", 
-                    impact: { relationship: 15, happiness: 15, confidence: -5 },
-                    resolution_reasoning: "Building a home brings immense joy, but the loss of your private sanctuary makes you feel vulnerable.",
-                    video : './movies/chapter3-moving.mp4'
-                },
-                { 
-                    text: "Say you 'need space'", 
-                    impact: { confidence: 15, relationship: -35, community: -10 },
-                    resolution_reasoning: "Protecting your independence keeps you strong, but the damage to his trust is a wound that might not heal."
-                }
-            ]
-        },
-        {
-            title: "Wrestling at the Club",
-            desc: "Sparring vs. Refereeing.",
-            choices: [
-                { 
-                    text: "Spar with Ibearian (Exhibition)", 
-                    impact: { confidence: 15, relationship: 15, community: -10 },
-                    resolution_reasoning: "The physical dialogue of the ring brings you closer than words ever could, though the regulars miss your presence."
-                },
-                { 
-                    text: "Referee a title match", 
-                    impact: { community: 15, karma: 15, relationship: -5 },
-                    resolution_reasoning: "Mediating the club's drama cements you as a leader, but the night ends without a single romantic spark."
-                },
-                { 
-                    text: "Stay on the sidelines", 
-                    impact: { happiness: -15, motivation: -15, community: -20 },
-                    resolution_reasoning: "Hesitation leads to stagnation; you feel like a bystander in your own life."
-                }
-            ]
-        },
-          {
-            title: "The Apex Ghost",
-            desc: "Old boss offers a high-paying role. Stability vs. Soul.",
-            choices: [
-                { 
-                    text: "Take the money", 
-                    impact: { confidence: -15, motivation: -25, karma: -20, relationship: 10 },
-                    resolution_reasoning: "The paycheck provides security for the couple, but your self-worth plummets as you sign back into the machine."
-                },
-                { 
-                    text: "Block the number", 
-                    impact: { motivation: 15, karma: 15, confidence: 10 },
-                    resolution_reasoning: "Rejecting the machine proves your integrity, fueling your drive to be the best musician in SF."
-                }
-            ]
-        },
-        {
-            title: "NYC Soul Trip",
-            desc: "Showing him your 'Soul City.'",
-            choices: [
-                { 
-                    text: "Book a fancy hotel in Soho", 
-                    impact: { happiness: 10, motivation: 10, karma: -15 },
-                    resolution_reasoning: "Experiencing Manhattan as a VIP is intoxicating, but the extravagance makes you feel like a tourist in your own soul."
-                },
-                { 
-                    text: "Stay in a gritty Brooklyn Airbnb", 
-                    impact: { confidence: 10, happiness: 15, motivation: -10 },
-                    resolution_reasoning: "The raw energy of Brooklyn reminds you why you play music, even if the lack of luxury is a bit exhausting."
-                }
-            ]
-        },
-         {
-            title: "The Financial Stress",
-            desc: "Unexpected tax bill hits hard.",
-            choices: [
-                { 
-                    text: "Panic and cancel vacation", 
-                    impact: { confidence: -25, happiness: -20, relationship: -15 },
-                    resolution_reasoning: "Fear of poverty turns you into the very thing you fled: a man obsessed with a spreadsheet."
-                },
-                { 
-                    text: "Trust the process/work extra gigs", 
-                    impact: { motivation: 20, confidence: 15, happiness: -10 },
-                    resolution_reasoning: "The hustle keeps you independent, but the lack of rest makes you irritable and distant."
-                }
-            ]
-        },
-        {
-            title: "The Oracle Park Show",
-            desc: "You are contacted last minute to cover for a famous guitarrist playing at the Oracle Park",
-            choices: [
-                { 
-                    text: "Obsessively practice all week", 
-                    impact: { confidence: 20, happiness: -15, relationship: -10 },
-                    resolution_reasoning: "Mastery requires sacrifice—you're a god on stage, but a stranger in your own living room."
-                },
-                { 
-                    text: "Balance practice with a date night", 
-                    impact: { relationship: 15, happiness: 15, confidence: -10 },
-                    resolution_reasoning: "Healthy balance keeps the love alive, but you miss a few notes that only you (and the critics) notice."
-                }
-            ]
-        },
-        {
-            title: "The Comedy Club",
-            desc: "Comic roasts bald, bearded rockers in their 40s.",
-            choices: [
-                { 
-                    text: "Laugh and buy him a drink", 
-                    impact: { happiness: 15, confidence: 15, relationship: -10 },
-                    resolution_reasoning: "Owning the joke proves you're comfortable in your skin, though the night's focus slightly shifts away from your partner."
-                },
-                { 
-                    text: "Get annoyed and leave", 
-                    impact: { confidence: -25, happiness: -15, relationship: -5 },
-                    resolution_reasoning: "Insecurity is a heavy cloak; your reaction makes the whole evening feel awkward and defensive."
-                }
-            ]
-        },
-        {
-            title: "The Tech Sabotage",
-            desc: "Sid wants to 'troll' an AI developer.",
-            choices: [
-                { 
-                    text: "Join the prank", 
-                    impact: { community: 15, karma: 10, relationship: -15 },
-                    resolution_reasoning: "Fighting the corporate machine with Sid is a riot, but leaving Ibearian home alone creates a cold atmosphere."
-                },
-                { 
-                    text: "Stay home and cook with Ibearian", 
-                    impact: { relationship: 15, community: -15 },
-                    resolution_reasoning: "Choosing love over chaos deepens the bond, but Sid feels like you've lost your edge."
-                }
-            ]
-        },
-        // PHASE 5: THE COMMITMENT
-        {
-            title: "Christmas Plans",
-            desc: "The big decision. Spain or SF?",
-            milestone: true,
-            choices: [
-                { 
-                    text: "Go to Granada", 
-                    impact: { relationship: 15, community: -15, motivation: -10 },
-                    resolution_reasoning: "Immersing yourself in his world is the ultimate sacrifice of love, even if it feels like your SF life is fading."
-                },
-                { 
-                    text: "Stay in SF for a quiet Christmas", 
-                    impact: { relationship: 5, happiness: 15, community: 15 },
-                    resolution_reasoning: "Celebrating in the city you love keeps the community vibes high, but he feels a lack of compromise."
-                }
-            ]
-        },
-        {
-            title: "The Big Event",
-            desc: "Metallica (Vegas) vs Billie Eilish (SF).",
-            milestone: true,
-            choices: [
-                { 
-                    text: "Metallica at the Sphere in Vegas", 
-                    impact: { motivation: 15, happiness: 25, confidence: 10, relationship: -5 },
-                    resolution_reasoning: "Witnessing the masters in the Sphere is a peak rock-star moment, though the trip is too intense for a romantic getaway."
-                },
-                { 
-                    text: "Billie Eilish in SF", 
-                    impact: { happiness: 15, karma: -10, relationship: -10, motivation: -10 },
-                    resolution_reasoning: "A night of local, emotional connection feels right, but you miss out on the high-octane inspiration of Vegas."
-                }
-            ]
-        },
-       
-        {
-            title: "The Chase Center Finale",
-            desc: "Headlining show. Your moment.",
-            choices: [
-                { 
-                    text: "Perform a legendary set focusing on the show", 
-                    impact: { happiness: 25, confidence: 20},
-                    resolution_reasoning: "You are the center of the city's frequency, but the roar of the crowd is so loud you can't hear him anymore."
-                },
-                { 
-                    text: "Spend time working the guest list for friends and setting up a fundraising campaign", 
-                    impact: { community: 25, relationship: 5, karma: 15 },
-                    resolution_reasoning: "Using your power to elevate others makes you a true Mission hero, even if you sacrifice your own spotlight."
-                },
-                { 
-                    text: "You try to satisfy everyone but get stage fright", 
-                    impact: { happiness: -30, confidence: -30, community: -30 },
-                    resolution_reasoning: "The machine wins if you don't play; the silence is the heaviest thing you've ever felt."
-                }
-            ]
-        },
-        {
-            title: "The Spanish Final",
-            desc: "Sitting with Ibearian's parents.",
-            choices: [
-                { 
-                    text: "Speak Spanish despite nerves", 
-                    impact: { relationship: 15, community: 10, confidence: -15 },
-                    resolution_reasoning: "Your broken Spanish is the most beautiful sound they've heard, proving you are family now."
-                },
-                { 
-                    text: "Stick to English", 
-                    impact: { relationship: 5, confidence: -25, happiness: -10 },
-                    resolution_reasoning: "The language barrier feels like a mountain you're too tired to climb, leaving a cold distance at the table."
-                }
-            ]
-        },
-        {
-            title: "The Mission Gentrification",
-            desc: "A massive tech campus moves in.",
-            choices: [
-                { 
-                    text: "Lead the community protest spending extra hours away", 
-                    impact: { community: 20, karma: 25, motivation: 20, relationship: -20 },
-                    resolution_reasoning: "Saving the neighborhood is your greatest legacy, but the battle leaves you no time for a personal life."
-                },
-                { 
-                    text: "Ignore it for your tour", 
-                    impact: { motivation: 15, community: -45, karma: -40, confidence: 10 },
-                    resolution_reasoning: "Choosing your career over the Mission makes you the 'Ghost' you used to hate."
-                }
-            ]
-        },
-        {
-            title: "The Future Talk",
-            desc: "You decided to travel to the Philiphines! A quiet, beautiful night walking on a private beach in El Nido.",
-            choices: [
-                { 
-                    text: "Discuss life goals and future", 
-                    impact: { relationship: 15, happiness: 15, confidence: -10 },
-                    resolution_reasoning: "Planning a life together brings a deep, terrifying joy that shifts everything you thought you knew."
-                },
-                { 
-                    text: "Avoid the topic and order piña coladas", 
-                    impact: { relationship: -30, motivation: 15, confidence: 10 },
-                    resolution_reasoning: "Hiding behind your hobbies provides a safe shield, but you're now standing on opposite sides of the room."
-                }
-            ]
-        },
-        // SCENARIO 32: THE CROSSROADS
-        {
-            title: "THE CROSSROADS",
-            desc: "The fog settles. The path is clear.",
-            choices: []
-        }
-    ];
-
-
-        // 3. Rendering Logic
-       function renderScenarioScreen() {
-            const idx = game.currentScenario;
-            const scenario = scenarioData[idx];
-            
-
-              if (game.deferredFeedback) {
-                    const { reasoning, deltas } = game.deferredFeedback;
-                    // Important: Remove the data so we don't trigger this twice
-                    delete game.deferredFeedback;
-
-                    // Use a small timeout to ensure the DOM has finished switching phases
-                    setTimeout(() => {
-                        showImpactFeedback(reasoning, deltas, () => {
-                            advanceScenario();
-                        });
-                    }, 50);
-
-                    // Return a transition placeholder
-                    return createElement('div', 'flex items-center justify-center h-full min-h-[400px]', `
-                        <div class="text-center space-y-4">
-                            <div class="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                            <p class="text-cyan-400 font-mono text-xs tracking-widest uppercase">Synchronizing Legacy Data...</p>
-                        </div>
-                    `);
-                }
-
-            // Handle Scenario 32 logic
-            if (idx === 31 || idx >= scenarioData.length - 1) return renderCrossroads();
-
-            const container = createElement('div', 'flex flex-col w-full h-full p-6 space-y-6 animate-in fade-in zoom-in-95 duration-500 relative overflow-hidden');
-
-            // Add immersive stage lighting glows to the background
-            const bgGlows = `
-                <div class="absolute -top-24 -left-24 w-64 h-64 bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none"></div>
-                <div class="absolute top-1/2 -right-32 w-80 h-80 bg-purple-600/10 blur-[120px] rounded-full pointer-events-none"></div>
-            `;
-            container.innerHTML = bgGlows;
-
-            // 1. Narrative Progress Section
-            const progressPercent = ((idx + 1) / 32) * 100;
-            const progressHeader = createElement('div', 'w-full space-y-2 mb-2 relative z-10');
-            progressHeader.innerHTML = `
-                <div class="flex justify-between items-end px-1">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em]">Story Progress</span>
-                    </div>
-                    <span class="text-xl font-black text-white italic tracking-tighter">${idx + 1} <span class="text-zinc-600 text-sm">/ 32</span></span>
-                </div>
-                <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
-                    <div class="h-full bg-gradient-to-r from-cyan-600 to-blue-400 transition-all duration-1000 shadow-[0_0_15px_#06b6d4]" style="width: ${progressPercent}%"></div>
-                </div>
-            `;
-            container.appendChild(progressHeader);
-
-            // 2. High-Impact Colorful Traits Bar
-            const traitsBar = createElement('div', 'grid grid-cols-3 md:grid-cols-6 gap-3 w-full p-4 bg-zinc-900/80 border-y-2 border-white/10 backdrop-blur-md relative z-10');
-            
-            const traitConfig = [
-                { k: 'relationship', n: 'Relationship', e: '❤️', color: 'text-rose-500', bar: 'bg-rose-500', glow: 'shadow-[0_0_10px_rgba(244,63,94,0.4)]' },
-                { k: 'community', n: 'Community', e: '🤝', color: 'text-cyan-400', bar: 'bg-cyan-400', glow: 'shadow-[0_0_10px_rgba(34,211,238,0.4)]' },
-                { k: 'karma', n: 'Karma', e: '✨', color: 'text-amber-400', bar: 'bg-amber-400', glow: 'shadow-[0_0_10px_rgba(251,191,36,0.4)]' },
-                { k: 'confidence', n: 'Confidence', e: '🛡️', color: 'text-indigo-400', bar: 'bg-indigo-400', glow: 'shadow-[0_0_10px_rgba(129,140,248,0.4)]' },
-                { k: 'motivation', n: 'Motivation', e: '⚡', color: 'text-emerald-400', bar: 'bg-emerald-400', glow: 'shadow-[0_0_10px_rgba(52,211,153,0.4)]' },
-                { k: 'happiness', n: 'Happiness', e: '☀️', color: 'text-orange-400', bar: 'bg-orange-400', glow: 'shadow-[0_0_10px_rgba(251,146,60,0.4)]' }
-            ];
-            
-            traitConfig.forEach(t => {
-                const val = game.traits[t.k];
-                traitsBar.innerHTML += `
-                    <div class="flex flex-col items-center group transition-all">
-                        <span class="text-[10px] font-black ${t.color} uppercase tracking-tighter mb-1">${t.n}</span>
-                        <span class="text-3xl mb-1 filter drop-shadow-md group-hover:scale-110 transition-transform">${t.e}</span>
-                        <span class="text-xl font-black text-white italic tracking-tighter leading-none">${val}</span>
-                        <div class="w-full h-1 bg-white/5 mt-2 rounded-full overflow-hidden border border-white/5">
-                            <div class="h-full ${t.bar} ${t.glow} transition-all duration-700" style="width: ${val}%"></div>
-                        </div>
-                    </div>
-                `;
-            });
-            container.appendChild(traitsBar);
-
-            // 3. Central Scenario Content
-            const scenarioBox = createElement('div', 'flex-1 flex flex-col items-center justify-center text-center space-y-8 py-6 relative z-10');
-            scenarioBox.innerHTML = `
-                <div class="space-y-3">
-                    <div class="flex items-center justify-center gap-4">
-                        <div class="h-[2px] w-8 bg-gradient-to-r from-transparent to-cyan-500"></div>
-                        <span class="text-cyan-400 font-mono text-[10px] tracking-[0.5em] uppercase animate-pulse">Data Feed Incoming</span>
-                        <div class="h-[2px] w-8 bg-gradient-to-l from-transparent to-cyan-500"></div>
-                    </div>
-                    <h2 class="text-5xl md:text-6xl font-black text-white italic tracking-tighter uppercase leading-[0.9] drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
-                        ${scenario.title}
-                    </h2>
-                </div>
-                
-                <div class="relative group max-w-2xl px-6">
-                    <div class="absolute -inset-2 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-1000"></div>
-                    <p class="relative text-2xl md:text-3xl text-zinc-200 font-medium leading-tight italic">
-                        "${scenario.desc}"
-                    </p>
-                </div>
-            `;
-            container.appendChild(scenarioBox);
-
-            // 4. Action / Choice Buttons
-            const choiceContainer = createElement('div', 'grid grid-cols-1 gap-4 w-full max-w-xl mx-auto pb-10 relative z-10');
-            scenario.choices.forEach((choice) => {
-                const btn = createElement('button', 'group relative p-1 transition-all transform hover:scale-[1.03] active:scale-95');
-                
-                // Complex button structure for "Metal" look with hover glows
-                btn.innerHTML = `
-                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl opacity-20 group-hover:opacity-100 blur-sm transition-opacity"></div>
-                    <div class="relative bg-zinc-900 border-2 border-white/10 group-hover:border-cyan-400 p-5 rounded-xl flex items-center justify-between overflow-hidden">
-                        <!-- Button Scanline Texture -->
-                        <div class="absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)50%,rgba(0,0,0,0.25)50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]"></div>
-                        
-                        <span class="text-lg font-black uppercase italic text-zinc-400 group-hover:text-white transition-colors pr-8">
-                            ${choice.text}
-                        </span>
-                        
-                        <div class="flex items-center gap-3 shrink-0">
-                            <span class="hidden group-hover:block text-[10px] font-black text-cyan-400 tracking-widest uppercase animate-in slide-in-from-right-2">Commit</span>
-                            <div class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-cyan-500 group-hover:border-cyan-400 group-hover:text-black transition-all">
-                                <span class="text-xl">▶</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                btn.onclick = () => handleChoice(choice);
-                choiceContainer.appendChild(btn);
-            });
-
-            container.appendChild(choiceContainer);
-            
-            // 5. Final Touch: Decorative CRT scanline overlay for the whole screen
-            const scanline = createElement('div', 'absolute inset-0 pointer-events-none opacity-[0.02] z-50 bg-[linear-gradient(rgba(18,16,16,0)50%,rgba(0,0,0,0.25)50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]');
-            container.appendChild(scanline);
-
-            return container;
-        }
-        
-     function handleChoice(choice) {
-            const deltas = [];
-            
-            // 1. Calculate and update trait changes immediately
-            for (const [trait, value] of Object.entries(choice.impact)) {
-                const oldVal = game.traits[trait];
-                game.traits[trait] = Math.min(100, Math.max(0, oldVal + value));
-                
-                const emojiMap = { relationship: '❤️', community: '🤝', karma: '✨', confidence: '🛡️', motivation: '⚡', happiness: '☀️' };
-                const nameMap = { relationship: 'Relationship', community: 'Community', karma: 'Karma', confidence: 'Confidence', motivation: 'Motivation', happiness: 'Happiness' };
-                deltas.push({ name: nameMap[trait], emoji: emojiMap[trait], value });
-            }
-
-            const reasoning = choice.resolution_reasoning || "Your decision ripples through the city.";
-
-            // 2. Control Flow: Video FIRST, Feedback SECOND
-            if (choice.video) {
-                // Save the impact info to be shown after the video ends
-                game.deferredFeedback = { reasoning, deltas };
-                // Trigger movie, specifying we want to return to Phase 24 (Scenario screen)
-                playMovie(choice.video, reasoning, 24);
-            } else {
-                // No video? Just show results and then advance
-                showImpactFeedback(reasoning, deltas, () => {
-                    advanceScenario();
-                });
-            }
-        }
-
-
-       function showImpactFeedback(reasoning, deltas, callback) {
-            const overlay = document.createElement('div');
-            overlay.className = "fixed inset-0 z-[2000] flex items-center justify-center bg-black/95 backdrop-blur-xl animate-in fade-in duration-700";
-            overlay.id = 'trait-impact-overlay';
-            
-            let rowsHtml = '';
-            deltas.forEach((d, index) => {
-                const isGain = d.value > 0;
-                const colorClass = isGain ? 'text-green-400' : 'text-red-500';
-                const containerGlow = isGain ? 'bg-green-500/10 border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.3)]' : 'bg-red-500/10 border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.3)]';
-                const sign = isGain ? '+' : '';
-                
-                rowsHtml += `
-                    <div class="flex items-center justify-between group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full border flex items-center justify-center text-2xl ${containerGlow}">${d.emoji}</div>
-                            <div>
-                                <p class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Trait Shift</p>
-                                <h4 class="text-xl font-bold text-white uppercase tracking-tight">${d.name}</h4>
-                            </div>
-                        </div>
-                        <div class="text-3xl font-black tracking-tighter ${colorClass}">${sign}${d.value}</div>
-                    </div>
-                    ${index < deltas.length - 1 ? '<div class="h-px bg-zinc-800 w-full opacity-50"></div>' : ''}
-                `;
-            });
-
-            overlay.innerHTML = `
-                <div class="relative max-w-lg w-full mx-4 overflow-hidden transform animate-in zoom-in-95 duration-500">
-                    <div class="absolute -top-20 -left-20 w-64 h-64 bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none"></div>
-                    <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-purple-600/10 blur-[100px] rounded-full pointer-events-none"></div>
-
-                    <div class="relative bg-zinc-900 border-x-2 border-t-2 border-zinc-700 rounded-t-3xl p-1 shadow-2xl">
-                        <div class="bg-zinc-800 rounded-t-[1.3rem] py-6 px-4 text-center border-b-4 border-cyan-500">
-                            <h3 class="text-cyan-400 font-mono text-xs font-bold tracking-[0.4em] uppercase mb-1">Story Trait Update</h3>
-                            <h2 class="text-white font-black text-4xl tracking-tighter uppercase italic leading-none">
-                                Legacy <span class="text-cyan-400">Shifted!</span>
-                            </h2>
-                        </div>
-
-                        <div class="p-6 bg-black/40 border-b border-zinc-800">
-                            <p class="text-lg italic text-zinc-300 font-medium leading-relaxed text-center">"${reasoning}"</p>
-                        </div>
-
-                        <div class="p-8 space-y-6 bg-gradient-to-b from-zinc-900 to-black">
-                            ${rowsHtml}
-                        </div>
-                    </div>
-
-                    <button id="close-impact-results" class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-black py-5 rounded-b-3xl text-2xl transition-all transform hover:scale-[1.02] active:scale-95 shadow-[0_8px_0_rgb(8,145,178)] uppercase italic tracking-widest">
-                        Proceed ▶
-                    </button>
-                </div>
-            `;
-
-            document.body.appendChild(overlay);
-
-            const closeSequence = () => {
-                overlay.classList.add('animate-out', 'fade-out', 'zoom-out-95');
-                setTimeout(() => {
-                    overlay.remove();
-                    callback();
-                }, 300);
-            };
-
-            overlay.querySelector('#close-impact-results').onclick = (e) => {
-                e.stopPropagation();
-                closeSequence();
-            };
-            
-            overlay.onclick = () => closeSequence();
-        }
-
-           
-    function advanceScenario() {
-        game.currentScenario++;
-        // Call main render to show next question or crossroads
-        if (typeof renderGame === 'function') renderGame();
-    }
-
-        function renderCrossroads() {
-            const isHighRel = game.traits.relationship > 80;
-            const container = createElement('div', 'flex flex-col items-center justify-center h-full p-8 text-center space-y-8 animate-in fade-in duration-1000');
-
-            if (isHighRel) {
-                container.innerHTML = `
-                    <div class="space-y-4">
-                        <span class="text-red-500 animate-pulse font-black text-xs uppercase tracking-widest">Chapter Final</span>
-                        <h2 class="text-6xl font-black text-white italic tracking-tighter uppercase italic">THE CROSSROADS</h2>
-                        <p class="text-2xl text-gray-200 italic max-w-2xl leading-snug">
-                            Ibearian takes your hand on a cliff overlooking the Golden Gate during sunset. "Habibi, I want to share my life with you. Will you marry me?"
-                        </p>
-                    </div>
-                    <div class="flex flex-col gap-4 w-full max-w-sm">
-                        <button onclick="triggerFinale('MARRIAGE')" class="metal-button py-6 text-2xl font-black border-red-500 text-red-500 hover:bg-red-500/10">YES ❤️</button>
-                        <button onclick="triggerFinale('TROUBADOUR')" class="metal-button py-4 text-xl font-black border-zinc-500 text-zinc-500">NO</button>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div class="space-y-4">
-                        <span class="text-cyan-400 font-black text-xs uppercase tracking-widest">Chapter Final</span>
-                        <h2 class="text-6xl font-black text-white italic tracking-tighter uppercase italic">THE CROSSROADS</h2>
-                        <p class="text-2xl text-gray-200 italic max-w-2xl leading-snug">
-                            You sit at the Wharf, watching the fog roll in. The spark is fading into a deep, respectful friendship. "We'll always be in each other's lives," he says softly.
-                        </p>
-                    </div>
-                    <div class="flex flex-col gap-4 w-full max-w-sm">
-                        <button onclick="triggerFinale('FRIENDSHIP_VISIT')" class="metal-button py-6 text-xl font-black">Offer to visit him in Spain as a friend</button>
-                        <button onclick="triggerFinale('FRIENDSHIP_HEAL')" class="metal-button py-4 text-xl font-black">Keep your distance to heal</button>
-                    </div>
-                `;
-            }
-            return container;
-        }
-
-
-        function renderFinaleScreen(tier) {
-            const container = document.getElementById('game-container');
-            const finales = {
-                MARRIAGE: { t: "THE MARRIAGE", desc: "You said Yes. The Mission District hasn't seen a wedding like this in decades. You and Ibearian build a life of music, wrestling, and Iraqi-Spanish fusion meals.", color: "text-red-500" },
-                TROUBADOUR: { t: "THE TROUBADOURS", desc: "You chose freedom, but you chose it together. You sell the SF apartment and travel the world as nomadic lovers, your guitars the only luggage you need.", color: "text-yellow-400" },
-                CORPORATE: { t: "THE CORPORATE RELAPSE", desc: "The dream broke. Hassan loses the rebel spirit, breaks up with Ibearian, and returns to a soul-crushing job at Apex. The guitar gathers dust in a corner.", color: "text-zinc-500" },
-                ACTIVIST: { t: "THE GLOBAL ACTIVIST", desc: "You didn't marry, but you became a legend. A global figure in the fight against corporate greed, using your music to dismantle the machine.", color: "text-cyan-400" },
-                BESTIE: { t: "THE BESTIE ICON", desc: "The Mission District legend. You run the youth center and are the beloved 'bestie' of every local. Your music is the heartbeat of the streets.", color: "text-green-400" },
-                BACHELOR: { t: "THE SOULFUL BACHELOR", desc: "A peaceful, solo life in a cabin at Big Bear Lake. You play your guitar for the mountains now, finally at peace with yourself.", color: "text-orange-400" },
-                GHOST: { t: "THE BITTER GHOST", desc: "Alone and disconnected, Hassan haunts the dive bars of SF, bitter about his lost career and lost love. A ghost in the city he once owned.", color: "text-gray-700" }
-            };
-
-            const fin = finales[tier];
-    
-            // Final Traits Bar for Epilogue
-            const finalTraitsBar = `
-                <div class="grid grid-cols-3 md:grid-cols-6 gap-4 w-full max-w-4xl p-6 bg-white/5 border border-white/10 rounded-2xl mb-12 backdrop-blur-xl">
-                    ${[
-                        { k: 'relationship', n: 'Rel.', e: '❤️' },
-                        { k: 'community', n: 'Comm.', e: '🤝' },
-                        { k: 'karma', n: 'Karma', e: '✨' },
-                        { k: 'confidence', n: 'Conf.', e: '🛡️' },
-                        { k: 'motivation', n: 'Motiv.', e: '⚡' },
-                        { k: 'happiness', n: 'Happy', e: '☀️' }
-                    ].map(t => `
-                        <div class="flex flex-col items-center">
-                            <span class="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">${t.n} ${t.e}</span>
-                            <span class="text-3xl font-black text-white italic tracking-tighter">${game.traits[t.k]}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-
-            container.innerHTML = `
-                <div class="flex flex-col items-center justify-center min-h-screen p-8 bg-black text-center space-y-12 animate-in fade-in zoom-in-95 duration-[3000ms]">
-                    
-                    <!-- Final Scores -->
-                    ${finalTraitsBar}
-
-                    <div class="space-y-4">
-                        <h3 class="font-mono text-xs tracking-[1em] text-white/40 uppercase">Epilogue</h3>
-                        <h1 class="text-9xl font-black italic tracking-tighter uppercase ${fin.color} drop-shadow-[0_0_50px_rgba(0,0,0,0.8)]">${fin.t}</h1>
-                    </div>
-                    
-                    <p class="text-4xl font-black text-white italic max-w-4xl leading-tight tracking-tight">
-                        "${fin.desc}"
-                    </p>
-
-                    <div class="pt-20 border-t border-white/10 w-full max-w-md flex flex-col gap-8">
-                        <button onclick="location.reload()" class="metal-button py-8 text-3xl font-black italic uppercase tracking-widest bg-white text-black border-white shadow-[8px_8px_0px_#475569]">NEW JOURNEY</button>
-                        <div class="text-[10px] text-white/30 uppercase tracking-[0.5em] font-black">Habibi's Dream : Legacy Written</div>
-                    </div>
-                </div>
-            `;
-        }
-
-
-
     const container = document.getElementById('game-container');
    
 
@@ -16345,8 +14977,6 @@
             case 21: contentElement = renderScrapbook(); break;
             case 22: contentElement = renderCode();break;
             case 23: contentElement = renderChapterTwoIntro();break;
-            case 24: contentElement = renderScenarioScreen(); break;
-            case 25: contentElement = renderChapterThreeIntro();break;
             case 99: contentElement = renderCinematic(); break;
             case 100: contentElement = startCinematic(); break;
             default:
@@ -16448,7 +15078,6 @@
     window.startWarfield = startWarfield;
     window.presidio_action1 = presidio_action1;
     window.presidio_action2 = presidio_action2;
-    window.presidio_action3 = presidio_action3;
     window.presidio_race = presidio_race;
     window.handleRaffleEntry = handleRaffleEntry;
     window.popup_action1 = popup_action1;
@@ -16497,7 +15126,6 @@
     window.get_book = get_book;
     window.crazy_book = crazy_book;
     window.home_action1 = home_action1;
-    window.home_action2 = home_action2;
     window.rick_request_help = rick_request_help;
     window.rick_action0 = rick_action0;
     window.rick_action1 = rick_action1;
@@ -16561,9 +15189,6 @@
     window.endLagunitas = endLagunitas;
     window.endChapel = endChapel;
     window.endSlims = endSlims;
-    window.dolores_action1 = dolores_action1;
-    window.renderFinale = renderFinale;
-    window.triggerFinale = triggerFinale;
 
  
 
