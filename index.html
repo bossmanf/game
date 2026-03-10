@@ -2156,7 +2156,8 @@
                 action2: true,
                 gig: false,
                 unlock:false,
-                code:true
+                code:true,
+                satisfy:false
             },
             crazy_buttons:
             {
@@ -3494,7 +3495,7 @@
               const dialogueHtml = renderDialogue(rick_dave_challenge_data , "Rick");
                 const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
                 switchToView(contentDiv);
-            addMission('dave', 'Defeat Invincible Dave to proof your resilience');
+            addMission('dave', 'Defeat Invincible Dave to prove your resilience');
             
             game.rick_buttons.dave = true;
             landmarkImageRegistry["Wrestling Club"] = "./sprites/grapplersclub-dave.jpg";
@@ -3947,7 +3948,7 @@
             inventoryItem.acquired = false;
             inventoryItem.given = true;
             landmarkImageRegistry["The Fillmore "] = "./sprites/bob2.jpg";
-            game.bridget_buttons.showHelpButton = false;
+            game.bridget_buttons.satisfy = true;
             playMovie('./videos/arn.mp4', 'Thanks! I have recovered my mojo! I will tell Bridget that I can act in HSB. How can I help you?'); 
             iphoneNotifications = iphoneNotifications.slice(1);            
             iphoneNotifications = appendNotification(iphoneNotifications,'Bridget', 'Thanks for convincing Bob! You said something about chops? I think I can help you...', '💬', '');
@@ -5249,12 +5250,12 @@
 
         const cool_bouncer_help_dialogue_data = [
             { speaker: 'Bouncer', text: "Whoa there, Gandalf. Hold up. You’re vibrating on a frequency that's a little too... 'analog' for this function." },
-            { speaker: 'Player', text: "Analog? I do not need to be digital to proof anything. I'm just here to see my friend." },
+            { speaker: 'Player', text: "Analog? I do not need to be digital to prove anything. I'm just here to see my friend." },
             { speaker: 'Bouncer', text: "Look, the policy is strict. This is a 'Gen-Z and Beyond' mixer. You look like you're pushing fifty-five, pops." },
             { speaker: 'Player', text: "Fifty-five?! I am younger than 50!" },
             { speaker: 'Bouncer', text: "Nice try. You’ve got 'I-actually-lived-through-the-70s' fatigue in your eyes. I need proof of youth." },
             { speaker: 'Player', text: "Proof? What, you want to see my TikTok following? My snap streak?" },
-            { speaker: 'Bouncer', text: "Show me something to proof your age." },
+            { speaker: 'Bouncer', text: "Show me something to prove your age." },
             { speaker: 'Player', text: "You're lucky I'm a patient man. I'll be back with something that’ll make your kale smoothie curdle." },
             { speaker: 'Bouncer', text: "I prefer Oat-Milk Lattes with a shot of collagen, actually. Now move along before you break a hip" }
         ];
@@ -8593,7 +8594,7 @@
         function bridget_chops(){
             game.previousPhase = 5;
             game.currentLocationId = 'HSB Festival';
-            if (!game.bridget_buttons.showHelpButton){
+            if (game.bridget_buttons.satisfy){
                 let chop = game.chops.find(i => i.name === 'Backstage Blueprint');
                 game.pendingAcquisition.chop = 'Backstage Blueprint';
                 chop.isUnlocked = true;
@@ -8682,6 +8683,7 @@
             game.pendingAcquisition.location = 'Cliff\'s Variety'
             game.dialogueData = dj_help_dialogue_data;
             game.activeCharacter = 'DJ Robbie';
+            game.dj_buttons.showHelpButton = false;
             addMission('dj', 'Hit Cliff’s Variety and grab Galactic Silver Glitter ✨ for DJ Robbie');
             game.dialogueIndex = 0;
             const dialogueHtml = renderDialogue(dj_help_dialogue_data, 'DJ Robbie');
@@ -8707,7 +8709,7 @@
             const dialogueHtml = renderDialogue(bridget_help_dialogue_data, 'Bridget');
             const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
             switchToView(contentDiv);
-            game.bridget_buttons.showHelpButton = true;
+            game.bridget_buttons.showHelpButton = false;
             
         }
 
@@ -15259,7 +15261,7 @@
         cinematicData: { videoPath: '', cinematicText: '' },
         sids_buttons: { showHelpButton: false, money: false , helpChapter2: true, oasis:false, oasisNeed:true, sf_attire:true},
         kevind_buttons: { chops: false, practiceChop: false, guitar: false },
-        bridget_buttons: { showHelpButton: false, photo: false, trivia: false, action2: false, code: true },
+        bridget_buttons: { showHelpButton: true, photo: false, trivia: false, action2: false, code: true },
         crazy_buttons: { showHelpButton: false, showLibrary: false, showPoker: false },
         cliffs_buttons: { showHelpButton: false , copies: false},
         work_buttons: { badge: true },
