@@ -8105,12 +8105,12 @@
         function fishermans_food(){
             let inventoryItem = game.inventory_items.find(i => i.name === 'Organic Burger');
             inventoryItem.acquired = false;
-            game.fishermans_buttons.food = true
-            if (game.fishermans_buttons.food & game.fishermans_buttons.drink){
-                playMovie('./videos/fisherman-success1.mp4','Little Jimi devours the burger! You have fully satisfied the demands and the song book is yours - 3 new songs learned!' );
-                let topic = game.conversation_topics.acquired.find(i => i.name === 'Organic Food');
-                topic.acquired = false;
+            game.fishermans_buttons.food = true;
+            if (game.fishermans_buttons.drink){
                 songRecipesData.forEach(song => { if ([5, 6, 7].includes(song.id)) song.available = true; });
+                playMovie('./videos/fisherman-success1.mp4','Little Jimi devours the burger! You have fully satisfied the demands and the song book is yours - 3 new songs learned!' );
+                let topic = game.conversation_topics.unlocked.find(i => i.name === 'Organic Food');
+                topic.acquired = false;
 
             }
             else{
@@ -8126,12 +8126,12 @@
             inventoryItem = game.inventory_items.find(i => i.name === 'Cycling Bottle');
             inventoryItem.acquired = true;
 
-            game.fishermans_buttons.drink = true
-            if (game.fishermans_buttons.food & game.fishermans_buttons.drink){
-                playMovie('./videos/fisherman-success2.mp4','Little Jimi drinks the whole thing! You have fully satisfied the demands and the song book is yours - 3 new songs learned' );
-                let topic = game.conversation_topics.acquired.find(i => i.name === 'Organic Food');
-                topic.acquired = false;
+            game.fishermans_buttons.drink = true;
+            if (game.fishermans_buttons.food){
                 songRecipesData.forEach(song => { if ([5,6,7].includes(song.id)) song.available = true; });
+                playMovie('./videos/fisherman-success2.mp4','Little Jimi drinks the whole thing! You have fully satisfied the demands and the song book is yours - 3 new songs learned' );
+                let topic = game.conversation_topics.unlocked.find(i => i.name === 'Organic Food');
+                topic.acquired = false;
 
             }
             else{
@@ -15519,9 +15519,9 @@
             desc: "Rick wants to build a ring in the club using the club's treasury budget.",
             choices: [
                 { 
-                    text: "Convince Rick to use the budget for maintenance instead and rest for your next gig.", 
+                    text: "Convince Rick to optimize the budget for maintenance", 
                     impact: { motivation: -10, confidence: -5, relationship: -5 },
-                    resolution_reasoning: "You feel ready for the gig, but you feel like you disappointed Rick and the grapplers.",
+                    resolution_reasoning: "You had to argue with Rick to save a big expense for the club but you feel like you disappointed Rick and the grapplers.",
                     video : './videos/chapter3-rickargue.mp4'
                 },
                 { 
@@ -15565,7 +15565,7 @@
                 { 
                     text: "Go to Puerto Vallarta with Ibearian", 
                     impact: { motivation: 15, relationship: 10, community: -10 },
-                    resolution_reasoning: "The exotic sun sparks new motivation and passion, but the expensive trip disconnects you from your SF roots.",
+                    resolution_reasoning: "The exotic sun sparks new motivation and passion, but the exotic trip disconnects you from your SF roots.",
                     video: './videos/chapter3-pv.mp4'
                 }
             ]
@@ -15695,7 +15695,7 @@
             desc: "Solo set with Ibearian in the front row.",
             choices: [
                 { 
-                    text: "Perform a legendary set with an epic 20-minute emotional guitar odyssey.",
+                    text: "Perform an epic 20-minute emotional guitar odyssey.",
                     impact: { confidence: 15, relationship: 10, happiness: -10 },
                     resolution_reasoning: "Vulnerability is your superpower. He sees the real you, but the emotional purge leaves you exhausted.",
                     video: './videos/chapter3-august-good.mp4'
@@ -15731,7 +15731,7 @@
       
         {
             title: "Hardly Strictly Bluegrass Festival Weekend!",
-            desc: "Ibearian invites you to a game convention",
+            desc: "Ibearian invites you to a game convention the same weekend",
             choices: [
                 { 
                     text: "Volunteer at HSB", 
@@ -15858,7 +15858,7 @@
                 { 
                     text: "Lean into the \"Single & Dangerous\" persona.", 
                     impact: { confidence: 20, happiness: -15, relationship: -10 },
-                    resolution_reasoning: "You look like a mysterious rock icon to the world, sending your ego into the stratosphere, but the lie makes you feel hollow and creates a cold distance when you get home.",
+                    resolution_reasoning: "You look like a mysterious rock icon to the world, sending your ego into the stratosphere, but the lie makes you feel hollow and creates a cold distance with Ibearian.",
                     video : './videos/chapter3-interviewbad.mp4'
                 },
                 { 
@@ -15916,7 +15916,7 @@
             desc: "A beloved mural of an Iraqi poet in Clarion Alley is about to be painted over for an advertisement.",
             choices: [
                 { 
-                    text: "Join the community tonight to occupy the alley and play music in protest.", 
+                    text: "Join the community tonight to play music in protest.", 
                     impact: { community: 15, karma: 10, relationship: -15 },
                     resolution_reasoning: "Fighting is a riot, but leaving Ibearian home alone creates a cold atmosphere.",
                     video : './videos/chapter3-iraqi.mp4'
@@ -15980,7 +15980,7 @@
                 { 
                     text: "Lead the community protest spending extra hours away", 
                     impact: { community: 20, karma: 25, motivation: 20, relationship: -20 },
-                    resolution_reasoning: "Saving the neighborhood is your greatest legacy, but the battle leaves you no time for a personal life.",
+                    resolution_reasoning: "Saving Oasis is your greatest legacy, but the battle leaves you no time for a personal life.",
                     video : './videos/chapter3-oasis.mp4'
                 },
                 { 
