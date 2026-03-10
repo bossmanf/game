@@ -12277,6 +12277,11 @@
                     </div>
                 </div>
             `;
+
+            if (game.chapter ===1){
+                let topic = game.conversation_topics.unlocked.find(i => i.name === 'Musician Career');
+                topic.acquired = true;
+            }
             const container = createElement('div', 'w-full px-0', mapHtml);
             game.dialogueIndex = 0;
             game.message = '';
