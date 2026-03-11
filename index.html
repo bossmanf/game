@@ -4164,7 +4164,7 @@
                 { speaker: 'Player', text: "That’s a beautiful thing, man. And wait... is that the 'Revolution' bike I see on the display stand? The custom racing frame?" },
                 { speaker: 'BESTIE', text: "She’s a purple masterpiece, isn't she? Titanium, carbon fiber, and pure funk. " },
                 { speaker: 'Player', text: "How do I get my name on that title?" },
-                { speaker: 'BESTIE', text: "We’re giving her away to the soul who makes the biggest impact on the charity. 🚲👑 Right now, some tech-exec from APEX has put down $2,500 to look like a hero. You’d have to beat that to take her home. 💰📉" },
+                { speaker: 'BESTIE', text: "We’re giving her away to the soul who makes the biggest impact on the charity. 🚲👑 Right now, some tech-exec from APEX has put down $1,500 to look like a hero. You’d have to beat that to take her home. 💰📉" },
                 { speaker: 'Player', text: "Three thousand dollars?! That’s a lot of busking sets. I really want to help those kids, so I will start working on my fundraising." },
                 { speaker: 'BESTIE', text: "That’s the spirit! Now I'm off to look for the purple banana until they put me in the truck!" }
             ];
@@ -4174,7 +4174,7 @@
             switchToView(contentDiv);
             game.bobby_buttons.showHelpButton = false;
             game.bobby_buttons.showBike = true;
-            addMission('bobby', 'Donate $1601 to Bobby\'s Children charity fundraiser');
+            addMission('bobby', 'Donate $1501 to Bobby\'s Children charity fundraiser');
 
         }
 
@@ -4202,10 +4202,10 @@
         }
 
         function bobby_action1(){
-             if(game.score > 2501){
+             if(game.score > 1501){
 
                     // --- HELP / LEARN LOGIC ---
-                    game.score -= 2501;
+                    game.score -= 1501;
                     game.pendingAcquisition.item = 'Revolution Bike';
                     game.bobby_buttons.bike = true;
                     playMovie('./videos/bobby-cash.mp4', 'You are the biggest donor and win the Revolution Bike!');
@@ -4214,7 +4214,7 @@
                 }
                 else{
                     const notnow_dialogue_data = [
-                    { speaker: 'Bestie', text: "You are not the biggest donor. You need at least $2501" }];
+                    { speaker: 'Bestie', text: "You are not the biggest donor. You need at least $1501" }];
                     const dialogueHtml = renderDialogue(notnow_dialogue_data , 'Bobby');
                     const contentDiv = createElement('div', 'p-4 h-full w-full', dialogueHtml);
                     switchToView(contentDiv);
@@ -4441,7 +4441,7 @@
             game.pendingAcquisition.gig = true;
             game.pendingAcquisition.hype = 200;
             game.pendingAcquisition.fans = 200;
-            game.pendingAcquisition.cash = 1250;
+            game.pendingAcquisition.cash = 1550;
        
             toggleMission('chapel');
             landmarkImageRegistry['The Chapel'] = './sprites/chapel-guitar.jpg';
@@ -4490,7 +4490,7 @@
             game.pendingAcquisition.gig = true;
             game.pendingAcquisition.hype = 200;
             game.pendingAcquisition.fans = 200;
-            game.pendingAcquisition.cash = 1300;
+            game.pendingAcquisition.cash = 1600;
             toggleMission('slims_guitar');
     
             game.currentLocationId = 'Slim\'s';
@@ -4543,7 +4543,7 @@
             game.pendingAcquisition.gig = true;
             game.pendingAcquisition.hype = 220;
             game.pendingAcquisition.fans = 400;
-            game.pendingAcquisition.cash = 1500;
+            game.pendingAcquisition.cash = 1700;
    
             toggleLandmarkVisibilityByName('The Fillmore ', true);
             toggleLandmarkVisibilityByName('The Fillmore', true);
@@ -10807,7 +10807,7 @@
         let shopData = [
             { name: 'Guitar Pick', price: 1, icon: '🔻', desc: 'A simple guitar pick' },
             { name: 'Black Magic Gummies', price: 20, icon: '🍬', desc: 'They are magic!' },
-            { name: 'Morello\'s Guitar', price: 2500, icon: '🎸', desc: 'Ultimate Rock Power-Up.' },
+            { name: 'Morello\'s Guitar', price: 1500, icon: '🎸', desc: 'Ultimate Rock Power-Up.' },
             { name: 'Billie Eilish\ VIP concert ticket', price: 12600, icon: '🎟️', desc: 'A waste of money and time?' }
         ];
 
@@ -15179,7 +15179,7 @@
     function startChapter2() {
         // 1. Reset Global Game Object
            Object.assign(game, {
-        score: 500,
+        score: 800,
         level: 1,
         chapter:2,
         isLLMLoaded: false,
