@@ -4311,7 +4311,7 @@
             toggleMission('bike');
             playMovie('./videos/presidio-race.mp4', 'Cycling through the Golden Gate bridge is such an awesome experience!');
             iphoneNotifications = iphoneNotifications.slice(1);            
-            iphoneNotifications = appendNotification(iphoneNotifications,game.names.bestie, 'I am going to Barbados now! See you in a couple of months!' , '💬', '');
+            iphoneNotifications = appendNotification(iphoneNotifications,game.names.bestie, 'FIBI! I decided to travel to Papua New Guinea and the whole Polynesia! See you in a couple of months! ❤️❤️' , '💬', '');
             toggleLandmarkVisibilityByName('BESTIE',true);
 
         }
@@ -6223,9 +6223,9 @@
                 { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 1000, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 6, icon: '💿' },
                 { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 1000, icon: '👥' },
-                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 4, icon: '📣' },
+                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 3, icon: '📣' },
                 { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 4, icon: '🎼' },
-                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 4, icon: '🎸' },
+                { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 3, icon: '🎸' },
                 { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 4, icon: '🖋️' },
                 { id: 'guitar', label: 'Backstage Blueprint', current: getChopVal('📜'), target: 6, icon: '📜' },
                 { id: 'rhythm', label: 'Stage Presence', current: getChopVal('🎤'), target: 5, icon: '🎤' },
@@ -7146,7 +7146,7 @@
                 { id: 'hype', label: 'Hype Level', current: game.hype || 0, target: 800, icon: '🔥' },
                 { id: 'songs', label: 'Setlist (Number of songs)', current: game.songs || 0, target: 6, icon: '💿' },
                 { id: 'fans', label: 'Fan Base', current: game.fans || 0, target: 800, icon: '👥' },
-                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 3, icon: '📣' },
+                { id: 'chop0', label: 'Social Influence', current: getChopVal('📣'), target: 2, icon: '📣' },
                 { id: 'chop1', label: 'Rhythm Mastery', current: getChopVal('🎼'), target: 3, icon: '🎼' },
                 { id: 'chop2', label: 'Instrument Synergy', current: getChopVal('🎸'), target: 3, icon: '🎸' },
                 { id: 'social', label: 'Lyrical Flow', current: getChopVal('🖋️'), target: 4, icon: '🖋️' },
@@ -10299,7 +10299,7 @@
 
             setTimeout(() => {
                 updateState({ selectedAnswer: null, questionData: null, message: '' });
-                setPhase(0, '');
+                setPhase(10, '');
             }, 4000);
             
         }
@@ -10330,7 +10330,7 @@
             topicContent.appendChild(topicButtons);
 
             const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'MENU');
-            backButton.onclick = () => setPhase(0, '');
+            backButton.onclick = () => setPhase(10, '');
             topicContent.appendChild(backButton);
             return topicContent;
         }
@@ -10396,7 +10396,7 @@
             qContent.appendChild(answersDiv);
 
             const backButton = createElement('button', 'metal-button px-6 py-2 text-lg mt-8 bg-gray-600 hover:bg-gray-700', 'MENU');
-            backButton.onclick = () => setPhase(0, '');
+            backButton.onclick = () => setPhase(10, '');
             qContent.appendChild(backButton);
 
 
@@ -11253,7 +11253,7 @@
 
             function returnToMainMenu() {
                 // Return to the main menu (Phase 0) as requested.
-                setPhase(0, '');
+                setPhase(10, '');
             }
 
             // --- Event Listener Setup ---
@@ -11918,6 +11918,10 @@
         // --- CASE B: CHALLENGE ACTIVE (The CD Animation) ---
         else {
             const inputId = 'guess-input';
+
+              const revealText = game.songRevealed ? 'Reveal Hidden Metadata'  : 'REVEALED: ' + (game.currentSong || 'UNKNOWN').toUpperCase();
+        const revealClass = game.songRevealed ? 'text-cyan-400 opacity-100' : 'opacity-0 hover:opacity-100';
+
             
             div.innerHTML = `
                 <div class="text-center space-y-4">
@@ -11941,6 +11945,11 @@
                     <button id="submit-button" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 text-xl rounded-lg transition-transform active:scale-95 uppercase tracking-widest">
                         SUBMIT GUESS
                     </button>
+
+                   <button id="reveal-metadata"
+                    class="relative z-20 w-full ${revealClass} text-[10px] text-zinc-700 font-bold uppercase tracking-[0.4em] py-4 transition-all cursor-help border border-transparent hover:border-white/5 rounded-lg">
+                    ${revealText}
+                </button>
                 </div>
             `;
 
@@ -11958,6 +11967,19 @@
                         }
                     };
                 }
+                      // Logic for the hidden reveal button
+                if (revealBtn) {
+                const triggerReveal = () => {
+                    if (!game.songRevealed) {
+                        game.songRevealed = true;
+                        if (typeof renderGame === 'function') renderGame();
+                    }
+                };
+                revealBtn.onclick = triggerReveal;
+                revealBtn.onmouseenter = triggerReveal;
+            }
+
+
             }, 10);
         }
 
@@ -11969,7 +11991,7 @@
         function loadNextFeudQuestion() {
             const index = game.familyFeud.currentChallengeIndex;
             if (index >= game.familyFeud.Challenges.length) {
-                setPhase(0, `You cleared all challenges! Total score: $${game.familyFeud.totalPointsScored}`, null);
+                setPhase(10, `You cleared all challenges! Total score: $${game.familyFeud.totalPointsScored}`, null);
                 return;
             }
 
@@ -11990,7 +12012,7 @@
             if (game.familyFeud.currentChallenge) {
                  setPhase(11, '');
             } else {
-                 setPhase(0, '', null);
+                 setPhase(10, '', null);
             }
             renderGame();
         }
@@ -12409,7 +12431,7 @@
                 }
             });
             //clueGameElements.playAgainButton.addEventListener('click', initializeClueGame);
-            clueGameElements.playAgainButton.onclick = () => setPhase(0, '');
+            clueGameElements.playAgainButton.onclick = () => setPhase(10, '');
 
             // Start the actual game logic
             initializeClueGame();
